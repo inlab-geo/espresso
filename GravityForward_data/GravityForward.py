@@ -91,7 +91,7 @@ def plot_model(grav_basics, model, synthetics):
 
     plt.figure(figsize=(17, 12))
     plt.subplot(2, 2, 1)
-    plt.imshow(np.reshape(synthetics.gz_rec,[lxr,lyr]),extent=[-limx,limx,-limy,limy])
+    plt.imshow(np.reshape(synthetics.gz_rec,[lxr,lyr]),extent=[-limy,limy,-limx,limx])
     plt.scatter(grav_basics.rec_coords[:,1],grav_basics.rec_coords[:,0],s=0.3,color='k')
     plt.title('2D view of gz')
     plt.xlabel('y [m]')
@@ -110,14 +110,14 @@ def plot_model(grav_basics, model, synthetics):
     plt.ylim([-30,30])
 
     plt.subplot(2, 2, 3)
-    plt.imshow(np.reshape(synthetics.gx_rec,[lxr,lyr]),extent=[-80,80,-80,80])
+    plt.imshow(np.reshape(synthetics.gx_rec,[lxr,lyr]),extent=[-limy,limy,-limx,limx])
     plt.title('2D view of gx')
     plt.xlabel('y [m]')
     plt.ylabel('x [m]')
     plt.colorbar(label="Gravity [mGal]")
     
     plt.subplot(2, 2, 4)
-    plt.imshow(np.reshape(synthetics.gy_rec,[lxr,lyr]),extent=[-80,80,-80,80])
+    plt.imshow(np.reshape(synthetics.gy_rec,[lxr,lyr]),extent=[-limy,limy,-limx,limx])
     plt.title('2D view of gy')
     plt.xlabel('y [m]')
     plt.ylabel('x [m]')
