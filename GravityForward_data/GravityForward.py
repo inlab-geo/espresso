@@ -86,9 +86,12 @@ def plot_model(grav_basics, model, synthetics):
     lxr=len(grav_basics.x_rec)
     lyr=len(grav_basics.y_rec)
     
+    limx=max(grav_basics.x_rec)+(grav_basics.x_rec[1]-grav_basics.x_rec[0])*0.5
+    limy=max(grav_basics.y_rec)+(grav_basics.y_rec[1]-grav_basics.y_rec[0])*0.5
+
     plt.figure(figsize=(17, 12))
     plt.subplot(2, 2, 1)
-    plt.imshow(np.reshape(synthetics.gz_rec,[lxr,lyr]),extent=[-80,80,-80,80])
+    plt.imshow(np.reshape(synthetics.gz_rec,[lxr,lyr]),extent=[-limx,limx,-limy,limy])
     plt.scatter(grav_basics.rec_coords[:,1],grav_basics.rec_coords[:,0],s=0.3,color='k')
     plt.title('2D view of gz')
     plt.xlabel('y [m]')
