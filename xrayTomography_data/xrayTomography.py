@@ -202,43 +202,58 @@ def tracer(model,paths,extent=(0,1,0,1)):
 ####################################################################
 # Additions for CoFi Test Suite
 
-def myFancySolverRoutine(m,data,synthetics):
-    A=synthetics[1]
-    print(np.shape(A))
-    m = np.linalg.inv((A.T).dot(A) + epsSquared*np.eye(np.shape(A)[1])).dot(A.T).dot(data)
-    return m
-
-def init_routine():
-    model=list()
-    dataset = np.loadtxt('xrayTomography/xrt_data.dat')
-    start_model = np.ones([model_size,model_size])
-    model.append(start_model)
+class Basics():
+    model_size=50
+    epsSquared=0.001
+    noise=0
+    subset=1
+    dataset = np.loadtxt('xrayTomography_data/xrt_data.dat')
+    data = np.zeros([np.shape(dataset)[0],2])
+    data = -np.log(dataset[:,5]) + np.log(dataset[:,2])
     paths = np.zeros([np.shape(dataset)[0],4])
     paths[:,0] = dataset[:,0]
     paths[:,1] = dataset[:,1]
     paths[:,2] = dataset[:,3]
     paths[:,3] = dataset[:,4]
-    model.append(paths)
-    return model
+    del dataset
 
-def forward(m):
+
+def init_routine(xrt_basics):
+    try:
+        start_model=eql_basics.model
+    except:
+        start_model = np.ones([xrt_basics.model_size,xrt_basics.model_size])
+    return start_model
+
+def forward(xrt_basics, model):
     synthetics=list()
-    attns, A = tracer(m[0],m[1])
-    synthetics.append(attns)
-    synthetics.append(A)
+    data, G = tracer(model,xrt_basics.paths)
+    synthetics=syntheticsmaker(data, G)
     gradient=[]
     return synthetics, gradient
 
-model_size=50
-epsSquared=0.001
-noise=0
-subset=1
-dataset = np.loadtxt('xrayTomography/xrt_data.dat')
-data = np.zeros([np.shape(dataset)[0],2])
-data = -np.log(dataset[:,5]) + np.log(dataset[:,2])
-del dataset
+class syntheticsmaker():
+    def __init__(self, data, G):
+        self.G=G
+        self.data=data
 
-def plot_model(result):
+def solver(xrt_basics, model, synthetics, gradient):
+# def solver(m,data,synthetics):
+    G=synthetics.G
+    data=xrt_basics.data
+
+    if xrt_basics.subset<1:
+        ind=np.random.choice(len(data),round(len(data)*xrt_basics.subset))
+        data=data[ind]
+        G=G[ind,:]
+    
+    data=data+np.random.normal(0,xrt_basics.noise*np.max(data),len(data))
+
+    #print(np.shape(G))
+    result = np.linalg.inv((G.T).dot(G) + xrt_basics.epsSquared*np.eye(np.shape(G)[1])).dot(G.T).dot(data)
+    return result
+
+def plot_model(xrt_basics,result):
     size=int(np.sqrt(len(result)))
     displayModel(result.reshape(size,size))
     

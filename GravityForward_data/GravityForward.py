@@ -22,7 +22,7 @@ def init_routine(grav_basics):
     try:
         start_model=eql_basics.model
     except:
-        start_model = np.load(file='InversionTestProblems/GravityForward_data/Model_1d.npy')
+        start_model = np.load(file='GravityForward_data/Model_1d.npy')
         
     start_model[start_model > 10] = grav_basics.anomaly_density
     start_model[start_model == 10] = grav_basics.background_density

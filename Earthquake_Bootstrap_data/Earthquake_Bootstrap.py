@@ -3,18 +3,18 @@ from scipy import stats
 import numpy as np
 import math
 import pickle
-from InversionTestProblems.Earthquake_Bootstrap_data import plotcovellipse as pc
-from InversionTestProblems.Earthquake_Bootstrap_data import eqlocate as eq
+from Earthquake_Bootstrap_data import plotcovellipse as pc
+from Earthquake_Bootstrap_data import eqlocate as eq
 
 
 
 
 
 class Earthquake():
-    pickle_eq = open("InversionTestProblems/Earthquake_Bootstrap_data/loctim.pickle","rb")
+    pickle_eq = open("Earthquake_Bootstrap_data/loctim.pickle","rb")
     [la,lo,el,ts,vp] = pickle.load(pickle_eq)
     # load border.xy
-    pickle_b = open("InversionTestProblems/Earthquake_Bootstrap_data/border.pickle","rb")
+    pickle_b = open("Earthquake_Bootstrap_data/border.pickle","rb")
     [borderx,bordery] = pickle.load(pickle_b)
     
     nBoot = 5000 # Number of bootstrap samples

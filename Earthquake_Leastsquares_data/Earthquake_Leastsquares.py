@@ -1,15 +1,15 @@
 import matplotlib.pyplot as plt
 from scipy import stats
 import numpy as np
-from InversionTestProblems.Earthquake_Leastsquares_data import plotcovellipse as pc
+from Earthquake_Leastsquares_data import plotcovellipse as pc
 import math
 import scipy.io as sio
-from InversionTestProblems.Earthquake_Leastsquares_data import eqlocate as eq
-from InversionTestProblems.Earthquake_Leastsquares_data.plotcovellipse import plot_point_cov,plot_cov_ellipse
+from Earthquake_Leastsquares_data import eqlocate as eq
+from Earthquake_Leastsquares_data.plotcovellipse import plot_point_cov,plot_cov_ellipse
 import pickle
 
 class Earthquake():
-    pickle_off = open("InversionTestProblems/Earthquake_Leastsquares_data/eqdata.pickle","rb")
+    pickle_off = open("Earthquake_Leastsquares_data/eqdata.pickle","rb")
     [data,datan,rec_loc] = pickle.load(pickle_off)
     vel = 5.4
     nit = 8 # number of iterations
