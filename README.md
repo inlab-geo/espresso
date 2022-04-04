@@ -1,5 +1,7 @@
 # CoFI examples
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/inlab-geo/cofi-examples.git/HEAD)
+
 [CoFI](https://github.com/inlab-geo/cofi) (Common Framework for Inference) is an open-source 
 initiative for interfacing between generic inference algorithms and specific geoscience problems.
 
