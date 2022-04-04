@@ -31,7 +31,7 @@ def init_routine(grav_basics):
     tmp=cartesian((grav_basics.x_rec,grav_basics.y_rec))
     z_rec=np.zeros(len(tmp))
     z_rec=z_rec[:, np.newaxis]
-    grav_basics.rec_coords=np.append(tmp,z_rec,axis=1)
+    grav_basics.rec_coords_all=np.append(tmp,z_rec,axis=1)
     del tmp
 
     return start_model
@@ -74,9 +74,9 @@ def forward(grav_basics, model):
     x_nodes=np.append(temp1, temp2, axis=1)
     del temp1, temp2    
     
-    gx_rec, gy_rec, gz_rec = calculate_gravity(model, x_nodes, y_nodes, z_nodes, grav_basics.rec_coords)   
+    gx_rec, gy_rec, gz_rec = calculate_gravity(model, x_nodes, y_nodes, z_nodes, grav_basics.rec_coords_all)   
     
-    synthetics = syntheticsmaker(gx_rec, gy_rec, gz_rec)
+    synthetics = synth(gx_rec, gy_rec, gz_rec)
     gradient=[]
     return synthetics, gradient 
     
@@ -91,8 +91,8 @@ def plot_model(grav_basics, model, synthetics):
 
     plt.figure(figsize=(17, 12))
     plt.subplot(2, 2, 1)
+    plt.scatter(grav_basics.rec_coords_all[:,1],grav_basics.rec_coords_all[:,0],s=0.3,color='k')
     plt.imshow(np.reshape(synthetics.gz_rec,[lxr,lyr]),extent=[-limy,limy,-limx,limx])
-    plt.scatter(grav_basics.rec_coords[:,1],grav_basics.rec_coords[:,0],s=0.3,color='k')
     plt.title('2D view of gz')
     plt.xlabel('y [m]')
     plt.ylabel('x [m]')
@@ -101,8 +101,8 @@ def plot_model(grav_basics, model, synthetics):
     model2d=model.reshape(12,12,12)
     plt.subplot(2,2, 2)
     plt.title("Model slice at z = 30 m")
+    plt.scatter(grav_basics.rec_coords_all[:,1],grav_basics.rec_coords_all[:,0],s=3,color='r')
     plt.imshow(model2d[7][:][:],extent=[-30,30,-30,30])
-    plt.scatter(grav_basics.rec_coords[:,1],grav_basics.rec_coords[:,0],s=3,color='r')
     plt.xlabel('y [m]')
     plt.ylabel('x [m]')
     plt.colorbar(label="Density [kg/m$^3$]")
@@ -130,7 +130,7 @@ def plot_model(grav_basics, model, synthetics):
     
 #########################################################################
 
-class syntheticsmaker():
+class synth():
     def __init__(self, gx_rec, gy_rec, gz_rec):
         self.gx_rec=gx_rec
         self.gy_rec=gy_rec
