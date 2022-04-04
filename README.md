@@ -12,8 +12,8 @@ This repository contains examples for running inversion algorithms using CoFI.
 (Strongly recommended) Create a virtual environment to avoid conflicts with your other projects:
 
 ```console
-$ conda create -n cofi_env scipy jupyterlab
-$ conda activate cofi_dev
+$ conda create -n cofi_env python=3.8 scipy jupyterlab matplotlib
+$ conda activate cofi_env
 ```
 
 Install `cofi` with:
