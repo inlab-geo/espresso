@@ -1,13 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
-# from discretize.utils import mkvc
 from scipy.constants import G
 
 
 
 
 class Basics():
+    """
+    Creates a class object containing basic information about the inversion test problem. 
+
+    Attributes:
+    --------------------
     
+    :param background_density: Set the background density of the default model
+    :type background_density: float
+    :param anomaly_density: Set the density of the anomaly of the default model
+    :type anomaly_density: float
+    :param noise: Set the noise level as % of maximum value of 
+    :type noise: float
+    :param x_rec: 
+    :type x_rec: float
+    :param y_rec: 
+    :type y_rec: float
+
+    --------------------
+    """    
     # Some parameters that can be changed
     background_density=10
     anomaly_density=2000
@@ -75,6 +92,11 @@ def forward(grav_basics, model):
     del temp1, temp2    
     
     gx_rec, gy_rec, gz_rec = calculate_gravity(model, x_nodes, y_nodes, z_nodes, grav_basics.rec_coords_all)   
+    
+    if grav_basics.noise > 0: 
+        gx_rec=gx_rec+np.random.normal(0,grav_basics.noise*np.max(np.absolute(gx_rec)),len(gx_rec))
+        gy_rec=gy_rec+np.random.normal(0,grav_basics.noise*np.max(np.absolute(gy_rec)),len(gy_rec))
+        gz_rec=gz_rec+np.random.normal(0,grav_basics.noise*np.max(np.absolute(gz_rec)),len(gz_rec))
     
     synthetics = synth(gx_rec, gy_rec, gz_rec)
     gradient=[]
