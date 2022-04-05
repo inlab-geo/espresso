@@ -173,7 +173,7 @@ class Basics():
     """
     Creates a class object containing basic information about the inversion test problem. 
 
-    AAAA Stuff that gets set - so its not arguments but its output so it should be mentioned?
+    Attributes:
     --------------------
     
     :param model_size: defines the model size; model is always squared so setting one value is sufficient.
@@ -245,6 +245,11 @@ def forward(xrt_basics, model):
     :type xrt_basics: class
     :param model: Contains attenuation values in a 2-dimensional (N_x * N_y) array
     :type model: numpy array
+    
+    :param synthetics: Contains synthetic data of the forward calulation (attenuation rate) and other parameters needed to understand them
+    :type synthetics: class
+    :param gradient: 
+    :type gradient: list (empty)
  
     -------------
     """
@@ -285,7 +290,7 @@ def solver(xrt_basics, model, synthetics, gradient):
     
     :param xrt_basics: Basic parameters of the inversion test problem
     :type xrt_basics: class
-    :param model: Contains attenuation rates in a 2-dimensional (N_x * N_y) array
+    :param model: Contains attenuation parameters of each model grid cell in a 2-dimensional (N_x * N_y) array
     :type model: numpy array
     :param synthetics: Contains synthetic data (attenutation rate) and the corresponding 
     array showing the distance a ray spent in which grid cell. 

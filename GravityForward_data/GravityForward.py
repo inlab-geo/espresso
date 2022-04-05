@@ -9,6 +9,8 @@ class Basics():
     """
     Creates a class object containing basic information about the inversion test problem. 
 
+    Each attribute in this class can be set prior to the forward calculation to change the output. 
+
     Attributes:
     --------------------
     
@@ -16,16 +18,16 @@ class Basics():
     :type background_density: float
     :param anomaly_density: Set the density of the anomaly of the default model
     :type anomaly_density: float
-    :param noise: Set the noise level as % of maximum value of 
+    :param noise: Set the noise level as % of maximum value of calculated gravitational force
     :type noise: float
-    :param x_rec: 
-    :type x_rec: float
-    :param y_rec: 
-    :type y_rec: float
+    :param x_rec: Set the recording locations in x-direction. 
+    :type x_rec: numpy array
+    :param y_rec: Set the recording locations in y-direction. 
+    :type y_rec: numpy array
 
     --------------------
     """    
-    # Some parameters that can be changed
+    
     background_density=10
     anomaly_density=2000
     noise=0
@@ -36,6 +38,21 @@ class Basics():
 
 
 def init_routine(grav_basics):
+    """
+    Returns a starting model for the forward calculation. 
+    
+    If grav_basics.model is set, it returns that as the starting model. If grav_basics.model is 
+    not set, it returns a default starting model containing ones.
+    
+    Arguments:
+    -------------
+    
+    :param grav_basics: Basic parameters of the inversion test problem
+    :type grav_basics: class
+    
+    -------------
+    """
+    
     try:
         start_model=eql_basics.model
     except:
@@ -55,6 +72,25 @@ def init_routine(grav_basics):
 
 
 def forward(grav_basics, model):
+    """
+    Calculates the gravitational force of each recording location based on the input model. 
+    
+    Arguments:
+    -------------
+
+    :param grav_basics: Basic parameters of the inversion test problem
+    :type grav_basics: class
+    :param model: Contains density values in a 1-dimensional array
+    :type model: numpy array
+    :param synthetics: Contains synthetic data of the forward calulation (graviational response).
+    :type synthetics: cell
+    :param gradient: Empty variable in this inversion test problem. 
+    :type gradient: list (empty)
+ 
+    -------------
+    """
+    
+    
     # Create array of all nodes for each direction
     x_node_slice=np.linspace(-30,30,13) 
     y_node_slice=np.linspace(-30,30,13) 
@@ -105,6 +141,22 @@ def forward(grav_basics, model):
 
 
 def plot_model(grav_basics, model, synthetics):
+    """
+    Visualises gx, gy, gz and the input model. 
+    
+    Arguments:
+    -------------
+
+    :param grav_basics: Basic parameters of the inversion test problem
+    :type grav_basics: class
+    :param model: Contains density values in a 1-dimensional array
+    :type model: numpy array
+    :param synthetics: Contains synthetic data of the forward calulation (graviational response).
+    :type synthetics: cell
+ 
+    -------------
+    """
+    
     lxr=len(grav_basics.x_rec)
     lyr=len(grav_basics.y_rec)
     
@@ -153,12 +205,57 @@ def plot_model(grav_basics, model, synthetics):
 #########################################################################
 
 class synth():
+    """ 
+    Class object containing synthetic data of the forward calulation.
+    
+    Parameters
+    --------------------
+    *args
+        
+        gx : Gravitational force in x-direction at all recording stations as calculated by the forward model.
+        gy : Gravitational force in y-direction at all recording stations as calculated by the forward model.
+        gz : Gravitational force in z-direction at all recording stations as calculated by the forward model.
+    
+    --------------------
+    """
+
     def __init__(self, gx_rec, gy_rec, gz_rec):
         self.gx_rec=gx_rec
         self.gy_rec=gy_rec
         self.gz_rec=gz_rec
 
 def kernel(ii,jj,kk,dx,dy,dz,dim):
+    """
+    Calculates the analytical kernel (or jacobian) used in the forward calculation; based on Plouff (1976). Kernel is called by calculate_gravity.
+    
+    Returns the kernel for one component of the gravitational force, i.e. x-, y- or z-direction. 
+    
+    To-do (minor): Rename g to J. Script does not calculate gravity anymore, only the jacobian. 
+    
+    Arguments: 
+    --------------
+    :param ii: Specifies edge or prisms in x-direction (start or end of edge). Is either 1 or 2. 
+    :type ii: int
+    :param jj: Specifies edge or prisms in y-direction (start or end of edge). Is either 1 or 2. 
+    :type jj: int
+    :param kk: Specifies edge or prisms in z-direction (start or end of edge). Is either 1 or 2. 
+    :type kk: int
+    :param dx: Contains x-coordinates of all nodes. First column contains x-coordinates of the start of every edge in the model. Second column contains the end of every edge in the model.
+    :type dx: numpy array
+    :param dy: Contains y-coordinates of all nodes. First column contains y-coordinates of the start of every edge in the model. Second column contains the end of every edge in the model.
+    :type dy: numpy array
+    :param dz: Contains z-coordinates of all nodes. First column contains z-coordinates of the start of every edge in the model. Second column contains the end of every edge in the model.
+    :type dz: numpy array
+    :param dim: Sets which component of the gravitational force is calculated. Code can also calculate gradiometry components, which is also set here. 
+    :type dim: string ('gx', 'gy', 'gz', 'gxx', 'gxy', 'gxz', 'gxz', 'gyy', 'gyz', 'gzz')
+
+    :param g: Contains the kernel (or jacobian) of the current set of arguments. 
+    :type g: numpy array
+    
+    --------------
+    
+    """
+    
     
     r = (dx[:, ii] ** 2 + dy[:, jj] ** 2 + dz[:, kk]** 2) ** (0.50)
 
@@ -182,7 +279,7 @@ def kernel(ii,jj,kk,dx,dy,dz,dim):
         g = (-1) ** (ii + jj + kk) * (dx[:, ii] * np.log(dy_r) + dy[:, jj] * np.log(dx_r) - dz[:, kk]* np.arctan(dxdy / dzr))
     elif dim=="gxx":
         arg = dy[:, jj] * dz[:, kk] / dxr
-        # It said g-= ... - maybe neet to switch vorzeichen?
+        # It said g-= ... - maybe neet to switch. 
         g = ((-1) ** (ii + jj + kk) * (dxdy / (r * dz_r)+ dxdz / (r * dy_r)- np.arctan(arg)+ dx[:, ii]* (1.0 / (1 + arg ** 2.0))* dydz/ dxr ** 2.0* (r + dx[:, ii] ** 2.0 / r)))
     elif dim=="gxy":
         arg = dy[:, jj] * dz[:, kk] / dxr
@@ -207,8 +304,35 @@ def kernel(ii,jj,kk,dx,dy,dz,dim):
     return g
 
 def calculate_gravity(model, x_final, y_final, z_final, recvec):
+    """
+    The analytical kernel used in the forward calculation; based on Plouff (1976). Kernel is called by calculate_gravity.
+    
+    To-do (minor): Rename x_final etc into soemthing more intuitive.
+    
+    Arguments: 
+    --------------
+    :param model: Contains density values in a 1-dimensional array
+    :type model: numpy array
+    :param x_final: Contains x-coordinates of the edges of all prisms in the model in a (Nx2) array. Values are in metre.
+        - x_final[:,0] - start coordinate of edges, in m
+        - x_final[:,1] - end coordinate of edges, in m
+    :param y_final: Contains x-coordinates of the edges of all prisms in the model in a (Nx2) array. Values are in metre.
+        - y_final[:,0] - start coordinate of edges, in m
+        - y_final[:,1] - end coordinate of edges, in m
+    :param z_final: Contains x-coordinates of the edges of all prisms in the model in a (Nx2) array. Values are in metre.
+        - z_final[:,0] - start coordinate of edges, in m
+        - z_final[:,1] - end coordinate of edges, in m
+    :param recvec: Contains coordinates of all recording locations in a (Nx3) array.  Values are in metre.
+        - recvec[:,0] - x-coordinates of recording locations, in m
+        - recvec[:,1] - y-coordinates of recording locations, in m
+        - recvec[:,2] - z-coordinates of recording locations, in m
+    :type recvec: numpy array
 
-    # Tolerance implementation follows SimPEG, discussed in Nagy et al., 2000
+    --------------
+    
+    """
+
+
     tol=1e-4
 
     gx_rec=np.zeros(len(recvec))
@@ -248,11 +372,22 @@ def calculate_gravity(model, x_final, y_final, z_final, recvec):
         gy_rec[recno] = 1e8*G*sum(model*Jy)
         gz_rec[recno] = 1e8*G*sum(model*Jz)
     
-    
-    
     return gx_rec, gy_rec, gz_rec
     
 def cartesian(arrays, out=None):
+    """
+    Creates all possible combinations between input arrays. Used to create coordinates of all grid cells and recording locations. 
+    
+    Arguments:
+    -----------
+    
+    :param arrays: Input arrays as a [n,m] array, where n is the number of grid points in one direction and m is the number of directions.
+    :type arrays: numpy array
+    :param out: Returns all possible coordinate combinations as a [n^m,m] array.
+    :type out: numpy array
+    
+    -----------
+    """
     arrays = [np.asarray(x) for x in arrays]
     dtype = arrays[0].dtype
 
