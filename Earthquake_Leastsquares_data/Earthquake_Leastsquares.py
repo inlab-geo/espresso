@@ -8,7 +8,28 @@ from Earthquake_Leastsquares_data import eqlocate as eq
 from Earthquake_Leastsquares_data.plotcovellipse import plot_point_cov,plot_cov_ellipse
 import pickle
 
-class Earthquake():
+class basics():
+    """
+    Creates a class object containing basic information about the inversion test problem. 
+
+    Attributes:
+    --------------------
+    
+    :param data: Contains travel time data from the true earthquake location to all receivers, in seconds
+    :type data: numpy array
+    :param datan: Contains NOISY travel time data from the true earthquake location to all receivers, in seconds
+    :type datan: numpy array
+    :param rec_loc: Contains the receiver locations as a [N,3] array with N being the number of stations; in km.
+    :type rec_loc: numpy array
+    :param vel: Set the wave speed of the Earth crust. Use assumes homogeneous crustal   
+        Earth model with constant wave speed, in km/s.
+    :type vel: float
+    :param nit: Set the number of iterations for the inversion. 
+    :type nit: int
+    :param n_used: Set the number of receivers used for the inversion. Between 1 and 10
+    :type n_used: int
+
+    """
     pickle_off = open("Earthquake_Leastsquares_data/eqdata.pickle","rb")
     [data,datan,rec_loc] = pickle.load(pickle_off)
     vel = 5.4
@@ -18,6 +39,20 @@ class Earthquake():
     
     
 def init_routine(eql_basics):
+    """
+    Returns a starting model for the forward calculation. 
+    
+    If eql_basics.model is set, it returns that as the starting model. If eql_basics.model is 
+    not set, it returns a default starting model.
+    
+    Arguments:
+    -------------
+    
+    :param xrt_basics: Basic parameters of the inversion test problem
+    :type xrt_basics: class
+    
+    -------------
+    """
     try:
         model=eql_basics.model
     except:
@@ -25,6 +60,29 @@ def init_routine(eql_basics):
     return model
 
 def forward(eql_basics, model):
+    """
+    Returns synthetic data, i.e. travel times, as the result of the forward calculation.
+    The forward calculation consists of assuming that the waves travel as straight rays 
+    between the earthquake and the receiver, hence the travel time calculation becomes:
+    t=distance/velocity
+    
+    Velocity is set constant. 
+    
+    Arguments:
+    -------------
+
+    :param eql_basics: Basic parameters of the inversion test problem
+    :type eql_basics: class
+    :param model: Contains starting values for the Earthquake location and origin time.
+    :type model: numpy array
+    
+    :param synthetics: Contains synthetic data created with the forward calulation
+    :type synthetics: numpy array
+    :param gradient: Empty variable in this inversion test problem. 
+    :type gradient: list (empty)
+ 
+    -------------
+    """
     rec_loc=eql_basics.rec_loc
     vel=eql_basics.vel
     d = np.zeros(len(rec_loc))     # define distance matrix shape
@@ -38,6 +96,26 @@ def forward(eql_basics, model):
     return synthetic, gradient
 
 def solver(eql_basics, model_start, synthetic, gradient):
+    """
+    Performs the inversion. Returns a recovered model that is a 
+    regularised least squares solution given the data and the starting model. 
+    
+    Arguments:
+    -------------
+    
+    :param eql_basics: Basic parameters of the inversion test problem
+    :type eql_basics: class
+    :param model: Contains starting values for the Earthquake location and origin time.
+    :type model: numpy array
+    :param synthetics: Contains synthetic data (attenutation rate) and the corresponding 
+    array showing the distance a ray spent in which grid cell. 
+    :type synthetics: class
+    :param gradient: Empty variable in this inversion test problem. 
+    :type gradient: list (empty)
+      
+    -------------
+    """
+    
     rec_loc=eql_basics.rec_loc
     nit=eql_basics.nit
     n_used=eql_basics.n_used
@@ -70,10 +148,25 @@ def solver(eql_basics, model_start, synthetic, gradient):
         if(it!=nit-1):model_recovered[it+1] = model_recovered[it] + dm
     r = r.reshape(nit,len(rec_loc[:n_used]))
     
-    result=resultmaker(model_recovered,r, chisq)
+    result=resultclass(model_recovered,r, chisq)
     return result
 
 def plot_model(eql_basics, result):
+    """
+    Visualises the recovered model and provides information about chi-squared and covariance. 
+    
+    Arguments:
+    -------------
+    
+    :param xrt_basics: Basic parameters of the inversion test problem
+    :type xrt_basics: class
+    :param result: Contains the recovered model, i.e. the coordinates of the earthquake location 
+        in x, y, z (in km) and the origin time (in s). 
+    :type result: numpy array
+    
+    --------------------
+    """
+    
     nit=eql_basics.nit  
     n_used=eql_basics.n_used
     rec_loc=eql_basics.rec_loc
@@ -136,7 +229,7 @@ def calct(sol,rec_loc):
     tpred = sol[3] + d/vel
     return tpred
 
-class resultmaker():
+class resultclass():
     def __init__(self, model_recovered,r, chisq):
         self.model_recovered=model_recovered
         self.r=r

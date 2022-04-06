@@ -248,7 +248,7 @@ def forward(xrt_basics, model):
     
     :param synthetics: Contains synthetic data of the forward calulation (attenuation rate) and other parameters needed to understand them
     :type synthetics: class
-    :param gradient: 
+    :param gradient: Empty variable in this inversion test problem. 
     :type gradient: list (empty)
  
     -------------
@@ -280,7 +280,6 @@ class synth():
         self.data=data
 
 def solver(xrt_basics, model, synthetics, gradient):
-    
     """
     Performs the inversion. Returns a recovered model that is a 
     regularised least squares solution given the data and the starting model. 

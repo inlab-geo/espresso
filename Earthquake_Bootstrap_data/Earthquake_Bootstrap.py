@@ -10,24 +10,75 @@ from Earthquake_Bootstrap_data import eqlocate as eq
 
 
 
-class Earthquake():
-    pickle_eq = open("Earthquake_Bootstrap_data/loctim.pickle","rb")
-    [la,lo,el,ts,vp] = pickle.load(pickle_eq)
-    # load border.xy
-    pickle_b = open("Earthquake_Bootstrap_data/border.pickle","rb")
-    [borderx,bordery] = pickle.load(pickle_b)
+class basics():
+    """
+    Creates a class object containing basic information about the inversion test problem. 
+
+    Each attribute in this class can be set prior to the forward calculation to change the output. 
+
+    Attributes:
+    --------------------
+    
+    Changeable: 
+    :param nBoot: Set the number of bootstrap iterations, i.e. for how many data subsets the inversion is performed.
+    :type nBoot: int
+    :param vel: Set the wave speed of the Earth crust. Use assumes homogeneous crustal Earth model 
+        with constant wave speed, in km/s. Values can be changed for each recording location. 
+    :type vp: numpy array
+    --------------------
+    
+    Others:
+    :param la: Latitude of receiver locations, in degree (WGS84?)
+    :type la: float
+    :param lo: Longitude of receiver locations, in degree (WGS84?)
+    :type lo: float
+    :param el: Elevation of receiver locations, im m
+    :type el: float
+    :param ts: Recording time, in seconds after 16:30
+    :type ts: float
+    :param borderx: Latitude of border of Switzerland, in degree (WGS84?)
+    :type borderx: float
+    :param bordery: Longitude of border of Switzerland, in degree (WGS84?)
+    :type bordery: float
+    
+
+    --------------------
+    """    
     
     nBoot = 5000 # Number of bootstrap samples
-
-    # vel = 5.4
-    # nit = 8 # number of iterations
-    # n_used = 10
-    # model=[-10.0, 5.0, 5.0, 0.0]
-
-
+    pickle_eq = open("Earthquake_Bootstrap_data/loctim.pickle","rb")
+    [la,lo,el,ts,vp] = pickle.load(pickle_eq)
+    del pickle_eq
+    
+    pickle_b = open("Earthquake_Bootstrap_data/border.pickle","rb")
+    [borderx,bordery] = pickle.load(pickle_b)
+    del pickle_b
 
 
 def forward(eql_basics, model_start):
+    """
+    Calculates the gravitational force of each recording location based on the input model. 
+    
+    Arguments:
+    -------------
+
+    :param eql_basics: Basic parameters of the inversion test problem
+    :type eql_basics: class
+    :param model: Contains starting coordinates for the Earthquake location.
+    :type model: numpy array
+    :param synthetics: Contains synthetic data created with the forward calulation
+    :type synthetics: class
+        - :param sols: Contains the iterative solutions of the inversion (coordinates)
+          :type sols: numpy array
+        - :param res: The observed arrival time - minus the predicted arrival time
+          :type res: numpy array
+        - :param tpred: Contains the predicted arrival times for comparison with origin time
+          :type tpred: numpy array
+    :param gradient: Empty variable in this inversion test problem. 
+    :type gradient: list (empty)
+    -------------
+    """
+    
     gradient=[]
     x0=model_start[0]
     y0=model_start[1]
@@ -38,12 +89,27 @@ def forward(eql_basics, model_start):
     lo=eql_basics.lo
     el=eql_basics.el
     ts=eql_basics.ts
-    sols, res =eq.eqlocate(x0,y0,z0,ts,la,lo,el,vp,tol) # here sols are the iterative solutions found,
-    synthetic=eql_basics.ts-res
+    sols, res =eq.eqlocate(x0,y0,z0,ts,la,lo,el,vp,tol) # here sols are the iterative solutions found
+    tpred=eql_basics.ts-res
+    synthetic=synth(sols, res, tpred)
     return synthetic, gradient
     
     
 def init_routine(eql_basics):
+    """
+    Returns a starting model for the forward calculation. 
+    
+    If eql_basics.model is set, it returns that as the starting model. If eql_basics.model is 
+    not set, it returns a default starting model.
+    
+    Arguments:
+    -------------
+    
+    :param xrt_basics: Basic parameters of the inversion test problem
+    :type xrt_basics: class
+    
+    -------------
+    """
     try:
         model=eql_basics.model
     except:
@@ -53,6 +119,48 @@ def init_routine(eql_basics):
 
 
 def solver(eql_basics, model_start, synthetic, gradient):
+    """
+    Performs the inversion. Returns a recovered model that is a 
+    regularised least squares solution given the data and the starting model. 
+    
+    Further obtains about the results uncertainty (covariance). 
+    
+    Arguments:
+    -------------
+    
+    :param eql_basics: Basic parameters of the inversion test problem
+    :type eql_basics: class
+    :param model: Contains starting values for the Earthquake location.
+    :type model: numpy array
+    :param synthetics: Contains synthetic data created with the forward calulation
+    :type synthetics: class
+        - :param sols: Contains the iterative solutions of the inversion (coordinates)
+          :type sols: numpy array
+        - :param res: The observed arrival time - minus the predicted arrival time
+          :type res: numpy array
+        - :param tpred: Contains the predicted arrival times 
+          :type tpred: numpy array
+    :param gradient: Empty variable in this inversion test problem. 
+    :type gradient: list (empty)
+    
+    :param result: Contains the result of the inversion and relevant information to understand it.
+    :type result: class
+        - :param bootstrap_solutions: Contains earthquake location and origin time of all bootstrap iterations in (t,x,y,z)
+          :type bootstrap_solutions: numpy array
+        - :param bootstrap_cov: Contains covariance values (earthquake location and origin time) of all bootstrap iterations
+          :type bootstrap_cov: numpy array
+        - :param model_all: Contains the iterative model solutions for earthquake location and origin time in (t,x,y,z)
+          :type model_all: numpy array
+        - :param model_final: Contains the final earthquake location in (x,y,z) coordinates, in degree (WGS84?)
+          :type model_final: numpy array
+        - :param orig_t_final: Contains the final origin time estimation, in seconds after 16:30
+          :type orig_t_final: float
+        - :param orig_t_all: Contains all origin time estimatoions, in seconds after 16:30
+          :type orig_t_all: numpy array
+
+    -------------
+    """
+    
     x0=model_start[0]
     y0=model_start[1]
     z0=model_start[2]
@@ -66,23 +174,50 @@ def solver(eql_basics, model_start, synthetic, gradient):
     sols, res =eq.eqlocate(x0,y0,z0,ts,la,lo,el,vp,tol) # here sols are the iterative solutions found
     bootstrap_solutions = np.zeros((nBoot,4))
     for i in range(nBoot):
-        yBoot = synthetic + np.random.choice(res,size=len(res),replace=True) # random sample residuals with replacement
+        yBoot = synthetic.tpred + np.random.choice(res,size=len(res),replace=True) # random sample residuals with replacement
         solsB, resB =eq.eqlocate(x0,y0,z0,yBoot,la,lo,el,vp,tol) # here sols are the iterative solutions found,
         bootstrap_solutions[i] = solsB[-1] # bootstrap solution
     
     bootstrap_cov=np.cov(bootstrap_solutions.T)
-    tpred=ts-res
+    #tpred=ts-res
     model_all=sols
     orig_t_all=sols[:,0]
     orig_t_final=sols[-1,0] # origin time
     model_final=[sols[-1,1], sols[-1,2], sols[-1,3]] # x,y,z,
-    result=resultmaker(bootstrap_solutions, bootstrap_cov, res, model_all, model_final, tpred, orig_t_final, orig_t_all)
+    result=resultclass(bootstrap_solutions, bootstrap_cov, res, model_all, model_final, orig_t_final, orig_t_all)
     print ('Earthquake location (iterative least square solution):\n', model_final)
     print ('Event time (seconds after 16:30)',orig_t_final)
 
     return result
 
 def plot_model(eql_basics, result):
+    """
+    Visualises the recovered model and provides information about its covariance. 
+    
+    Arguments:
+    -------------
+    
+    :param xrt_basics: Basic parameters of the inversion test problem
+    :type xrt_basics: class
+    :param result: Contains the result of the inversion and relevant information to understand it.
+    :type result: class
+        - :param bootstrap_solutions: Contains earthquake location and origin time of all bootstrap iterations in (t,x,y,z)
+          :type bootstrap_solutions: numpy array
+        - :param bootstrap_cov: Contains covariance values (earthquake location and origin time) of all bootstrap iterations
+          :type bootstrap_cov: numpy array
+        - :param model_all: Contains the iterative model solutions for earthquake location and origin time in (t,x,y,z)
+          :type model_all: numpy array
+        - :param model_final: Contains the final earthquake location in (x,y,z) coordinates, in degree (WGS84?)
+          :type model_final: numpy array
+        - :param orig_t_final: Contains the final origin time estimation, in seconds after 16:30
+          :type orig_t_final: float
+        - :param orig_t_all: Contains all origin time estimatoions, in seconds after 16:30
+          :type orig_t_all: numpy array
+    
+    --------------------
+    """
+
+    
     solBoot=result.bootstrap_solutions
     orig_t_final=result.orig_t_final
     orig_t_all=result.orig_t_all
@@ -150,19 +285,61 @@ def plot_model(eql_basics, result):
     print(" Parameter 3 {:7.3f} [{:7.3f}, {:7.3f}]".format(bcsol[2],p[0,2],p[1,2]))
 
 
-class resultmaker():
-    def __init__(self, bootstrap_solutions, bootstrap_cov, res, model_all, model_final, tpred, orig_t_final, orig_t_all):
+class resultclass():
+    """
+    Class object containing  the result of the inversion and relevant information to understand it.
+    
+    Attributes: 
+    ----------------
+    :param bootstrap_solutions: Contains earthquake location and origin time of all bootstrap iterations in (t,x,y,z)
+    :type bootstrap_solutions: numpy array
+    :param bootstrap_cov: Contains covariance values (earthquake location and origin time) of all bootstrap iterations
+    :type bootstrap_cov: numpy array
+    :param model_all: Contains the iterative model solutions for earthquake location and origin time in (t,x,y,z)
+    :type model_all: numpy array
+    :param model_final: Contains the final earthquake location in (x,y,z) coordinates, in degree (WGS84?)
+    :type model_final: numpy array
+    :param orig_t_final: Contains the final origin time estimation, in seconds after 16:30
+    :type orig_t_final: float
+    :param orig_t_all: Contains all origin time estimatoions, in seconds after 16:30
+    :type orig_t_all: numpy array
+    ----------------
+    
+    """
+    
+    def __init__(self, bootstrap_solutions, bootstrap_cov, res, model_all, model_final,  orig_t_final, orig_t_all):
         self.bootstrap_solutions=bootstrap_solutions
         self.bootstrap_cov=bootstrap_cov
         self.res=res
         self.model_all=model_all
         self.model_final=model_final
-        self.tpred=tpred
         self.orig_t_final=orig_t_final
         self.orig_t_all=orig_t_all
 
 
 
+class synth():
+    """ 
+    Class object containing synthetic data of the forward calulation.
+    
+    Parameters
+    --------------------
+    *args
+        
+       :param sols: Contains the iterative solutions of the inversion (coordinates)
+       :type sols: numpy array
+       :param res: The observed arrival time - minus the predicted arrival time
+       :type res: numpy array
+       :param tpred: Contains the predicted arrival times for comparison with origin time
+       :type tpred: numpy array
+    
+    --------------------
+    """
+
+    def __init__(self, sols, res, tpred):
+        self.sols=sols
+        self.res=res
+        self.tpred=tpred
 
 
 #def eqlocate(x0,y0,z0,ts,la,lo,el,vpin,tol,solvedep=False,nimax=100,verbose=False,kms2deg=[111.19,75.82]):

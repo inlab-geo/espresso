@@ -376,7 +376,7 @@ def calculate_gravity(model, x_final, y_final, z_final, recvec):
     
 def cartesian(arrays, out=None):
     """
-    Creates all possible combinations between input arrays. Used to create coordinates of all grid cells and recording locations. 
+    Creates all combinations between input arrays. Used to create coordinates of all grid cells and recording locations. 
     
     Arguments:
     -----------
