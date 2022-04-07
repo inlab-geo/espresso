@@ -169,7 +169,7 @@ def tracer(model,paths,extent=(0,1,0,1)):
 ####################################################################
 # Additions for Inversion Test Suite
 
-class Basics():
+class xrt_basics_class():
     """
     Creates a class object containing basic information about the inversion test problem. 
 
@@ -222,7 +222,7 @@ def init_routine(xrt_basics):
     -------------
     
     :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: class
+    :type xrt_basics: xrt_basics_class
     
     -------------
     """
@@ -242,12 +242,12 @@ def forward(xrt_basics, model):
     -------------
 
     :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: class
+    :type xrt_basics: xrt_basics_class
     :param model: Contains attenuation values in a 2-dimensional (N_x * N_y) array
     :type model: numpy array
     
     :param synthetics: Contains synthetic data of the forward calulation (attenuation rate) and other parameters needed to understand them
-    :type synthetics: class
+    :type synthetic: numpy array
     :param gradient: Empty variable in this inversion test problem. 
     :type gradient: list (empty)
  
@@ -256,11 +256,11 @@ def forward(xrt_basics, model):
     
     synthetics=list()
     data, G = tracer(model,xrt_basics.paths)
-    synthetics=synth(data, G)
+    synthetics=synthclass(data, G)
     gradient=[]
     return synthetics, gradient
 
-class synth():
+class synthclass():
     """ 
     Class object containing synthetic data of the forward calulation and other parameters needed to understand them.
     
@@ -288,12 +288,12 @@ def solver(xrt_basics, model, synthetics, gradient):
     -------------
     
     :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: class
+    :type xrt_basics: xrt_basics_class
     :param model: Contains attenuation parameters of each model grid cell in a 2-dimensional (N_x * N_y) array
     :type model: numpy array
     :param synthetics: Contains synthetic data (attenutation rate) and the corresponding 
     array showing the distance a ray spent in which grid cell. 
-    :type synthetics: class
+    :type synthetic: numpy array
     :param gradient: Empty variable in this inversion test problem. 
     :type gradient: list (empty)
     
@@ -321,7 +321,7 @@ def plot_model(xrt_basics,result):
     -------------
     
     :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: class
+    :type xrt_basics: xrt_basics_class
     :param result: Contains the recovered model as attenuation rates in a 2-dimensional (N_x * N_y) array
     :type result: numpy array
     

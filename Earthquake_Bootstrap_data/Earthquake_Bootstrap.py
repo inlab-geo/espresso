@@ -10,7 +10,7 @@ from Earthquake_Bootstrap_data import eqlocate as eq
 
 
 
-class basics():
+class earthquake_basics():
     """
     Creates a class object containing basic information about the inversion test problem. 
 
@@ -63,11 +63,11 @@ def forward(eql_basics, model_start):
     -------------
 
     :param eql_basics: Basic parameters of the inversion test problem
-    :type eql_basics: class
+    :type eql_basics: earthquake_basics
     :param model: Contains starting coordinates for the Earthquake location.
     :type model: numpy array
     :param synthetics: Contains synthetic data created with the forward calulation
-    :type synthetics: class
+    :type synthetic: numpy array
         - :param sols: Contains the iterative solutions of the inversion (coordinates)
           :type sols: numpy array
         - :param res: The observed arrival time - minus the predicted arrival time
@@ -91,7 +91,7 @@ def forward(eql_basics, model_start):
     ts=eql_basics.ts
     sols, res =eq.eqlocate(x0,y0,z0,ts,la,lo,el,vp,tol) # here sols are the iterative solutions found
     tpred=eql_basics.ts-res
-    synthetic=synth(sols, res, tpred)
+    synthetic=synthetic_class(sols, res, tpred)
     return synthetic, gradient
     
     
@@ -105,8 +105,8 @@ def init_routine(eql_basics):
     Arguments:
     -------------
     
-    :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: class
+    :param eql_basics: Basic parameters of the inversion test problem
+    :type eql_basics: earthquake_basics
     
     -------------
     """
@@ -129,11 +129,11 @@ def solver(eql_basics, model_start, synthetic, gradient):
     -------------
     
     :param eql_basics: Basic parameters of the inversion test problem
-    :type eql_basics: class
+    :type eql_basics: earthquake_basics
     :param model: Contains starting values for the Earthquake location.
     :type model: numpy array
     :param synthetics: Contains synthetic data created with the forward calulation
-    :type synthetics: class
+    :type synthetic: numpy array
         - :param sols: Contains the iterative solutions of the inversion (coordinates)
           :type sols: numpy array
         - :param res: The observed arrival time - minus the predicted arrival time
@@ -144,7 +144,7 @@ def solver(eql_basics, model_start, synthetic, gradient):
     :type gradient: list (empty)
     
     :param result: Contains the result of the inversion and relevant information to understand it.
-    :type result: class
+    :type result: resultclass
         - :param bootstrap_solutions: Contains earthquake location and origin time of all bootstrap iterations in (t,x,y,z)
           :type bootstrap_solutions: numpy array
         - :param bootstrap_cov: Contains covariance values (earthquake location and origin time) of all bootstrap iterations
@@ -155,7 +155,7 @@ def solver(eql_basics, model_start, synthetic, gradient):
           :type model_final: numpy array
         - :param orig_t_final: Contains the final origin time estimation, in seconds after 16:30
           :type orig_t_final: float
-        - :param orig_t_all: Contains all origin time estimatoions, in seconds after 16:30
+        - :param orig_t_all: Contains all origin time estimations, in seconds after 16:30
           :type orig_t_all: numpy array
 
     -------------
@@ -184,7 +184,7 @@ def solver(eql_basics, model_start, synthetic, gradient):
     orig_t_all=sols[:,0]
     orig_t_final=sols[-1,0] # origin time
     model_final=[sols[-1,1], sols[-1,2], sols[-1,3]] # x,y,z,
-    result=resultclass(bootstrap_solutions, bootstrap_cov, res, model_all, model_final, orig_t_final, orig_t_all)
+    result=resultclass(bootstrap_solutions=bootstrap_solutions, bootstrap_cov=bootstrap_cov, res=res, model_all=model_all, model_final=model_final, orig_t_final=orig_t_final, orig_t_all=orig_t_all)
     print ('Earthquake location (iterative least square solution):\n', model_final)
     print ('Event time (seconds after 16:30)',orig_t_final)
 
@@ -197,10 +197,10 @@ def plot_model(eql_basics, result):
     Arguments:
     -------------
     
-    :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: class
+    :param eql_basics: Basic parameters of the inversion test problem
+    :type eql_basics: earthquake_basics
     :param result: Contains the result of the inversion and relevant information to understand it.
-    :type result: class
+    :type result: resultclass
         - :param bootstrap_solutions: Contains earthquake location and origin time of all bootstrap iterations in (t,x,y,z)
           :type bootstrap_solutions: numpy array
         - :param bootstrap_cov: Contains covariance values (earthquake location and origin time) of all bootstrap iterations
@@ -287,7 +287,7 @@ def plot_model(eql_basics, result):
 
 class resultclass():
     """
-    Class object containing  the result of the inversion and relevant information to understand it.
+    Class object containing the results of the inversion and relevant information to understand it.
     
     Attributes: 
     ----------------
@@ -307,18 +307,11 @@ class resultclass():
     
     """
     
-    def __init__(self, bootstrap_solutions, bootstrap_cov, res, model_all, model_final,  orig_t_final, orig_t_all):
-        self.bootstrap_solutions=bootstrap_solutions
-        self.bootstrap_cov=bootstrap_cov
-        self.res=res
-        self.model_all=model_all
-        self.model_final=model_final
-        self.orig_t_final=orig_t_final
-        self.orig_t_all=orig_t_all
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
 
 
-
-class synth():
+class synthetic_class():
     """ 
     Class object containing synthetic data of the forward calulation.
     
@@ -340,6 +333,20 @@ class synth():
         self.sols=sols
         self.res=res
         self.tpred=tpred
+
+# Old version, keep for a moment
+#class resultclass():
+    ##def __init__(self, bootstrap_solutions, bootstrap_cov, res, model_all, model_final,  orig_t_final, orig_t_all):
+        
+        
+    #def __init__(self, *args, **kwargs):
+        #self.bootstrap_solutions=bootstrap_solutions
+        #self.bootstrap_cov=bootstrap_cov
+        #self.res=res
+        #self.model_all=model_all
+        #self.model_final=model_final
+        #self.orig_t_final=orig_t_final
+        #self.orig_t_all=orig_t_all
 
 
 #def eqlocate(x0,y0,z0,ts,la,lo,el,vpin,tol,solvedep=False,nimax=100,verbose=False,kms2deg=[111.19,75.82]):

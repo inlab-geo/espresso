@@ -5,7 +5,7 @@ from scipy.constants import G
 
 
 
-class Basics():
+class gravity_basics():
     """
     Creates a class object containing basic information about the inversion test problem. 
 
@@ -48,7 +48,7 @@ def init_routine(grav_basics):
     -------------
     
     :param grav_basics: Basic parameters of the inversion test problem
-    :type grav_basics: class
+    :type grav_basics: gravity_basics
     
     -------------
     """
@@ -79,7 +79,7 @@ def forward(grav_basics, model):
     -------------
 
     :param grav_basics: Basic parameters of the inversion test problem
-    :type grav_basics: class
+    :type grav_basics: gravity_basics
     :param model: Contains density values in a 1-dimensional array
     :type model: numpy array
     :param synthetics: Contains synthetic data of the forward calulation (graviational response).
@@ -134,7 +134,7 @@ def forward(grav_basics, model):
         gy_rec=gy_rec+np.random.normal(0,grav_basics.noise*np.max(np.absolute(gy_rec)),len(gy_rec))
         gz_rec=gz_rec+np.random.normal(0,grav_basics.noise*np.max(np.absolute(gz_rec)),len(gz_rec))
     
-    synthetics = synth(gx_rec, gy_rec, gz_rec)
+    synthetics = synthetic_class(gx_rec, gy_rec, gz_rec)
     gradient=[]
     return synthetics, gradient 
     
@@ -148,7 +148,7 @@ def plot_model(grav_basics, model, synthetics):
     -------------
 
     :param grav_basics: Basic parameters of the inversion test problem
-    :type grav_basics: class
+    :type grav_basics: gravity_basics
     :param model: Contains density values in a 1-dimensional array
     :type model: numpy array
     :param synthetics: Contains synthetic data of the forward calulation (graviational response).
@@ -204,7 +204,7 @@ def plot_model(grav_basics, model, synthetics):
     
 #########################################################################
 
-class synth():
+class synthetic_class():
     """ 
     Class object containing synthetic data of the forward calulation.
     

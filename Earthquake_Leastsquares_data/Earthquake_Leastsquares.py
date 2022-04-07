@@ -48,8 +48,8 @@ def init_routine(eql_basics):
     Arguments:
     -------------
     
-    :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: class
+    :param eql_basics: Basic parameters of the inversion test problem
+    :type eql_basics: earthquake_basics
     
     -------------
     """
@@ -72,7 +72,7 @@ def forward(eql_basics, model):
     -------------
 
     :param eql_basics: Basic parameters of the inversion test problem
-    :type eql_basics: class
+    :type eql_basics: earthquake_basics
     :param model: Contains starting values for the Earthquake location and origin time.
     :type model: numpy array
     
@@ -104,15 +104,23 @@ def solver(eql_basics, model_start, synthetic, gradient):
     -------------
     
     :param eql_basics: Basic parameters of the inversion test problem
-    :type eql_basics: class
+    :type eql_basics: earthquake_basics
     :param model: Contains starting values for the Earthquake location and origin time.
     :type model: numpy array
     :param synthetics: Contains synthetic data (attenutation rate) and the corresponding 
     array showing the distance a ray spent in which grid cell. 
-    :type synthetics: class
+    :type synthetic: numpy array
     :param gradient: Empty variable in this inversion test problem. 
     :type gradient: list (empty)
-      
+    :param result: 
+        :param model_recovered: The least square solution of the inversion
+        :type model_recovered: numpy array
+        :param r: Residual between the observed and predicted travel times 
+        :type r: numpy array
+        :param chisq: Chi-squared value of the recovered model
+        :type chisq: numpy array
+    :type result: resultclass
+    
     -------------
     """
     
@@ -148,7 +156,7 @@ def solver(eql_basics, model_start, synthetic, gradient):
         if(it!=nit-1):model_recovered[it+1] = model_recovered[it] + dm
     r = r.reshape(nit,len(rec_loc[:n_used]))
     
-    result=resultclass(model_recovered,r, chisq)
+    result=resultclass(model_recovered=model_recovered,r=r, chisq=chisq)
     return result
 
 def plot_model(eql_basics, result):
@@ -158,8 +166,8 @@ def plot_model(eql_basics, result):
     Arguments:
     -------------
     
-    :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: class
+    :param eql_basics: Basic parameters of the inversion test problem
+    :type eql_basics: earthquake_basics
     :param result: Contains the recovered model, i.e. the coordinates of the earthquake location 
         in x, y, z (in km) and the origin time (in s). 
     :type result: numpy array
@@ -229,9 +237,29 @@ def calct(sol,rec_loc):
     tpred = sol[3] + d/vel
     return tpred
 
-class resultclass():
-    def __init__(self, model_recovered,r, chisq):
-        self.model_recovered=model_recovered
-        self.r=r
-        self.chisq=chisq
+# Old version of resultclass, keep for a moment
+#class resultclass2():
+    #def __init__(self, model_recovered,r, chisq):
+        #self.model_recovered=model_recovered
+        #self.r=r
+        #self.chisq=chisq
 
+class resultclass():
+    """
+    Class object containing the results of the inversion and relevant information to understand it.
+    
+    Attributes: 
+    ----------------
+        :param model_recovered: The least square solution of the inversion
+        :type model_recovered: numpy array
+        :param r: Residual between the observed and predicted travel times 
+        :type r: numpy array
+        :param chisq: Chi-squared value of the recovered model
+        :type chisq: numpy array
+
+    ----------------
+    
+    """
+    
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
