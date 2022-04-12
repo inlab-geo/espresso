@@ -14,11 +14,11 @@ This repository contains examples for running inversion algorithms using CoFI.
 (Strongly recommended) Create a virtual environment to avoid conflicts with your other projects:
 
 ```console
-$ conda create -n cofi_env python=3.8 scipy jupyterlab matplotlib
+$ conda env create -f environment.yml
 $ conda activate cofi_env
 ```
 
-Install `cofi` with:
+Otherwise (if you've followed above then skip this), ensure you have `scipy` in your environment and then install `cofi` with:
 
 ```console
 $ pip install cofi
@@ -54,3 +54,9 @@ or our [Slack workspace](https://inlab-geo.slack.com/).
 - InLab [website](http://www.inlab.edu.au/)
 - CoFI [documentation](https://cofi.readthedocs.io/en/latest/index.html) (under construction)
 - CoFI [GitHub repository](https://github.com/inlab-geo/cofi) (under construction)
+
+## Troubleshooting for interactive lab
+If you've followed the [getting started section](README.md#getting-started) above, and are still 
+having trouble displaying the ipython widgets, then hopefully 
+[this StackOverflow thread](https://stackoverflow.com/questions/36351109/ipython-notebook-ipywidgets-does-not-show) 
+will help you. 
