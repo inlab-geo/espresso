@@ -4,7 +4,7 @@ import pathlib
 # get version number
 _ROOT = pathlib.Path(__file__).parent
 
-with open(str(_ROOT / "src" / "CoFITestSuite" / "_version.py")) as f:
+with open(str(_ROOT / "src" / "cofitestsuite" / "_version.py")) as f:
     for line in f:
         if line.startswith("__version__ ="):
             _, _, version = line.partition("=")
@@ -16,7 +16,7 @@ with open(str(_ROOT / "src" / "CoFITestSuite" / "_version.py")) as f:
 
 
 setup(
-    name="CoFITestSuite-h-hollmann",
+    name="cofitestsuite-h-hollmann",
     version=VERSION,
     description="A gravity forward calculation",
     author="Hannes",
