@@ -95,7 +95,7 @@ git commit -m "A sentence that describes the new problem."
 git push
 ```
 
-The new test problem is now uploaded into the repository. As a last step, visit https://github.com/inlab-geo/inversion-test-problems/branches. Locate the new branch and click on "create pull request". If the changes are confined to the new folder and Jupyter Notebook, the new test problem will be quickly added to the repository and released to pip with the next update.
+The new test problem is now uploaded into the repository. As a last step, visit https://github.com/inlab-geo/inversion-test-problems/branches. Locate the new branch and click on "create pull request". If the changes are confined to the new folder and Jupyter Notebook, the new test problem will be quickly added to the repository and released to the pip package with the next update.
 
 # How to create a sensible inversion test problem
 
