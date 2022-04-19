@@ -2,5 +2,5 @@ include *.md
 include setup.cfg
 include setup.py
 include LICENSE
-recursive-include src/CoFITestSuite/*/ *.*
+recursive-include src/cofitestsuite/*/ *.*
 exclude *.ipynb

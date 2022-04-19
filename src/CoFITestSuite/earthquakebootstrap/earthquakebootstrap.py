@@ -3,8 +3,8 @@ from scipy import stats
 import numpy as np
 import math
 import pickle
-from CoFITestSuite.earthquakebootstrap import plotcovellipse as pc
-from CoFITestSuite.earthquakebootstrap import eqlocate as eq
+from cofitestsuite.earthquakebootstrap import plotcovellipse as pc
+from cofitestsuite.earthquakebootstrap import eqlocate as eq
 import os
 
 

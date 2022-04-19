@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 from scipy import stats
 import numpy as np
-from CoFITestSuite.earthquakeleastsquares import plotcovellipse as pc
+from cofitestsuite.earthquakeleastsquares import plotcovellipse as pc
 import math
 import scipy.io as sio
-from CoFITestSuite.earthquakeleastsquares import eqlocate as eq
-from CoFITestSuite.earthquakeleastsquares.plotcovellipse import plot_point_cov,plot_cov_ellipse
+from cofitestsuite.earthquakeleastsquares import eqlocate as eq
+from cofitestsuite.earthquakeleastsquares.plotcovellipse import plot_point_cov,plot_cov_ellipse
 import pickle
 import os
 
