@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-import random 
+import random
 import tqdm
+import os
 
 # Andrew Valentine (andrew.valentine@anu.edu.au)
 # Malcolm Sambridge (malcolm.sambridge@anu.edu.au)
@@ -17,27 +18,27 @@ import tqdm
 
 def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,figsize=(8,6)):
     """
-    Function to visualise the recovered model. 
-    
+    Function to visualise the recovered model.
+
     Arguments:
-    
+
     ---------------
     :param model: Contains attenuation values in a 2-dimensional (N_x * N_y) array
     :type model: numpy array
     :param paths: specifies the start and end points rays displayed in the subsequent model plot.
     :type paths: numpy array
     :param extent: Use to limit the boundary of the model region where rays are allowed to travel.
-    :type extent: numpy array 
+    :type extent: numpy array
     :param clim: Set the color limits of the current image.
     :type clim: numpy array; see matplotlib.pyplot.clim
-    :param cmap: Set the color scheme of the current image. 
+    :param cmap: Set the color scheme of the current image.
     :type cmap: numpy array
-    :param figsize: Set the figure size of the current image. 
+    :param figsize: Set the figure size of the current image.
     :type fixsize: numpy array
-    
+
     ---------------
     """
-    
+
     plt.figure(figsize=figsize)
     if cmap is None: cmap = plt.cm.bone_r
 
@@ -55,16 +56,16 @@ def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,figsize=(
 
 def tracer(model,paths,extent=(0,1,0,1)):
     """
-    For every raypath defined in paths: This function calculates the distance of the 
-    ray in each model cell. 
-    The distances are combined with the attenuation of each model cell to estimate 
-    the overall attenuation rate between source and receiver for each ray path. 
-    
+    For every raypath defined in paths: This function calculates the distance of the
+    ray in each model cell.
+    The distances are combined with the attenuation of each model cell to estimate
+    the overall attenuation rate between source and receiver for each ray path.
+
     Arguments in:
     ---------------
     :param model: Contains attenuation values in a 2-dimensional (N_x * N_y) array
     :type model: numpy array
-    :param paths: specifies the start and end points of each ray traveling through the model. 
+    :param paths: specifies the start and end points of each ray traveling through the model.
         - paths[i,0] - x-location of source for path i
         - paths[i,1] - y-location of source for path i
         - paths[i,2] - x-location of receiver for path i
@@ -73,15 +74,15 @@ def tracer(model,paths,extent=(0,1,0,1)):
     :param extent: Use to limit the boundary of the model region where rays are allowed to travel.
     :type extent: numpy array
     ---------------
-    Arguments out: 
+    Arguments out:
     ---------------
-    :param attns: is the attenuation for each path. It is an array of dimension 
+    :param attns: is the attenuation for each path. It is an array of dimension
     :type attns: numpy array
     :param A: The matrix relating model to data. Contains distance information of each raypath in each model cell.
     :type A: numpy array
     ---------------
     """
-    
+
     try:
         nx,ny = model.shape
     except:
@@ -169,13 +170,13 @@ def tracer(model,paths,extent=(0,1,0,1)):
 ####################################################################
 # Additions for Inversion Test Suite
 
-class xrt_basics_class():
+class Basics():
     """
-    Creates a class object containing basic information about the inversion test problem. 
+    Creates a class object containing basic information about the inversion test problem.
 
     Attributes:
     --------------------
-    
+
     :param model_size: defines the model size; model is always squared so setting one value is sufficient.
     :type model_size: int
     :param epsSquared: regularisation parameter
@@ -186,7 +187,7 @@ class xrt_basics_class():
     :type subset: float
     :param data: contains attenuation rates for each ray traveling through the model
     :type data: numpy array
-    :param paths: specifies the start and end points of each ray traveling through the model. 
+    :param paths: specifies the start and end points of each ray traveling through the model.
         - paths[i,0] - x-location of source for path i
         - paths[i,1] - y-location of source for path i
         - paths[i,2] - x-location of receiver for path i
@@ -195,11 +196,19 @@ class xrt_basics_class():
     -------
     """
 
+
+    def data_path(filename):
+        path_to_current_file = os.path.realpath(__file__)
+        current_directory = os.path.split(path_to_current_file)[0]
+        data_path = os.path.join(current_directory, filename)
+        return data_path
+
+
     model_size=50
     epsSquared=0.001
     noise=0
     subset=1
-    dataset = np.loadtxt('xrayTomography_data/xrt_data.dat')
+    dataset = np.loadtxt(data_path('xrt_data.dat'))
     data = np.zeros([np.shape(dataset)[0],2])
     data = -np.log(dataset[:,5]) + np.log(dataset[:,2])
     paths = np.zeros([np.shape(dataset)[0],4])
@@ -207,23 +216,23 @@ class xrt_basics_class():
     paths[:,1] = dataset[:,1]
     paths[:,2] = dataset[:,3]
     paths[:,3] = dataset[:,4]
-    
+
     del dataset
 
 
 def init_routine(xrt_basics):
     """
-    Returns a starting model for the forward calculation. 
-    
-    If xrt_basics.model is set, it returns that as the starting model. If xrt_basics.model is 
+    Returns a starting model for the forward calculation.
+
+    If xrt_basics.model is set, it returns that as the starting model. If xrt_basics.model is
     not set, it returns a default starting model containing ones.
-    
+
     Arguments:
     -------------
-    
+
     :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: xrt_basics_class
-    
+    :type xrt_basics: class
+
     -------------
     """
     try:
@@ -234,69 +243,69 @@ def init_routine(xrt_basics):
 
 def forward(xrt_basics, model):
     """
-    Returns the attenuation rate along ray paths given a model. Calculates the attenuation 
-    of each model cell based on the cell's attenuation rate and the length of the ray path 
-    within that cell. 
-    
+    Returns the attenuation rate along ray paths given a model. Calculates the attenuation
+    of each model cell based on the cell's attenuation rate and the length of the ray path
+    within that cell.
+
     Arguments:
     -------------
 
     :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: xrt_basics_class
+    :type xrt_basics: class
     :param model: Contains attenuation values in a 2-dimensional (N_x * N_y) array
     :type model: numpy array
-    
+
     :param synthetics: Contains synthetic data of the forward calulation (attenuation rate) and other parameters needed to understand them
-    :type synthetic: numpy array
-    :param gradient: Empty variable in this inversion test problem. 
+    :type synthetics: class
+    :param gradient: Empty variable in this inversion test problem.
     :type gradient: list (empty)
- 
+
     -------------
     """
-    
+
     synthetics=list()
     data, G = tracer(model,xrt_basics.paths)
-    synthetics=synthclass(data, G)
+    synthetics=synth(data, G)
     gradient=[]
     return synthetics, gradient
 
-class synthclass():
-    """ 
+class synth():
+    """
     Class object containing synthetic data of the forward calulation and other parameters needed to understand them.
-    
+
     Parameters
     --------------------
     *args
-        
+
         data : Contains synthetic attenuation rates for every ray path.
-        
-        G : Contains the attenuation of each model cell along each ray path. 
-    
+
+        G : Contains the attenuation of each model cell along each ray path.
+
     --------------------
     """
-    
+
     def __init__(self, data, G):
         self.G=G
         self.data=data
 
 def solver(xrt_basics, model, synthetics, gradient):
     """
-    Performs the inversion. Returns a recovered model that is a 
-    regularised least squares solution given the data and the starting model. 
-    
+    Performs the inversion. Returns a recovered model that is a
+    regularised least squares solution given the data and the starting model.
+
     Arguments:
     -------------
-    
+
     :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: xrt_basics_class
+    :type xrt_basics: class
     :param model: Contains attenuation parameters of each model grid cell in a 2-dimensional (N_x * N_y) array
     :type model: numpy array
-    :param synthetics: Contains synthetic data (attenutation rate) and the corresponding 
-    array showing the distance a ray spent in which grid cell. 
-    :type synthetic: numpy array
-    :param gradient: Empty variable in this inversion test problem. 
+    :param synthetics: Contains synthetic data (attenutation rate) and the corresponding
+    array showing the distance a ray spent in which grid cell.
+    :type synthetics: class
+    :param gradient: Empty variable in this inversion test problem.
     :type gradient: list (empty)
-    
+
     -------------
     """
     G=synthetics.G
@@ -306,7 +315,7 @@ def solver(xrt_basics, model, synthetics, gradient):
         ind=np.random.choice(len(data),round(len(data)*xrt_basics.subset))
         data=data[ind]
         G=G[ind,:]
-    
+
     data=data+np.random.normal(0,xrt_basics.noise*np.max(data),len(data))
 
     #print(np.shape(G))
@@ -315,22 +324,22 @@ def solver(xrt_basics, model, synthetics, gradient):
 
 def plot_model(xrt_basics,result):
     """
-    Visualises the recovered model. This is a wrapper for the underlying function displayModel. 
-    
+    Visualises the recovered model. This is a wrapper for the underlying function displayModel.
+
     Arguments:
     -------------
-    
+
     :param xrt_basics: Basic parameters of the inversion test problem
-    :type xrt_basics: xrt_basics_class
+    :type xrt_basics: class
     :param result: Contains the recovered model as attenuation rates in a 2-dimensional (N_x * N_y) array
     :type result: numpy array
-    
+
     --------------------
     """
-    
+
     size=int(np.sqrt(len(result)))
     displayModel(result.reshape(size,size))
-    
+
 # -------------------------------------------------------------------------------
 # Useful functions that are not used in this inversion test problem
 # -------------------------------------------------------------------------------
