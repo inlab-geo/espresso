@@ -67,8 +67,11 @@ problem_basics.variable2=value2
 # How to contribute to the repository:
  <em>This section needs to be include a text about merge before we see more traffic.</em>
 
-Here we assume that the contributor already created a Github account and established a secure connection using https or SSH. If this is not the case please see the following tutorials: 
-- [Add a tutorial for how to set up a secure connection.]
+
+
+This section contains the minimum information necessary to contribute to the CoFI Test Suite Github repository. We assume that the contributor already owns a Github account and established a secure connection using https or SSH. If this is not the case please see the following tutorial: 
+
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
 To contribute an existing test problem to the Github repository, first clone the Github repository: 
 
