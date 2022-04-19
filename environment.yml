@@ -5,5 +5,3 @@ dependencies:
   - scipy>=1.7.3
   - matplotlib>=3.5.0
   - pip>=21.2.4
-  - pip:
-    - cofi>=0.1.1.dev1
