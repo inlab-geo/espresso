@@ -9,14 +9,14 @@ CoFi TestSuite is a collection of clearly defined, stand-alone forward and inver
 It is recommended to use a clean virtual environment for the install: 
 
 ```console
-conda create -n cofi_testsuite_env python=3.8 scipy jupyterlab numpy
+conda create -n cofi_testsuite_env python=3.8 scipy jupyterlab numpy matplotlib
 conda activate cofi_testsuite_env
 ```
 
 CoFi Test Suite is available on the PyIP test server and can be installed using this command:
 
 ```console
-python3 -m pip install --index-url https://test.pypi.org/simple/ cofitestsuite-h-hollmann
+pip install cofitestsuite
 ```
 
 # Basic usage
