@@ -16,7 +16,7 @@ with open(str(_ROOT / "src" / "cofitestsuite" / "_version.py")) as f:
 
 
 setup(
-    name="cofitestsuite-h-hollmann",
+    name="cofitestsuite",
     version=VERSION,
     description="A gravity forward calculation",
     author="Hannes",
