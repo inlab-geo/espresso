@@ -107,7 +107,7 @@ The code can include files of all kinds of formats. But it needs to include a fi
 - ``plot_model()``
 
 Some notes on how to make a local problem work within the repository:
-- If the code imports local functions, for example ``import auxillaryfunction'' where auxillaryfunction.py is in the same folder, it is necessary to change the line to ``from cofitestsuite.newproblem import auxillaryfunction``
+- If the code imports local functions, for example ``import auxillaryfunction`` where auxillaryfunction.py is in the same folder, it is necessary to change the line to ``from cofitestsuite.newproblem import auxillaryfunction``
 - If data is included, then the correct path has to be given. 
 
 Additionally, we encourage you to add a Jupyter Notebook with an identical name into the folder ''Jupyter Notebooks`` that contains the following:
