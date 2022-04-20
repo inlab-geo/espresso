@@ -1,7 +1,7 @@
 # CoFI Test Suite
 
 
-CoFi TestSuite is a collection of clearly defined, stand-alone forward and inversion problems that each can be solved using the same code structure. The aim is to create a minimalistic framework that is easily understandable while still being capable of hosting a wide range of inversion problems. Information will be conveyed via a sensible, consistent naming convention and informative output at the end consisting of text and visualisations. Extended documentation will be available on Github. 
+CoFi TestSuite is a collection of clearly defined, stand-alone forward and inversion problems that each can be solved using the same code structure. The aim is to create a minimalistic framework that is easily understandable while being flexible enough of hosting a wide range of inversion problems. Information will be conveyed via a sensible, consistent naming convention and an informative output that can consist of text and/or visualisations. 
 
 
 # Installation
@@ -13,7 +13,7 @@ conda create -n cofi_testsuite_env python=3.8 scipy jupyterlab numpy matplotlib
 conda activate cofi_testsuite_env
 ```
 
-CoFi Test Suite is available on the PyIP test server and can be installed using this command:
+CoFi Test Suite is available on PyIP and can be installed using this command:
 
 ```console
 pip install cofitestsuite
@@ -34,7 +34,7 @@ Replace ``testproblem`` with one of the following currently available problems:
 - ``earthquakebootstrap``: 
 - ``earthquakeleastsquares``: 
 
-Once a problem is imported, it's functions can be called using the same structure for each problem:
+Once a problem is imported, it's main functions can be called using the same structure for each problem. For more information for each function please use help():
 
 ```console
 
@@ -65,11 +65,9 @@ problem_basics.variable2=value2
 ```
 
 # How to contribute to the repository:
- <em>This section needs to be include a text about merge before we see more traffic.</em>
+ <em>This section should include a text about how to merge branches before it is made available to the wider public.</em>
 
-
-
-This section contains the minimum information necessary to contribute to the CoFI Test Suite Github repository. We assume that the contributor already owns a Github account and established a secure connection using https or SSH. If this is not the case please see the following tutorial: 
+This section contains the minimum information necessary to contribute to the CoFI Test Suite Github repository. We assume that the potential contributor already has a Github account and established a secure connection using https or SSH. If this is not the case please see the following tutorial: 
 
 https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
@@ -79,13 +77,16 @@ To contribute an existing test problem to the Github repository, first clone the
 git clone https://github.com/inlab-geo/inversion-test-problems.git
 ```
 
-Create a new branch for the new test problem:
+Create a new branch for the new test problem (using a sensible name instead of ``new_branch``):
 
 ```console
 git checkout -b new_branch
 ```
 
-Then add the new test problem as a new folder to ``scr/cofitestsuite/newproblem`` (replacing ``newproblem`` with the new problem name) and add the Jupyter Notebook with the name ''newproblem.ipynb'' to the ``Jupyter Notebooks`` folder. 
+For more information about how to use branches, see this article:
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+
+Next, add the new test problem as a new folder to ``scr/cofitestsuite/newproblem`` (replacing ``newproblem`` with the new problem name) and add the Jupyter Notebook with the name ''newproblem.ipynb'' to the ``Jupyter Notebooks`` folder. 
 
 Then use the following commands to upload the new test problem to the repository:
 
@@ -99,29 +100,48 @@ The new test problem is now uploaded into the repository. As a last step, visit 
 
 # How to create a sensible inversion test problem
 
-The code can include files of all kinds of formats. But it needs to include a file called ``newproblem.py``. This file should include the following functions: 
+The code can include files of any format, but it has to include a file called ``newproblem.py`` that acts as the front end of the new test problem. This file should include the following functions: 
 - ``basic()``
 - ``init_routine()``
 - ``forward()``
 - ``solver()``
 - ``plot_model()``
 
-Some notes on how to make a local problem work within the repository:
-- If the code imports local functions, for example ``import auxillaryfunction`` where auxillaryfunction.py is in the same folder, it is necessary to change the line to ``from cofitestsuite.newproblem import auxillaryfunction``
-- If data is included, then the correct path has to be given. 
+These key functions can call any amount of sub-functions from within the file ``newproblem.py``, or from within the same folder.
+
+important points to note on how to convert a locally working problem into one that works within the CoFI Test Suite package:
+
+- We recommend to not use subfolders within ''newproblem''. All data and scripts will be in the same folder after comiling.
+
+- If the code imports functions from the same folder that would usually be called by using ``import auxillaryfunction``, it is necessary to change the line to ``from cofitestsuite.newproblem import auxillaryfunction``.
+
+- If data is included, then the correct path to where the pip package is installed has to be given. When giving the path, replace this: 
+  ```console 
+  np.load(''data.npz'')
+  ```
+  with the following, or your own version of it:
+
+  ```console
+  np.load(data_path(''data.npz''))
+    
+  def data_path(filename):
+    path_to_current_file = os.path.realpath(__file__)
+    current_directory = os.path.split(path_to_current_file)[0]
+    data_path = os.path.join(current_directory, filename)
+    return data_path
+  ```
 
 Additionally, we encourage you to add a Jupyter Notebook with an identical name into the folder ''Jupyter Notebooks`` that contains the following:
+
 - An extensive description of the new inversion test problem, containing information about (but not limited to)...
   - the forward calculation (ie. the underlying physics) and how it was implemented.
   - which inversion method is used (and regularisation) and how it was implemented.
   - the physical unit of relevant variables, but at least of ``model`` and ``data``.
   - all changeable parameters, possibly in a list.
+
 - An example of the new problem being used, with a reasonable output.
 
 
-description of 
-
-Now, use the following commands to add the new folder into 
 
 <!---  Binder does not work right now.   -->
 <!---  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/inlab-geo/inversion-test-problems/HEAD)   -->
