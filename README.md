@@ -38,7 +38,7 @@ Once a problem is imported, it's main functions can be called using the same str
 
 ```console
 
-from InversionTestProblems import testproblem as tp
+from cofitestsuite.testproblem import testproblem as tp
 
 model=tp.init_routine(problem_basics) 
 
@@ -55,7 +55,7 @@ Problem-specific values, for example model resolution or noise level, can be spe
 
 ```console
 
-from InversionTestProblems import testproblem as tp
+from cofitestsuite.testproblem import testproblem as tp
 
 problem_basics = problem_fcn.basics()
 problem_basics.variable=value
