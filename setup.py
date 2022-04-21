@@ -18,7 +18,7 @@ with open(str(_ROOT / "src" / "cofitestsuite" / "_version.py")) as f:
 setup(
     name="cofitestsuite",
     version=VERSION,
-    description="A gravity forward calculation",
+    description="A collection of forward and inverse problems",
     author="Hannes",
     author_email="hannes.hollmann@anu.edu.au",
     license='BSD 2-clause',

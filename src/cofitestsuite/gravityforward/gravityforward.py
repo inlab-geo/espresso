@@ -5,7 +5,7 @@ import os
 
 
 
-class():
+class basics():
     """
     Creates a class object containing basic information about the inversion test problem.
 
