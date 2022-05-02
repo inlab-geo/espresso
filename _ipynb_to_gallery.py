@@ -3,8 +3,10 @@ Usage: python ipynb_to_gallery.py <notebook.ipynb>
 Dependencies:
 pypandoc: install using `pip install pypandoc`
 
-Source: https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe
+Adapted from source gist link below:
+https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe
 """
+
 import pypandoc as pdoc
 import json
 
@@ -35,8 +37,17 @@ def convert_ipynb_to_gallery(file_name):
                 python_file = python_file + '\n' * 2 + source
 
     python_file = python_file.replace("\n%", "\n# %")
-    open(file_name.replace('.ipynb', '.py'), 'w').write(python_file)
+    generated_file_name = file_name.replace(".ipynb", ".py")
+    generated_file_name = generated_file_name.replace("notebooks", "scripts")
+    open(generated_file_name, 'w').write(python_file)
 
 if __name__ == '__main__':
     import sys
-    convert_ipynb_to_gallery(sys.argv[-1])
+    import glob
+    if sys.argv[-1] == "all":
+        all_scripts = glob.glob('notebooks/*.ipynb')
+        all_scripts = [name for name in all_scripts if "lab" not in name]
+    else:
+        all_scripts = [sys.argv[-1]]
+    for script in all_scripts:
+        convert_ipynb_to_gallery(script)

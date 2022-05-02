@@ -23,7 +23,7 @@ Table of contents
 -  Next - `switching to a different inversion approach <#switch>`__
 
 Introduction 
-------------
+-------------
 
 In the workflow of ``cofi``, there are three main components:
 ``BaseProblem``, ``InversionOptions``, and ``Inversion``.
@@ -88,7 +88,7 @@ So a common workflow includes 4 steps:
 # --------------
 # 
 # 0. Import modules 
-# -----------------
+# ------------------
 # 
 
 import numpy as np
@@ -103,7 +103,7 @@ np.random.seed(42)
 # --------------
 # 
 # 1. Define the problem 
-# ---------------------
+# ----------------------
 # 
 # A list of functions/properties that can be set to ``BaseProblem`` so
 # far:
@@ -167,7 +167,7 @@ inv_problem.summary()
 # --------------
 # 
 # 2. Define the inversion options 
-# -------------------------------
+# --------------------------------
 # 
 
 inv_options = InversionOptions()
@@ -199,7 +199,7 @@ inv_options.summary()
 # --------------
 # 
 # 3. Start an inversion 
-# ---------------------
+# ----------------------
 # 
 
 inv = Inversion(inv_problem, inv_options)
@@ -215,7 +215,7 @@ inv_result.summary()
 # --------------
 # 
 # 4. Check back your problem setting, inversion setting & result 
-# --------------------------------------------------------------
+# ---------------------------------------------------------------
 # 
 
 inv.summary()
@@ -246,7 +246,7 @@ _=plt.legend()
 # --------------
 # 
 # 5. Summary: a cleaner version of the above example 
-# --------------------------------------------------
+# ---------------------------------------------------
 # 
 # For review purpose, here are the minimal set of commands we’ve used to
 # produce the above result:
@@ -289,7 +289,7 @@ inv_result.summary()
 # --------------
 # 
 # 6. Switching to a different inversion approach 
-# ----------------------------------------------
+# -----------------------------------------------
 # 
 # Alternatively, you can switch to a different inversion solver easily.
 # Here we use a plain optimizer ``scipy.optimize.minimize`` to demonstrate
