@@ -36,9 +36,9 @@ jobs:
 
       - name: Move datasets
         run: |
-          mv notebooks/*.npz scripts/
-          mv notebooks/*.dat scripts/
-          mv notebooks/*.csv scripts/
+          mv notebooks/*.npz scripts/ 2>/dev/null
+          mv notebooks/*.dat scripts/ 2>/dev/null
+          mv notebooks/*.csv scripts/ 2>/dev/null
 
       - name: Push scripts back to repo
         run: |
