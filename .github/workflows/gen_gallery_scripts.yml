@@ -37,11 +37,12 @@ jobs:
       - name: Move datasets
         continue-on-error: true
         run: |
-          mv notebooks/*.npz scripts/ 2>/dev/null
-          mv notebooks/*.dat scripts/ 2>/dev/null
-          mv notebooks/*.csv scripts/ 2>/dev/null
+          cp notebooks/*.npz scripts/ 2>/dev/null
+          cp notebooks/*.dat scripts/ 2>/dev/null
+          cp notebooks/*.csv scripts/ 2>/dev/null
 
       - name: Push scripts back to repo
+        continue-on-error: true
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
