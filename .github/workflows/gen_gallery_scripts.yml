@@ -35,6 +35,7 @@ jobs:
           python _ipynb_to_gallery.py all
 
       - name: Move datasets
+        continue-on-error: true
         run: |
           mv notebooks/*.npz scripts/ 2>/dev/null
           mv notebooks/*.dat scripts/ 2>/dev/null
