@@ -34,6 +34,12 @@ jobs:
         run: |
           python _ipynb_to_gallery.py all
 
+      - name: Move datasets
+        run: |
+          mv notebooks/*.npz scripts/
+          mv notebooks/*.dat scripts/
+          mv notebooks/*.csv scripts/
+
       - name: Push scripts back to repo
         run: |
           git config --global user.name "github-actions[bot]"
