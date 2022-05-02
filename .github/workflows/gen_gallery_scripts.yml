@@ -28,6 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install pandoc
+          pip install pypandoc
       
       - name: Run _ipynb_to_gallery.py
         run: |
