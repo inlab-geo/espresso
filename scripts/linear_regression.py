@@ -151,7 +151,7 @@ plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
 plt.scatter(x, y_observed, color="lightcoral", label="observed data")
 plt.xlabel("X")
 plt.ylabel("Y")
-_=plt.legend()
+plt.legend();
 
 # define the problem
 inv_problem = BaseProblem()
@@ -233,7 +233,7 @@ plt.plot(_x_plot, _y_synth, color="seagreen", label="least squares solution")
 plt.scatter(x, y_observed, color="lightcoral", label="original data")
 plt.xlabel("X")
 plt.ylabel("Y")
-_=plt.legend()
+plt.legend();
 
 
 ######################################################################
@@ -262,6 +262,7 @@ np.random.seed(42)
 _m_true = np.array([-6,-5,2,1])                                            # m
 _sample_size = 20                                                          # N
 x = np.random.choice(np.linspace(-3.5,2.5), size=_sample_size)             # x
+basis_func = lambda x: np.array([x**i for i in range(4)]).T               # x -> G
 forward_func = lambda m: (np.array([x**i for i in range(4)]).T) @ m        # m -> y_synthetic
 y_observed = forward_func(_m_true) + np.random.normal(0,1,_sample_size)    # d
 
@@ -269,7 +270,6 @@ y_observed = forward_func(_m_true) + np.random.normal(0,1,_sample_size)    # d
 inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
 inv_problem.set_dataset(x, y_observed)
-inv_problem.set_forward(forward_func)
 inv_problem.set_jacobian(basis_func(x))
 
 ######## Specify how you'd like the inversion to run (via an `InversionOptions`)
@@ -309,8 +309,9 @@ inv_result.summary()
 
 ######## Provide additional information
 inv_problem.set_initial_model(np.ones(4))
+inv_problem.set_forward(forward_func)
 inv_problem.set_data_misfit("L2")
-inv_problem.set_regularisation("L2", 0)
+inv_problem.set_regularisation(2, 0.02)
 
 ######## Set a different tool
 inv_options_2 = InversionOptions()
@@ -328,6 +329,7 @@ inv_result_2.summary()
 _x_plot = np.linspace(-3.5,2.5)
 _G_plot = basis_func(_x_plot)
 _y_plot = _G_plot @ _m_true
+_y_synth = _G_plot @ inv_result.model
 _y_synth_2 = _G_plot @ inv_result_2.model
 plt.figure(figsize=(12,8))
 plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
@@ -336,15 +338,10 @@ plt.plot(_x_plot, _y_synth_2, color="cornflowerblue", label="optimisation soluti
 plt.scatter(x, y_observed, color="lightcoral", label="original data")
 plt.xlabel("X")
 plt.ylabel("Y")
-_=plt.legend()
+plt.legend();
 
 
 ######################################################################
 # Here we see the (blue curve) is also a relatively good approximation of
 # the true curve (orange).
-# 
-
-
-######################################################################
-# --------------
 # 

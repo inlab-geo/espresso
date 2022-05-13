@@ -335,7 +335,7 @@ grav_problem.summary()
 inv_options = InversionOptions()
 # inv_options.set_tool()
 # inv_options.set_params()
-# inv_options.set_tool("scipy.optimize.least_squares")
+inv_options.set_tool("scipy.linalg.lstsq")
 
 inv_options.summary()
 
@@ -350,20 +350,15 @@ inv_options.summary()
 inv = Inversion(grav_problem, inv_options)
 # inv.summary()
 
-# inv_result = inv.run()
-# inv_result.summary()
+inv_result = inv.run()
+inv_result.summary()
 
-# result_model = inv_result.model.reshape(12,12,12)
-# plt.subplot(1,2,1)
-# plt.imshow(result_model[:,6,:])
-# plt.colorbar()
+result_model = inv_result.model.reshape(12,12,12)
 
-# a=gz.reshape(20,20)
-# plt.subplot(1,2,2)
-# plt.imshow(a)
-# plt.colorbar()
-
-
-######################################################################
-# --------------
-# 
+fig = plt.figure(figsize=(10,8))
+ax1 = fig.add_subplot(121)
+img1 = ax1.imshow(result_model[::-1,6,:])
+plt.colorbar(img1)
+ax2 = fig.add_subplot(122)
+img2 = ax2.imshow(result_model[6,:,:])
+plt.colorbar(img2);
