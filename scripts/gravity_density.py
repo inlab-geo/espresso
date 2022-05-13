@@ -353,6 +353,11 @@ inv = Inversion(grav_problem, inv_options)
 inv_result = inv.run()
 inv_result.summary()
 
+
+######################################################################
+# Let’s see the density image from a vertical plane:
+# 
+
 result_model = inv_result.model.reshape(12,12,12)
 
 plt.imshow(result_model[::-1,6,:])
