@@ -6,11 +6,11 @@ on:
     types:
       - closed
     paths:
-      - "notebooks/"
+      - 'notebooks/'
   push:
-    branch: main
+    branches: main
     paths:
-      - "notebooks/"
+      - 'notebooks/'
 
 jobs:
   generate_scripts:
