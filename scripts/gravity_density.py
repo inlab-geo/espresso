@@ -275,9 +275,9 @@ del tmp
 # Load starting models
 tmp=np.load('Starting_models.npz')
 Starting_model1=tmp['starting_model1']
-# Starting_model1[Starting_model1 > 0 ]=10
+Starting_model1[Starting_model1 > 0 ]=10
 Starting_model2=tmp['starting_model2']
-# Starting_model2 = np.zeros((12**3))
+Starting_model3 = np.zeros((12**3))
 
 # Create "observed" data by adding noise to forward solution
 noise_level=0.05
@@ -315,7 +315,7 @@ grav_problem.set_regularisation(reg_l1, epsilon)
 
 # Use default L2 misfit
 grav_problem.set_data_misfit("L2")
-grav_problem.set_initial_model(Starting_model1)
+grav_problem.set_initial_model(Starting_model3)
 
 # Set gradient, in hope of helping optimisers converge better
 def data_misfit_gradient(model):
@@ -335,7 +335,7 @@ grav_problem.summary()
 inv_options = InversionOptions()
 # inv_options.set_tool()
 # inv_options.set_params()
-inv_options.set_tool("scipy.linalg.lstsq")
+inv_options.set_tool("scipy.optimize.least_squares")
 
 inv_options.summary()
 
@@ -355,10 +355,9 @@ inv_result.summary()
 
 result_model = inv_result.model.reshape(12,12,12)
 
-fig = plt.figure(figsize=(10,8))
-ax1 = fig.add_subplot(121)
-img1 = ax1.imshow(result_model[::-1,6,:])
-plt.colorbar(img1)
-ax2 = fig.add_subplot(122)
-img2 = ax2.imshow(result_model[6,:,:])
-plt.colorbar(img2);
+plt.imshow(result_model[::-1,6,:])
+plt.colorbar();
+
+plt.imshow(result_model[6,:,:])
+plt.colorbar();
+
