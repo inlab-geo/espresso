@@ -358,6 +358,10 @@ result_model = inv_result.model.reshape(12,12,12)
 plt.imshow(result_model[::-1,6,:])
 plt.colorbar();
 
+
+######################################################################
+# From a different angle:
+# 
+
 plt.imshow(result_model[6,:,:])
 plt.colorbar();
-
