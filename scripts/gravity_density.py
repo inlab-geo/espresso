@@ -16,6 +16,14 @@ written in inversion-test-problems
 # ~~~~~~~~~~~~~~~~~
 # 
 
+# -------------------------------------------------------- #
+#                                                          #
+#     Uncomment below to set up environment on "colab"     #
+#                                                          #
+# -------------------------------------------------------- #
+
+# !pip install -U cofi
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -333,8 +341,6 @@ grav_problem.summary()
 # 
 
 inv_options = InversionOptions()
-# inv_options.set_tool()
-# inv_options.set_params()
 inv_options.set_tool("scipy.optimize.least_squares")
 
 inv_options.summary()

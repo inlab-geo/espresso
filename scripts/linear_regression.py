@@ -91,6 +91,14 @@ So a common workflow includes 4 steps:
 # ------------------
 # 
 
+# -------------------------------------------------------- #
+#                                                          #
+#     Uncomment below to set up environment on "colab"     #
+#                                                          #
+# -------------------------------------------------------- #
+
+# !pip install -U cofi
+
 import numpy as np
 import matplotlib.pyplot as plt
 
