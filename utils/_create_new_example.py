@@ -4,7 +4,7 @@ import os
 from shutil import copyfile
 
 NOTEBOOKS_FOLDER = "notebooks"
-TEMPLATE_FOLDER = f"{NOTEBOOKS_FOLDER}/_template"
+TEMPLATE_FOLDER = "utils/_template"
 
 if __name__ == '__main__':
     # validate example name
