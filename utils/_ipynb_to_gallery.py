@@ -8,7 +8,7 @@ https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe
 """
 
 import sys
-import glob
+from glob import glob
 from shutil import copyfile
 
 import pypandoc as pdoc
@@ -53,7 +53,7 @@ def convert_ipynb_to_gallery(file_name):
 if __name__ == '__main__':
     # collect notebooks to convert to sphinx gallery scripts
     if sys.argv[-1] == "all":
-        all_scripts = glob.glob(f"{NOTEBOOKS_FOLDER}/*/*.ipynb")
+        all_scripts = glob(f"{NOTEBOOKS_FOLDER}/*/*.ipynb")
         all_scripts = [name for name in all_scripts if "lab" not in name]
     else:
         all_scripts = [sys.argv[-1]]
@@ -63,9 +63,9 @@ if __name__ == '__main__':
         print(f"file: {script}")
         convert_ipynb_to_gallery(script)
     # collect all data files to move to scripts/
-    all_data = glob.glob(f"{NOTEBOOKS_FOLDER}/*/*.npz")
-    all_data.extend(glob.glob(f"{NOTEBOOKS_FOLDER}/*/*.dat"))
-    all_data.extend(glob.glob(f"{NOTEBOOKS_FOLDER}/*/*.csv"))
+    all_data = glob(f"{NOTEBOOKS_FOLDER}/*/*.npz")
+    all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*.dat"))
+    all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*.csv"))
     # move
     print("\nMoving dataset files...")
     for data_file in all_data:

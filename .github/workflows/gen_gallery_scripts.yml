@@ -37,7 +37,7 @@ jobs:
  
       - name: Run _ipynb_to_gallery.py
         run: |
-          python _ipynb_to_gallery.py all
+          python utils/_ipynb_to_gallery.py all
           
       - name: Set git config
         continue-on-error: true
