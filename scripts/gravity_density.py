@@ -223,7 +223,7 @@ def calculate_gradiometry(model, x_final, y_final, z_final, recvec):
 
 def forward(model):
     # Load model geometry 
-    P=np.load('Gravity_model.npz')
+    P=np.load('gravity_model.npz')
     x_nodes = P['x_nodes']
     y_nodes = P['y_nodes']
     z_nodes=P['z_nodes']
@@ -236,7 +236,7 @@ def forward(model):
         
 def get_jacobian(model):
     # Load model geometry 
-    P=np.load('Gravity_model.npz')
+    P=np.load('gravity_model.npz')
     x_nodes = P['x_nodes']
     y_nodes = P['y_nodes']
     z_nodes=P['z_nodes']
@@ -274,14 +274,14 @@ def reg_gradient_l2(model):
 # 
 
 # Load density model
-tmp=np.load('Gravity_model.npz')
+tmp=np.load('gravity_model.npz')
 rec_coords=tmp['rec_coords']
 z_nodes=tmp['z_nodes']
 model=tmp['model']
 del tmp
 
 # Load starting models
-tmp=np.load('Starting_models.npz')
+tmp=np.load('gravity_starting_models.npz')
 Starting_model1=tmp['starting_model1']
 Starting_model1[Starting_model1 > 0 ]=10
 Starting_model2=tmp['starting_model2']

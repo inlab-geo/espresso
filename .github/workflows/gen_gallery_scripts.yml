@@ -34,12 +34,12 @@ jobs:
         run: |
           python _ipynb_to_gallery.py all
 
-      - name: Move datasets
-        continue-on-error: true
-        run: |
-          cp notebooks/*.npz scripts/ 2>/dev/null
-          cp notebooks/*.dat scripts/ 2>/dev/null
-          cp notebooks/*.csv scripts/ 2>/dev/null
+      # - name: Move datasets
+      #   continue-on-error: true
+      #   run: |
+      #     cp notebooks/*.npz scripts/ 2>/dev/null
+      #     cp notebooks/*.dat scripts/ 2>/dev/null
+      #     cp notebooks/*.csv scripts/ 2>/dev/null
 
       - name: Push scripts back to repo
         continue-on-error: true
