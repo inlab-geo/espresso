@@ -2,86 +2,98 @@
 Polynomial Linear Regression
 ============================
 
-To get started, we look at a simple linear regression example with
-``cofi``.
-
-We have a set of noisy data values, Y, measured at known locations, X,
-and wish to find the best fit degree 3 polynomial.
-
-The function we are going to fit is: :math:`y=-6-5x+2x^2+x^3`
-
-Table of contents
------------------
-
--  `Introduction <#introduction>`__
--  Step 0 - `Import modules <#import>`__
--  Step 1 - `Define the problem <#problem>`__
--  Step 2 - `Define the inversion options <#options>`__
--  Step 3 - `Run the inversion <#inversion>`__
--  Step 4 - `Check out the result <#result>`__
--  Summary - `a clean version of code above <#review>`__
--  Next - `switching to a different inversion approach <#switch>`__
-
-Introduction 
--------------
-
-In the workflow of ``cofi``, there are three main components:
-``BaseProblem``, ``InversionOptions``, and ``Inversion``.
-
--  ``BaseProblem`` defines three things: 1) the forward problem; 2) the
-   inversion parameter (model) space; and 3) the objective function to
-   be optimised
--  ``InversionOptions`` describes details about how one wants to run the
-   inversion, including the inversion approach, backend tool and
-   solver-specific parameters.
--  ``Inversion`` can be seen as an inversion engine that takes in the
-   above two as information, and will produce an ``InversionResult``
-   upon running.
-
-For each of the above components, there’s a ``summary()`` method to
-check the current status.
-
-So a common workflow includes 4 steps:
-
-1. define ``BaseProblem``. This can be done:
-
-   -  either: through a series of set functions
-
-      ::
-
-         inv_problem = BaseProblem()
-         inv_problem.set_objective(some_function_here)
-         inv_problem.set_initial_model(a_starting_point)
-
-   -  or: by subclassing ``BaseProblem``
-
-      ::
-
-         class MyOwnProblem(BaseProblem):
-             def __init__(self, initial_model, whatever_I_want_to_pass_in):
-                 self.initial_model = initial_model
-                 self.whatever_I_want_to_pass_in = whatever_I_want_to_pass_in
-             def objective(self, model):
-                 return some_objective_function_value
-
-2. define ``InversionOptions``. Some useful methods include:
-
-   -  ``set_solving_method()`` and ``suggest_tools()``. Once you’ve set
-      a solving method (from “least squares” and “optimisation”, more
-      will be supported), you can use ``suggest_tools()`` to see a list
-      of backend tools to choose from.
-
-3. start an ``Inversion``. This step is common:
-
-   ::
-
-      inv = Inversion(inv_problem, inv_options)
-      result = inv.run()
-
-4. analyse the result, workflow and redo your experiments with different
-   ``InversionOptions``
-
 """
+
+
+######################################################################
+# .. raw:: html
+# 
+#    <!--<badge>-->
+# 
+# 
+# 
+
+
+######################################################################
+# To get started, we look at a simple linear regression example with
+# ``cofi``.
+# 
+# We have a set of noisy data values, Y, measured at known locations, X,
+# and wish to find the best fit degree 3 polynomial.
+# 
+# The function we are going to fit is: :math:`y=-6-5x+2x^2+x^3`
+# 
+# Table of contents
+# -----------------
+# 
+# -  `Introduction <#introduction>`__
+# -  Step 0 - `Import modules <#import>`__
+# -  Step 1 - `Define the problem <#problem>`__
+# -  Step 2 - `Define the inversion options <#options>`__
+# -  Step 3 - `Run the inversion <#inversion>`__
+# -  Step 4 - `Check out the result <#result>`__
+# -  Summary - `a clean version of code above <#review>`__
+# -  Next - `switching to a different inversion approach <#switch>`__
+# 
+# Introduction 
+# -------------
+# 
+# In the workflow of ``cofi``, there are three main components:
+# ``BaseProblem``, ``InversionOptions``, and ``Inversion``.
+# 
+# -  ``BaseProblem`` defines three things: 1) the forward problem; 2) the
+#    inversion parameter (model) space; and 3) the objective function to
+#    be optimised
+# -  ``InversionOptions`` describes details about how one wants to run the
+#    inversion, including the inversion approach, backend tool and
+#    solver-specific parameters.
+# -  ``Inversion`` can be seen as an inversion engine that takes in the
+#    above two as information, and will produce an ``InversionResult``
+#    upon running.
+# 
+# For each of the above components, there’s a ``summary()`` method to
+# check the current status.
+# 
+# So a common workflow includes 4 steps:
+# 
+# 1. define ``BaseProblem``. This can be done:
+# 
+#    -  either: through a series of set functions
+# 
+#       ::
+# 
+#          inv_problem = BaseProblem()
+#          inv_problem.set_objective(some_function_here)
+#          inv_problem.set_initial_model(a_starting_point)
+# 
+#    -  or: by subclassing ``BaseProblem``
+# 
+#       ::
+# 
+#          class MyOwnProblem(BaseProblem):
+#              def __init__(self, initial_model, whatever_I_want_to_pass_in):
+#                  self.initial_model = initial_model
+#                  self.whatever_I_want_to_pass_in = whatever_I_want_to_pass_in
+#              def objective(self, model):
+#                  return some_objective_function_value
+# 
+# 2. define ``InversionOptions``. Some useful methods include:
+# 
+#    -  ``set_solving_method()`` and ``suggest_tools()``. Once you’ve set
+#       a solving method (from “least squares” and “optimisation”, more
+#       will be supported), you can use ``suggest_tools()`` to see a list
+#       of backend tools to choose from.
+# 
+# 3. start an ``Inversion``. This step is common:
+# 
+#    ::
+# 
+#       inv = Inversion(inv_problem, inv_options)
+#       result = inv.run()
+# 
+# 4. analyse the result, workflow and redo your experiments with different
+#    ``InversionOptions``
+# 
 
 
 ######################################################################
