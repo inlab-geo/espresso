@@ -38,14 +38,27 @@ jobs:
       - name: Run _ipynb_to_gallery.py
         run: |
           python _ipynb_to_gallery.py all
-
-      - name: Push scripts back to repo
+          
+      - name: Set git config
         continue-on-error: true
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+      - name: Commit changes to notebooks
+        continue-on-error: true
+        run: |
           git add notebooks/*
           git commit -m "chore: added badges to colab in notebooks/"
+
+      - name: Commit changes to scripts
+        continue-on-error: true
+        run: |
           git add scripts/*
           git commit -m "chore: update scripts/"
+          git push
+          
+      - name: Push back to repo
+        run: |
+          git status
           git push
