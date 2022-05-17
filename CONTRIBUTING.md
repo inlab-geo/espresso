@@ -10,6 +10,32 @@ Please head to either [GitHub issues](https://github.com/inlab-geo/cofi-examples
 or our [Slack workspace](https://inlab-geo.slack.com/).
 
 ### ***To add a domain-specific (e.g. geoscience) example***
+Here is a general workflow in a contribution process:
+
+```mermaid
+  %%{init: {'theme':'base'}}%%
+    flowchart LR
+      subgraph PREPARATION [ ]
+        direction TB
+        fork(fork repository)-->clone(create local clone)
+        clone-->env_setup(environment setup)
+      end
+      subgraph EDIT [ ]
+        direction TB
+        code(start coding)-->commit(commit as needed)
+        commit-->push(push to your own fork)
+      end
+      subgraph SUBMIT [ ]
+        direction TB
+        pr(create pull request)-->modify(edit based on our comments)
+        modify-->commit_push(commit and push)
+        commit_push-->merge(we merge it once ready)
+        pr-->merge
+      end
+      PREPARATION-->EDIT
+      EDIT-->SUBMIT
+```
+
 1. Fork this repository by clicking the "Fork" button on top right
 2. Clone your own version of this repository
    ```console
