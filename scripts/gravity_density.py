@@ -223,41 +223,78 @@ def calculate_gradiometry(model, x_final, y_final, z_final, recvec):
 #         self.y_nodes=y_nodes
 #         self.z_nodes=z_nodes
 #         self.recvec=recvec
-        
+
+
+# -----------------------------------------------------
+# Utility loading functions
+
+def load(file_name):
+    data_source = np.DataSource()
+    url_base = "https://github.com/inlab-geo/cofi-examples/raw/main/notebooks/gravity"
+
+    if data_source.exists("gravity_model.npz"):
+        tmp = np.load('gravity_model.npz')
+    else:
+        abs_path = data_source.abspath(f"{url_base}/{file_name}")
+        if data_source.exists(abs_path):
+            tmp = np.load(abs_path)
+        else:
+            print(f"Downloading models {file_name}...")
+            data_source.open(f"{url_base}/{file_name}")
+            tmp = np.load(abs_path)
+    return tmp
+
+
+def load_gravity_model():
+    # Load density true model
+    tmp = load("gravity_model.npz")
+
+    # Extract density model
+    model=tmp['model']
+    x_nodes = tmp['x_nodes']
+    y_nodes = tmp['y_nodes']
+    z_nodes=tmp['z_nodes']
+    rec_coords=tmp['rec_coords']
+
+    return rec_coords, x_nodes, y_nodes, z_nodes, model
+
+
+def load_starting_models():
+    # Load density true model & starting models
+    tmp = load("gravity_starting_models.npz")
+
+    # Process starting models
+    Starting_model1=tmp['starting_model1']
+    Starting_model1[Starting_model1 > 0 ]=10
+    Starting_model2=tmp['starting_model2']
+    Starting_model3 = np.zeros((12**3))
+
+    return Starting_model1, Starting_model2, Starting_model3
     
+
 # -----------------------------------------------------
 # New functions, defined just for CoFI
 # The ones above are from my forward code. 
 # Only difference between these two is "jacobian=True", but necessary here to separate them
 
-def forward(model):
+def get_forward_jacobian():
     # Load model geometry 
-    P=np.load('gravity_model.npz')
-    x_nodes = P['x_nodes']
-    y_nodes = P['y_nodes']
-    z_nodes=P['z_nodes']
-    rec_coords=P['rec_coords']
-    
-    gx, gy, gz = calculate_gravity(model,x_nodes,y_nodes,z_nodes,rec_coords)
-    
-    return gz
-        
-        
-def get_jacobian(model):
-    # Load model geometry 
-    P=np.load('gravity_model.npz')
-    x_nodes = P['x_nodes']
-    y_nodes = P['y_nodes']
-    z_nodes=P['z_nodes']
-    rec_coords=P['rec_coords']
-    
-    Jx, Jy, Jz = calculate_gravity(model,x_nodes,y_nodes,z_nodes,rec_coords, jacobian=True)
-    
-    return Jz
+    rec_coords, x_nodes, y_nodes, z_nodes, _ = load_gravity_model()
+
+    def forward(model):
+        gx, gy, gz = calculate_gravity(model,x_nodes,y_nodes,z_nodes,rec_coords)
+        return gz
+
+    def get_jacobian(model):
+        Jx, Jy, Jz = calculate_gravity(model,x_nodes,y_nodes,z_nodes,rec_coords, jacobian=True)
+        return Jz
+
+    return forward, get_jacobian
+
+forward, get_jacobian = get_forward_jacobian()
 
 def depth_weight(z,z0,beta):
     return ((-z[::-1]+z0)**(-beta/2))
-
 
 def reg_l1(model):
     return np.linalg.norm(W @ model, 1)
@@ -269,7 +306,7 @@ def reg_gradient_l1(model):
     return W @ np.sign(model)
 
 def reg_gradient_l2(model):
-    return 2 * m.T @ W.T @ W
+    return 2 * model.T @ W.T @ W
 
 
 ######################################################################
@@ -282,19 +319,9 @@ def reg_gradient_l2(model):
 # all kinds of things once it is working.
 # 
 
-# Load density model
-tmp=np.load('gravity_model.npz')
-rec_coords=tmp['rec_coords']
-z_nodes=tmp['z_nodes']
-model=tmp['model']
-del tmp
-
-# Load starting models
-tmp=np.load('gravity_starting_models.npz')
-Starting_model1=tmp['starting_model1']
-Starting_model1[Starting_model1 > 0 ]=10
-Starting_model2=tmp['starting_model2']
-Starting_model3 = np.zeros((12**3))
+# Load true model and starting guesses
+rec_coords, _, _, z_nodes, model = load_gravity_model()
+Starting_model1, Starting_model2, Starting_model3 = load_starting_models()
 
 # Create "observed" data by adding noise to forward solution
 noise_level=0.05
