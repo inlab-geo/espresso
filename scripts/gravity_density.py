@@ -232,8 +232,8 @@ def load(file_name):
     data_source = np.DataSource()
     url_base = "https://github.com/inlab-geo/cofi-examples/raw/main/notebooks/gravity"
 
-    if data_source.exists("gravity_model.npz"):
-        tmp = np.load('gravity_model.npz')
+    if data_source.exists(file_name):
+        tmp = np.load(file_name)
     else:
         abs_path = data_source.abspath(f"{url_base}/{file_name}")
         if data_source.exists(abs_path):
