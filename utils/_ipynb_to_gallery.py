@@ -62,10 +62,11 @@ if __name__ == '__main__':
     for script in all_scripts:
         print(f"file: {script}")
         convert_ipynb_to_gallery(script)
-    # collect all data files to move to scripts/
+    # collect all data and library files to move to scripts/
     all_data = glob(f"{NOTEBOOKS_FOLDER}/*/*.npz")
     all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*.dat"))
     all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*.csv"))
+    all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*_lib.py"))
     # move
     print("\nMoving dataset files...")
     for data_file in all_data:
