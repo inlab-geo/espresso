@@ -41,9 +41,11 @@ Polynomial Linear Regression
 # In the workflow of ``cofi``, there are three main components:
 # ``BaseProblem``, ``InversionOptions``, and ``Inversion``.
 # 
-# -  ``BaseProblem`` defines three things: 1) the forward problem; 2) the
-#    inversion parameter (model) space; and 3) the objective function to
-#    be optimised
+# -  ``BaseProblem`` defines three things: 1) the forward problem; 2)
+#    model parameter space (the unknowns); and 3) other information about
+#    the objective you’d like to reach. Depending on the inversion
+#    approaches you’d like to use, the last one can be an objective
+#    function, or a log likelihood function, etc.
 # -  ``InversionOptions`` describes details about how one wants to run the
 #    inversion, including the inversion approach, backend tool and
 #    solver-specific parameters.
@@ -154,12 +156,13 @@ np.random.seed(42)
 # 
 
 # generate data with random Gaussian noise
-basis_func = lambda x: np.array([x**i for i in range(4)]).T               # x -> G
+def basis_func(x):
+    return np.array([x**i for i in range(4)]).T                           # x -> G
 _m_true = np.array([-6,-5,2,1])                                           # m
-
 sample_size = 20                                                          # N
 x = np.random.choice(np.linspace(-3.5,2.5), size=sample_size)             # x
-forward_func = lambda m: basis_func(x) @ m                                # m -> y_synthetic
+def forward_func(m):
+    return basis_func(x) @ m                                              # m -> y_synthetic
 y_observed = forward_func(_m_true) + np.random.normal(0,1,sample_size)    # d
 
 ############## PLOTTING ###############################################################
@@ -173,11 +176,16 @@ plt.xlabel("X")
 plt.ylabel("Y")
 plt.legend();
 
-# define the problem
+
+######################################################################
+# Now we define the problem in ``cofi`` - in other words, we attach the
+# problem information to a ``BaseProblem`` object.
+# 
+
+# define the problem in cofi
 inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
 inv_problem.set_dataset(x, y_observed)
-inv_problem.set_forward(forward_func)
 inv_problem.set_jacobian(basis_func(x))
 
 inv_problem.summary()
@@ -240,7 +248,7 @@ inv_result.summary()
 
 inv.summary()
 
-y_synthetic = inv_problem.forward(inv_result.model)
+y_synthetic = forward_func(inv_result.model)
 
 ############## PLOTTING ###############################################################
 _x_plot = np.linspace(-3.5,2.5)
@@ -282,8 +290,10 @@ np.random.seed(42)
 _m_true = np.array([-6,-5,2,1])                                            # m
 _sample_size = 20                                                          # N
 x = np.random.choice(np.linspace(-3.5,2.5), size=_sample_size)             # x
-basis_func = lambda x: np.array([x**i for i in range(4)]).T               # x -> G
-forward_func = lambda m: (np.array([x**i for i in range(4)]).T) @ m        # m -> y_synthetic
+def basis_func(x):
+    return np.array([x**i for i in range(4)]).T                            # x -> G
+def forward_func(m): 
+    return (np.array([x**i for i in range(4)]).T) @ m                      # m -> y_synthetic
 y_observed = forward_func(_m_true) + np.random.normal(0,1,_sample_size)    # d
 
 ######## Attach above information to a `BaseProblem`
