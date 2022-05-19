@@ -2,6 +2,7 @@ import numpy as np
 class auxclass:
     
         
+    @staticmethod
     def cartesian(arrays, out=None):
         """
         Creates all combinations between input arrays. Used to create coordinates of all grid cells and recording locations.
@@ -22,12 +23,11 @@ class auxclass:
         m = int(n / arrays[0].size)
         out[:,0] = np.repeat(arrays[0], m)
         if arrays[1:]:
-            cartesian(arrays[1:], out=out[0:m, 1:])
+            auxclass.cartesian(arrays[1:], out=out[0:m, 1:])
             for j in range(1, arrays[0].size):
             #for j in xrange(1, arrays[0].size):
                 out[j*m:(j+1)*m, 1:] = out[0:m, 1:]
         return out
-
 
     def node_maker(x_node_slice, y_node_slice, z_node_slice):
 
