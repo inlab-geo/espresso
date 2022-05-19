@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 import os
 import re
 import pkgutil
+from io import StringIO 
+
+#import importlib
+#auxclass = getattr(importlib.import_module(".gravityforward.auxfile", package='inversiontestproblems'), "auxclass")
+
 
 class gravity:
     """
@@ -63,19 +68,15 @@ class gravity:
             # within package/mymodule1.py, for example
             
             tmp = pkgutil.get_data(__name__, "data/gravmodel1.txt")
-            tmp2=np.frombuffer(tmp, dtype='S3')
-            self.m=tmp2.astype(np.float)
+            tmp2=tmp.decode("utf-8") 
+            self.m=np.loadtxt(StringIO(tmp2))
             del  tmp, tmp2
-            
-            #self.m=tmp3.astype(float)
-            #del tmp, tmp2, tmp3
             
             self.lmx = 12
             self.lmy = 12
             self.lmz = 12
             self.lrx = 17
             self.lry = 17
-            ##del tmp
             
             # Receiver locations in x and y direction
             x_rec = np.linspace(-80.0, 80.0, self.lrx)
@@ -121,7 +122,9 @@ class gravity:
             temp2=temp2[:, np.newaxis]
             self.x_nodes=np.append(temp1, temp2, axis=1)
             del temp1, temp2
-
+        
+        elif self._ieg=1:
+            
             
         else:
             print("Error - example number not defined")
