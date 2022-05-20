@@ -1,38 +1,35 @@
 from setuptools import setup, find_packages
+#setup(
 
-import pathlib
-# get version number
-_ROOT = pathlib.Path(__file__).parent
+    #name='testdummy',
+    #version='0.0.1',
+    #install_requires=[
+        #'importlib-metadata; python_version == "3.8"',
+    #],
 
-with open(str(_ROOT / "src" / "cofitestsuite" / "_version.py")) as f:
-    for line in f:
-        if line.startswith("__version__ ="):
-            _, _, version = line.partition("=")
-            VERSION = version.strip(" \n'\"")
-            break
-    else:
-        raise RuntimeError("unable to read the version from ./_version.py")
+    #packages=find_packages("contrib"),  # include all packages under src
+    #package_dir={"": "contrib"},   # tell distutils packages are under src
+
+    #package_data={
+        ## If any package contains *.txt files, include them:
+        #"": ["*.txt"],
+        ## And include any *.dat files found in the "data" subdirectory
+        ## of the "mypkg" package, also:
+        #"": ["data/*.npz"],
+    #}
+#)
+
 
 
 
 setup(
-    name="cofitestsuite",
-    version=VERSION,
-    description="A collection of forward and inverse problems",
-    author="Hannes",
-    author_email="hannes.hollmann@anu.edu.au",
-    license='BSD 2-clause',
-    install_requires=['numpy',],
-    include_package_data=True,
-
-    classifiers=[
-        'Development Status :: 1 - Planning',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+    name='inversiontestproblems',
+    version='0.0.1',
+    install_requires=[
+        'importlib-metadata; python_version == "3.8"',
     ],
+    include_package_data=True,
+    #packages=find_packages(exclude=("*.egg_info")),  
+    package_dir={"inversiontestproblems": "contrib"},   # tell distutils packages are under src
 )
+
