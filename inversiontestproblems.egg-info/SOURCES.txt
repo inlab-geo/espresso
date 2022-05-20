@@ -4,8 +4,8 @@ pyproject.toml
 setup.cfg
 setup.py
 contrib/__init__.py
-contrib/auxfile.py
 contrib/gravityforward/__init__.py
+contrib/gravityforward/auxfile.py
 contrib/gravityforward/Jupyter/Testfile.npz
 contrib/gravityforward/Jupyter/gravmodel1.txt
 contrib/gravityforward/Jupyter/testfile.npy

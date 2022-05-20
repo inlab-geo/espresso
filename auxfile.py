@@ -1,4 +1,8 @@
 import numpy as np
+
+
+    
+
 class auxclass:
     
         
@@ -31,43 +35,43 @@ class auxclass:
 
     def node_maker(x_node_slice, y_node_slice, z_node_slice):
 
-        coords_p1=cartesian((z_node_slice[0:-1],y_node_slice[0:-1],x_node_slice[0:-1]))
-        coords_p2=cartesian((z_node_slice[1:],y_node_slice[1:],x_node_slice[1:]))
+        coords_p1=auxclass.cartesian((z_node_slice[0:-1],y_node_slice[0:-1],x_node_slice[0:-1]))
+        coords_p2=auxclass.cartesian((z_node_slice[1:],y_node_slice[1:],x_node_slice[1:]))
 
         temp1=coords_p1[:,0]
         temp2=coords_p2[:,0]
         temp1=temp1[:, np.newaxis]
         temp2=temp2[:, np.newaxis]
-        z_final=np.append(temp1, temp2, axis=1)
+        z_nodes=np.append(temp1, temp2, axis=1)
 
         temp1=coords_p1[:,1]
         temp2=coords_p2[:,1]
         temp1=temp1[:, np.newaxis]
         temp2=temp2[:, np.newaxis]
-        y_final=np.append(temp1, temp2, axis=1)
+        y_nodes=np.append(temp1, temp2, axis=1)
 
         temp1=coords_p1[:,2]
         temp2=coords_p2[:,2]
         temp1=temp1[:, np.newaxis]
         temp2=temp2[:, np.newaxis]
-        x_final=np.append(temp1, temp2, axis=1)
+        x_nodes=np.append(temp1, temp2, axis=1)
 
 
-        return x_final, y_final, z_final
+        return x_nodes, y_nodes, z_nodes
 
-    def inject_density(model,x_final, y_final, z_final, x,y,z, value):
+    def inject_density(model,x_nodes, y_nodes, z_nodes, x,y,z, value):
         # Just a little fcn that allows you to change the density of a grid cell based on coordinates. 
         # Easier to make specific changes this way.
 
-        x1=x_final[:,0]
-        y1=y_final[:,0]
-        z1=z_final[:,1]
+        x1=x_nodes[:,0]
+        y1=y_nodes[:,0]
+        z1=z_nodes[:,1]
 
         bool1=x1==x
         bool2=y1==y
         bool3=z1==z
 
-        ind=np.where(ar(bool1) & ar(bool2) & ar(bool3))
+        ind=np.where(np.asarray(bool1) & np.asarray(bool2) & np.asarray(bool3))
         ind=np.squeeze(ind[0])
 
         model[ind]=value
