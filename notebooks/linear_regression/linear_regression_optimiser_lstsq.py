@@ -12,13 +12,12 @@ The function we are going to fit is: y = -6 - 5x + 2x^2 + x^3
 
 import numpy as np
 import matplotlib.pyplot as plt
-from sqlalchemy import true
 from cofi import BaseProblem, InversionOptions, Inversion
 
 np.random.seed(42)
 
-show_plot = true
-show_summary = true
+show_plot = True
+show_summary = True
 
 
 ############# 1. Define the problem ###################################################
