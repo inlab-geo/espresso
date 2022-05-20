@@ -3,6 +3,8 @@
 This file sets up an example from setting up problem to running the inversion:
 - For the problem: polynomial linear regression,
 - Using the tool: linear system solver (scipy.linalg.lstsq)
+
+The function we are going to fit is: y = -6 - 5x + 2x^2 + x^3
     
 """
 
