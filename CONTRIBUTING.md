@@ -5,11 +5,11 @@ in order to contribute, and we welcome contributions of any forms (e.g. issues,
 pull requests, etc.). If you've read the instructions below and are still unsure
 where to start, feel free to contact us via [Slack](https://inlab-geo.slack.com/).
 
-### ***To report bugs or typos***
+## ***To report bugs or typos***
 Please head to either [GitHub issues](https://github.com/inlab-geo/cofi-examples/issues) 
 or our [Slack workspace](https://inlab-geo.slack.com/).
 
-### ***To add a domain-specific (e.g. geoscience) example***
+## ***To add a domain-specific (e.g. geoscience) example***
 Here is a general workflow in a contribution process:
 
 ```mermaid

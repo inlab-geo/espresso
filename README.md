@@ -65,7 +65,7 @@ details.
 - CoFI [GitHub repository](https://github.com/inlab-geo/cofi) (under construction)
 
 ## Troubleshooting for interactive lab
-If you've followed the [instructions on running locally](README.md#run-the-examples-with-cofi-locally)
+If you've followed the [instructions on running locally](#run-the-examples-with-cofi-locally)
 above, and are still having trouble ***displaying the ipython widgets***, then hopefully 
 [this StackOverflow thread](https://stackoverflow.com/questions/36351109/ipython-notebook-ipywidgets-does-not-show) 
 will help you. 
