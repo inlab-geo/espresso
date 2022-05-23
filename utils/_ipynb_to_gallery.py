@@ -17,6 +17,9 @@ import json
 NOTEBOOKS_FOLDER = "notebooks"
 SCRIPTS_FOLDER = "scripts"
 
+BADGE_BEGIN = "<!--<badge>-->"
+BADGE_END = "<!--</badge>-->"
+
 def convert_ipynb_to_gallery(file_name):
     python_file = ""
 
@@ -34,7 +37,11 @@ def convert_ipynb_to_gallery(file_name):
         else:
             if cell['cell_type'] == 'markdown':
                 md_source = ''.join(cell['source'])
-                rst_source = pdoc.convert_text(md_source, 'rst', 'md')
+                if md_source.startswith(BADGE_BEGIN) and md_source.endswith(BADGE_END):
+                    rst_source = ".. raw:: html\n\n\t"
+                    rst_source += md_source.replace(BADGE_BEGIN,"<badge>").replace(BADGE_END,"</badge>")
+                else:
+                    rst_source = pdoc.convert_text(md_source, 'rst', 'md')
                 commented_source = '\n'.join(['# ' + x for x in
                                               rst_source.split('\n')])
                 python_file = python_file + '\n\n\n' + '#' * 70 + '\n' + \
