@@ -12,6 +12,11 @@ Polynomial Linear Regression
 
 
 ######################################################################
+# --------------
+# 
+
+
+######################################################################
 # To get started, we look at a simple linear regression example with
 # ``cofi``.
 # 
