@@ -8,10 +8,7 @@ Polynomial Linear Regression
 ######################################################################
 # .. raw:: html
 # 
-#    <!--<badge>-->
-# 
-# 
-# 
+# 	<badge><a href="https://colab.research.google.com/github/inlab-geo/cofi-examples/blob/main/notebooks/linear_regression/linear_regression.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></badge>
 
 
 ######################################################################
