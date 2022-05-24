@@ -27,8 +27,7 @@ jobs:
         run: |
           python3 -m build
       - name: Upload to TestPyPI
-        run: |
-          python3 -m twine upload --repository testpypi dist/*
+        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
