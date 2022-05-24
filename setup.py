@@ -23,7 +23,7 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name='inversiontestproblems',
+    name='inversiontestproblems-h-hollmann',
     version='0.0.1',
     install_requires=[
         'importlib-metadata; python_version == "3.8"',

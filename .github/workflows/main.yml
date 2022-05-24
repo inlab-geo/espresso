@@ -29,3 +29,6 @@ jobs:
       - name: Upload to TestPyPI
         run: |
           python3 -m twine upload --repository testpypi dist/*
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
