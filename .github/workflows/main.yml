@@ -32,7 +32,7 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
           TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
         run: |
-          echo KEY: '${TWINE_PASSWORD}'
+         #  echo KEY: '${TWINE_PASSWORD}'
           twine check dist/*
           twine upload --verbose --skip-existing dist/*        
       
