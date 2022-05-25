@@ -26,8 +26,22 @@ jobs:
       - name: Create package
         run: |
           python3 -m build
-      - name: Upload to TestPyPI
-        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Upload to Test PyPI
+        env:
+          TWINE_USERNAME: "__token__"
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
+        run: |
+          echo KEY: '${TWINE_PASSWORD}'
+          twine check dist/*
+          twine upload --verbose --skip-existing dist/*        
+      
+      
+      
+      
+      
+      # - name: Upload to TestPyPI
+        # uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        # with:
+        #   user: __token__
+        #   password: ${{ secrets.PYPI_API_TOKEN }}
