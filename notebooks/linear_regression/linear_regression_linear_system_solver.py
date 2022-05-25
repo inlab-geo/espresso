@@ -70,7 +70,6 @@ if show_summary:
 
 ############# 4. Plot result ##########################################################
 if show_plot:
-    y_synthetic = inv_problem.forward(inv_result.model)
     _x_plot = np.linspace(-3.5,2.5)
     _G_plot = basis_func(_x_plot)
     _y_plot = _G_plot @ _m_true
