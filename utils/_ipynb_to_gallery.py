@@ -75,7 +75,7 @@ if __name__ == '__main__':
     all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*.csv"))
     all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*_lib.py"))
     # move
-    print("\nMoving dataset files...")
+    print("\nMoving data files...")
     for data_file in all_data:
         data_filename_without_path = data_file.split("/")[-1]
         dest_file_path = f"{SCRIPTS_FOLDER}/{data_filename_without_path}"

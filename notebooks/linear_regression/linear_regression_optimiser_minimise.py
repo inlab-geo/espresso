@@ -48,7 +48,7 @@ if show_plot:
 # define the problem in cofi
 inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
-inv_problem.set_dataset(x, y_observed)
+inv_problem.set_data(y_observed)
 inv_problem.set_forward(forward_func)
 inv_problem.set_data_misfit("L2")
 inv_problem.set_regularisation(2, 0.02)

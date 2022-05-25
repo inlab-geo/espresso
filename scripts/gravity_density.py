@@ -343,7 +343,7 @@ W=np.diag(W)
 # Set CoFI problem:
 grav_problem = BaseProblem()
 grav_problem.name = "Gravity"
-grav_problem.set_dataset(rec_coords, gz)
+grav_problem.set_data(gz)
 
 # Here I linked the function, not the result
 grav_problem.set_forward(forward)

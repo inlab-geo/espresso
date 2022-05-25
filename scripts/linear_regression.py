@@ -141,8 +141,8 @@ np.random.seed(42)
 # -  ``set_jacobian_times_vector()``
 # -  ``set_data_misfit()``
 # -  ``set_regularisation()``
-# -  ``set_dataset()``
-# -  ``set_dataset_from_file()``
+# -  ``set_data()``
+# -  ``set_data_from_file()``
 # -  ``set_initial_model()``
 # -  ``set_model_shape()``
 # -  ``set_bounds``
@@ -187,7 +187,7 @@ plt.legend();
 # define the problem in cofi
 inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
-inv_problem.set_dataset(x, y_observed)
+inv_problem.set_data(x, y_observed)
 inv_problem.set_jacobian(basis_func(x))
 
 inv_problem.summary()
@@ -301,7 +301,7 @@ y_observed = forward_func(_m_true) + np.random.normal(0,1,_sample_size)    # d
 ######## Attach above information to a `BaseProblem`
 inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
-inv_problem.set_dataset(x, y_observed)
+inv_problem.set_data(x, y_observed)
 inv_problem.set_jacobian(basis_func(x))
 
 ######## Specify how you'd like the inversion to run (via an `InversionOptions`)
@@ -334,7 +334,7 @@ inv_result.summary()
 # There are different ways of defining information - Here in the code
 # below, after we make clear how to calculate the data misfit and
 # regularisation, the objective function is generated for you based on the
-# forward function and dataset. Alternatively, you can pass in an
+# forward function and data. Alternatively, you can pass in an
 # objective function directly using
 # ``inv_problem.set_objective(your_objective_func)``
 # 

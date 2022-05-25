@@ -48,7 +48,7 @@ if show_plot:
 # define the problem in cofi
 inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
-inv_problem.set_dataset(x, y_observed)
+inv_problem.set_data(y_observed)
 inv_problem.set_jacobian(basis_func(x))
 if show_summary:
     inv_problem.summary()
