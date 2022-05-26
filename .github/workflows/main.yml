@@ -8,7 +8,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: checkout repo
-               uses: actions/checkout@v1
+               uses: actions/checkout@v3
             - name: Increase version
                run: |
                old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
