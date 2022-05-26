@@ -3,55 +3,54 @@ name: Python package
 on: [push]
 
 jobs:
-job1:
-   build:
-   runs-on: ubuntu-latest
-   - uses: actions/checkout@v1
-   - name: bash_script
-   run: |
-        old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
-        new_version=$(($old_version + 1))
-        str="__version__=\"0.0."
-        out="$str$new_version\""
-        sed -i '1s/.*/'$out'/' contrib/_version.py
-    shell: bash
+    version_update:
+        runs-on: ubuntu-latest
+        - uses: actions/checkout@v1
+        - name: bash_script
+        run: |
+                old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
+                new_version=$(($old_version + 1))
+                str="__version__=\"0.0."
+                out="$str$new_version\""
+                sed -i '1s/.*/'$out'/' contrib/_version.py
+            shell: bash
 
 
-job2:
-  needs: job1
+
      build:
+        needs: version_update
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.9"]
+        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            python-version: ["3.9"]
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install setuptools wheel
-          python -m pip install --upgrade build
-          python -m pip install --upgrade twine
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Create package
-        run: |
-          python3 -m build
-      - name: Upload to Test PyPI
-        env:
-          TWINE_USERNAME: "__token__"
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-          TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
-        run: |
-         #  echo KEY: '${TWINE_PASSWORD}'
-          twine check dist/*
-          twine upload --verbose --skip-existing dist/*        
-      
+        steps:
+        - uses: actions/checkout@v3
+        - name: Set up Python ${{ matrix.python-version }}
+            uses: actions/setup-python@v3
+            with:
+            python-version: ${{ matrix.python-version }}
+        - name: Install dependencies
+            run: |
+            python -m pip install --upgrade pip setuptools wheel
+            python -m pip install setuptools wheel
+            python -m pip install --upgrade build
+            python -m pip install --upgrade twine
+            if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        - name: Create package
+            run: |
+            python3 -m build
+        - name: Upload to Test PyPI
+            env:
+            TWINE_USERNAME: "__token__"
+            TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+            TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
+            run: |
+            #  echo KEY: '${TWINE_PASSWORD}'
+            twine check dist/*
+            twine upload --verbose --skip-existing dist/*        
+        
       
 
 
