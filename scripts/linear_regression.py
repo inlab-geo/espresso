@@ -187,7 +187,7 @@ plt.legend();
 # define the problem in cofi
 inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
-inv_problem.set_data(x, y_observed)
+inv_problem.set_data(y_observed)
 inv_problem.set_jacobian(basis_func(x))
 
 inv_problem.summary()
@@ -301,7 +301,7 @@ y_observed = forward_func(_m_true) + np.random.normal(0,1,_sample_size)    # d
 ######## Attach above information to a `BaseProblem`
 inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
-inv_problem.set_data(x, y_observed)
+inv_problem.set_data(y_observed)
 inv_problem.set_jacobian(basis_func(x))
 
 ######## Specify how you'd like the inversion to run (via an `InversionOptions`)
