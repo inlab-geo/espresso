@@ -3,22 +3,25 @@ name: Python package
 on: [push]
 
 jobs:
-    version_update:
+    job1:
+        name: Update version
         runs-on: ubuntu-latest
-        - uses: actions/checkout@v1
-        - name: bash_script
-        run: |
-                old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
-                new_version=$(($old_version + 1))
-                str="__version__=\"0.0."
-                out="$str$new_version\""
-                sed -i '1s/.*/'$out'/' contrib/_version.py
-            shell: bash
+        steps:
+            - uses: actions/checkout@v1
+            - name: bash_script
+                run: |
+                        old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
+                        new_version=$(($old_version + 1))
+                        str="__version__=\"0.0."
+                        out="$str$new_version\""
+                        sed -i '1s/.*/'$out'/' contrib/_version.py
+                    shell: bash
 
 
 
-     build:
-        needs: version_update
+     job2:
+        name: Build and upload
+        needs: job1
 
         runs-on: ubuntu-latest
         strategy:
