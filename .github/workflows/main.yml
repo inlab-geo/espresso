@@ -4,9 +4,17 @@ on: [push]
 
 jobs:
 job1:
-     build:
-     runs-on: ubuntu-latest
-     run: |
+   build:
+   runs-on: ubuntu-latest
+   - uses: actions/checkout@v1
+   - name: bash_script
+   run: |
+        old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
+        new_version=$(($old_version + 1))
+        str="__version__=\"0.0."
+        out="$str$new_version\""
+        sed -i '1s/.*/'$out'/' contrib/_version.py
+    shell: bash
 
 
 job2:
@@ -47,20 +55,20 @@ job2:
       
 
 
-name: version_increase
-  on: push
-   jobs:
-   build:
-   runs-on: ubuntu-latest
-   - uses: actions/checkout@v1
-   - name: bash_script
-   run: |
-        old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
-        new_version=$(($old_version + 1))
-        str="__version__=\"0.0."
-        out="$str$new_version\""
-        sed -i '1s/.*/'$out'/' contrib/_version.py
-    shell: bash
+#name: version_increase
+  #on: push
+   #jobs:
+   #build:
+   #runs-on: ubuntu-latest
+   #- uses: actions/checkout@v1
+   #- name: bash_script
+   #run: |
+        #old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
+        #new_version=$(($old_version + 1))
+        #str="__version__=\"0.0."
+        #out="$str$new_version\""
+        #sed -i '1s/.*/'$out'/' contrib/_version.py
+    #shell: bash
 
       
       
