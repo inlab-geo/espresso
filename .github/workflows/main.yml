@@ -3,7 +3,15 @@ name: Python package
 on: [push]
 
 jobs:
-  build:
+job1:
+     build:
+     runs-on: ubuntu-latest
+     run: |
+
+
+job2:
+  needs: job1
+     build:
 
     runs-on: ubuntu-latest
     strategy:
@@ -37,7 +45,23 @@ jobs:
           twine upload --verbose --skip-existing dist/*        
       
       
-      
+
+
+name: version_increase
+  on: push
+   jobs:
+   build:
+   runs-on: ubuntu-latest
+   - uses: actions/checkout@v1
+   - name: bash_script
+   run: |
+        old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
+        new_version=$(($old_version + 1))
+        str="__version__=\"0.0."
+        out="$str$new_version\""
+        sed -i '1s/.*/'$out'/' contrib/_version.py
+    shell: bash
+
       
       
       # - name: Upload to TestPyPI
