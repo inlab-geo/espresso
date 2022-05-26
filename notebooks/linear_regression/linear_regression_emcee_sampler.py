@@ -17,7 +17,7 @@ from cofi import BaseProblem, InversionOptions, Inversion
 
 np.random.seed(42)
 
-show_plot = True
+show_plot = False
 show_summary = True
 
 
