@@ -13,7 +13,7 @@ jobs:
             - name: Increase version
               run: |
                 echo "Grep the old version"
-                old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
+                old_version=$(grep -oP '(?<=0.0.)[0-99]+' ./contrib/_version.py)
                 echo "Make new version"
                 new_version=$(($old_version + 1))
                 echo "Create string"
@@ -21,7 +21,7 @@ jobs:
                 echo "Combine string and new version"
                 out="$str$new_version\""
                 echo "Replace line in _version.py with new line"
-                sed -i '1s/.*/'$out'/' contrib/_version.py
+                sed -i '1s/.*/'$out'/' ./contrib/_version.py
                 echo "Success."
 
 
@@ -40,8 +40,8 @@ jobs:
               uses: actions/checkout@v3
             - name: Set up Python ${{ matrix.python-version }}
               uses: actions/setup-python@v3
-              #with:
-                #python-version: ${{ matrix.python-version }}
+              with:
+              python-version: ${{ matrix.python-version }}
             - name: Install dependencies
               run: |
                 python -m pip install --upgrade pip setuptools wheel
