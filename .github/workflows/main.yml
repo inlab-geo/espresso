@@ -12,11 +12,17 @@ jobs:
 
             - name: Increase version
               run: |
+                echo "Grep the old version"
                 old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
+                echo "Make new version"
                 new_version=$(($old_version + 1))
+                echo "Create string"
                 str="__version__=\"0.0."
+                echo "Combine string and new version"
                 out="$str$new_version\""
+                echo "Replace line in _version.py with new line"
                 sed -i '1s/.*/'$out'/' contrib/_version.py
+                echo "Success."
 
 
 
