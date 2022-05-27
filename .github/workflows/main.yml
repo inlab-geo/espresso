@@ -1,0 +1,96 @@
+name: Python packaging
+
+on: [push]
+
+jobs:
+    job1:
+        name: Update version
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout repo
+              uses: actions/checkout@v3
+
+            - name: Increase version
+              run: |
+                echo "Grep the old version"
+                old_version=$(grep -oP '(?<=0.0.)[0-99]+' ./contrib/_version.py)
+                echo "Make new version"
+                new_version=$(($old_version + 1))
+                echo "Create string"
+                str="__version__=\"0.0."
+                echo "Combine string and new version"
+                out="$str$new_version\""
+                echo "Replace line in _version.py with new line"
+                sed -i '1s/.*/'$out'/' ./contrib/_version.py
+                echo "Success."
+
+            - name: Commit and push changes
+              run: |
+                git config --global user.name "h-hollmann"
+                git config --global user.email "hannes.hollmann@anu.edu.au"
+                git add -A
+                git commit -m "Update version"
+                git push
+
+    job2:
+        name: Build and upload
+        needs: job1
+
+        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            python-version: ["3.9"]
+
+        steps:
+            - name: checkout repo
+              uses: actions/checkout@v3
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v3
+              with:
+                python-version: ${{ matrix.python-version }}
+            - name: Install dependencies
+              run: |
+                python -m pip install --upgrade pip setuptools wheel
+                python -m pip install setuptools wheel
+                python -m pip install --upgrade build
+                python -m pip install --upgrade twine
+                if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+            - name: Create package
+              run: |
+                python3 -m build
+            - name: Upload to Test PyPI
+              env:
+                TWINE_USERNAME: "__token__"
+                TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+                TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
+              run: |
+                #  echo KEY: '${TWINE_PASSWORD}'
+                twine check dist/*
+                twine upload --verbose --skip-existing dist/*        
+        
+      
+
+      
+
+#name: version_increase
+  #on: push
+   #jobs:
+   #build:
+   #runs-on: ubuntu-latest
+   #- uses: actions/checkout@v1
+   #- name: bash_script
+   #run: |
+        #old_version=$(grep -oP '(?<=0.0.)[0-99]+' contrib/_version.py)
+        #new_version=$(($old_version + 1))
+        #str="__version__=\"0.0."
+        #out="$str$new_version\""
+        #sed -i '1s/.*/'$out'/' contrib/_version.py
+    #shell: bash
+
+      
+      
+      # - name: Upload to TestPyPI
+        # uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        # with:
+        #   user: __token__
+        #   password: ${{ secrets.PYPI_API_TOKEN }}

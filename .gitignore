@@ -4,4 +4,4 @@
 .cache/*
 *.pyc
 dist/*
-src/CoFITestSuite_h_hollmann.egg-info/*
+*.egg-info/*

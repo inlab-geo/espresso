@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import pathlib
 #setup(
 
     #name='testdummy',
@@ -21,10 +22,21 @@ from setuptools import setup, find_packages
 
 
 
+########################## VERSION ####################################################
+_ROOT = pathlib.Path(__file__).parent
+with open(str(_ROOT / "contrib" / "_version.py")) as f:
+    for line in f:
+        if line.startswith("__version__="):
+            _, _, version = line.partition("=")
+            VERSION = version.strip(" \n'\"")
+            break
+    else:
+        raise RuntimeError("unable to read the version from contib/_version.py")
+
 
 setup(
-    name='inversiontestproblems',
-    version='0.0.1',
+    name='inversiontestproblems-h-hollmann',
+    version=VERSION,
     install_requires=[
         'importlib-metadata; python_version == "3.8"',
     ],
