@@ -26,12 +26,12 @@ import pathlib
 _ROOT = pathlib.Path(__file__).parent
 with open(str(_ROOT / "contrib" / "_version.py")) as f:
     for line in f:
-        if line.startswith("__version__ ="):
+        if line.startswith("__version__="):
             _, _, version = line.partition("=")
             VERSION = version.strip(" \n'\"")
             break
     else:
-        raise RuntimeError("unable to read the version from src/cofi/_version.py")
+        raise RuntimeError("unable to read the version from contib/_version.py")
 
 
 setup(
