@@ -24,7 +24,14 @@ jobs:
                 sed -i '1s/.*/'$out'/' ./contrib/_version.py
                 echo "Success."
 
+            - name: Commit and push changes
+                run: |
+                git config --global user.name "h-hollmann"
+                git config --global user.email "hannes.hollmann@anu.edu.au"
 
+                git add -A
+                git commit -m "Update version"
+                git push
 
     job2:
         name: Build and upload
