@@ -11,6 +11,7 @@ The function we are going to fit is: y = -6 - 5x + 2x^2 + x^3
 ############# 0. Import modules #######################################################
 
 import numpy as np
+import arviz as az
 import matplotlib.pyplot as plt
 import corner
 from cofi import BaseProblem, InversionOptions, Inversion
@@ -38,6 +39,11 @@ sigma = 1.0                                     # common noise standard deviatio
 Cdinv = np.eye(len(y_observed))/(sigma**2)      # inverse data covariance matrix
 m_lower_bound = np.ones(4) * (-10.)             # lower bound for uniform prior
 m_upper_bound = np.ones(4) * 10                 # upper bound for uniform prior
+
+nwalkers = 32
+ndim = 4
+nsteps = 5000
+walkers_start = np.array([0.,0.,0.,0.]) + 1e-4 * np.random.randn(nwalkers, ndim)
 
 if show_plot:
     _x_plot = np.linspace(-3.5,2.5)
@@ -68,7 +74,7 @@ inv_problem = BaseProblem()
 inv_problem.name = "Polynomial Regression"
 inv_problem.set_log_prior(log_prior)
 inv_problem.set_log_likelihood(log_likelihood)
-inv_problem.set_initial_model(np.zeros(4))
+inv_problem.set_walkers_starting_pos(walkers_start)
 if show_summary:
     inv_problem.summary()
 
@@ -76,7 +82,7 @@ if show_summary:
 ############# 2. Define the inversion options #########################################
 inv_options = InversionOptions()
 inv_options.set_tool("emcee")
-inv_options.set_params(nwalkers=32, nsteps=5000)
+inv_options.set_params(nwalkers=nwalkers, nsteps=nsteps)
 if show_summary:
     inv_options.summary()
 
@@ -90,6 +96,18 @@ if show_summary:
 
 ############# 4. Plot result ##########################################################
 sampler = inv_result.sampler
+print(type(sampler.get_blobs()))
+az_idata = inv_result.to_arviz()
+
+# if show_plot:
+# plot sampling performance
+az.plot_trace(az_idata)
+# autocorrelation analysis
+tau = sampler.get_autocorr_time()
+print(f"autocorrelation time: {tau}")
+
+plt.show()
+
 
 if show_plot:
     # plot sampling performance
