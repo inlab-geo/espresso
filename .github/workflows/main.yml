@@ -37,13 +37,6 @@ jobs:
                 git add -A
                 git commit -m "chore: Update version"
                 git push
-
-                
-                      - name: Set git config
-        continue-on-error: true
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
                 
     job2:
         name: Build and upload
