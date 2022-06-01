@@ -133,6 +133,9 @@ np.random.seed(42)
 # far:
 # 
 # -  ``set_objective()``
+# -  ``set_log_posterior()``
+# -  ``set_log_prior()``
+# -  ``set_log_likelihood()``
 # -  ``set_gradient()``
 # -  ``set_hessian()``
 # -  ``set_hessian_times_vector()``
@@ -155,6 +158,10 @@ np.random.seed(42)
 # -  ``defined_components()`` (review what have been set)
 # -  ``summary()`` (better displayed information)
 # -  ``suggest_solvers()``
+# 
+# Check `API reference
+# page <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html>`__
+# for details.
 # 
 
 # generate data with random Gaussian noise
@@ -334,8 +341,8 @@ inv_result.summary()
 # There are different ways of defining information - Here in the code
 # below, after we make clear how to calculate the data misfit and
 # regularisation, the objective function is generated for you based on the
-# forward function and data. Alternatively, you can pass in an
-# objective function directly using
+# forward function and data. Alternatively, you can pass in an objective
+# function directly using
 # ``inv_problem.set_objective(your_objective_func)``
 # 
 
