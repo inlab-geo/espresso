@@ -96,43 +96,26 @@ if show_summary:
 
 ############# 4. Plot result ##########################################################
 sampler = inv_result.sampler
-print(type(sampler.get_blobs()))
 az_idata = inv_result.to_arviz()
-
-# if show_plot:
-# plot sampling performance
-az.plot_trace(az_idata)
-# autocorrelation analysis
-tau = sampler.get_autocorr_time()
-print(f"autocorrelation time: {tau}")
-
-plt.show()
-
 
 if show_plot:
     # plot sampling performance
-    samples = sampler.get_chain()
     labels = ["m0", "m1", "m2","m3"]
-    fig, axes = plt.subplots(len(labels), figsize=(10, 7), sharex=True)
-    for i in range(len(labels)):
-        ax = axes[i]
-        ax.plot(samples[:, :, i], "k", alpha=0.3)
-        ax.set_xlim(0, len(samples))
-        ax.set_ylabel(labels[i])
-        ax.yaxis.set_label_coords(-0.1, 0.5)
-    axes[-1].set_xlabel("step number")
+    az.plot_trace(az_idata)
 
     # autocorrelation analysis
     tau = sampler.get_autocorr_time()
     print(f"autocorrelation time: {tau}")
 
-    # thin by about half the autocorrelation time, and flatten the chain
-    flat_samples = sampler.get_chain(discard=300, thin=30, flat=True)
-
-    # corner plot
-    fig = corner.corner(flat_samples, labels=labels, truths=_m_true.tolist())
+    # corner plot after thinning by about half the autocorrelation time
+    az.plot_pair(
+        az_idata.sel(draw=slice(300,None)), 
+        marginals=True, 
+        reference_values=dict(zip([f"var_{i}" for i in range(4)], _m_true.tolist()))
+    )
 
     # sub-sample of 100 predicted curves from the posterior ensemble
+    flat_samples = sampler.get_chain(discard=300, thin=30, flat=True)
     inds = np.random.randint(len(flat_samples), size=100) # get a random selection from posterior ensemble
     _x_plot = np.linspace(-3.5,2.5)
     _G_plot = basis_func(_x_plot)
