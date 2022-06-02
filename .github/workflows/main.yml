@@ -1,10 +1,10 @@
 name: Python packaging
 
-on: [push]
-#on:
-  #pull_request:
-    #types:
-      #- closed
+# on: [push]
+on:
+  pull_request:
+    types:
+      - closed
 jobs:
     job1:
         name: Update version
@@ -37,7 +37,7 @@ jobs:
                 git add -A
                 git commit -m "chore: Update version"
                 git push
-                
+
     job2:
         name: Build and upload
         needs: job1
@@ -72,11 +72,11 @@ jobs:
               run: |
                 #  echo KEY: '${TWINE_PASSWORD}'
                 twine check dist/*
-                twine upload --verbose --skip-existing dist/*        
-        
-      
+                twine upload --verbose --skip-existing dist/*
 
-      
+
+
+
 
 #name: version_increase
   #on: push
@@ -93,8 +93,8 @@ jobs:
         #sed -i '1s/.*/'$out'/' contrib/_version.py
     #shell: bash
 
-      
-      
+
+
       # - name: Upload to TestPyPI
         # uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
         # with:
