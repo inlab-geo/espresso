@@ -40,6 +40,8 @@ def convert_ipynb_to_gallery(file_name):
                 if md_source.startswith(BADGE_BEGIN) and md_source.endswith(BADGE_END):
                     rst_source = ".. raw:: html\n\n\t"
                     rst_source += md_source.replace(BADGE_BEGIN,"<badge>").replace(BADGE_END,"</badge>")
+                elif "Table of contents" in md_source:
+                    continue
                 else:
                     rst_source = pdoc.convert_text(md_source, 'rst', 'md')
                 commented_source = '\n'.join(['# ' + x for x in
@@ -49,6 +51,7 @@ def convert_ipynb_to_gallery(file_name):
             elif cell['cell_type'] == 'code':
                 source = ''.join(cell['source'])
                 python_file = python_file + '\n' * 2 + source
+                python_file = python_file + '\n' * 2 + '#' * 70 + '\n' + '#'
 
     python_file = python_file.replace("\n%", "\n# %")
 

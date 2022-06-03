@@ -34,20 +34,9 @@ Polynomial Linear Regression
 # 
 # The function we are going to fit is: :math:`y=-6-5x+2x^2+x^3`
 # 
-# Table of contents
-# -----------------
-# 
-# 1. `Import modules <#import>`__
-# 2. `Define the problem <#problem>`__
-# 3. `Define the inversion options <#options>`__
-# 4. `Run the inversion <#inversion>`__
-# 5. `Check out the result <#result>`__
-# 6. `A clean version of code above <#review>`__
-# 7. `Switching to a different inversion approach <#switch>`__
-# 
-#    1. `Optimisation <#optimisation>`__
-#    2. `Sampling <#sampling>`__
-# 
+
+
+######################################################################
 # Introduction 
 # -------------
 # 
@@ -73,7 +62,7 @@ Polynomial Linear Regression
 # 
 # 1. we begin by defining the ``BaseProblem``. This can be done through a
 #    series of set functions
-#    ``python  inv_problem = BaseProblem()  inv_problem.set_objective(some_function_here)  inv_problem.set_initial_model(a_starting_point)``
+#    ``python     inv_problem = BaseProblem()     inv_problem.set_objective(some_function_here)     inv_problem.set_initial_model(a_starting_point)``
 # 
 # 2. define ``InversionOptions``. Some useful methods include:
 # 
@@ -109,6 +98,9 @@ Polynomial Linear Regression
 
 # !pip install -U cofi
 
+######################################################################
+#
+
 import numpy as np
 import matplotlib.pyplot as plt
 import arviz as az
@@ -117,6 +109,9 @@ from IPython.display import display, Math # some librarys for IO
 from cofi import BaseProblem, InversionOptions, Inversion
 
 np.random.seed(42)
+
+######################################################################
+#
 
 
 ######################################################################
@@ -153,7 +148,6 @@ np.random.seed(42)
 #    linear regression problem and looks like the following:
 # 
 #    .. math:: \left(\begin{array}{ccc}1&x_1&x_1^2&x_1^3\\1&x_2&x_2^2&x_2^3\\\vdots&\vdots&\vdots\\1&x_N&x_N^2&x_N^3\end{array}\right)
-# 
 # -  :math:`\text{basis_func}` is the basis function that converts
 #    :math:`\textbf{x}` into :math:`\textbf{G}`
 # 
@@ -181,6 +175,9 @@ plt.scatter(x, y_observed, color="lightcoral", label="observed data")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.legend();
+
+######################################################################
+#
 
 
 ######################################################################
@@ -221,6 +218,9 @@ inv_problem.set_jacobian(basis_func(x))
 
 inv_problem.summary()
 
+######################################################################
+#
+
 
 ######################################################################
 # --------------
@@ -244,6 +244,9 @@ inv_problem.summary()
 inv_options = InversionOptions()
 inv_options.summary()
 
+######################################################################
+#
+
 
 ######################################################################
 # We have a **suggesting system** that is being improved at the moment, so
@@ -253,6 +256,9 @@ inv_options.summary()
 
 inv_options.suggest_tools()
 
+######################################################################
+#
+
 
 ######################################################################
 # Having seen what a default ``InversionOptions`` object look like, we
@@ -261,6 +267,9 @@ inv_options.suggest_tools()
 
 inv_options.set_solving_method("linear least square")
 inv_options.summary()
+
+######################################################################
+#
 
 
 ######################################################################
@@ -275,6 +284,9 @@ inv_options.summary()
 
 inv_options.suggest_tools()
 
+######################################################################
+#
+
 
 ######################################################################
 # You can also set the backend tool directly (as following), without the
@@ -283,6 +295,9 @@ inv_options.suggest_tools()
 
 inv_options.set_tool("scipy.linalg.lstsq")
 inv_options.summary()
+
+######################################################################
+#
 
 
 ######################################################################
@@ -302,6 +317,9 @@ inv_options.summary()
 inv = Inversion(inv_problem, inv_options)
 inv.summary()
 
+######################################################################
+#
+
 
 ######################################################################
 # Now, let’s run it!
@@ -309,6 +327,9 @@ inv.summary()
 
 inv_result = inv.run()
 inv_result.success
+
+######################################################################
+#
 
 
 ######################################################################
@@ -329,6 +350,9 @@ inv_result.success
 
 inv_result.summary()
 
+######################################################################
+#
+
 
 ######################################################################
 # --------------
@@ -346,6 +370,9 @@ inv_result.summary()
 # 
 
 inv.summary()
+
+######################################################################
+#
 
 
 ######################################################################
@@ -367,6 +394,9 @@ plt.scatter(x, y_observed, color="lightcoral", label="original data")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.legend();
+
+######################################################################
+#
 
 
 ######################################################################
@@ -419,6 +449,9 @@ inv_result = inv.run()
 print(f"The inversion result from `scipy.linalg.lstsq`: {inv_result.model}\n")
 inv_result.summary()
 
+######################################################################
+#
+
 
 ######################################################################
 # --------------
@@ -435,7 +468,7 @@ inv_result.summary()
 # 
 # Any linear problem :math:`\textbf{y} = \textbf{G}\textbf{m}` can also be
 # solved by minimising the squares of the residual of the linear
-# equations, e.g. \ :math:`\textbf{r}^T \textbf{r}` where
+# equations, e.g. :math:`\textbf{r}^T \textbf{r}` where
 # :math:`\textbf{r}=\textbf{y}-\textbf{G}\textbf{m}`.
 # 
 # So we first use a plain optimizer ``scipy.optimize.minimize`` to
@@ -471,6 +504,9 @@ inv_result_2 = inv_2.run()
 print(f"The inversion result from `scipy.optimize.minimize`: {inv_result_2.model}\n")
 inv_result_2.summary()
 
+######################################################################
+#
+
 ######## Plot all together
 _x_plot = np.linspace(-3.5,2.5)
 _G_plot = basis_func(_x_plot)
@@ -485,6 +521,9 @@ plt.scatter(x, y_observed, color="lightcoral", label="original data")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.legend();
+
+######################################################################
+#
 
 
 ######################################################################
@@ -567,13 +606,14 @@ plt.legend();
 # 
 # So in ``cofi``, you can either define:
 # 
-# -  log of the posterior, using
-#    ```BaseProblem.set_log_posterior()`` <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_posterior>`__,
+# -  log of the posterior, using ``BaseProblem.set_log_posterior``
+#    (`ref <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_posterior>`__),
 #    or
 # -  log of prior and log of likelihood, using
-#    ```BaseProblem.set_log_prior()`` <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_prior>`__
-#    and
-#    ```BaseProblem.set_log_likelihood()`` <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_likelihood>`__
+#    ``BaseProblem.set_log_prior()``
+#    (`ref <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_prior>`__)
+#    and ``BaseProblem.set_log_likelihood()``
+#    (`ref <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_likelihood>`__)
 # 
 # We use the second option in this demo.
 # 
@@ -584,9 +624,10 @@ plt.legend();
 # predicted by our polynomial curve we specify a Likelihood function
 # :math:`p({\mathbf d}_{obs}| {\mathbf m})`
 # 
-# :raw-latex:`\begin{equation*}
-# p({\mathbf d}_{obs} | {\mathbf m}) \propto \exp \left\{- \frac{1}{2} ({\mathbf d}_{obs}-{\mathbf d}_{pred}({\mathbf m}))^T C_D^{-1} ({\mathbf d}_{obs}-{\mathbf d}_{pred}({\mathbf m})) \right\}
-# \end{equation*}`
+# .. math::
+# 
+# 
+#    p({\mathbf d}_{obs} | {\mathbf m}) \propto \exp \left\{- \frac{1}{2} ({\mathbf d}_{obs}-{\mathbf d}_{pred}({\mathbf m}))^T C_D^{-1} ({\mathbf d}_{obs}-{\mathbf d}_{pred}({\mathbf m})) \right\}
 # 
 # where :math:`{\mathbf d}_{obs}` represents the observed y values and
 # :math:`{\mathbf d}_{pred}({\mathbf m})` are those predicted by the
@@ -609,6 +650,9 @@ def log_likelihood(model):
     residual = y_observed - y_synthetics
     return -0.5 * residual @ (Cdinv @ residual).T
 
+######################################################################
+#
+
 
 ######################################################################
 # Prior
@@ -621,21 +665,25 @@ def log_likelihood(model):
 # 
 # The first is to make the prior uniform with specified bounds
 # 
-# :raw-latex:`\begin{eqnarray*}
-# p({\mathbf m}) &=& \frac{1}{V},\quad  l_i \le m_i \le u_i, \quad (i=1,\dots,M)\\
-# \\
-#          &=& 0, \quad {\rm otherwise},
-# \end{eqnarray*}`
+# .. math::
+# 
+# 
+#    \begin{align}
+#    p({\mathbf m}) &= \frac{1}{V},\quad  l_i \le m_i \le u_i, \quad (i=1,\dots,M)\\
+#    \\
+#             &= 0, \quad {\rm otherwise},
+#    \end{align}
 # 
 # where :math:`l_i` and :math:`u_i` are lower and upper bounds on the
 # :math:`i`\ th model coefficient.
 # 
 # The second choice is to make the prior an unbounded Gaussian
 # 
-# :raw-latex:`\begin{eqnarray*}
-# p({\mathbf m}) \propto \exp \left\{- \frac{1}{2}({\mathbf m}-{\mathbf m}_o)^T C_M^{-1}({\mathbf m}-{\mathbf m}_o)
-# \right\},
-# \end{eqnarray*}`
+# .. math::
+# 
+# 
+#    p({\mathbf m}) \propto \exp \left\{- \frac{1}{2}({\mathbf m}-{\mathbf m}_o)^T C_M^{-1}({\mathbf m}-{\mathbf m}_o)
+#    \right\},
 # 
 # where :math:`{\mathbf m}_o)` is some reference set of model
 # coefficients, and :math:`C_M^{-1}` is an inverse model covariance
@@ -654,6 +702,9 @@ def log_prior(model):    # uniform distribution
         if model[i] < m_lower_bound[i] or model[i] > m_upper_bound[i]: return -np.inf
     return 0.0 # model lies within bounds -> return log(1)
 
+######################################################################
+#
+
 
 ######################################################################
 # Walkers’ starting points
@@ -661,13 +712,16 @@ def log_prior(model):    # uniform distribution
 # 
 # Now we define some hyperparameters (e.g. the number of walkers and
 # steps), and initialise the starting positions of walkers. We start all
-# walkers in a small ball about a chosen point :math:`[0, 0, 0, 0]`.
+# walkers in a small ball about a chosen point :math:`(0, 0, 0, 0)`.
 # 
 
 nwalkers = 32
 ndim = 4
 nsteps = 5000
 walkers_start = np.array([0.,0.,0.,0.]) + 1e-4 * np.random.randn(nwalkers, ndim)
+
+######################################################################
+#
 
 
 ######################################################################
@@ -693,6 +747,9 @@ inv_result_3 = inv_3.run()
 print(f"The inversion result from `emcee`:")
 inv_result_3.summary()
 
+######################################################################
+#
+
 
 ######################################################################
 # Analyse sampling results
@@ -709,13 +766,17 @@ inv_result_3.summary()
 # this ``inv_result_3.sampler`` object.
 # 
 # Additionally, we can convert a sampler object into an instance of
-# ```arviz.InferenceData`` <https://python.arviz.org/en/latest/api/generated/arviz.InferenceData.html#arviz.InferenceData>`__,
+# ``arviz.InferenceData``
+# (`ref <https://python.arviz.org/en/latest/api/generated/arviz.InferenceData.html#arviz.InferenceData>`__),
 # so that all the plotting functions from
 # `arviz <https://python.arviz.org/en/latest/index.html>`__ are exposed.
 # 
 
 sampler = inv_result_3.sampler
 az_idata = inv_result_3.to_arviz()
+
+######################################################################
+#
 
 
 ######################################################################
@@ -734,6 +795,9 @@ az_idata = inv_result_3.to_arviz()
 labels = ["m0", "m1", "m2","m3"]
 az.plot_trace(az_idata);
 
+######################################################################
+#
+
 
 ######################################################################
 # Autocorrelation analysis
@@ -750,6 +814,9 @@ az.plot_trace(az_idata);
 
 tau = sampler.get_autocorr_time()
 print(f"autocorrelation time: {tau}")
+
+######################################################################
+#
 
 
 ######################################################################
@@ -772,6 +839,9 @@ az.plot_pair(
     marginals=True, 
     reference_values=dict(zip([f"var_{i}" for i in range(4)], _m_true.tolist()))
 );
+
+######################################################################
+#
 
 
 ######################################################################
@@ -810,6 +880,9 @@ plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
 plt.scatter(x, y_observed, color="lightcoral", label="observed data")
 plt.legend();
 
+######################################################################
+#
+
 
 ######################################################################
 # Uncertainty estimates
@@ -822,12 +895,15 @@ plt.legend();
 solmed = np.zeros(4)
 for i in range(ndim):
     mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
-    #mcmc = np.percentile(flat_samples[:, i], [5, 50, 95])
     solmed[i] = mcmc[1]
     q = np.diff(mcmc)
-    txt = "\mathrm{{{3}}} = {0:.3f}_{{-{1:.3f}}}^{{{2:.3f}}} "
-    txt = txt.format(mcmc[1], q[0], q[1], labels[i])
-    display(Math(txt))
+    # txt = "\mathrm{{{3}}} = {0:.3f}_{{-{1:.3f}}}^{{{2:.3f}}} "
+    # txt = txt.format(mcmc[1], q[0], q[1], labels[i])
+    # display(Math(txt))
+    print(f"{labels[i]} = {mcmc[1]}, (-{q[0]}, +{q[1]})")
+
+######################################################################
+#
 
 
 ######################################################################
@@ -849,7 +925,13 @@ print('\n Posterior estimate of model standard deviations in each parameter')
 for i in range(ndim):
     print("    {} {:7.4f}".format(labels[i],CM_std[i]))
 
+######################################################################
+#
+
 print("\n Solution and 95% credible intervals ")
 for i in range(ndim):
     mcmc = np.percentile(flat_samples[:, i], [5, 50, 95])
     print(" {} {:7.3f} [{:7.3f}, {:7.3f}]".format(labels[i],mcmc[1],mcmc[0],mcmc[2]))
+
+######################################################################
+#
