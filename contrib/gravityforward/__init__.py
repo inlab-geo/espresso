@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-import re
+# import re
 import pkgutil
 from io import StringIO
 import importlib
@@ -15,28 +14,42 @@ auxclass = getattr(
 
 class gravityforward(auxclass):
     """
-    Description of Gravityclass.
+    Description of the inversion test suite - gravity forward problem.
+
 
     Parameters:
     --------------------
+    *args
 
-
+    m: The model in a 1-D array containing densities [1xM]
+    rec_coords: Array containing coonrdinates of recording stations [3xN]
+    x_nodes: X-coordinates of all nodes in model [2xM]
+    y_nodes: Y-coordinates of all nodes in model [2xM]
+    z_nodes: Z-coordinates of all nodes in model [2xM]
+    --------
+    For plotting purposes:
+    lmx: Number of cells in model (M); x-direction
+    lmy: Number of cells in model (M); y-direction
+    lmz: Number of cells in model (M); z-direction
+    lrx: Number of recording stations (N); x-direction
+    lry: Number of recording stations (N); x-direction
 
     --------------------
-    Functions(?):
+    Functions:
     --------------------
 
-
+    get_model: Returns the chosen starting model; np.array
+    get_data: Returns synthetic measurements of gravitational force, with added
+        gaussian noise; np.array
+    forward: Returns gravitational force in z-direction based on the
+        input model (m) and recording locations (rec_coords); np.array
+    gradient: Returns the jacobian / design matrix based on the
+        input model (m) and recording locations (rec_coords); np.array
+    plot_model: Returns an plot of the model and the result of the forward
+        calculation.
 
     --------------------
     """
-
-    # A test to get the correct data path using importlib. I thought it returns a path-like object
-    # But it returns contextlib._GeneratorContextManager instead -- ?
-    # def get_path(self):
-    # import importlib.resources
-    # xml_path = importlib.resources.path('inversiontestproblems.gravityforward.data', 'gravmodel1.txt')
-    # return xml_path
 
     def __init__(self, example_number=0):
         self._ieg = example_number
@@ -168,42 +181,45 @@ class gravityforward(auxclass):
 
         else:
 
-            print("Error - example number not defined")
+            raise("Error - example number not defined")
 
     def get_model(self):
         """
-        Description of get_data().
+        Returns the model as a numpy array.
 
         Parameters
         --------------------
         *args
 
-        data_x: ?
-        data_y: ?
-        data_z: ?
         m: The model in a 1-D array containing densities
-        rec_coords: Array containing coonrdinates of recording stations [3xN]
-        x_nodes: X-coordinates of all nodes in model [2xN]
-        y_nodes: Y-coordinates of all nodes in model [2xN]
-        z_nodes: Z-coordinates of all nodes in model [2xN]
-        --------
-        For plotting purposes:
-        lmx: Number of cells in model; x-direction
-        lmy: Number of cells in model; y-direction
-        lmz: Number of cells in model; z-direction
-        lrx: Number of recording stations; x-direction
-        lry: Number of recording stations; x-direction
 
         --------------------
         """
-        # def data_path(filename):
-        #     path_to_current_file = os.path.realpath(__file__)
-        #     current_directory = os.path.split(path_to_current_file)[0]
-        #     data_path = os.path.join(current_directory)
-        #     data_path=data_path+"/data/"+filename
-        #     return data_path
 
         return self.m
+
+    def get_data(self, m):
+        """
+        Returns synthetic measurements of gravitational force, with added
+            gaussian noise;
+
+        Parameters
+        --------------------
+        *args
+
+        datan: Measurements of gravitational force, with added
+            gaussian noise.
+
+        --------------------
+        """
+
+        gz_rec = self._calculate_gravity(
+            m, self.x_nodes, self.y_nodes, self.z_nodes, self.rec_coords, False
+        )
+
+        self.datan=gz_rec+np.random.normal(0,0.005*np.max(gz_rec),len(gz_rec))
+
+        return self.datan
 
     def _kernel(self, ii, jj, kk, dx, dy, dz, dim):
         r = (dx[:, ii] ** 2 + dy[:, jj] ** 2 + dz[:, kk] ** 2) ** (0.50)
@@ -427,19 +443,6 @@ class gravityforward(auxclass):
             plt.xlim([-30, 30])
             plt.ylim([-30, 30])
 
-            #             plt.subplot(2, 2, 3)
-            #             plt.imshow(np.reshape(gx_rec,[lrx,lry]),extent=[-limy,limy,-limx,limx])
-            #             plt.title('2D view of gx')
-            #             plt.xlabel('y [m]')
-            #             plt.ylabel('x [m]')
-            #             plt.colorbar(label="Gravity [mGal]")
-
-            #             plt.subplot(2, 2, 4)
-            #             plt.imshow(np.reshape(gy_rec,[lrx,lry]),extent=[-limy,limy,-limx,limx])
-            #             plt.title('2D view of gy')
-            #             plt.xlabel('y [m]')
-            #             plt.ylabel('x [m]')
-            #             plt.colorbar(label="Gravity [mGal]")
             plt.show()
         elif self._ieg == 1:
 
@@ -459,13 +462,6 @@ class gravityforward(auxclass):
                 max(self.rec_coords[:, 1])
                 + (self.rec_coords[1, 1] - self.rec_coords[0, 1]) * 0.5
             )
-
-            # model2d=model.reshape(3,1,9)
-            # plt.figure(figsize=(17, 8))
-            # plt.subplot(2, 1, 1)
-            # plt.title("Model slice at y=0")
-            # plt.imshow(model2d[:,0,:])
-            # plt.colorbar(label="density [kg/m^3]")
 
             plt.figure(figsize=(17, 8))
             plt.subplot(1, 2, 1)
