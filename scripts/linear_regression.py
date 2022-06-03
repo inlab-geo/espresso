@@ -17,8 +17,17 @@ Polynomial Linear Regression
 
 
 ######################################################################
-# To get started, we look at a simple linear regression example with
+# This tutorial focusses on regression - that is, fitting curves to
+# datasets. We will look at a simple linear regression example with
 # ``cofi``.
+# 
+# To begin with, we will work with polynomial curves,
+# 
+# .. math:: y(x) = \sum_{n=0}^N m_n x^n\,.
+# 
+# Here, :math:`N` is the ‘order’ of the polynomial: if N=1 we have a
+# straight line, if N=2 it will be a quadratic, and so on. The :math:`m_n`
+# are the ‘model coefficients’.
 # 
 # We have a set of noisy data values, Y, measured at known locations, X,
 # and wish to find the best fit degree 3 polynomial.
@@ -28,14 +37,16 @@ Polynomial Linear Regression
 # Table of contents
 # -----------------
 # 
-# -  `Introduction <#introduction>`__
-# -  Step 0 - `Import modules <#import>`__
-# -  Step 1 - `Define the problem <#problem>`__
-# -  Step 2 - `Define the inversion options <#options>`__
-# -  Step 3 - `Run the inversion <#inversion>`__
-# -  Step 4 - `Check out the result <#result>`__
-# -  Summary - `a clean version of code above <#review>`__
-# -  Next - `switching to a different inversion approach <#switch>`__
+# 1. `Import modules <#import>`__
+# 2. `Define the problem <#problem>`__
+# 3. `Define the inversion options <#options>`__
+# 4. `Run the inversion <#inversion>`__
+# 5. `Check out the result <#result>`__
+# 6. `A clean version of code above <#review>`__
+# 7. `Switching to a different inversion approach <#switch>`__
+# 
+#    1. `Optimisation <#optimisation>`__
+#    2. `Sampling <#sampling>`__
 # 
 # Introduction 
 # -------------
@@ -45,9 +56,9 @@ Polynomial Linear Regression
 # 
 # -  ``BaseProblem`` defines three things: 1) the forward problem; 2)
 #    model parameter space (the unknowns); and 3) other information about
-#    the objective you’d like to reach. Depending on the inversion
-#    approaches you’d like to use, the last one can be an objective
-#    function, or a log likelihood function, etc.
+#    the inverse problem we are solving, such as the jacobian matrix
+#    (i.e. design matrix for our linear problem) for the least squares
+#    solver we will be using initially in the following
 # -  ``InversionOptions`` describes details about how one wants to run the
 #    inversion, including the inversion approach, backend tool and
 #    solver-specific parameters.
@@ -60,26 +71,9 @@ Polynomial Linear Regression
 # 
 # So a common workflow includes 4 steps:
 # 
-# 1. define ``BaseProblem``. This can be done:
-# 
-#    -  either: through a series of set functions
-# 
-#       ::
-# 
-#          inv_problem = BaseProblem()
-#          inv_problem.set_objective(some_function_here)
-#          inv_problem.set_initial_model(a_starting_point)
-# 
-#    -  or: by subclassing ``BaseProblem``
-# 
-#       ::
-# 
-#          class MyOwnProblem(BaseProblem):
-#              def __init__(self, initial_model, whatever_I_want_to_pass_in):
-#                  self.initial_model = initial_model
-#                  self.whatever_I_want_to_pass_in = whatever_I_want_to_pass_in
-#              def objective(self, model):
-#                  return some_objective_function_value
+# 1. we begin by defining the ``BaseProblem``. This can be done through a
+#    series of set functions
+#    ``python  inv_problem = BaseProblem()  inv_problem.set_objective(some_function_here)  inv_problem.set_initial_model(a_starting_point)``
 # 
 # 2. define ``InversionOptions``. Some useful methods include:
 # 
@@ -96,14 +90,14 @@ Polynomial Linear Regression
 #       result = inv.run()
 # 
 # 4. analyse the result, workflow and redo your experiments with different
-#    ``InversionOptions``
+#    ``InversionOptions`` objects
 # 
 
 
 ######################################################################
 # --------------
 # 
-# 0. Import modules 
+# 1. Import modules 
 # ------------------
 # 
 
@@ -117,6 +111,8 @@ Polynomial Linear Regression
 
 import numpy as np
 import matplotlib.pyplot as plt
+import arviz as az
+from IPython.display import display, Math # some librarys for IO
 
 from cofi import BaseProblem, InversionOptions, Inversion
 
@@ -126,42 +122,43 @@ np.random.seed(42)
 ######################################################################
 # --------------
 # 
-# 1. Define the problem 
+# 2. Define the problem 
 # ----------------------
 # 
-# A list of functions/properties that can be set to ``BaseProblem`` so
-# far:
+# Here we compute :math:`y(x)` for multiple :math:`x`-values
+# simultaneously, so write the forward operator in the following form:
 # 
-# -  ``set_objective()``
-# -  ``set_log_posterior()``
-# -  ``set_log_prior()``
-# -  ``set_log_likelihood()``
-# -  ``set_gradient()``
-# -  ``set_hessian()``
-# -  ``set_hessian_times_vector()``
-# -  ``set_residual()``
-# -  ``set_jacobian()``
-# -  ``set_jacobian_times_vector()``
-# -  ``set_data_misfit()``
-# -  ``set_regularisation()``
-# -  ``set_data()``
-# -  ``set_data_from_file()``
-# -  ``set_initial_model()``
-# -  ``set_model_shape()``
-# -  ``set_bounds``
-# -  ``set_constraints``
-# -  ``name`` (only useful when displaying this problem, no functional
-#    use)
+# .. math::  \left(\begin{array}{c}y_1\\y_2\\\vdots\\y_N\end{array}\right) = \left(\begin{array}{ccc}1&x_1&x_1^2&x_1^3\\1&x_2&x_2^2&x_2^3\\\vdots&\vdots&\vdots\\1&x_N&x_N^2&x_N^3\end{array}\right)\left(\begin{array}{c}m_0\\m_1\\m_2\end{array}\right)
 # 
-# Other useful functions:
+# \ This clearly has the required general form, :math:`\mathbf{y=Gm}`, and
+# so the best-fitting model can be identified using the least-squares
+# algorithm.
 # 
-# -  ``defined_components()`` (review what have been set)
-# -  ``summary()`` (better displayed information)
-# -  ``suggest_solvers()``
+# In the following code block, we’ll define the forward function and
+# generate some random data points as our dataset.
 # 
-# Check `API reference
-# page <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html>`__
-# for details.
+# .. math::
+# 
+#    \begin{align}
+#    \text{forward}(\textbf{m}) &= \textbf{G}\textbf{m}\\
+#    &= \text{basis_func}(\textbf{x})\cdot\textbf{m}
+#    \end{align}
+# 
+# where:
+# 
+# -  :math:`\text{forward}` is the forward function that takes in a model
+#    and produces synthetic data,
+# -  :math:`\textbf{m}` is the model vector,
+# -  :math:`\textbf{G}` is the basis matrix (i.e. design matrix) of this
+#    linear regression problem and looks like the following:
+# 
+#    .. math:: \left(\begin{array}{ccc}1&x_1&x_1^2&x_1^3\\1&x_2&x_2^2&x_2^3\\\vdots&\vdots&\vdots\\1&x_N&x_N^2&x_N^3\end{array}\right)
+# 
+# -  :math:`\text{basis_func}` is the basis function that converts
+#    :math:`\textbf{x}` into :math:`\textbf{G}`
+# 
+# Recall that the function we are going to fit is:
+# :math:`y=-6-5x+2x^2+x^3`
 # 
 
 # generate data with random Gaussian noise
@@ -190,6 +187,31 @@ plt.legend();
 # Now we define the problem in ``cofi`` - in other words, we attach the
 # problem information to a ``BaseProblem`` object.
 # 
+# From `this
+# page <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#set-methods>`__
+# you’ll see a list of functions/properties that can be set to
+# ``BaseProblem``.
+# 
+# Other helper methods for ``BaseProblem`` include:
+# 
+# -  ``defined_components()`` (review what have been set)
+# -  ``summary()`` (better displayed information)
+# -  ``suggest_solvers()``
+# 
+# We refer readers to `cofi’s API reference
+# page <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html>`__
+# for details about all these methods.
+# 
+# Since we are dealing with a linear problem, the design matrix
+# :math:`\textbf{G}` is the Jacobian of the forward function with respect
+# to the model. This information will be useful when the inversion solver
+# is a linear system solver (as we’ll demonstrate firstly in the next
+# section).
+# 
+# For a linear system solver, only the data observations vector and the
+# Jacobian matrix are needed. We thus set them to our ``BaseProblem``
+# object.
+# 
 
 # define the problem in cofi
 inv_problem = BaseProblem()
@@ -203,14 +225,39 @@ inv_problem.summary()
 ######################################################################
 # --------------
 # 
-# 2. Define the inversion options 
+# 3. Define the inversion options 
 # --------------------------------
+# 
+# As mentioned above, an ``InversionOptions`` object contains everything
+# you’d like to define regarding how the inversion is to be run.
+# 
+# From `this
+# page <https://cofi.readthedocs.io/en/latest/api/generated/cofi.InversionOptions.html>`__
+# you’ll see the methods for ``InversionOptions``.
+# 
+# In general: 1. we use ``InversionOptions.set_tool("tool_name")`` to set
+# which backend tool you’d like to use 2. then with
+# ``InversionOptions.set_params(p1=val1, p2=val2, ...)`` you can set
+# solver-specific parameters.
 # 
 
 inv_options = InversionOptions()
 inv_options.summary()
 
+
+######################################################################
+# We have a **suggesting system** that is being improved at the moment, so
+# that you can see what backend tools are available based on the
+# categories of inversion approaches you’d like to use.
+# 
+
 inv_options.suggest_tools()
+
+
+######################################################################
+# Having seen what a default ``InversionOptions`` object look like, we
+# customise the inversion process by constraining the solving approach:
+# 
 
 inv_options.set_solving_method("linear least square")
 inv_options.summary()
@@ -222,11 +269,17 @@ inv_options.summary()
 # As the “summary” suggested, you’ve set the solving method, so you can
 # skip the step of setting a backend tool because there’s a default one.
 # 
-# If there are more backend tool options, then use the following function
-# to see available options and set your desired backend solver.
+# If there are more than one backend tool options, then the following
+# function shows available options and set your desired backend solver.
 # 
 
 inv_options.suggest_tools()
+
+
+######################################################################
+# You can also set the backend tool directly (as following), without the
+# call to ``inv_options.set_solving_method()`` above.
+# 
 
 inv_options.set_tool("scipy.linalg.lstsq")
 inv_options.summary()
@@ -235,15 +288,44 @@ inv_options.summary()
 ######################################################################
 # --------------
 # 
-# 3. Start an inversion 
+# 4. Start an inversion 
 # ----------------------
+# 
+# This step is common for most cases. We’ve specified our problem as a
+# ``BaseProblem`` object, and we’ve defined how to run the inversion as an
+# ``InversionOptions`` object.
+# 
+# Taking them both in, an ``Inversion`` object knows all the information
+# and is an engine to actually perform the inversion.
 # 
 
 inv = Inversion(inv_problem, inv_options)
 inv.summary()
 
+
+######################################################################
+# Now, let’s run it!
+# 
+
 inv_result = inv.run()
 inv_result.success
+
+
+######################################################################
+# The inversion result returned by ``inv.run()`` is an instance of
+# ``InversionResult``.
+# 
+# See `this documentation
+# page <https://cofi.readthedocs.io/en/latest/api/generated/cofi.InversionResult.html>`__
+# for details about what can be done with the resulting object.
+# 
+# Results returned by different backend tools will have different extra
+# information. But there are two common things - they all have a
+# ``success`` status (as a boolean) and a ``model``/``sampler`` result.
+# 
+# Similar to the other class objects, you can see what’s inside it with
+# the ``summary()`` method.
+# 
 
 inv_result.summary()
 
@@ -251,11 +333,25 @@ inv_result.summary()
 ######################################################################
 # --------------
 # 
-# 4. Check back your problem setting, inversion setting & result 
+# 5. Check back your problem setting, inversion setting & result 
 # ---------------------------------------------------------------
 # 
 
+
+######################################################################
+# A summary view of the ``Inversion`` object shows information about the
+# whole inversion process, including how the problem is defined, how the
+# inversion is defined to be run, as well as what the results are (if
+# any).
+# 
+
 inv.summary()
+
+
+######################################################################
+# Now, let’s plot the predicted curve and compare it to the data and
+# ground truth.
+# 
 
 y_synthetic = forward_func(inv_result.model)
 
@@ -282,7 +378,7 @@ plt.legend();
 ######################################################################
 # --------------
 # 
-# 5. Summary: a cleaner version of the above example 
+# 6. Summary: a cleaner version of the above example 
 # ---------------------------------------------------
 # 
 # For review purpose, here are the minimal set of commands we’ve used to
@@ -327,30 +423,41 @@ inv_result.summary()
 ######################################################################
 # --------------
 # 
-# 6. Switching to a different inversion approach 
+# 7. Switching to a different inversion approach 
 # -----------------------------------------------
 # 
-# Alternatively, you can switch to a different inversion solver easily.
-# Here we use a plain optimizer ``scipy.optimize.minimize`` to demonstrate
-# this ability.
+# We’ve seen how this linear regression problem is solved with a linear
+# system solver. It’s time to see ``cofi``\ ’s capability to switch
+# between different inversion approaches easily.
+# 
+# 7.1. Optimisation 
+# ~~~~~~~~~~~~~~~~~~
+# 
+# Any linear problem :math:`\textbf{y} = \textbf{G}\textbf{m}` can also be
+# solved by minimising the squares of the residual of the linear
+# equations, e.g. \ :math:`\textbf{r}^T \textbf{r}` where
+# :math:`\textbf{r}=\textbf{y}-\textbf{G}\textbf{m}`.
+# 
+# So we first use a plain optimizer ``scipy.optimize.minimize`` to
+# demonstrate this ability.
 # 
 # For this backend solver to run successfully, some additional information
-# should be provided, otherwise we will raise an error to notify what
+# should be provided, otherwise you’ll see an error to notify what
 # additional information is required by the solver.
 # 
 # There are different ways of defining information - Here in the code
 # below, after we make clear how to calculate the data misfit and
-# regularisation, the objective function is generated for you based on the
-# forward function and data. Alternatively, you can pass in an objective
-# function directly using
-# ``inv_problem.set_objective(your_objective_func)``
+# regularisation (optionally), the objective function is generated for you
+# based on the forward function and data. Alternatively, you can pass in
+# an objective function directly using
+# ``inv_problem.set_objective(your_objective_func)``.
 # 
 
 ######## Provide additional information
 inv_problem.set_initial_model(np.ones(4))
 inv_problem.set_forward(forward_func)
 inv_problem.set_data_misfit("L2")
-inv_problem.set_regularisation(2, 0.02)
+inv_problem.set_regularisation(2, 0.02)        # optional
 
 ######## Set a different tool
 inv_options_2 = InversionOptions()
@@ -384,3 +491,365 @@ plt.legend();
 # Here we see the (blue curve) is also a relatively good approximation of
 # the true curve (orange).
 # 
+
+
+######################################################################
+# 7.2. Sampling 
+# ~~~~~~~~~~~~~~
+# 
+# We’ve seen the same regression problem solved with a linear system
+# solver and an optimiser - how about sampling?
+# 
+# Background (if you’re relatively new to this)
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# 
+# Before we show you an example of how to solve this problem from a
+# Bayesian sampling perspective, let’s switch to a slightly different
+# mindset:
+# 
+# 1. Instead of getting a result as a **single “best-fit”** model, it’s
+#    worthwhile to obtain an **ensemble** of models
+# 2. How to *express* such an ensemble of models? It’s uncertain where the
+#    true model is, but given a) the data and b) some prior knowledge
+#    about the model, we can express it as a **probability distribution**,
+#    where :math:`p(\text{model})` is the probability at which the
+#    :math:`\text{model}` is true.
+# 3. How to *estimate* this distribution then? There are various ways, and
+#    **sampling** is a typical one of them.
+# 
+# In a sampling approach, there are typically multiple walkers that start
+# from some initial points (initial guesses of the models) and take steps
+# in the model space (the set of all possible models). With a Markov chain
+# Monte Carlo (McMC) sampler, the walkers move step by step, and determine
+# whether to keep the new sample based on evaluation of the posterior
+# probability density we provide, with some randomness.
+# 
+# Essentially, the **posterior distribution** is the key information that
+# we give to the sampler, so that they decide how to take the steps and
+# when to accept the samples.
+# 
+# Starting from the **Bayes theorem**:
+# 
+# .. math::
+# 
+# 
+#    p(A|B) = \frac{p(B|A)p(A)}{p(B)}
+# 
+# The unknowns are model parameters, so we set :math:`A` to be
+# :math:`\textbf{m}` (model), and :math:`B` to be :math:`\textbf{d}`
+# (data). Since the marginal distribution :math:`p(\textbf{d})` is assumed
+# to be unrelated to the :math:`\textbf{m}`, we get the following
+# relationship:
+# 
+# .. math::
+# 
+# 
+#    p(\textbf{m}|\textbf{d}) \propto p(\textbf{d}|\textbf{m}) p(\textbf{m})
+# 
+# where:
+# 
+# -  :math:`p(\textbf{m}|\textbf{d})` (posterior) is the probability of a
+#    model given data observations
+# -  :math:`p(\textbf{d}|\textbf{m})` (likelihood) is the probability of
+#    which data is observed given a certain model
+# -  :math:`p(\textbf{m})` (prior) is the probability of a certain model
+#    and reflects your belief / domain knowledge on the model
+# 
+# Coding
+# ^^^^^^
+# 
+# Most sampler tools require the logarithm of the probability.
+# 
+# .. math::
+# 
+# 
+#    \log(\text{posterior}) = \log(\text{likelihood}) + \log(\text{prior})
+# 
+# So in ``cofi``, you can either define:
+# 
+# -  log of the posterior, using
+#    ```BaseProblem.set_log_posterior()`` <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_posterior>`__,
+#    or
+# -  log of prior and log of likelihood, using
+#    ```BaseProblem.set_log_prior()`` <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_prior>`__
+#    and
+#    ```BaseProblem.set_log_likelihood()`` <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#cofi.BaseProblem.set_log_likelihood>`__
+# 
+# We use the second option in this demo.
+# 
+# Likelihood
+# ''''''''''
+# 
+# To measure the probability of the observed y values given those
+# predicted by our polynomial curve we specify a Likelihood function
+# :math:`p({\mathbf d}_{obs}| {\mathbf m})`
+# 
+# :raw-latex:`\begin{equation*}
+# p({\mathbf d}_{obs} | {\mathbf m}) \propto \exp \left\{- \frac{1}{2} ({\mathbf d}_{obs}-{\mathbf d}_{pred}({\mathbf m}))^T C_D^{-1} ({\mathbf d}_{obs}-{\mathbf d}_{pred}({\mathbf m})) \right\}
+# \end{equation*}`
+# 
+# where :math:`{\mathbf d}_{obs}` represents the observed y values and
+# :math:`{\mathbf d}_{pred}({\mathbf m})` are those predicted by the
+# polynomial model :math:`({\mathbf m})`. The Likelihood is defined as the
+# probability of observing the data actually observed, given an model. For
+# sampling we will only need to evaluate the log of the Likelihood,
+# :math:`\log p({\mathbf d}_{obs} | {\mathbf m})`. To do so, we require
+# the inverse data covariance matrix describing the statistics of the
+# noise in the data, :math:`C_D^{-1}` . For this problem the data errors
+# are independent with identical standard deviation in noise for each
+# datum. Hence :math:`C_D^{-1} = \frac{1}{\sigma^2}I` where
+# :math:`\sigma=1`.
+# 
+
+sigma = 1.0                                     # common noise standard deviation
+Cdinv = np.eye(len(y_observed))/(sigma**2)      # inverse data covariance matrix
+
+def log_likelihood(model):
+    y_synthetics = forward_func(model)
+    residual = y_observed - y_synthetics
+    return -0.5 * residual @ (Cdinv @ residual).T
+
+
+######################################################################
+# Prior
+# '''''
+# 
+# Bayesian sampling requires a prior probability density function. A
+# common problem with polynomial coefficients as model parameters is that
+# it is not at all obvious what a prior should be. There are two common
+# choices.
+# 
+# The first is to make the prior uniform with specified bounds
+# 
+# :raw-latex:`\begin{eqnarray*}
+# p({\mathbf m}) &=& \frac{1}{V},\quad  l_i \le m_i \le u_i, \quad (i=1,\dots,M)\\
+# \\
+#          &=& 0, \quad {\rm otherwise},
+# \end{eqnarray*}`
+# 
+# where :math:`l_i` and :math:`u_i` are lower and upper bounds on the
+# :math:`i`\ th model coefficient.
+# 
+# The second choice is to make the prior an unbounded Gaussian
+# 
+# :raw-latex:`\begin{eqnarray*}
+# p({\mathbf m}) \propto \exp \left\{- \frac{1}{2}({\mathbf m}-{\mathbf m}_o)^T C_M^{-1}({\mathbf m}-{\mathbf m}_o)
+# \right\},
+# \end{eqnarray*}`
+# 
+# where :math:`{\mathbf m}_o)` is some reference set of model
+# coefficients, and :math:`C_M^{-1}` is an inverse model covariance
+# describing prior information for each model parameter.
+# 
+# Here we choose a Uniform prior with
+# :math:`{\mathbf l}^T = (-10.,-10.,-10.,-10.)`, and
+# :math:`{\mathbf u}^T = (10.,10.,10.,10.)`.
+# 
+
+m_lower_bound = np.ones(4) * (-10.)             # lower bound for uniform prior
+m_upper_bound = np.ones(4) * 10                 # upper bound for uniform prior
+
+def log_prior(model):    # uniform distribution
+    for i in range(len(m_lower_bound)):
+        if model[i] < m_lower_bound[i] or model[i] > m_upper_bound[i]: return -np.inf
+    return 0.0 # model lies within bounds -> return log(1)
+
+
+######################################################################
+# Walkers’ starting points
+# ''''''''''''''''''''''''
+# 
+# Now we define some hyperparameters (e.g. the number of walkers and
+# steps), and initialise the starting positions of walkers. We start all
+# walkers in a small ball about a chosen point :math:`[0, 0, 0, 0]`.
+# 
+
+nwalkers = 32
+ndim = 4
+nsteps = 5000
+walkers_start = np.array([0.,0.,0.,0.]) + 1e-4 * np.random.randn(nwalkers, ndim)
+
+
+######################################################################
+# Finally, we attach all above information to our ``BaseProblem`` and
+# ``InversionOptions`` objects.
+# 
+
+######## Provide additional information
+inv_problem.set_log_prior(log_prior)
+inv_problem.set_log_likelihood(log_likelihood)
+inv_problem.set_walkers_starting_pos(walkers_start)
+
+######## Set a different tool
+inv_options_3 = InversionOptions()
+inv_options_3.set_tool("emcee")
+inv_options_3.set_params(nwalkers=nwalkers, nsteps=nsteps)
+
+######## Run it
+inv_3 = Inversion(inv_problem, inv_options_3)
+inv_result_3 = inv_3.run()
+
+######## Check result
+print(f"The inversion result from `emcee`:")
+inv_result_3.summary()
+
+
+######################################################################
+# Analyse sampling results
+# ^^^^^^^^^^^^^^^^^^^^^^^^
+# 
+# Sampler is complete. We do not know if there have been enough walkers or
+# enough samplers but we’ll have a look at these results, using some
+# standard approaches.
+# 
+# As you’ve seen above, ``inv_result_3`` has a ``sampler`` attribute
+# attached to it, and this contains all the information from backend
+# sampler, including the chains on each walker, their associated posterior
+# value, etc. You get to access all the raw data directly by exploring
+# this ``inv_result_3.sampler`` object.
+# 
+# Additionally, we can convert a sampler object into an instance of
+# ```arviz.InferenceData`` <https://python.arviz.org/en/latest/api/generated/arviz.InferenceData.html#arviz.InferenceData>`__,
+# so that all the plotting functions from
+# `arviz <https://python.arviz.org/en/latest/index.html>`__ are exposed.
+# 
+
+sampler = inv_result_3.sampler
+az_idata = inv_result_3.to_arviz()
+
+
+######################################################################
+# Sampling performance
+# ''''''''''''''''''''
+# 
+# Let’s take a look at what the sampler has done. A good first step is to
+# look at the time series of the parameters in the chain. The samples can
+# be accessed using the ``EnsembleSampler.get_chain()`` method. This will
+# return an array with the shape (5000, 32, 3) giving the parameter values
+# for each walker at each step in the chain. The figure below shows the
+# positions of each walker as a function of the number of steps in the
+# chain:
+# 
+
+labels = ["m0", "m1", "m2","m3"]
+az.plot_trace(az_idata);
+
+
+######################################################################
+# Autocorrelation analysis
+# ''''''''''''''''''''''''
+# 
+# As mentioned above, the walkers start in small distributions around some
+# chosen values and then they quickly wander and start exploring the full
+# posterior distribution. In fact, after a relatively small number of
+# steps, the samples seem pretty well “burnt-in”. That is a hard statement
+# to make quantitatively, but we can look at an estimate of the integrated
+# autocorrelation time (see Emcee’s package the -*Autocorrelation analysis
+# & convergence tutorial* for more details):
+# 
+
+tau = sampler.get_autocorr_time()
+print(f"autocorrelation time: {tau}")
+
+
+######################################################################
+# Corner plot
+# '''''''''''
+# 
+# The above suggests that only about 70 steps are needed for the chain to
+# “forget” where it started. It’s not unreasonable to throw away a few
+# times this number of steps as “burn-in”.
+# 
+# Let’s discard the initial 300 steps, and thin by about half the
+# autocorrelation time (30 steps).
+# 
+# Let’s make one of the most useful plots you can make with your MCMC
+# results: a corner plot.
+# 
+
+az.plot_pair(
+    az_idata.sel(draw=slice(300,None)), 
+    marginals=True, 
+    reference_values=dict(zip([f"var_{i}" for i in range(4)], _m_true.tolist()))
+);
+
+
+######################################################################
+# The corner plot shows all the one and two dimensional projections of the
+# posterior probability distributions of your parameters. This is useful
+# because it quickly demonstrates all of the covariances between
+# parameters. Also, the way that you find the marginalized distribution
+# for a parameter or set of parameters using the results of the MCMC chain
+# is to project the samples into that plane and then make an N-dimensional
+# histogram. That means that the corner plot shows the marginalized
+# distribution for each parameter independently in the histograms along
+# the diagonal and then the marginalized two dimensional distributions in
+# the other panels.
+# 
+# Predicted curves
+# ''''''''''''''''
+# 
+# Now lets plot the a sub-sample of 100 the predicted curves from this
+# posterior ensemble and compare to the data.
+# 
+
+flat_samples = sampler.get_chain(discard=300, thin=30, flat=True)
+inds = np.random.randint(len(flat_samples), size=100) # get a random selection from posterior ensemble
+_x_plot = np.linspace(-3.5,2.5)
+_G_plot = basis_func(_x_plot)
+_y_plot = _G_plot @ _m_true
+plt.figure(figsize=(12,8))
+sample = flat_samples[0]
+_y_synth = _G_plot @ sample
+plt.plot(_x_plot, _y_synth, color="seagreen", label="Posterior samples",alpha=0.1)
+for ind in inds:
+    sample = flat_samples[ind]
+    _y_synth = _G_plot @ sample
+    plt.plot(_x_plot, _y_synth, color="seagreen", alpha=0.1)
+plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
+plt.scatter(x, y_observed, color="lightcoral", label="observed data")
+plt.legend();
+
+
+######################################################################
+# Uncertainty estimates
+# '''''''''''''''''''''
+# 
+# We can now calculate some formal uncertainties based on the 16th, 50th,
+# and 84th percentiles of the samples in the marginalized distributions.
+# 
+
+solmed = np.zeros(4)
+for i in range(ndim):
+    mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
+    #mcmc = np.percentile(flat_samples[:, i], [5, 50, 95])
+    solmed[i] = mcmc[1]
+    q = np.diff(mcmc)
+    txt = "\mathrm{{{3}}} = {0:.3f}_{{-{1:.3f}}}^{{{2:.3f}}} "
+    txt = txt.format(mcmc[1], q[0], q[1], labels[i])
+    display(Math(txt))
+
+
+######################################################################
+# The first number here is the median value of each model coefficient in
+# the posterior ensemble, while the upper and lower numbers correspond to
+# the differences between the median and the 16th and 84th percentile.
+# Recall here that the true values were
+# :math:`m_0 = -6, m_1 = -5, m_2= 2,` and :math:`m_3 = 1`. So all are
+# close to the median and lie within the credible intervals.
+# 
+# We can also calculate the posterior model covariance matrix and compare
+# to that estimated by least squares.
+# 
+
+CMpost = np.cov(flat_samples.T)
+CM_std= np.std(flat_samples,axis=0)
+print('Posterior model covariance matrix\n',CMpost)
+print('\n Posterior estimate of model standard deviations in each parameter')
+for i in range(ndim):
+    print("    {} {:7.4f}".format(labels[i],CM_std[i]))
+
+print("\n Solution and 95% credible intervals ")
+for i in range(ndim):
+    mcmc = np.percentile(flat_samples[:, i], [5, 50, 95])
+    print(" {} {:7.3f} [{:7.3f}, {:7.3f}]".format(labels[i],mcmc[1],mcmc[0],mcmc[2]))
