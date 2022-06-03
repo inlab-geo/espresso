@@ -901,7 +901,7 @@ for i in range(ndim):
     # txt = "\mathrm{{{3}}} = {0:.3f}_{{-{1:.3f}}}^{{{2:.3f}}} "
     # txt = txt.format(mcmc[1], q[0], q[1], labels[i])
     # display(Math(txt))
-    print(f"{labels[i]} = {mcmc[1]}, (-{q[0]}, +{q[1]})")
+    print(f"{labels[i]} = {round(mcmc[1],3)}, (-{round(q[0],3)}, +{round(q[1],3)})")
 
 ######################################################################
 #
