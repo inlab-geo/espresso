@@ -57,7 +57,7 @@ def main(output_dir="."):
         return basis_func(x) @ m                                              # m -> y_synthetic
     y_observed = forward_func(_m_true) + np.random.normal(0,1,sample_size)    # d
 
-    if show_plot:
+    if save_plot or show_plot:
         _x_plot = np.linspace(-3.5,2.5)
         _G_plot = basis_func(_x_plot)
         _y_plot = _G_plot @ _m_true
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Polynomial Linear regression solved by an optimiser"
     )
-    parser.add_argument("--output_dir", "-o", type=str, help="output folder for figures")
+    parser.add_argument("--output-dir", "-o", type=str, help="output folder for figures")
     parser.add_argument("--show-plot", dest="show_plot", action="store_true", default=None)
     parser.add_argument("--no-show-plot", dest="show_plot", action="store_false", default=None)
     parser.add_argument("--save-plot", dest="save_plot", action="store_true", default=None)
@@ -130,6 +130,8 @@ if __name__ == "__main__":
     parser.add_argument("--no-show-summary", dest="show_summary", action="store_false", default=None)
     args = parser.parse_args()
     output_dir = args.output_dir or "."
+    if output_dir.endswith("/"):
+        output_dir = output_dir[:-1]
     show_plot = show_plot if args.show_plot is None else args.show_plot
     save_plot = save_plot if args.save_plot is None else args.save_plot
     show_summary = show_summary if args.show_summary is None else args.show_summary
