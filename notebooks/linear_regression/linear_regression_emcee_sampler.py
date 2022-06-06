@@ -97,10 +97,10 @@ if show_summary:
 ############# 4. Plot result ##########################################################
 sampler = inv_result.sampler
 az_idata = inv_result.to_arviz()
+labels = ["m0", "m1", "m2","m3"]
 
 if show_plot:
     # plot sampling performance
-    labels = ["m0", "m1", "m2","m3"]
     az.plot_trace(az_idata)
 
     # autocorrelation analysis
@@ -134,3 +134,27 @@ if show_plot:
     plt.ylabel("Y")
     plt.legend()
     plt.show()
+
+if show_summary:
+    flat_samples = sampler.get_chain(discard=300, thin=30, flat=True)
+    # uncertainties - 16th, 50th, and 84th percentiles of the samples in the marginalized distributions
+    solmed = np.zeros(4)
+    for i in range(ndim):
+        mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
+        solmed[i] = mcmc[1]
+        q = np.diff(mcmc)
+        print(f"{labels[i]} = {round(mcmc[1],3)}, (-{round(q[0],3)}, +{round(q[1],3)})")
+    
+    # posterior model covariance matrix
+    CMpost = np.cov(flat_samples.T)
+    CM_std= np.std(flat_samples,axis=0)
+    print('Posterior model covariance matrix\n',CMpost)
+    print('\nPosterior estimate of model standard deviations in each parameter')
+    for i in range(ndim):
+        print("    {} {:7.4f}".format(labels[i],CM_std[i]))
+
+    # solution and 95% credible intervals
+    print("\n Solution and 95% credible intervals ")
+    for i in range(ndim):
+        mcmc = np.percentile(flat_samples[:, i], [5, 50, 95])
+        print(" {} {:7.3f} [{:7.3f}, {:7.3f}]".format(labels[i],mcmc[1],mcmc[0],mcmc[2]))
