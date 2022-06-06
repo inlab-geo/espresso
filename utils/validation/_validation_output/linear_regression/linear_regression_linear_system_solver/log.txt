@@ -1,0 +1,34 @@
+=====================================================================
+Summary for inversion problem: Polynomial Regression
+=====================================================================
+Model shape: Unknown
+---------------------------------------------------------------------
+List of functions/properties set by you:
+['jacobian', 'data']
+---------------------------------------------------------------------
+List of functions/properties created based on what you have provided:
+['jacobian_times_vector']
+---------------------------------------------------------------------
+List of functions/properties not set by you:
+['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularisation', 'forward', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+=============================
+Summary for inversion options
+=============================
+Solving method: None set
+Use `suggest_solving_methods()` to check available solving methods.
+-----------------------------
+Backend tool: `scipy.linalg.lstsq` - SciPy's wrapper function over LAPACK's linear least-squares solver, using 'gelsd', 'gelsy' (default), or 'gelss' as backend driver
+References: ['https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html', 'https://www.netlib.org/lapack/lug/node27.html']
+Use `suggest_tools()` to check available backend tools.
+-----------------------------
+Solver-specific parameters: None set
+Use `suggest_solver_params()` to check required/optional solver-specific parameters.
+============================
+Summary for inversion result
+============================
+SUCCESS
+----------------------------
+model: [-5.71964359 -5.10903808  1.82553662  0.97472374]
+sum of squared residuals: 14.961507878871286
+effective rank: 4
+singular values: [61.36381472  8.31821387  4.03376312  1.96325721]

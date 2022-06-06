@@ -1,0 +1,42 @@
+=====================================================================
+Summary for inversion problem: Polynomial Regression
+=====================================================================
+Model shape: (4,)
+---------------------------------------------------------------------
+List of functions/properties set by you:
+['data_misfit', 'regularisation', 'forward', 'data', 'initial_model', 'model_shape']
+---------------------------------------------------------------------
+List of functions/properties created based on what you have provided:
+['objective', 'residual']
+---------------------------------------------------------------------
+List of functions/properties not set by you:
+['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+=============================
+Summary for inversion options
+=============================
+Solving method: None set
+Use `suggest_solving_methods()` to check available solving methods.
+-----------------------------
+Backend tool: `scipy.optimize.minimize` - SciPy's optimisers that minimises a scalar function with respect to one or more variables, check SciPy's documentation page for a list of methods
+References: ['https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html']
+Use `suggest_tools()` to check available backend tools.
+-----------------------------
+Solver-specific parameters: None set
+Use `suggest_solver_params()` to check required/optional solver-specific parameters.
+============================
+Summary for inversion result
+============================
+SUCCESS
+----------------------------
+fun: 0.34859221629337445
+jac: [-1.11758709e-07  4.47034836e-08 -4.24683094e-07  1.16229057e-06]
+hess_inv: [[16.03375207  5.10437838 -6.66993651 -2.11071782]
+ [ 5.10437838  7.20894841 -2.87890279 -1.54018835]
+ [-6.66993651 -2.87890279  4.26644192  1.42602996]
+ [-2.11071782 -1.54018835  1.42602996  0.56995601]]
+nfev: 135
+njev: 27
+status: 0
+message: Optimization terminated successfully.
+nit: 26
+model: [-5.41196935 -4.93925609  1.67801232  0.92007732]
