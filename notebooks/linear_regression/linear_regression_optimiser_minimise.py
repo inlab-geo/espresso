@@ -18,10 +18,11 @@ where: d refers to data observations (y_1, y_2, ..., y_N).T
                                    (1, x_N, x_N^2, x_N^3) )
        m refers to the unknown model parameters (m_0, m_1, m_2, m_3)
 
-Note that G matrix can also be called the Jacobian as it is the first derivative of
-forward operator with respect to the unknown model. We refer to the function that 
-calculates G matrix given a set of x as the basis function.
-    
+Note that G matrix is here equivalent to the Jacobian as it entries G(i,j) are the 
+first derivative of the i-th datum d(i) with respect to the j-th model parameter m(j). 
+We here refer to the function that calculates the G matrix given a set of model 
+parameters as the basis function.
+
 """
 
 ############# 0. Import modules #######################################################
@@ -32,8 +33,13 @@ from cofi import BaseProblem, InversionOptions, Inversion
 
 np.random.seed(42)
 
+save_plot = True
 show_plot = False
 show_summary = True
+
+_problem_name = "linear_reg"
+_solver_name = "opt_min"
+_figs_prefix = f"{_problem_name}_{_solver_name}"
 
 def main():
 
@@ -60,7 +66,8 @@ def main():
         plt.xlabel("X")
         plt.ylabel("Y")
         plt.legend()
-        plt.show()
+        if save_plot:
+            plt.savefig(f"{_figs_prefix}_problem")
 
     # define the problem in cofi
     inv_problem = BaseProblem()
@@ -89,7 +96,7 @@ def main():
 
 
     ############# 4. Plot result ######################################################
-    if show_plot:
+    if save_plot or show_plot:
         _x_plot = np.linspace(-3.5,2.5)
         _G_plot = basis_func(_x_plot)
         _y_plot = _G_plot @ _m_true
@@ -101,6 +108,10 @@ def main():
         plt.xlabel("X")
         plt.ylabel("Y")
         plt.legend()
+        if save_plot:
+            plt.savefig(f"{_figs_prefix}_result")
+
+    if show_plot:
         plt.show()
 
 

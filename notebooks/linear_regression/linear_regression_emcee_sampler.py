@@ -18,9 +18,10 @@ where: d refers to data observations (y_1, y_2, ..., y_N).T
                                    (1, x_N, x_N^2, x_N^3) )
        m refers to the unknown model parameters (m_0, m_1, m_2, m_3)
 
-Note that G matrix can also be called the Jacobian as it is the first derivative of
-forward operator with respect to the unknown model. We refer to the function that 
-calculates G matrix given a set of x as the basis function.
+Note that G matrix is here equivalent to the Jacobian as it entries G(i,j) are the 
+first derivative of the i-th datum d(i) with respect to the j-th model parameter m(j). 
+We here refer to the function that calculates the G matrix given a set of model 
+parameters as the basis function.
 
 """
 
@@ -33,8 +34,13 @@ from cofi import BaseProblem, InversionOptions, Inversion
 
 np.random.seed(42)
 
+save_plot = True
 show_plot = False
 show_summary = True
+
+_problem_name = "linear_reg"
+_solver_name = "emcee"
+_figs_prefix = f"{_problem_name}_{_solver_name}"
 
 def main():
 
@@ -61,7 +67,7 @@ def main():
     nsteps = 5000
     walkers_start = np.array([0.,0.,0.,0.]) + 1e-4 * np.random.randn(nwalkers, ndim)
 
-    if show_plot:
+    if save_plot or show_plot:
         _x_plot = np.linspace(-3.5,2.5)
         _G_plot = basis_func(_x_plot)
         _y_plot = _G_plot @ _m_true
@@ -71,7 +77,8 @@ def main():
         plt.xlabel("X")
         plt.ylabel("Y")
         plt.legend()
-        plt.show()
+        if save_plot:
+            plt.savefig(f"{_figs_prefix}_problem")
 
     # define functions for Bayesian sampling
     def log_prior(model):    # uniform distribution
@@ -115,9 +122,11 @@ def main():
     az_idata = inv_result.to_arviz()
     labels = ["m0", "m1", "m2","m3"]
 
-    if show_plot:
+    if save_plot or show_plot:
         # plot sampling performance
         az.plot_trace(az_idata)
+        if save_plot:
+            plt.savefig(f"{_figs_prefix}_trace")
 
         # autocorrelation analysis
         tau = sampler.get_autocorr_time()
@@ -129,6 +138,8 @@ def main():
             marginals=True, 
             reference_values=dict(zip([f"var_{i}" for i in range(4)], _m_true.tolist()))
         )
+        if save_plot:
+            plt.savefig(f"{_figs_prefix}_corner")
 
         # sub-sample of 100 predicted curves from the posterior ensemble
         flat_samples = sampler.get_chain(discard=300, thin=30, flat=True)
@@ -149,7 +160,12 @@ def main():
         plt.xlabel("X")
         plt.ylabel("Y")
         plt.legend()
-        plt.show()
+        if save_plot:
+            plt.savefig(f"{_figs_prefix}_sample_curves")
+
+        if show_plot:
+            plt.show()
+        
 
     if show_summary:
         flat_samples = sampler.get_chain(discard=300, thin=30, flat=True)
