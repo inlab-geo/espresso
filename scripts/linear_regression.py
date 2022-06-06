@@ -879,6 +879,8 @@ for ind in inds:
     plt.plot(_x_plot, _y_synth, color="seagreen", alpha=0.1)
 plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
 plt.scatter(x, y_observed, color="lightcoral", label="observed data")
+plt.xlabel("X")
+plt.ylabel("Y")
 plt.legend();
 
 ######################################################################
