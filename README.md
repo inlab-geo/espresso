@@ -13,21 +13,21 @@ conda create -n inv_test_prob_env python=3.8 scipy jupyterlab numpy matplotlib
 conda activate inv_test_prob_env
 ```
 
-'Inversion Test Problems' is available on PyIP and can be installed using this command:
+`Inversion Test Problems` is available on PyIP and can be installed using this command:
 
 Linux/MacOS
 ```console
 python3 -m pip install --index-url https://test.pypi.org/simple/ inversiontestproblems-h-hollmann
 ```
 
-Linux/MacOS
+Windows:
 ```console
 py -m pip install --index-url https://test.pypi.org/simple/ inversiontestproblems-h-hollmann
 ```
 
 # Basic usage
 
-Once installed, each Inversion Test Problem can be imported using the following commands:
+Once installed, each test problem can be imported using the following command:
 
 ```console
 from inversiontestproblems import testproblem
@@ -67,4 +67,4 @@ tp.x_nodes # x-coordinates of all nodes of the model
 
 ```
 
-Which values are set is highly problem-specific and we suggest to use 'help(tp)' or 'dir(tp)' to quickly see what is available. Alternatively, consult the Inversion Test Suite Documentation (later).
+The set values are set is highly problem-specific and we suggest to use 'help(tp)' or 'dir(tp)' to quickly see what is available. Alternatively, consult the Inversion Test Suite Documentation (later).
