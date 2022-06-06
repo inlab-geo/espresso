@@ -6,6 +6,22 @@ This file sets up an example from setting up problem to running the inversion:
 
 The function we are going to fit is: y = -6 - 5x + 2x^2 + x^3
 
+We may also write the polynomial curves in this form: y = sum(m_n * x^n), n=0,1,2,3,
+where: m_n, n=0,1,2,3 are the model coefficients.
+
+If we consider N data points and M=3 model parameters, then N equations like above 
+yields a linear operation: d = Gm,
+where: d refers to data observations (y_1, y_2, ..., y_N).T
+       G refers to basis matrix: ( (1, x_1, x_1^2, x_1^3)
+                                   (1, x_2, x_2^2, x_2^3)
+                                   ...
+                                   (1, x_N, x_N^2, x_N^3) )
+       m refers to the unknown model parameters (m_0, m_1, m_2, m_3)
+
+Note that G matrix can also be called the Jacobian as it is the first derivative of
+forward operator with respect to the unknown model. We refer to the function that 
+calculates G matrix given a set of x as the basis function.
+
 """
 
 ############# 0. Import modules #######################################################
