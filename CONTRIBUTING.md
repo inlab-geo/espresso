@@ -42,7 +42,7 @@ Here is a general workflow in a contribution process:
    $ git clone https://github.com/<your-github-id>/cofi-examples.git
    ```
    replacing `<your-github-id>` with your actual id
-3. Run `python utils/_create_new_example.py <example-name>`, replacing `<example-name>` with
+3. Run `python utils/generate_example/create_new_example.py <example-name>`, replacing `<example-name>` with
    the problem you are going to describe and run inversion on.
 4. You will then notice that inside the folder `notebooks/<example-name>` there are 
    three template files. Please try not to change the file names, but if you won't 

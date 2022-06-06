@@ -33,4 +33,4 @@ jobs:
 
       - name: Run script
         run: |
-          python utils/_test_all_notebooks_scripts.py
+          python utils/validation/test_all_notebooks_scripts.py
