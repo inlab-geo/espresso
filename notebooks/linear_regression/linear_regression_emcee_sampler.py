@@ -40,9 +40,10 @@ show_summary = True
 
 _problem_name = "linear_reg"
 _solver_name = "emcee"
-_figs_prefix = f"{_problem_name}_{_solver_name}"
+_file_prefix = f"{_problem_name}_{_solver_name}"
 
-def main():
+def main(output_dir="."):
+    _figs_prefix = f"{output_dir}/{_file_prefix}"
 
     ############# 1. Define the problem ###############################################
 
@@ -193,4 +194,21 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(
+        description='Polynomial Linear regression solved by linear system solver'
+    )
+    parser.add_argument("--output_dir", "-o", type=str, help="output folder for figures")
+    parser.add_argument("--show-plot", dest="show_plot", action="store_true", default=None)
+    parser.add_argument("--no-show-plot", dest="show_plot", action="store_false", default=None)
+    parser.add_argument("--save-plot", dest="save_plot", action="store_true", default=None)
+    parser.add_argument("--no-save-plot", dest="save_plot", action="store_false", default=None)
+    parser.add_argument("--show-summary", dest="show_summary", action="store_true", default=None)
+    parser.add_argument("--no-show-summary", dest="show_summary", action="store_false", default=None)
+    args = parser.parse_args()
+    output_dir = args.output_dir or "."
+    show_plot = show_plot if args.show_plot is None else args.show_plot
+    save_plot = save_plot if args.save_plot is None else args.save_plot
+    show_summary = show_summary if args.show_summary is None else args.show_summary
+
+    main(output_dir)

@@ -9,6 +9,8 @@ TEMPLATE_FOLDER = "utils/generate_example/_template"
 if __name__ == '__main__':
     # validate example name
     example_name = sys.argv[-1]
+    if example_name.endswith(".py"):
+        raise ValueError("please provide a valid example name as an argument")
     existing_examples = glob(NOTEBOOKS_FOLDER+"/*/")
     existing_examples = [e for e in existing_examples if not e.startswith("notebooks/_")]
     existing_examples = [e.split("/")[1] for e in existing_examples]
