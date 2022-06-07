@@ -13,3 +13,4 @@ generated/
 
 # Custom testing files
 utils/validation/_output/
+debug.log

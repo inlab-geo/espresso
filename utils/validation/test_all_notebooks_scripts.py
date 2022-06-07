@@ -8,6 +8,7 @@ import os
 import shutil
 import filecmp
 import re
+import logging
 import numpy
 
 NOTEBOOKS_FOLDER = "notebooks"
@@ -127,62 +128,52 @@ def approximate_diff(file_name_1, file_name_2, tolerance=1.0e-03):
 
     return diff_output,max_absolute_difference, max_relative_difference,max_i
 
+
 def analyse_cmp_res(match, mismatch, errors, outdir, regdir, files):
     if (len(mismatch)==0 and len(errors)==0):
-        print(bcolors.PASSED +bcolors.BOLD+ '  [PASSED]  '+ bcolors.ENDC+regdir.replace(f"{VALIDATION_FOLDER}/",''))
-
+        logging.critical(bcolors.PASSED +bcolors.BOLD+ '[PASSED] '+ bcolors.ENDC+regdir.replace(f"{VALIDATION_FOLDER}/",''))
     elif (len(mismatch)>0 and len(errors)==0):
-        print(bcolors.WARNING +bcolors.BOLD+'  [WARNING] '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
-    
+        logging.warning(bcolors.WARNING +bcolors.BOLD+'[WARNING] '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
     elif (len(errors)==len(files)):
-        print(bcolors.MISSING +bcolors.BOLD+  '  [MISSING]  '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
-
+        logging.error(bcolors.MISSING +bcolors.BOLD+  '[MISSING] '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
     elif (len(errors)>0):
-        print(bcolors.FAILED +bcolors.BOLD+  '  [FAILED]  '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
-
+        logging.error(bcolors.FAILED +bcolors.BOLD+  '[FAILED] '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
+    
     if (len(errors)==len(files)):
-        print('              no output files found')
-        
+        logging.error('\tno output files found')
     else:
         if len(mismatch)>0:
-            print(bcolors.WARNING+bcolors.BOLD+'            mismatched files:'+ bcolors.ENDC)
+            logging.critical(bcolors.WARNING+bcolors.BOLD+'\twith following mismatched files:'+ bcolors.ENDC)
             for f in mismatch:
                 fn=f.replace('./','')
-                print(bcolors.BOLD+'            '+fn + bcolors.ENDC)
-
+                logging.critical(bcolors.BOLD+'\t\t'+fn + bcolors.ENDC)
                 f1=regdir+'/'+f
                 f2=outdir+'/'+f
                 fn=f.replace('./','')
                 diff_output,abs_max,rel_max,i_max=approximate_diff(f1,f2)
-            
                 if f.endswith('png'):
-                    print('              image files are not identical')
-            
+                    logging.warning('\t\t\timage files are not identical')
                 elif abs_max==0 and rel_max==0:
-                    print('              no numerical difference detected')
+                    logging.critical('\t\t\tno numerical difference detected')
                 else:
-                    print('              number of differences      : {:d}'.format(i_max))
-                    print('              maximum absolute difference: {:.5f}'.format(abs_max))
-                    print('              maximum relative difference: {:.5f}%'.format(rel_max*100.0))
-    
-    
-
-    
+                    logging.critical('\t\t\tnumber of differences      : {:d}'.format(i_max))
+                    logging.critical('\t\t\tmaximum absolute difference: {:.5f}'.format(abs_max))
+                    logging.critical('\t\t\tmaximum relative difference: {:.5f}%'.format(rel_max*100.0))
         if len(errors)>0 and len(match)>1:
-            print(bcolors.FAILED+bcolors.BOLD+'            missing files:'+ bcolors.ENDC)
+            logging.error(bcolors.FAILED+bcolors.BOLD+'\tmissing files:'+ bcolors.ENDC)
             for f in errors:
                 fn=f.replace('./','')
-                print(bcolors.BOLD+'              '+fn + bcolors.ENDC)
+                logging.error(bcolors.BOLD+'\t\t'+fn + bcolors.ENDC)
         
 
 def main():
-    print("Validation starts.")
-    shutil.rmtree(OUTPUT_FOLDER)
+    print("Validation starts.\n")
+    shutil.rmtree(OUTPUT_FOLDER, ignore_errors=True)
     os.mkdir(OUTPUT_FOLDER)
 
     # iterate through each example
     for example_dir in listdir_nohidden():
-        print(f"\nTesting example - {example_dir} ...")
+        logging.info(f"Testing example - {example_dir} ...")
         out_dir = example_dir.replace(NOTEBOOKS_FOLDER, OUTPUT_FOLDER)
         os.mkdir(out_dir)
         val_dir = example_dir.replace(NOTEBOOKS_FOLDER, VALIDATION_FOLDER)
@@ -193,9 +184,9 @@ def main():
             script_name = script.split("/")[-1]
             out_subdir = f"{out_dir}{script_name[:-3]}"
             os.mkdir(out_subdir)
-            print(f"script: {script}")
+            logging.info(f"script: {script}")
             # run the script
-            print(f"\tsaving outputs to folder {out_subdir}")
+            logging.info(f"\tsaving outputs to folder {out_subdir}")
             res = subprocess.run([
                 PYTHON, 
                 script, 
@@ -210,9 +201,10 @@ def main():
                 log_file.write(res.stdout)
             # compare output with validation standards
             val_subdir = f"{val_dir}{script_name[:-3]}"
-            print(f"\tcomparing outputs with folder {val_subdir}")
+            logging.info(f"\tcomparing outputs with folder {val_subdir}")
             files = list(listfiles_nohidden(out_subdir))
-            # print(f"\t  with following files:\n{files}")
+            files = [f.split("/")[-1] for f in files]
+            logging.info(f"\t\twith following files: {files}")
             match, mismatch, errors = filecmp.cmpfiles(out_subdir, val_subdir, files)
             analyse_cmp_res(match, mismatch, errors, out_subdir, val_subdir, files)
 
@@ -222,8 +214,16 @@ def main():
         except:
             pass
 
-    print("\nOK.")
+    print("\nAll done - check ./debug.log file for full report.")
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="[%(levelname)s] %(message)s",
+        handlers=[
+            logging.FileHandler("debug.log"),
+            logging.StreamHandler()
+        ]
+    )
     main()

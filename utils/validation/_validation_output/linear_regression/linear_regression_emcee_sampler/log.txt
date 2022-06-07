@@ -30,7 +30,7 @@ Summary for inversion result
 ============================
 SUCCESS
 ----------------------------
-sampler: <emcee.ensemble.EnsembleSampler object at 0x16af7e110>
+sampler: <emcee.ensemble.EnsembleSampler object>
 blob_names: ['log_likelihood', 'log_prior']
 autocorrelation time: [60.06623419 66.33363928 45.80483908 52.6256319 ]
 m0 = -5.717, (-0.423, +0.431)
