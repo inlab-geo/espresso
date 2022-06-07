@@ -62,10 +62,7 @@ def approximate_diff(file_name_1, file_name_2, tolerance=1.0e-03):
         except:
             return False
 
-    if file_name_1.endswith(".png"):
-        open_mode = "rb"
-    else:
-        open_mode = "r"
+    open_mode = "r"
     file_1 = open(file_name_1, open_mode)
     file_2 = open(file_name_2, open_mode)
     lines_1 = file_1.readlines()
@@ -154,15 +151,16 @@ def analyse_cmp_res(match, mismatch, errors, outdir, regdir, files):
                 f1=regdir+'/'+f
                 f2=outdir+'/'+f
                 fn=f.replace('./','')
-                diff_output,abs_max,rel_max,i_max=approximate_diff(f1,f2)
                 if f.endswith('png'):
                     logging.warning('\t\t\timage files are not identical')
-                elif abs_max==0 and rel_max==0:
-                    logging.critical('\t\t\tno numerical difference detected')
                 else:
-                    logging.critical('\t\t\tnumber of differences      : {:d}'.format(i_max))
-                    logging.critical('\t\t\tmaximum absolute difference: {:.5f}'.format(abs_max))
-                    logging.critical('\t\t\tmaximum relative difference: {:.5f}%'.format(rel_max*100.0))
+                    diff_output,abs_max,rel_max,i_max=approximate_diff(f1,f2)
+                    if abs_max==0 and rel_max==0:
+                        logging.critical('\t\t\tno numerical difference detected')
+                    else:
+                        logging.critical('\t\t\tnumber of differences      : {:d}'.format(i_max))
+                        logging.critical('\t\t\tmaximum absolute difference: {:.5f}'.format(abs_max))
+                        logging.critical('\t\t\tmaximum relative difference: {:.5f}%'.format(rel_max*100.0))
         if len(errors)>0 and len(match)>1:
             logging.error(bcolors.FAILED+bcolors.BOLD+'\tmissing files:'+ bcolors.ENDC)
             for f in errors:
