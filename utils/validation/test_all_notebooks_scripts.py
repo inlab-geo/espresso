@@ -62,8 +62,12 @@ def approximate_diff(file_name_1, file_name_2, tolerance=1.0e-03):
         except:
             return False
 
-    file_1 = open(file_name_1, 'r')
-    file_2 = open(file_name_2, 'r')
+    if file_name_1.endswith(".png"):
+        open_mode = "rb"
+    else:
+        open_mode = "r"
+    file_1 = open(file_name_1, open_mode)
+    file_2 = open(file_name_2, open_mode)
     lines_1 = file_1.readlines()
     lines_2 = file_2.readlines()
     difference = False
