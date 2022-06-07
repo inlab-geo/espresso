@@ -38,7 +38,7 @@ Fork and clone the ITP repository
 1. Navigate to the `GitHub repository <https://github.com/inlab-geo/inversion-test-problems>`_
 2. Click the "Fork" button on top right of the page (followed by a confirmation page
    with a "Create fork" button)
-3. Now you will be redirected to your own fork of ``Inversion Test Problems``,
+3. Now you will be redirected to your own fork of Inversion Test Problems,
    where you can freely commit changes and add your code.
 
    .. mermaid::

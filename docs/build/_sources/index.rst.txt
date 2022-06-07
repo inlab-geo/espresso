@@ -7,13 +7,30 @@ Welcome to the documentation of Inversion Test Problems!
 ========================================================
 
 We are building an inversion test suite which collects examples from many disciplines within geoscience and elsewhere. The connection point to CoFI is a common standard that is flexible and capable enough to accommodate a variety of inference problems which can be recognised by various solvers that comply with this same common framework. Having the basic set up and several examples in place already, we hope to encourage more examples be developed and be contributed.
+things to add:
+api/index.rst
+changelog.rst
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :caption: Getting started
+    :maxdepth: 1
 
-   installation.rst
-   contribute.rst
+    installation.rst
+
+
+.. toctree::
+    :caption: Reference
+    :maxdepth: 1
+
+    faq.rst
+
+.. toctree::
+    :caption: Developer notes
+    :maxdepth: 1
+
+    contribute.rst
+    license.rst
+
 
 Indices and tables
 ==================
