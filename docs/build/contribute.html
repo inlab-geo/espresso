@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
@@ -106,7 +107,11 @@
                             
                                 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pre-requisite">Pre-requisite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install">Install</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Contribute to Inversion Test Problems</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#reporting-issues">Reporting issues</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-contribute">How to contribute</a></li>
@@ -134,7 +139,7 @@ our Github <a class="reference external" href="https://github.com/inlab-geo/inve
 <p>Thank you for contributing to Inversion Test Problems! Inversion test problems is
 a community driven effort to create a collection of forward
 codes, simulating a wide range of physical problems. ITP relies on you to
-contribute your forward code! You do not need to know all the detailes to get started.
+contribute your forward code! You do not need to know all the details to get started.
 Here we explain step by step how to contribute your code to ITP. If this page
 does not answer all of your questions, don’t hesitate to contact us via
 <a class="reference external" href="https://github.com/inlab-geo/inversion-test-problemscofi/issues/new/choose">GitHub issues</a>
@@ -168,19 +173,19 @@ where you can freely commit changes and add your code.</p>
     commit
     commit
         </div></li>
-<li><p>Next, create a local copy of your ITP repository using ‘’clone’’
+<li><p>Next, create a local copy of your ITP repository using “clone”
 (Github slang for download):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">YOUR_GITHUB_ACCOUNT</span><span class="o">/</span><span class="n">inversion</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="n">problems</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
-<p>replacing <code class="docutils literal notranslate"><span class="pre">YOUR_GITHUB_ACCOUNT</span></code> with your own account.</p>
+<p>replacing YOUR_GITHUB_ACCOUNT with your own account.</p>
 </li>
 </ol>
 </section>
 <section id="environment-setup">
 <h4>Environment setup<a class="headerlink" href="#environment-setup" title="Permalink to this headline">¶</a></h4>
 <p id="env-setup">We recommend to use a clean environment to avoid dependency issues. Here we use
-conda to create the environment (<a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#">How to install conda</a>).
+conda to create the environment (<a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#">how to install conda</a>).
 Create a new environment using these commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">NEW_PROBLEM</span> <span class="n">scipy</span> <span class="n">matplotlib</span>
 </pre></div>
@@ -193,7 +198,7 @@ Create a new environment using these commands:</p>
 </section>
 <section id="create-your-own-inversion-test-problem">
 <h3>Create your own Inversion Test Problem<a class="headerlink" href="#create-your-own-inversion-test-problem" title="Permalink to this headline">¶</a></h3>
-<p>A new contribution to Inversion Test Problem has to conform to a consistent
+<p id="create-prob">A new contribution to Inversion Test Problem has to conform to a consistent
 file structure. The simplest way to ensure that a new contribution includes
 all files is to start the creation of a new problem from the template.
 Execute the following command in the ROOT folder of the cloned Github repository
@@ -268,7 +273,7 @@ include the following standard functions:</p>
 </section>
 <section id="commit-push-and-pull-request">
 <h3>Commit, push and pull request<a class="headerlink" href="#commit-push-and-pull-request" title="Permalink to this headline">¶</a></h3>
-<p>The git <a class="reference external" href="https://git-scm.com/docs/git-add">add</a> command is how you add files to
+<p id="commit-etc">The git <a class="reference external" href="https://git-scm.com/docs/git-add">add</a> command is how you add files to
 the so-called “staging” area.</p>
 <p>The git <a class="reference external" href="https://git-scm.com/docs/git-commit">commit</a> operation captures the staged
 changes of the project.</p>
@@ -298,21 +303,19 @@ your contribution!</p>
 <section id="jupyter-notebook">
 <h3>Jupyter Notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this headline">¶</a></h3>
 <p>Additionally, we encourage you to add a Jupyter Notebook with an identical name
-into the folder ‘’Jupyter Notebooks`` that contains the following:</p>
+into the folder Jupyter Notebooks that contains the following:</p>
+<ol class="arabic simple">
+<li><p>An extensive description of the new inversion test problem, containing
+information about (but not limited to)…:</p>
 <ul class="simple">
-<li><p>An extensive description of the new inversion test problem, containing information about (but not limited to)…</p></li>
-</ul>
-<blockquote>
-<div><ul class="simple">
 <li><p>the forward calculation (ie. the underlying physics) and how it was implemented.</p></li>
 <li><p>which inversion method is used (and regularisation) and how it was implemented.</p></li>
 <li><p>the physical unit of relevant variables, but at least of <code class="docutils literal notranslate"><span class="pre">model</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p></li>
 <li><p>all changeable parameters, possibly in a list.</p></li>
 </ul>
-</div></blockquote>
-<ul class="simple">
+</li>
 <li><p>An example of the new problem being used, with a reasonable output.</p></li>
-</ul>
+</ol>
 </section>
 </section>
 </section>
@@ -350,7 +353,7 @@ into the folder ‘’Jupyter Notebooks`` that contains the following:</p>
     <div class="footer" role="contentinfo">
         <div class="container">
             &#169; Copyright 2022, InLab.
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.
         </div>
     </div>  
 

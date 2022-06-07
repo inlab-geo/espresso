@@ -14,7 +14,7 @@ How to contribute
 Thank you for contributing to Inversion Test Problems! Inversion test problems is
 a community driven effort to create a collection of forward
 codes, simulating a wide range of physical problems. ITP relies on you to
-contribute your forward code! You do not need to know all the detailes to get started.
+contribute your forward code! You do not need to know all the details to get started.
 Here we explain step by step how to contribute your code to ITP. If this page
 does not answer all of your questions, don't hesitate to contact us via
 `GitHub issues <https://github.com/inlab-geo/inversion-test-problemscofi/issues/new/choose>`_
@@ -32,13 +32,13 @@ account or connection before contributing, please see here:
 and `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_.
 
 Fork and clone the ITP repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. _fork_clone:
 
 1. Navigate to the `GitHub repository <https://github.com/inlab-geo/inversion-test-problems>`_
 2. Click the "Fork" button on top right of the page (followed by a confirmation page
    with a "Create fork" button)
-3. Now you will be redirected to your own fork of ``Inversion Test Problems``,
+3. Now you will be redirected to your own fork of Inversion Test Problems,
    where you can freely commit changes and add your code.
 
    .. mermaid::
@@ -56,12 +56,12 @@ Fork and clone the ITP repository
          commit
          commit
 
-4. Next, create a local copy of your ITP repository using ''clone''
+4. Next, create a local copy of your ITP repository using "clone"
    (Github slang for download)::
 
      git clone https://github.com/YOUR_GITHUB_ACCOUNT/inversion-test-problems.git
 
-   replacing ``YOUR_GITHUB_ACCOUNT`` with your own account.
+   replacing YOUR_GITHUB_ACCOUNT with your own account.
 
 
 
@@ -70,7 +70,7 @@ Environment setup
 .. _env_setup:
 
 We recommend to use a clean environment to avoid dependency issues. Here we use
-conda to create the environment (`How to install conda <https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#>`_).
+conda to create the environment (`how to install conda <https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#>`_).
 Create a new environment using these commands::
 
     conda create -n NEW_PROBLEM scipy matplotlib
@@ -81,6 +81,7 @@ Replace NEW_PROBLEM with a sensible name. Next, activate the new environment::
 
 Create your own Inversion Test Problem
 --------------------------------------
+.. _create_prob:
 
 A new contribution to Inversion Test Problem has to conform to a consistent
 file structure. The simplest way to ensure that a new contribution includes
@@ -152,6 +153,8 @@ contribution. Details are listed here for now:
 
 Commit, push and pull request
 -----------------------------
+.. _commit_etc:
+
 
 The git `add <https://git-scm.com/docs/git-add>`_ command is how you add files to
 the so-called "staging" area.
@@ -191,11 +194,13 @@ Jupyter Notebook
 Additionally, we encourage you to add a Jupyter Notebook with an identical name
 into the folder Jupyter Notebooks that contains the following:
 
-- An extensive description of the new inversion test problem, containing information about (but not limited to)...
+1. An extensive description of the new inversion test problem, containing
+   information about (but not limited to)...:
 
- - the forward calculation (ie. the underlying physics) and how it was implemented.
- - which inversion method is used (and regularisation) and how it was implemented.
- - the physical unit of relevant variables, but at least of ``model`` and ``data``.
- - all changeable parameters, possibly in a list.
+   - the forward calculation (ie. the underlying physics) and how it was implemented.
+   - which inversion method is used (and regularisation) and how it was implemented.
+   - the physical unit of relevant variables, but at least of ``model`` and ``data``.
+   - all changeable parameters, possibly in a list.
 
-- An example of the new problem being used, with a reasonable output.
+
+2. An example of the new problem being used, with a reasonable output.
