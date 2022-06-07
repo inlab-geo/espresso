@@ -19,5 +19,7 @@ Below is a gallery of examples.
    strongly recommended to 
    `open the notebooks in Colab <https://colab.research.google.com/github/inlab-geo/cofi-examples/blob/main/index.ipynb>`_.
 
-   If you'd like to download the notebooks and run them locally, check the GitHub
-   repository for cofi-examples `here <https://github.com/inlab-geo/cofi-examples>`_.
+   If you'd like to download the notebooks and run them locally, you'll need to 
+   install cofi and fork the examples repository.
+   Check `here <https://github.com/inlab-geo/cofi-examples/blob/main/README.md>`_
+   for full instructions.
