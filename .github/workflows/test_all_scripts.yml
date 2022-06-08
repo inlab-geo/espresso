@@ -3,6 +3,8 @@ name: Check all Python examples work
 on:
   workflow_dispatch:
   pull_request:
+    types:
+      - ready_for_review
     paths:
       - 'notebooks/**'
   push:
