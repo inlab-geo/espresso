@@ -1,8 +1,13 @@
-"""Polynomial Linear regression solved by linear system solver
+"""Polynomial Linear regression solved by linear system solver (with uncertainty)
 
 This file sets up an example from setting up problem to running the inversion:
 - For the problem: polynomial linear regression,
 - Using the tool: linear system solver (scipy.linalg.lstsq)
+
+The difference between this script and linear_regression_linear_system_solver.py
+is that this one takes uncertainty into account, by adding a data covariance matrix.
+The underlying solver is still scipy.linalg.lstsq, but the formulea passed into it
+are different, as will be explained in the following paragraphs.
 
 The function we are going to fit is: y = -6 - 5x + 2x^2 + x^3
 
@@ -22,6 +27,10 @@ Note that G matrix is here equivalent to the Jacobian as it entries G(i,j) are t
 first derivative of the i-th datum d(i) with respect to the j-th model parameter m(j). 
 We here refer to the function that calculates the G matrix given a set of model 
 parameters as the basis function.
+
+To take uncertainty into account, we need an extra data covariance matrix C_d having
+the shape (N,N), where N is the number of data points. Then the formula we try to solve
+is no longer Gm = d, but this instead: (G.T C_d^(-1) G) m = G.T C_d^(-1) d
     
 """
 
@@ -45,7 +54,6 @@ def main(output_dir="."):
     _figs_prefix = f"{output_dir}/{_file_prefix}"
 
     ######### 1. Define the problem ###################################################
-
     # generate data with random Gaussian noise
     def basis_func(x):
         return np.array([x**i for i in range(4)]).T                           # x -> G
@@ -57,13 +65,16 @@ def main(output_dir="."):
         return basis_func(x) @ m                                              # m -> y_synthetic
     y_observed = forward_func(_m_true) + np.random.normal(0,1,sample_size)    # d
 
+    sigma = 2.25                                # Standard deviation of noise
+    Cdinv = np.eye(sample_size)/(sigma**2)      # Inverse Data covariance matrix
+
     if save_plot or show_plot:
         _x_plot = np.linspace(-3.5,2.5)
         _G_plot = basis_func(_x_plot)
         _y_plot = _G_plot @ _m_true
         plt.figure(figsize=(12,8))
         plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
-        plt.scatter(x, y_observed, color="lightcoral", label="observed data")
+        plt.errorbar(x, y_observed, yerr=sigma, fmt="o", color="lightcoral", label="observed data")
         plt.xlabel("X")
         plt.ylabel("Y")
         plt.legend()
@@ -73,7 +84,7 @@ def main(output_dir="."):
     # define the problem in cofi
     inv_problem = BaseProblem()
     inv_problem.name = "Polynomial Regression"
-    inv_problem.set_data(y_observed)
+    inv_problem.set_data(y_observed, data_cov_inv=Cdinv)
     inv_problem.set_jacobian(basis_func(x))
     if show_summary:
         inv_problem.summary()
@@ -91,7 +102,6 @@ def main(output_dir="."):
     inv_result = inv.run()
     if show_summary:
         inv_result.summary()
-
 
     ######### 4. Plot result ##########################################################
     if save_plot or show_plot:
