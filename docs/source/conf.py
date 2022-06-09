@@ -13,13 +13,14 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
+import inversiontestproblems
 
 # -- Project information -----------------------------------------------------
 
 project = 'Inversion Test Problems'
 copyright = '2022, InLab'
 author = 'InLab'
+version = "dev" if "dev" in inversiontestproblems.__version__ else f"v{inversiontestproblems.__version__}"
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'
@@ -53,6 +54,7 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'sphinx_book_theme'
+html_title = f'{project} <span class="project-version">{version}</span>'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
