@@ -182,8 +182,8 @@ plt.legend();
 
 
 ######################################################################
-# Now we define the problem in ``cofi`` - in other words, we attach the
-# problem information to a ``BaseProblem`` object.
+# Now we define the problem in ``cofi`` - in other words,we set the
+# problem information for a ``BaseProblem`` object.
 # 
 # From `this
 # page <https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#set-methods>`__
@@ -479,12 +479,12 @@ inv_result.summary()
 # should be provided, otherwise you’ll see an error to notify what
 # additional information is required by the solver.
 # 
-# There are different ways of defining information - Here in the code
-# below, after we make clear how to calculate the data misfit and
-# regularisation (optionally), the objective function is generated for you
-# based on the forward function and data. Alternatively, you can pass in
-# an objective function directly using
-# ``inv_problem.set_objective(your_objective_func)``.
+# There are several ways to provide the information needed to solve an
+# inverse problem with CoFI. In the example below we provide functions to
+# calculate the data and the optional regularisation. CoFI then generates
+# the objective function for us based on the information provided. The
+# alternative to this would be to directly provide objective function to
+# CoFI.
 # 
 
 ######## Provide additional information
@@ -564,9 +564,10 @@ plt.legend();
 # whether to keep the new sample based on evaluation of the posterior
 # probability density we provide, with some randomness.
 # 
-# Essentially, the **posterior distribution** is the key information that
-# we give to the sampler, so that they decide how to take the steps and
-# when to accept the samples.
+# The sampler seeks to recover the unknown **posterior distribution** as
+# efficiently as possible and different samplers employ different
+# strategies to determine a step (i.e. perturbation to the current model)
+# that finds a balance between the exploration and exploitation.
 # 
 # Starting from the **Bayes theorem**:
 # 
