@@ -104,7 +104,6 @@ Polynomial Linear Regression
 import numpy as np
 import matplotlib.pyplot as plt
 import arviz as az
-from IPython.display import display, Math # some librarys for IO
 
 from cofi import BaseProblem, InversionOptions, Inversion
 
@@ -936,6 +935,21 @@ print("\n Solution and 95% credible intervals ")
 for i in range(ndim):
     mcmc = np.percentile(flat_samples[:, i], [5, 50, 95])
     print(" {} {:7.3f} [{:7.3f}, {:7.3f}]".format(labels[i],mcmc[1],mcmc[0],mcmc[2]))
+
+######################################################################
+#
+
+
+######################################################################
+# --------------
+# 
+
+import cofi
+import emcee
+import scipy
+
+# %reload_ext watermark
+# %watermark -n -u -v -iv -w
 
 ######################################################################
 #
