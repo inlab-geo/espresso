@@ -5,6 +5,7 @@ on:
   pull_request:
     types:
       - closed
+permissions: read-all|write-all
 jobs:
     job1:
         name: Update version
