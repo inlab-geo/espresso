@@ -13,42 +13,44 @@ auxclass = getattr(
 
 
 class gravityforward(auxclass):
-    """
-    Description of the inversion test suite - gravity forward problem.
+    r""" Returns the vertical component of the gravitational force using a 3D density model. 
 
+    This Inversion Test Problem explores the gravitational response of a
+    three-dimensional model containing densities at specified receiver locations.
+    This problem returns the z-component of the gravitational response, but the
+    underlying code can return all three gravity and 6 gradiometry components,
+    if needed.
 
-    Parameters:
-    --------------------
-    *args
+    To calculate the gravitational response, the mass of each model cell has to
+    be estimated. This Inversion Test Problem uses an analytical approach to
+    calculate the mass, based on Plouff et al., 1976.
 
-    m: The model in a 1-D array containing densities [1xM]
-    rec_coords: Array containing coonrdinates of recording stations [3xN]
-    x_nodes: X-coordinates of all nodes in model [2xM]
-    y_nodes: Y-coordinates of all nodes in model [2xM]
-    z_nodes: Z-coordinates of all nodes in model [2xM]
-    --------
-    For plotting purposes:
-    lmx: Number of cells in model (M); x-direction
-    lmy: Number of cells in model (M); y-direction
-    lmz: Number of cells in model (M); z-direction
-    lrx: Number of recording stations (N); x-direction
-    lry: Number of recording stations (N); x-direction
+    :param example_number: Specify to choose between different model set-ups.
+        See documentation for more information - currently valid options:
+        - 0: A symmetric model with a high density cube located centrally.
+        - 1: The pseud-3D 'cross' example from Last et al., 1983 (Figure 2).
+    :type example_number: int
+    :param m: The model in a 1-D array containing densities [1xM]
+    :type m: numpy array
+    :param rec_coords: Array containing coonrdinates of recording stations [Nx3]
+    :type rec_coords: numpy array
+    :param x_nodes: X-coordinates of all nodes in model [2xM]
+    :type x_nodes: numpy array
+    :param y_nodes: Y-coordinates of all nodes in model [2xM]
+    :type y_nodes: numpy array
+    :param z_nodes: Z-coordinates of all nodes in model [2xM]
+    :type z_nodes: numpy array
+    :param lmx: Number of cells in model; x-direction
+    :type lmx: numpy array
+    :param lmy: Number of cells in model; y-direction
+    :type lmy: numpy array
+    :param lmz: Number of cells in model; z-direction
+    :type lmz: numpy array
+    :param lrx: Number of recording stations; x-direction
+    :type lrx: numpy array
+    :param lry: Number of recording stations; y-direction
+    :type lry: numpy array
 
-    --------------------
-    Functions:
-    --------------------
-
-    get_model: Returns the chosen starting model; np.array
-    get_data: Returns synthetic measurements of gravitational force, with added
-        gaussian noise; np.array
-    forward: Returns gravitational force in z-direction based on the
-        input model (m) and recording locations (rec_coords); np.array
-    gradient: Returns the jacobian / design matrix based on the
-        input model (m) and recording locations (rec_coords); np.array
-    plot_model: Returns an plot of the model and the result of the forward
-        calculation.
-
-    --------------------
     """
 
     def __init__(self, example_number=0):
@@ -81,7 +83,7 @@ class gravityforward(auxclass):
             # Receiver locations in x and y direction
             x_rec = np.linspace(-80.0, 80.0, self.lrx)
             y_rec = np.linspace(-80.0, 80.0, self.lry)
-            tmp = auxclass.cartesian((x_rec, y_rec))
+            tmp = auxclass._cartesian((x_rec, y_rec))
             z_rec = np.zeros(len(tmp))
             z_rec = z_rec[:, np.newaxis]
             self.rec_coords = np.append(tmp, z_rec, axis=1)
@@ -100,10 +102,10 @@ class gravityforward(auxclass):
 
             # Combine the 3 node arrays to get start&finish of each prism edge
             # 2 rows per array: Start and finish of each edge
-            coords_p1 = auxclass.cartesian(
+            coords_p1 = auxclass._cartesian(
                 (z_node_slice[0:-1], y_node_slice[0:-1], x_node_slice[0:-1])
             )
-            coords_p2 = auxclass.cartesian(
+            coords_p2 = auxclass._cartesian(
                 (z_node_slice[1:], y_node_slice[1:], x_node_slice[1:])
             )
 
@@ -140,7 +142,7 @@ class gravityforward(auxclass):
             x_node_slice = np.linspace(-45, 45, self.lmx + 1)
             y_node_slice = np.linspace(-1000, 1000, self.lmy + 1)
             z_node_slice = np.linspace(-30, 0, self.lmz + 1)
-            self.x_nodes, self.y_nodes, self.z_nodes = auxclass.node_maker(
+            self.x_nodes, self.y_nodes, self.z_nodes = auxclass._node_maker(
                 x_node_slice, y_node_slice, z_node_slice
             )
 
@@ -163,19 +165,19 @@ class gravityforward(auxclass):
             m = np.zeros((self.lmx) * (self.lmy) * (self.lmz))
             # Change specific cells to higher densities (anomaly)
             anomaly = 1000
-            m = auxclass.inject_density(
+            m = auxclass._inject_density(
                 m, self.x_nodes, self.y_nodes, self.z_nodes, -5, -1000, 0, anomaly
             )
-            m = auxclass.inject_density(
+            m = auxclass._inject_density(
                 m, self.x_nodes, self.y_nodes, self.z_nodes, -15, -1000, -10, anomaly
             )
-            m = auxclass.inject_density(
+            m = auxclass._inject_density(
                 m, self.x_nodes, self.y_nodes, self.z_nodes, -5, -1000, -10, anomaly
             )
-            m = auxclass.inject_density(
+            m = auxclass._inject_density(
                 m, self.x_nodes, self.y_nodes, self.z_nodes, 5, -1000, -10, anomaly
             )
-            self.m = auxclass.inject_density(
+            self.m = auxclass._inject_density(
                 m, self.x_nodes, self.y_nodes, self.z_nodes, -5, -1000, -20, anomaly
             )
 
@@ -184,11 +186,13 @@ class gravityforward(auxclass):
             raise("Error - example number not defined")
 
     def get_model(self):
-        """
-        Returns the model as a numpy array.
+        r""" Returns the starting model for the forward calculation.
+
+        This is some random additional text. Does it show up somewhere? If not, why?
+        And also, can I click on the get model link now?
 
         Parameters
-        --------------------
+        ----------
         *args
 
         m: The model in a 1-D array containing densities
@@ -199,12 +203,10 @@ class gravityforward(auxclass):
         return self.m
 
     def get_data(self, m):
-        """
-        Returns synthetic measurements of gravitational force, with added
-            gaussian noise;
+        r"""Returns synthetic measurements of gravitational force with added gaussian noise;
 
         Parameters
-        --------------------
+        ----------
         *args
 
         datan: Measurements of gravitational force, with added
@@ -222,6 +224,47 @@ class gravityforward(auxclass):
         return self.datan
 
     def _kernel(self, ii, jj, kk, dx, dy, dz, dim):
+        r"""Calculates parts of the Jacobian/design matrix/geometry
+        using the approach described by Plouff et al, 1976.
+
+        Parameters
+
+        *args
+
+        :param ii: Specifies either start (1) or end (2) of edge in x-direction
+        :type ii: int
+        :param jj: Specifies either start (1) or end (2) of edge in y-direction
+        :type jj: int
+        :param kk: Specifies either start (1) or end (2) of edge in z-direction
+        :type kk: int
+        :param dx: x-coordinates of all edges in the model (start and end in separate
+            columns); [Nx2]
+        :type dx: numpy array
+        :param dy: y-coordinates of all edges in the model (start and end in separate
+            columns); [Nx2]
+        :type dy: numpy array
+        :param dz: z-coordinates of all edges in the model (start and end in separate
+            columns); [Nx2]
+        :type dz: numpy array
+        :param dim: Specifies which part of the gravitational force is calculated.
+            For Inversion Test Problems, this is hard-coded to "gz".
+            Possible options are:
+            - "gx": x-component of the gravitational force
+            - "gy": y-component of the gravitational force
+            - "gz": z-component of the gravitational force
+            - "gxx": Derivative of the x-component, in x-direction
+            - "gyy": Derivative of the x-component, in y-direction
+            - "gxz": Derivative of the x-component, in z-direction
+            - "gyy": Derivative of the y-component, in y-direction
+            - "gyz": Derivative of the y-component, in z-direction
+            - "gzz": Derivative of the z-component, in z-direction
+        :type dim: string
+        :param g: Vertical component of the gravitational force at the recording
+            locations
+        :type g: numpy array
+
+        """
+
         r = (dx[:, ii] ** 2 + dy[:, jj] ** 2 + dz[:, kk] ** 2) ** (0.50)
         dz_r = dz[:, kk] + r
         dy_r = dy[:, jj] + r
@@ -252,7 +295,6 @@ class gravityforward(auxclass):
             )
         elif dim == "gxx":
             arg = dy[:, jj] * dz[:, kk] / dxr
-            # It said g-= ... - maybe neet to switch vorzeichen?
             g = (-1) ** (ii + jj + kk) * (
                 dxdy / (r * dz_r)
                 + dxdz / (r * dy_r)
@@ -334,23 +376,43 @@ class gravityforward(auxclass):
             g = -gxx - gyy
         return g
 
-    def _calculate_gravity(self, model, x_nodes, y_nodes, z_nodes, recvec, jacobian):
+    def _calculate_gravity(self, model, x_nodes, y_nodes, z_nodes, rec_coords, jacobian):
+        """ Calculates the gravitational force for each recording location based using the input model.
+
+        *args
+        :param model: The model in a 1-D array containing densities; [1xM]
+        :type model: numpy array
+        :param rec_coords: Array containing coonrdinates of recording stations; [Nx3]
+        :type rec_coords: numpy array
+        :param x_nodes: X-coordinates of all nodes in model; [2xM]
+        :type x_nodes: numpy array
+        :param y_nodes: Y-coordinates of all nodes in model; [2xM]
+        :type y_nodes: numpy array
+        :param z_nodes: Z-coordinates of all nodes in model; [2xM]
+        :type z_nodes: numpy array
+        :param jacobian: Specifies whether to return gravity (False) or Jacobian(True)
+        :type jacobian: bool
+        :param gz_rec: Vertical component of the gravitational force at the recording
+            locations; [Nx1]
+        :type gz_rec: numpy array
+
+        """
 
         from scipy.constants import G as G
 
         # Tolerance implementation follows Nagy et al., 2000
         tol = 1e-4
-        # gx_rec=np.zeros(len(recvec))
-        # gy_rec=np.zeros(len(recvec))
-        gz_rec = np.zeros(len(recvec))
+        # gx_rec=np.zeros(len(rec_coords))
+        # gy_rec=np.zeros(len(rec_coords))
+        gz_rec = np.zeros(len(rec_coords))
         if jacobian == True:
-            # Jx_rec=np.zeros([len(recvec),len(x_nodes)])
-            # Jy_rec=np.zeros([len(recvec),len(x_nodes)])
-            Jz_rec = np.zeros([len(recvec), len(x_nodes)])
-        for recno in range(len(recvec)):
-            dx = x_nodes - recvec[recno, 0]
-            dy = y_nodes - recvec[recno, 1]
-            dz = z_nodes - recvec[recno, 2]
+            # Jx_rec=np.zeros([len(rec_coords),len(x_nodes)])
+            # Jy_rec=np.zeros([len(rec_coords),len(x_nodes)])
+            Jz_rec = np.zeros([len(rec_coords), len(x_nodes)])
+        for recno in range(len(rec_coords)):
+            dx = x_nodes - rec_coords[recno, 0]
+            dy = y_nodes - rec_coords[recno, 1]
+            dz = z_nodes - rec_coords[recno, 2]
             min_x = np.min(np.diff(dx))
             min_y = np.min(np.diff(dy))
             min_z = np.min(np.diff(dz))
@@ -367,6 +429,8 @@ class gravityforward(auxclass):
                         # Jy+=self._kernel(ii,jj,kk,dx,dy,dz,"gy")
                         Jz += self._kernel(ii, jj, kk, dx, dy, dz, "gz")
             # Multiply J (Nx1) with the model density (Nx1) element-wise
+
+            # Result is multiplied by 1e5 to convert from m/s^2 to mGal
             # gx_rec[recno] = 1e5*G*sum(model*Jx)
             # gy_rec[recno] = 1e5*G*sum(model*Jy)
             gz_rec[recno] = 1e5 * G * sum(model * Jz)
@@ -381,7 +445,16 @@ class gravityforward(auxclass):
             return Jz_rec
 
     def forward(self, m):
+        r"""Calculates the gravitational force of each recording location.
 
+        *args
+        :param m: The model in a 1-D array containing densities; [1xM]
+        :type m: numpy array
+        :param gz_rec: Vertical component of the gravitational force at the recording
+            locations; [Nx1]
+        :type gz_rec: numpy array
+
+        """
         gz_rec = self._calculate_gravity(
             m, self.x_nodes, self.y_nodes, self.z_nodes, self.rec_coords, False
         )
@@ -391,6 +464,22 @@ class gravityforward(auxclass):
         return gz_rec
 
     def gradient(self, m):
+        r"""Returns the Jacobian / design matrix / problem geometry.
+
+        Returns the Jacobian given the model and recording locations in a [NxM]
+        array, with N being the number of recording locations and M being the
+        number of model cells.
+
+
+        :param m: The model in a 1-D array containing densities; [1xM]
+        :type m: numpy array
+        :param Jz: The jacobian / design matrix / problem geometry; [NxM]
+        :type Jz: numpy array
+
+
+        """
+
+
 
         Jz = self._calculate_gravity(
             m, self.x_nodes, self.y_nodes, self.z_nodes, self.rec_coords, True
@@ -400,6 +489,19 @@ class gravityforward(auxclass):
         return Jz
 
     def plot_model(self, m, data):
+        r"""Visualisation of the input model and the vertical gravity component.
+
+        *args
+
+        :param m: The model in a 1-D array containing densities [1xM]
+        :type m: numpy array
+        :param example_number: Specify to choose between different model set-ups.
+            See documentation for more information - currently valid options:
+            - 0: A symmetric model with a high density cube located centrally.
+            - 1: The pseud-3D 'cross' example from Last et al., 1983 (Figure 2).
+
+        """
+
         if self._ieg == 0:
 
             # gx_rec=data.gx_rec
@@ -462,6 +564,13 @@ class gravityforward(auxclass):
                 max(self.rec_coords[:, 1])
                 + (self.rec_coords[1, 1] - self.rec_coords[0, 1]) * 0.5
             )
+
+            # model2d=model.reshape(3,1,9)
+            # plt.figure(figsize=(17, 8))
+            # plt.subplot(2, 1, 1)
+            # plt.title("Model slice at y=0")
+            # plt.imshow(model2d[:,0,:])
+            # plt.colorbar(label="density [kg/m^3]")
 
             plt.figure(figsize=(17, 8))
             plt.subplot(1, 2, 1)

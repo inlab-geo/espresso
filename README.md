@@ -1,7 +1,7 @@
-# 'Inversion Test Problems'
+# Inversion Test Problems
 
 
-'Inversion Test Problems' is a collection of clearly defined, stand-alone forward codes of a variety of different geophysical problems... This suite of forward problems enables users .... and has an easily understandable, consistent code structure that is capable of hosting a wide range of typical geophysical research problems. Information will be conveyed via a sensible, consistent naming convention and an informative output that can consist of text and/or visualisations.
+Inversion Test Problems is a collection of clearly defined, stand-alone forward codes of a variety of different geophysical problems... This suite of forward problems enables users .... and has an easily understandable, consistent code structure that is capable of hosting a wide range of typical geophysical research problems. Information will be conveyed via a sensible, consistent naming convention and an informative output that can consist of text and/or visualisations.
 
 
 # Installation
@@ -9,25 +9,25 @@
 It is recommended to use a clean virtual environment for the install:
 
 ```console
-conda create -n inv_test_prob_env python=3.8 scipy jupyterlab numpy matplotlib
-conda activate inv_test_prob_env
+conda create -n ITP_env python=3.8 scipy jupyterlab numpy matplotlib
+conda activate ITP_env
 ```
 
-'Inversion Test Problems' is available on PyIP and can be installed using this command:
+`Inversion Test Problems` is available on PyIP and can be installed using this command:
 
 Linux/MacOS
 ```console
 python3 -m pip install --index-url https://test.pypi.org/simple/ inversiontestproblems-h-hollmann
 ```
 
-Linux/MacOS
+Windows:
 ```console
 py -m pip install --index-url https://test.pypi.org/simple/ inversiontestproblems-h-hollmann
 ```
 
 # Basic usage
 
-Once installed, each Inversion Test Problem can be imported using the following commands:
+Once installed, each test problem can be imported using the following command:
 
 ```console
 from inversiontestproblems import testproblem
@@ -67,4 +67,4 @@ tp.x_nodes # x-coordinates of all nodes of the model
 
 ```
 
-Which values are set is highly problem-specific and we suggest to use 'help(tp)' or 'dir(tp)' to quickly see what is available. Alternatively, consult the Inversion Test Suite Documentation (later).
+The set values are set is highly problem-specific and we suggest to use 'help(tp)' or 'dir(tp)' to quickly see what is available. Alternatively, consult the Inversion Test Suite Documentation (later).
