@@ -1,11 +1,9 @@
 name: Python packaging
-
-# on: [push]
-on:
-  workflow_dispatch:
-  pull_request:
-    types:
-      - closed
+on: [push]
+#on:
+  #pull_request:
+    #types:
+      #- closed
 jobs:
     job1:
         name: Update version
@@ -13,7 +11,6 @@ jobs:
         steps:
             - name: checkout repo
               uses: actions/checkout@v3
-
             - name: Increase version
               run: |
                 echo "Grep the old version"
@@ -27,7 +24,6 @@ jobs:
                 echo "Replace line in _version.py with new line"
                 sed -i '1s/.*/'$out'/' ./contrib/_version.py
                 echo "Success."
-
             - name: Commit and push changes
               continue-on-error: true
               run: |
@@ -38,16 +34,14 @@ jobs:
                 git add -A
                 git commit -m "chore: Update version"
                 git push
-
+                
     job2:
         name: Build and upload
         needs: job1
-
         runs-on: ubuntu-latest
         strategy:
           matrix:
             python-version: ["3.9"]
-
         steps:
             - name: checkout repo
               uses: actions/checkout@v3
@@ -68,12 +62,12 @@ jobs:
             - name: Upload to Test PyPI
               env:
                 TWINE_USERNAME: "__token__"
-                TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN2 }}
+                TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
                 TWINE_REPOSITORY_URL: "https://test.pypi.org/legacy/"
               run: |
                 #  echo KEY: '${TWINE_PASSWORD}'
                 twine check dist/*
-                twine upload --verbose --skip-existing dist/*
+                twine upload --verbose --skip-existing dist/*        
 
 
 
