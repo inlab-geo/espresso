@@ -46,8 +46,11 @@ jobs:
                 git config --global user.email 'github-actions[bot]@users.noreply.github.com'
                 git add -A
                 git commit -m "chore: Update version"
-                git push
-                
+            - name: Push changes
+              uses: ad-m/github-push-action@master
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  branch: ${{ github.ref }}                
     job2:
         name: Build and upload
         needs: job1
