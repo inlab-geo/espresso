@@ -5,7 +5,7 @@ on:
   pull_request:
     types:
       - closed
-permissions: write-all
+
 jobs:
     job1:
         name: Update version
@@ -41,6 +41,17 @@ jobs:
         name: Build and upload
         needs: job1
         runs-on: ubuntu-latest
+        permissions:
+          actions: write
+          checks: write
+          contents: write
+          deployments: write
+          issues: write
+          packages: write
+          pull-requests: write
+          repository-projects: write
+          security-events: write
+          statuses: write
         strategy:
           matrix:
             python-version: ["3.9"]
