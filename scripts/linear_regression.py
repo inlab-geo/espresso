@@ -38,7 +38,7 @@ Polynomial Linear Regression
 
 ######################################################################
 # Introduction 
-# ------------
+# -------------
 # 
 # In the workflow of ``cofi``, there are three main components:
 # ``BaseProblem``, ``InversionOptions``, and ``Inversion``.
@@ -62,7 +62,7 @@ Polynomial Linear Regression
 # 
 # 1. we begin by defining the ``BaseProblem``. This can be done through a
 #    series of set functions
-#    ``python     inv_problem = BaseProblem()     inv_problem.set_objective(some_function_here)     inv_problem.set_initial_model(a_starting_point)``
+#    ``python  inv_problem = BaseProblem()  inv_problem.set_objective(some_function_here)  inv_problem.set_initial_model(a_starting_point)``
 # 
 # 2. define ``InversionOptions``. Some useful methods include:
 # 
@@ -87,7 +87,7 @@ Polynomial Linear Regression
 # --------------
 # 
 # 1. Import modules 
-# -----------------
+# ------------------
 # 
 
 # -------------------------------------------------------- #
@@ -117,7 +117,7 @@ np.random.seed(42)
 # --------------
 # 
 # 2. Define the problem 
-# ---------------------
+# ----------------------
 # 
 # Here we compute :math:`y(x)` for multiple :math:`x`-values
 # simultaneously, so write the forward operator in the following form:
@@ -147,6 +147,7 @@ np.random.seed(42)
 #    linear regression problem and looks like the following:
 # 
 #    .. math:: \left(\begin{array}{ccc}1&x_1&x_1^2&x_1^3\\1&x_2&x_2^2&x_2^3\\\vdots&\vdots&\vdots\\1&x_N&x_N^2&x_N^3\end{array}\right)
+# 
 # -  :math:`\text{basis_func}` is the basis function that converts
 #    :math:`\textbf{x}` into :math:`\textbf{G}`
 # 
@@ -225,7 +226,7 @@ inv_problem.summary()
 # --------------
 # 
 # 3. Define the inversion options 
-# -------------------------------
+# --------------------------------
 # 
 # As mentioned above, an ``InversionOptions`` object contains everything
 # you’d like to define regarding how the inversion is to be run.
@@ -303,7 +304,7 @@ inv_options.summary()
 # --------------
 # 
 # 4. Start an inversion 
-# ---------------------
+# ----------------------
 # 
 # This step is common for most cases. We’ve specified our problem as a
 # ``BaseProblem`` object, and we’ve defined how to run the inversion as an
@@ -357,7 +358,7 @@ inv_result.summary()
 # --------------
 # 
 # 5. Check back your problem setting, inversion setting & result 
-# --------------------------------------------------------------
+# ---------------------------------------------------------------
 # 
 
 
@@ -408,7 +409,7 @@ plt.legend();
 # --------------
 # 
 # 6. Summary: a cleaner version of the above example 
-# --------------------------------------------------
+# ---------------------------------------------------
 # 
 # For review purpose, here are the minimal set of commands we’ve used to
 # produce the above result:
@@ -456,18 +457,18 @@ inv_result.summary()
 # --------------
 # 
 # 7. Switching to a different inversion approach 
-# ----------------------------------------------
+# -----------------------------------------------
 # 
 # We’ve seen how this linear regression problem is solved with a linear
 # system solver. It’s time to see ``cofi``\ ’s capability to switch
 # between different inversion approaches easily.
 # 
 # 7.1. Optimisation 
-# ~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~
 # 
 # Any linear problem :math:`\textbf{y} = \textbf{G}\textbf{m}` can also be
 # solved by minimising the squares of the residual of the linear
-# equations, e.g. :math:`\textbf{r}^T \textbf{r}` where
+# equations, e.g. \ :math:`\textbf{r}^T \textbf{r}` where
 # :math:`\textbf{r}=\textbf{y}-\textbf{G}\textbf{m}`.
 # 
 # So we first use a plain optimizer ``scipy.optimize.minimize`` to
@@ -533,7 +534,7 @@ plt.legend();
 
 ######################################################################
 # 7.2. Sampling 
-# ~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~
 # 
 # We’ve seen the same regression problem solved with a linear system
 # solver and an optimiser - how about sampling?
