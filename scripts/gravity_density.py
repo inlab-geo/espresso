@@ -19,7 +19,7 @@ written in inversion-test-problems
 # --------------
 # 
 # 0. Import modules
-# ~~~~~~~~~~~~~~~~~
+# -----------------
 # 
 
 # -------------------------------------------------------- #
@@ -46,7 +46,7 @@ np.random.seed(42)
 
 ######################################################################
 # 0. Auxillary functions
-# ~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------
 # 
 
 def kernel(ii,jj,kk,dx,dy,dz,dim):
@@ -319,7 +319,7 @@ def reg_gradient_l2(model):
 # --------------
 # 
 # 1. Define the problem
-# ~~~~~~~~~~~~~~~~~~~~~
+# ---------------------
 # 
 # I took out gx, gy for now to make it more straight forward. We can add
 # all kinds of things once it is working.
@@ -382,7 +382,7 @@ grav_problem.summary()
 # --------------
 # 
 # 2. Define the inversion
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------
 # 
 
 inv_options = InversionOptions()
@@ -441,13 +441,21 @@ plt.colorbar();
 ######################################################################
 # --------------
 # 
+# Watermark
+# ---------
+# 
 
-import cofi
-import emcee
-import scipy
+# %load_ext watermark
+# %watermark -n -u -v -p cofi,numpy,scipy,emcee,arviz
 
-# %reload_ext watermark
-# %watermark -n -u -v -iv -w
+######################################################################
+#
+
+# In case watermark doesn't work (e.g. sphinx-gallery)
+watermark_list = ["cofi", "numpy", "scipy", "emcee", "arviz"]
+for pkg in watermark_list:
+    pkg_var = __import__(pkg)
+    print(pkg, getattr(pkg_var, "__version__"))
 
 ######################################################################
 #
