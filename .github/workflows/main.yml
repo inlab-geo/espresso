@@ -1,6 +1,7 @@
 name: Python packaging
 #on: [push]
 on:
+  push:
   workflow_dispatch:
   pull_request:
     types:
