@@ -27,4 +27,4 @@ if __name__ == '__main__':
     for template_file, new_file in zip(template_files, new_files):
         print("file: "+template_file+" -> "+new_file)
         copyfile(template_file, new_file)
-    print("\nOK. Please navigate to"+ new_subfolder+" to write your own example.")
+    print("\nOK. Please navigate to "+ new_subfolder+" to write your own example.")
