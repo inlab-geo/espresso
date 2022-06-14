@@ -7,7 +7,7 @@ on:
 #     paths:
 #       - 'notebooks/**'
   schedule:
-    - cron: "48 4 * * *"
+    - cron: '54 4 * * *'
 
 
 jobs:
