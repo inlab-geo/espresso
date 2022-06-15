@@ -54,7 +54,6 @@ jobs:
         run: |
           git add scripts/*
           git commit -m "chore: update scripts/"
-          git push
           
       - name: Push back to repo
         run: |
