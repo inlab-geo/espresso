@@ -2,10 +2,6 @@
 Gravity Density Model
 =====================
 
-Adapted from `gravity forward
-code <https://github.com/inlab-geo/inversion-test-problems/blob/main/GravityForward.ipynb>`__
-written in inversion-test-problems
-
 """
 
 
@@ -13,6 +9,23 @@ written in inversion-test-problems
 # .. raw:: html
 # 
 # 	<badge><a href="https://colab.research.google.com/github/inlab-geo/cofi-examples/blob/main/notebooks/gravity/gravity_density.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></badge>
+
+
+######################################################################
+#    If you are running this notebook locally, make sure you’ve followed
+#    `steps
+#    here <https://github.com/inlab-geo/cofi-examples#run-the-examples-with-cofi-locally>`__
+#    to set up the environment. (This
+#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/environment.yml>`__
+#    file specifies a list of packages required to run the notebooks)
+# 
+
+
+######################################################################
+# Adapted from `gravity forward
+# code <https://github.com/inlab-geo/inversion-test-problems/blob/main/GravityForward.ipynb>`__
+# written in inversion-test-problems
+# 
 
 
 ######################################################################
@@ -445,14 +458,7 @@ plt.colorbar();
 # ---------
 # 
 
-# %load_ext watermark
-# %watermark -n -u -v -p cofi,numpy,scipy,emcee,arviz
-
-######################################################################
-#
-
-# In case watermark doesn't work (e.g. sphinx-gallery)
-watermark_list = ["cofi", "numpy", "scipy", "emcee", "arviz"]
+watermark_list = ["cofi", "numpy", "scipy", "matplotlib", "emcee", "arviz"]
 for pkg in watermark_list:
     pkg_var = __import__(pkg)
     print(pkg, getattr(pkg_var, "__version__"))

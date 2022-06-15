@@ -27,7 +27,16 @@ solvers to solve the corresponding inverse problem.
 # -------------------------------------------------------- #
 
 # !pip install -U cofi
-# !pip install pygimli
+
+# !MINICONDA_INSTALLER_SCRIPT=Miniconda3-4.5.4-Linux-x86_64.sh
+# !MINICONDA_PREFIX=/usr/local
+# !wget https://repo.continuum.io/miniconda/$MINICONDA_INSTALLER_SCRIPT
+# !chmod +x $MINICONDA_INSTALLER_SCRIPT
+# !./$MINICONDA_INSTALLER_SCRIPT -b -f -p $MINICONDA_PREFIX
+# !conda install -c gimli pygimli -y
+
+# import sys
+# _ = (sys.path.append("/usr/local/lib/python3.7/site-packages"))
 
 ######################################################################
 #
@@ -36,6 +45,8 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import pygimli as pg
+import pygimli.meshtools as mt
+from pygimli.physics import ert
 
 from cofi import BaseProblem, InversionOptions, Inversion
 
@@ -50,15 +61,174 @@ np.random.seed(42)
 # ---------------------
 # 
 
-my_problem = BaseProblem()
-# my_problem.set_forward(some_function_here)
-# ...
 
-# A list of set methods you can use on BaseProblem can be found here:
-# https://cofi.readthedocs.io/en/latest/api/generated/cofi.BaseProblem.html#set-methods
+######################################################################
+# We first define the true model, the survey and map it on a computational
+# mesh designed for the survey and true anomaly.
+# 
 
-# Feel free to add more cells as needed
-# You may also import dataset in this section
+# Generate the survey
+scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51),schemeName='dd')
+# Generate true model
+world = mt.createWorld(start=[-55, 0], end=[105, -80], worldMarker=True)
+conductive_anomaly = mt.createCircle(pos=[10, -7], radius=5, marker=2)
+plc = mt.mergePLC((world, conductive_anomaly))
+# Generate forward model mesh
+for s in scheme.sensors():
+    plc.createNode(s + [0.0, -0.2])
+mesh_coarse = mt.createMesh(plc, quality=33)
+fmesh = mesh_coarse.createH2()
+# link markers to resistivity
+rhomap = [[1, 200],
+          [2,  50],]
+# create model vector
+model_true = pg.solver.parseArgToArray(rhomap, fmesh.cellCount(), fmesh)
+
+# plot the compuational mesh and the true model
+ax=pg.show(fmesh)
+ax[0].set_title("Computational Mesh")
+ax=pg.show(fmesh,data=model_true,label=r"$\Omega m$")
+ax[0].set_title("Resitivity")
+
+######################################################################
+#
+
+
+######################################################################
+# Generate the synthetic data as a container with all the necessary
+# information for plotting.
+# 
+
+survey = ert.simulate(
+        fmesh,
+        res=rhomap,
+        scheme=scheme,
+)
+ax=ert.showERTData(survey,label=r"$\Omega$m")
+ax[0].set_title("Aparent Resitivity")
+
+y_obs=np.log(survey['rhoa'].array())
+
+######################################################################
+#
+
+
+######################################################################
+# The inversion can use a different mesh and the mesh to be used should
+# know nothing about the mesh that was designed based on the true model.
+# Here we first use a triangular mesh for the inversion, which makes the
+# problem underdetermined.
+# 
+
+world = mt.createWorld(
+    start=[-15, 0], end=[65, -30], worldMarker=False, marker=2)
+
+# local refinement of mesh near electrodes
+for s in scheme.sensors():
+    world.createNode(s + [0.0, -0.4])
+
+mesh_coarse = mt.createMesh(world, quality=33)
+imesh = mesh_coarse.createH2()
+for nr, c in enumerate(imesh.cells()):
+    c.setMarker(nr)
+ax=pg.show(imesh)
+ax[0].set_title("Inversion Mesh")
+
+######################################################################
+#
+
+
+######################################################################
+# Define the starting model on the inversion mesh.
+# 
+
+model_0 = np.ones(imesh.cellCount()) * 80.0
+
+######################################################################
+#
+
+
+######################################################################
+# Setup a forward operator with the inversion mesh.
+# 
+
+forward_operator = ert.ERTModelling(
+    sr=False,
+    # verbose=True,
+)
+forward_operator.setComplex(False)
+forward_operator.setData(scheme)
+forward_operator.setMesh(imesh, ignoreRegionManager=True)
+
+######################################################################
+#
+
+
+######################################################################
+# CoFI and other inference packages require a set of functions that
+# provide the misfit, the jacobian the resiudal with in the case of scipy
+# standardised interfaces.
+# 
+
+def get_response(model, y_obs, forward_operator):
+    y_synth = np.array(forward_operator.response(model))
+    return np.log(y_synth)
+
+def get_jacobian(model, y_obs, forward_operator):
+    y_synth_log = get_response(model, y_obs, forward_operator)
+    forward_operator.createJacobian(model)
+    J0 = np.array(forward_operator.jacobian())
+    model_log = np.log(model)
+    J = J0 / np.exp(y_synth_log[:, np.newaxis]) * np.exp(model_log)[np.newaxis, :]
+    return J
+
+def get_residuals(model, y_obs, forward_operator):
+    y_synth_log = get_response(model, y_obs, forward_operator)
+    phi = np.abs(np.dot((y_synth_log-y_obs),(y_synth_log-y_obs)))
+    return y_synth_log - y_obs
+
+def get_misfit(model, y_obs, forward_operator):
+    res = get_residuals(model, y_obs, forward_operator)
+    phi = np.abs(np.dot(res, res))
+    return phi
+
+######################################################################
+#
+
+
+######################################################################
+# Define the regularisation by PyGIMLi.
+# 
+
+region_manager = forward_operator.regionManager()
+region_manager.setMesh(imesh) 
+# region_manager.setVerbose(True)
+region_manager.setConstraintType(2)
+Wm = pg.matrix.SparseMapMatrix()
+region_manager.fillConstraints(Wm)
+Wm = pg.utils.sparseMatrix2coo(Wm)
+
+def get_regularisation(model):
+    return np.linalg.norm(Wm @ model, 2)
+
+######################################################################
+#
+
+
+######################################################################
+# With all the above forward operations set up with PyGIMLi, we now define
+# the problem in ``cofi`` by setting the problem information for a
+# ``BaseProblem`` object.
+# 
+
+ert_problem = BaseProblem()
+ert_problem.name = "Electrical Resistivity Tomography"
+ert_problem.set_forward(get_response, args=(y_obs, forward_operator))
+ert_problem.set_jacobian(get_jacobian, args=(y_obs, forward_operator))
+ert_problem.set_residual(get_residuals, args=(y_obs, forward_operator))
+ert_problem.set_data_misfit(get_misfit, args=(y_obs, forward_operator))
+ert_problem.set_regularisation(get_regularisation, lamda=1)
+ert_problem.set_initial_model(model_0)
 
 ######################################################################
 #
@@ -68,7 +238,7 @@ my_problem = BaseProblem()
 # Review what information is included in the ``BaseProblem`` object:
 # 
 
-my_problem.summary()
+ert_problem.summary()
 
 ######################################################################
 #
@@ -79,9 +249,13 @@ my_problem.summary()
 # -------------------------------
 # 
 
-my_options = InversionOptions()
-# my_options.set_tool(some_tool_name_here)
-# my_options.set_params(some_option = some_value)
+ert_problem.suggest_solvers()
+
+######################################################################
+#
+
+inv_options = InversionOptions()
+inv_options.set_tool("scipy.optimize.minimize")
 
 ######################################################################
 #
@@ -91,7 +265,7 @@ my_options = InversionOptions()
 # Review what’s been defined for the inversion we are about to run:
 # 
 
-my_options.summary()
+inv_options.summary()
 
 ######################################################################
 #
@@ -102,9 +276,14 @@ my_options.summary()
 # ---------------------
 # 
 
-inv = Inversion(my_problem, my_options)
+inv = Inversion(ert_problem, inv_options)
 inv_result = inv.run()
 inv_result.summary()
+
+######################################################################
+#
+
+inv_result.success
 
 ######################################################################
 #
@@ -115,7 +294,53 @@ inv_result.summary()
 # -----------
 # 
 
-# Add some plotting here if applicable
+ax=pg.show(
+    fmesh,
+    data=(model_true),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("True model")
+
+ax=pg.show(
+    imesh,
+    data=(model_0),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("Starting model")
+
+
+ax=pg.show(
+    imesh,
+    data=(inv_result.model),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("Inferred model")
+
+######################################################################
+#
+
+
+######################################################################
+# Now lets do this on a rectangular mesh in the region of interests for
+# the inversion with boundary represented using triangles.
+# 
+
+imesh=pg.createGrid(x=np.linspace(start=-15, stop=60, num=33),
+                                y=np.linspace(start=-30, stop=00, num=15),
+                                marker=2)
+imesh = pg.meshtools.appendTriangleBoundary(imesh, marker=1,
+                                           xbound=50, ybound=50)
+
+for nr, c in enumerate(imesh.cells()):
+    c.setMarker(nr)
+ax=pg.show(imesh)
+ax[0].set_title("Inversion Mesh")
+
+######################################################################
+#
+
+ax=pg.show(imesh,data=np.linspace(1,imesh.cellCount(),imesh.cellCount()))
+ax[0].set_title("Cell indices")
 
 ######################################################################
 #
@@ -130,3 +355,26 @@ inv_result.summary()
 ######################################################################
 # We can see that…
 # 
+
+
+######################################################################
+# --------------
+# 
+# Watermark
+# ---------
+# 
+
+# %load_ext watermark
+# %watermark -n -u -v -p cofi,numpy,scipy,emcee,arviz,pygimli
+
+######################################################################
+#
+
+# In case watermark doesn't work (e.g. sphinx-gallery)
+watermark_list = ["cofi", "numpy", "scipy", "emcee", "arviz", "pygimli"]
+for pkg in watermark_list:
+    pkg_var = __import__(pkg)
+    print(pkg, getattr(pkg_var, "__version__"))
+
+######################################################################
+#

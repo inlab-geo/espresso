@@ -12,7 +12,12 @@ Polynomial Linear Regression
 
 
 ######################################################################
-# --------------
+#    If you are running this notebook locally, make sure you’ve followed
+#    `steps
+#    here <https://github.com/inlab-geo/cofi-examples#run-the-examples-with-cofi-locally>`__
+#    to set up the environment. (This
+#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/environment.yml>`__
+#    file specifies a list of packages required to run the notebooks)
 # 
 
 
@@ -33,6 +38,11 @@ Polynomial Linear Regression
 # and wish to find the best fit degree 3 polynomial.
 # 
 # The function we are going to fit is: :math:`y=-6-5x+2x^2+x^3`
+# 
+
+
+######################################################################
+# --------------
 # 
 
 
@@ -809,8 +819,10 @@ az.plot_trace(az_idata);
 # posterior distribution. In fact, after a relatively small number of
 # steps, the samples seem pretty well “burnt-in”. That is a hard statement
 # to make quantitatively, but we can look at an estimate of the integrated
-# autocorrelation time (see Emcee’s package the -*Autocorrelation analysis
-# & convergence tutorial* for more details):
+# autocorrelation time (see Emcee’s package the -`Autocorrelation analysis
+# & convergence
+# tutorial <https://emcee.readthedocs.io/en/stable/tutorials/autocorr/>`__
+# for more details):
 # 
 
 tau = sampler.get_autocorr_time()
@@ -927,6 +939,10 @@ print('Posterior model covariance matrix\n',CMpost)
 print('\n Posterior estimate of model standard deviations in each parameter')
 for i in range(ndim):
     print("    {} {:7.4f}".format(labels[i],CM_std[i]))
+    
+inv_problem.set_data_covariance_inv(Cdinv)
+CMlstsq = inv_problem.model_covariance(None)
+print('Model covariance matrix estimated by least squares\n', CMlstsq)
 
 ######################################################################
 #
@@ -947,14 +963,7 @@ for i in range(ndim):
 # ---------
 # 
 
-# %load_ext watermark
-# %watermark -n -u -v -p cofi,numpy,scipy,emcee,arviz
-
-######################################################################
-#
-
-# In case watermark doesn't work (e.g. sphinx-gallery)
-watermark_list = ["cofi", "numpy", "scipy", "emcee", "arviz"]
+watermark_list = ["cofi", "numpy", "scipy", "matplotlib", "emcee", "arviz"]
 for pkg in watermark_list:
     pkg_var = __import__(pkg)
     print(pkg, getattr(pkg_var, "__version__"))
