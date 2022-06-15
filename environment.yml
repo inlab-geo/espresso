@@ -1,13 +1,14 @@
 name: cofi_env
 dependencies:
-  - python=3.9
+  - python=3.10
   - jupyterlab>=3
-  - numpy>=1.22.2
-  - scipy>=1.7.3
+  - numpy>=1.18
+  - scipy>=1.0.0
   - matplotlib>=3.5.0
   - conda-forge::nodejs>=12
-  - pip>=21.2.4
+  - gimli::pygimli
+  - pip
   - pip:
-    - cofi>=0.1.1.dev6
+    - cofi>=0.1.2.dev6
     - ipywidgets>=7.7.0
     - watermark>=2.3.0
