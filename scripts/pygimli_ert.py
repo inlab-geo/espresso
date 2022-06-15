@@ -208,8 +208,8 @@ Wm = pg.matrix.SparseMapMatrix()
 region_manager.fillConstraints(Wm)
 Wm = pg.utils.sparseMatrix2coo(Wm)
 
-def get_regularisation(model):
-    return np.linalg.norm(Wm @ model, 2)
+def get_regularisation(model, Wm):
+    return np.linalg.norm(Wm.dot(model), 2)
 
 ######################################################################
 #
@@ -223,11 +223,11 @@ def get_regularisation(model):
 
 ert_problem = BaseProblem()
 ert_problem.name = "Electrical Resistivity Tomography"
-ert_problem.set_forward(get_response, args=(y_obs, forward_operator))
-ert_problem.set_jacobian(get_jacobian, args=(y_obs, forward_operator))
-ert_problem.set_residual(get_residuals, args=(y_obs, forward_operator))
-ert_problem.set_data_misfit(get_misfit, args=(y_obs, forward_operator))
-ert_problem.set_regularisation(get_regularisation, lamda=1)
+ert_problem.set_forward(get_response, args=[y_obs, forward_operator])
+ert_problem.set_jacobian(get_jacobian, args=[y_obs, forward_operator])
+ert_problem.set_residual(get_residuals, args=[y_obs, forward_operator])
+ert_problem.set_data_misfit(get_misfit, args=[y_obs, forward_operator])
+ert_problem.set_regularisation(get_regularisation, lamda=2, args=[Wm])
 ert_problem.set_initial_model(model_0)
 
 ######################################################################
@@ -249,7 +249,7 @@ ert_problem.summary()
 # -------------------------------
 # 
 
-ert_problem.suggest_solvers()
+ert_problem.suggest_solvers();
 
 ######################################################################
 #
@@ -321,6 +321,9 @@ ax[0].set_title("Inferred model")
 
 
 ######################################################################
+# 5. Rectangular Mesh
+# -------------------
+# 
 # Now lets do this on a rectangular mesh in the region of interests for
 # the inversion with boundary represented using triangles.
 # 
@@ -347,6 +350,99 @@ ax[0].set_title("Cell indices")
 
 
 ######################################################################
+# Again, set the starting model value.
+# 
+
+model_0 = np.ones(imesh.cellCount()) * 80.0
+
+######################################################################
+#
+
+
+######################################################################
+# Set up the operator and regularisation for the new mesh
+# 
+
+# Forward operator
+forward_operator2 = ert.ERTModelling(
+    sr=False,
+    verbose=True,
+)
+forward_operator2.setComplex(False)
+forward_operator2.setData(scheme)
+forward_operator2.setMesh(imesh, ignoreRegionManager=True)
+# Regularisation
+rm2 = forward_operator2.regionManager()
+rm2.setMesh(imesh) 
+rm2.setVerbose(True)
+rm2.setConstraintType(2)
+Wm2 = pg.matrix.SparseMapMatrix()
+rm2.fillConstraints(Wm2)
+Wm2 = pg.utils.sparseMatrix2coo(Wm2)
+
+######################################################################
+#
+
+
+######################################################################
+# Define a new problem instance with the new forward operator.
+# 
+
+ert_problem2 = BaseProblem()
+ert_problem2.name = "Electrical Resistivity Tomography"
+ert_problem2.set_forward(get_response, args=(y_obs, forward_operator2))
+ert_problem2.set_jacobian(get_jacobian, args=(y_obs, forward_operator2))
+ert_problem2.set_residual(get_residuals, args=(y_obs, forward_operator2))
+ert_problem2.set_data_misfit(get_misfit, args=(y_obs, forward_operator2))
+ert_problem2.set_regularisation(get_regularisation, lamda=1, args=(Wm2))
+ert_problem2.set_initial_model(model_0)
+
+######################################################################
+#
+
+
+######################################################################
+# Run the inversion with the same inversion options.
+# 
+
+inv2 = Inversion(ert_problem2, inv_options)
+inv_result2 = inv2.run()
+inv_result2.summary()
+
+######################################################################
+#
+
+
+######################################################################
+# Plot the results:
+# 
+
+ax=pg.show(
+    fmesh,
+    data=(model_true),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("True model")
+
+ax=pg.show(
+    imesh,
+    data=(model_0),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("Starting model")
+
+ax=pg.show(
+    imesh,
+    data=(inv_result2.model),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("Inferred model")
+
+######################################################################
+#
+
+
+######################################################################
 # 5. Reflections / Conclusion / Further reading
 # ---------------------------------------------
 # 
@@ -364,14 +460,8 @@ ax[0].set_title("Cell indices")
 # ---------
 # 
 
-# %load_ext watermark
-# %watermark -n -u -v -p cofi,numpy,scipy,emcee,arviz,pygimli
-
-######################################################################
-#
-
 # In case watermark doesn't work (e.g. sphinx-gallery)
-watermark_list = ["cofi", "numpy", "scipy", "emcee", "arviz", "pygimli"]
+watermark_list = ["cofi", "numpy", "scipy", "matplotlib", "emcee", "arviz", "pygimli"]
 for pkg in watermark_list:
     pkg_var = __import__(pkg)
     print(pkg, getattr(pkg_var, "__version__"))
