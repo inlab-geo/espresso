@@ -8,8 +8,13 @@ current_directory = os.path.split(path_to_current_file)[0]
 # current_directory=current_directory + ".Ex1_dir"
 # print(current_directory)
 
-print(current_directory)
 
+try:
+    from . import _version
+
+    __version__ = _version.__version__
+except ImportError:
+    pass
 # gravityforward = getattr(importlib.import_module(".gravityforward", package='inversiontestproblems'), "gravityforward")
 
 for item in os.listdir(current_directory):
