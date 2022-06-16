@@ -6,18 +6,14 @@
 Welcome to the documentation of Inversion Test Problems!
 ========================================================
 
-We are building an inversion test suite which collects examples from many
-disciplines within geoscience and elsewhere. The connection point to CoFI is a
-common standard that is flexible and capable enough to accommodate a variety of
-inference problems which can be recognised by various solvers that comply with
-this same common framework. Having the basic set up and several examples in
+Inversion Test Problems (ITP) is a collection of clearly defined forward codes
+that simulate physical processes from many disciplines within the geosciences
+ and elsewhere. The goal of ITP is to
+bring together people developing physical simulations with those who need them.
+ITP's simple and consistent code structure enables users to access a wide range
+of different forward code and contributors to share their solutions with a wider
+audience. Having the basic set up and several examples in
 place already, we hope to encourage more examples be developed and be contributed.
-
-
-Things that could be added:
-
-changelog.rst
-
 
 
 
