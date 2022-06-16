@@ -19,7 +19,7 @@ Install
 
        It's optional, but recommended to use a virtual environment::
 
-         conda create -n ITP_env python=3.8 scipy jupyterlab matplotlib
+         conda create -n ITP_env scipy jupyterlab matplotlib
          conda activate ITP_env
 
        Install CoFI with::
@@ -39,7 +39,7 @@ Install
 
         git clone https://github.com/inlab-geo/inversion-test-problems.git
         cd inversion-test-problems
-        conda create -n ITP_env python=3.8 scipy matplotlib
+        conda create -n ITP_env scipy matplotlib
         conda activate ITP_env
         pip install build
         python -m build
