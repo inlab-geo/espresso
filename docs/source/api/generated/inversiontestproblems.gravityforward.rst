@@ -14,10 +14,12 @@
    .. autosummary::
    
       ~gravityforward.__init__
+      ~gravityforward.cartesian
       ~gravityforward.forward
-      ~gravityforward.get_data
       ~gravityforward.get_model
       ~gravityforward.gradient
+      ~gravityforward.inject_density
+      ~gravityforward.node_maker
       ~gravityforward.plot_model
    
    

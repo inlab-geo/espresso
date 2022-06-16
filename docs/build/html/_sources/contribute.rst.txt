@@ -11,7 +11,7 @@ our Github `repository`_.
 How to contribute
 ==================
 
-Thank you for contributing to Inversion Test Problems! Inversion test problems is
+Thank you for contributing to Inversion Test Problems! ITP is
 a community driven effort to create a collection of forward
 codes, simulating a wide range of physical problems. ITP relies on you to
 contribute your forward code! You do not need to know all the details to get started.
