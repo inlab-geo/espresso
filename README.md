@@ -1,7 +1,7 @@
 # Inversion Test Problems
 
 
-Inversion Test Problems is a collection of clearly defined, stand-alone forward codes of a variety of different geophysical problems... This suite of forward problems enables users .... and has an easily understandable, consistent code structure that is capable of hosting a wide range of typical geophysical research problems. Information will be conveyed via a sensible, consistent naming convention and an informative output that can consist of text and/or visualisations.
+Inversion Test Problems (ITP) is a collection of clearly defined forward codes that simulate a wide range of geophysical processes. The goal of ITP is to bring together people developing physical simulations with those who need them. ITP's simple and consistent code structure enables users to acces a wide range of different forward code and contributers to share their solutions with a wider audience. For more information, please visit our documentation (coming soon).
 
 
 # Installation
@@ -9,7 +9,7 @@ Inversion Test Problems is a collection of clearly defined, stand-alone forward 
 It is recommended to use a clean virtual environment for the install:
 
 ```console
-conda create -n ITP_env python=3.8 scipy jupyterlab numpy matplotlib
+conda create -n ITP_env scipy jupyterlab numpy matplotlib
 conda activate ITP_env
 ```
 
@@ -67,4 +67,4 @@ tp.x_nodes # x-coordinates of all nodes of the model
 
 ```
 
-The set values are set is highly problem-specific and we suggest to use 'help(tp)' or 'dir(tp)' to quickly see what is available. Alternatively, consult the Inversion Test Suite Documentation (later).
+Which additional values are set is highly example-specific and we suggest to use 'help(tp)' or 'dir(tp)' to quickly see what is available, or consult the Inversion Test Suite Documentation (coming soon).
