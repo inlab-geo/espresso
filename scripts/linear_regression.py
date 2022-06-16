@@ -942,7 +942,7 @@ for i in range(ndim):
     
 inv_problem.set_data_covariance_inv(Cdinv)
 CMlstsq = inv_problem.model_covariance(None)
-print('Model covariance matrix estimated by least squares\n', CMlstsq)
+print('\nModel covariance matrix estimated by least squares\n', CMlstsq)
 
 ######################################################################
 #

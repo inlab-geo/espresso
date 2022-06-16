@@ -23,7 +23,7 @@ Gravity Density Model
 
 ######################################################################
 # Adapted from `gravity forward
-# code <https://github.com/inlab-geo/inversion-test-problems/blob/main/GravityForward.ipynb>`__
+# code <https://github.com/inlab-geo/inversion-test-problems/blob/main/contrib/gravityforward/__init__.py>`__
 # written in inversion-test-problems
 # 
 
