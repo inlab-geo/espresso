@@ -22,7 +22,7 @@ Install
          conda create -n ITP_env scipy jupyterlab matplotlib
          conda activate ITP_env
 
-       Install CoFI with::
+       Install ITP with::
 
          python3 -m pip install --index-url https://test.pypi.org/simple/ inversiontestproblems-h-hollmann
 
