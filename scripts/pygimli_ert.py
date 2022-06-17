@@ -184,12 +184,12 @@ def get_jacobian(model, y_obs, forward_operator):
 
 def get_residuals(model, y_obs, forward_operator):
     y_synth_log = get_response(model, y_obs, forward_operator)
-    phi = np.abs(np.dot((y_synth_log-y_obs),(y_synth_log-y_obs)))
-    return y_synth_log - y_obs
+    return y_obs - y_synth_log
 
-def get_misfit(model, y_obs, forward_operator):
+def get_misfit(model, y_obs, forward_operator, print_progress=False):
     res = get_residuals(model, y_obs, forward_operator)
     phi = np.abs(np.dot(res, res))
+    if print_progress: print("data misfit:", phi)
     return phi
 
 ######################################################################
@@ -208,8 +208,31 @@ Wm = pg.matrix.SparseMapMatrix()
 region_manager.fillConstraints(Wm)
 Wm = pg.utils.sparseMatrix2coo(Wm)
 
-def get_regularisation(model, Wm):
-    return np.linalg.norm(Wm.dot(model), 2)
+def get_regularisation(model, Wm, print_progress=False):
+    weighted_model = Wm @ model
+    reg = weighted_model.T @ weighted_model
+    if print_progress: print("raw regularisation:", reg)
+    return reg
+
+######################################################################
+#
+
+
+######################################################################
+# To help optimisers terminate quicker, we provide gradient and hessian as
+# well.
+# 
+
+def get_gradient(model, y_obs, forward_operator, lamda, Wm):
+    res = get_residuals(model, y_obs, forward_operator)
+    jac = get_jacobian(model, y_obs, forward_operator)
+    grad = - res @ jac + lamda * Wm.T @ Wm @ model
+    return grad
+
+def get_hessian(model, y_obs, forward_operator, lamda, Wm):
+    jac = get_jacobian(model, y_obs, forward_operator)
+    hess = jac.T @ jac + lamda * Wm.T @ Wm
+    return hess
 
 ######################################################################
 #
@@ -221,13 +244,19 @@ def get_regularisation(model, Wm):
 # ``BaseProblem`` object.
 # 
 
+# hyperparameters
+lamda = 3
+
+# cofi problem definition
 ert_problem = BaseProblem()
 ert_problem.name = "Electrical Resistivity Tomography"
 ert_problem.set_forward(get_response, args=[y_obs, forward_operator])
 ert_problem.set_jacobian(get_jacobian, args=[y_obs, forward_operator])
 ert_problem.set_residual(get_residuals, args=[y_obs, forward_operator])
-ert_problem.set_data_misfit(get_misfit, args=[y_obs, forward_operator])
-ert_problem.set_regularisation(get_regularisation, lamda=2, args=[Wm])
+ert_problem.set_data_misfit(get_misfit, args=[y_obs, forward_operator, True])
+ert_problem.set_regularisation(get_regularisation, lamda=lamda, args=[Wm, True])
+ert_problem.set_gradient(get_gradient, args=[y_obs, forward_operator, lamda, Wm])
+ert_problem.set_hessian(get_hessian, args=[y_obs, forward_operator, lamda, Wm])
 ert_problem.set_initial_model(model_0)
 
 ######################################################################
@@ -256,6 +285,7 @@ ert_problem.suggest_solvers();
 
 inv_options = InversionOptions()
 inv_options.set_tool("scipy.optimize.minimize")
+inv_options.set_params(method="Newton-CG")
 
 ######################################################################
 #
@@ -321,6 +351,91 @@ ax[0].set_title("Inferred model")
 
 
 ######################################################################
+# 5. Use a custom solver
+# ----------------------
+# 
+# Now we switch to a Newton’s iterative approach written by ourselves, so
+# you’ll have a closer look at what’s happening in the loop.
+# 
+# First of all, define our own solver.
+# 
+
+from cofi.solvers import BaseSolver
+
+class MyNewtonSolver(BaseSolver):
+    def __init__(self, inv_problem, inv_options):
+        __params = inv_options.get_params()
+        self._niter = __params["niter"]
+        self._step = __params["step"]
+        self._verbose = __params["verbose"]
+        self._model_0 = inv_problem.initial_model
+        self._gradient = inv_problem.gradient
+        self._hessian = inv_problem.hessian
+        self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
+        self._reg = inv_problem.regularisation if inv_problem.regularisation_defined else None
+        self._obj = inv_problem.objective if inv_problem.objective_defined else None
+        
+    def __call__(self):
+        current_model = np.array(self._model_0)
+        for i in range(self._niter):
+            term1 = self._hessian(current_model)
+            term2 = - self._gradient(current_model)
+            model_update = np.linalg.solve(term1, term2)
+            current_model = np.array(current_model + self._step * model_update)
+            if self._verbose:
+                print("-" * 80)
+                print(f"Iteration {i+1}")
+                if self._misfit: self._misfit(current_model)
+                if self._reg: self._reg(current_model)
+                # if self._obj: print("objective func:", self._obj(current_model))
+        return {"model": current_model, "success": True}
+
+######################################################################
+#
+
+
+######################################################################
+# Now, make use of this custom solver and run inversion again:
+# 
+
+inv_options_own_solver = InversionOptions()
+inv_options_own_solver.set_tool(MyNewtonSolver)
+inv_options_own_solver.set_params(niter=30, step=1, verbose=True)
+
+inv_own_solver = Inversion(ert_problem, inv_options_own_solver)
+inv_own_solver_res = inv_own_solver.run()
+inv_own_solver_res.summary()
+
+######################################################################
+#
+
+ax=pg.show(
+    fmesh,
+    data=(model_true),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("True model")
+
+ax=pg.show(
+    imesh,
+    data=(model_0),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("Starting model")
+
+
+ax=pg.show(
+    imesh,
+    data=(inv_own_solver_res.model),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("Inferred model")
+
+######################################################################
+#
+
+
+######################################################################
 # 5. Rectangular Mesh
 # -------------------
 # 
@@ -328,8 +443,8 @@ ax[0].set_title("Inferred model")
 # the inversion with boundary represented using triangles.
 # 
 
-imesh=pg.createGrid(x=np.linspace(start=-15, stop=60, num=33),
-                                y=np.linspace(start=-30, stop=00, num=15),
+imesh=pg.createGrid(x=np.linspace(start=-15, stop=60, num=11),
+                                y=np.linspace(start=-30, stop=0, num=5),
                                 marker=2)
 imesh = pg.meshtools.appendTriangleBoundary(imesh, marker=1,
                                            xbound=50, ybound=50)
@@ -366,7 +481,7 @@ model_0 = np.ones(imesh.cellCount()) * 80.0
 # Forward operator
 forward_operator2 = ert.ERTModelling(
     sr=False,
-    verbose=True,
+    # verbose=True,
 )
 forward_operator2.setComplex(False)
 forward_operator2.setData(scheme)
@@ -374,7 +489,7 @@ forward_operator2.setMesh(imesh, ignoreRegionManager=True)
 # Regularisation
 rm2 = forward_operator2.regionManager()
 rm2.setMesh(imesh) 
-rm2.setVerbose(True)
+# rm2.setVerbose(True)
 rm2.setConstraintType(2)
 Wm2 = pg.matrix.SparseMapMatrix()
 rm2.fillConstraints(Wm2)
@@ -388,14 +503,20 @@ Wm2 = pg.utils.sparseMatrix2coo(Wm2)
 # Define a new problem instance with the new forward operator.
 # 
 
-ert_problem2 = BaseProblem()
-ert_problem2.name = "Electrical Resistivity Tomography"
-ert_problem2.set_forward(get_response, args=(y_obs, forward_operator2))
-ert_problem2.set_jacobian(get_jacobian, args=(y_obs, forward_operator2))
-ert_problem2.set_residual(get_residuals, args=(y_obs, forward_operator2))
-ert_problem2.set_data_misfit(get_misfit, args=(y_obs, forward_operator2))
-ert_problem2.set_regularisation(get_regularisation, lamda=1, args=(Wm2))
-ert_problem2.set_initial_model(model_0)
+# hyperparameters
+lamda2 = 1
+
+# cofi problem definition
+ert_problem_rect = BaseProblem()
+ert_problem_rect.name = "Electrical Resistivity Tomography"
+ert_problem_rect.set_forward(get_response, args=[y_obs, forward_operator2])
+ert_problem_rect.set_jacobian(get_jacobian, args=[y_obs, forward_operator2])
+ert_problem_rect.set_residual(get_residuals, args=[y_obs, forward_operator2])
+ert_problem_rect.set_data_misfit(get_misfit, args=[y_obs, forward_operator2])
+ert_problem_rect.set_regularisation(get_regularisation, lamda=lamda2, args=[Wm2])
+ert_problem_rect.set_gradient(get_gradient, args=[y_obs, forward_operator2, lamda2, Wm2])
+ert_problem_rect.set_hessian(get_hessian, args=[y_obs, forward_operator2, lamda2, Wm2])
+ert_problem_rect.set_initial_model(model_0)
 
 ######################################################################
 #
@@ -405,9 +526,9 @@ ert_problem2.set_initial_model(model_0)
 # Run the inversion with the same inversion options.
 # 
 
-inv2 = Inversion(ert_problem2, inv_options)
-inv_result2 = inv2.run()
-inv_result2.summary()
+inv_rect = Inversion(ert_problem_rect, inv_options_own_solver)
+inv_rect_res = inv_rect.run()
+inv_rect_res.summary()
 
 ######################################################################
 #
@@ -433,7 +554,7 @@ ax[0].set_title("Starting model")
 
 ax=pg.show(
     imesh,
-    data=(inv_result2.model),
+    data=(inv_rect_res.model),
     label=r"$\Omega m$"
 )
 ax[0].set_title("Inferred model")
@@ -443,14 +564,105 @@ ax[0].set_title("Inferred model")
 
 
 ######################################################################
-# 5. Reflections / Conclusion / Further reading
-# ---------------------------------------------
+# 6. Rectangular mesh with ``MyNewtonSolver`` and ``emcee``
+# ---------------------------------------------------------
 # 
+# 6.1. ``MyNewtonSolver``
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# 
+
+inv_rect_own_solver = Inversion(ert_problem_rect, inv_options_own_solver)
+inv_rect_own_solver_res = inv_rect_own_solver.run()
+inv_rect_own_solver_res.summary()
+
+######################################################################
+#
+
+ax=pg.show(
+    fmesh,
+    data=(model_true),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("True model")
+
+ax=pg.show(
+    imesh,
+    data=(model_0),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("Starting model")
+
+ax=pg.show(
+    imesh,
+    data=(inv_rect_own_solver_res.model),
+    label=r"$\Omega m$"
+)
+ax[0].set_title("Inferred model")
+
+######################################################################
+#
 
 
 ######################################################################
-# We can see that…
+# 6.2 ``emcee``
+# ~~~~~~~~~~~~~
 # 
+# CoFI needs more assumptions about the problem for a sampler to work -
+# these are the log of posterior distribution density and walkers’
+# starting positions.
+# 
+# For the log posterior, we define here by specifying ``log_prior`` and
+# ``log_likelihood``. And CoFI will combine them to get the
+# ``log_posterior``.
+# 
+
+# define log_likelihood
+sigma = 1.0                                     # common noise standard deviation
+Cdinv = np.eye(len(y_obs))/(sigma**2)           # inverse data covariance matrix
+def log_likelihood(model):
+    residual = ert_problem_rect.residual(model)
+    return -0.5 * residual @ (Cdinv @ residual).T
+
+# define log_prior
+m_lower_bound = np.zeros(model_0.shape)         # lower bound for uniform prior
+m_upper_bound = np.ones(model_0.shape) * 250    # upper bound for uniform prior
+def log_prior(model):                           # uniform distribution
+    for i in range(len(m_lower_bound)):
+        if model[i] < m_lower_bound[i] or model[i] > m_upper_bound[i]: return -np.inf
+    return 0.0 # model lies within bounds -> return log(1)
+
+# define walkers' starting positions
+nwalkers = 32
+nsteps = 1000
+walkers_start = model_0 + 1e-6 * np.random.randn(nwalkers, model_0.shape[0])
+
+# define them into cofi's BaseProblem object
+ert_problem_rect.set_log_likelihood(log_likelihood)
+ert_problem_rect.set_log_prior(log_prior)
+ert_problem_rect.set_walkers_starting_pos(walkers_start)
+
+######################################################################
+#
+
+
+######################################################################
+# As usual, specify how you’d like to run the inversion and run it.
+# 
+
+# define inversion options
+inv_options_emcee = InversionOptions()
+inv_options_emcee.set_tool("emcee")
+inv_options_emcee.set_params(nwalkers=nwalkers, nsteps=nsteps)
+
+from emcee.moves import GaussianMove
+inv_options_emcee.set_params(moves=GaussianMove(1))
+
+# run the inversion
+inv_rect_emcee = Inversion(ert_problem_rect, inv_options_emcee)
+inv_rect_emcee_res = inv_rect_emcee.run()
+
+######################################################################
+#
 
 
 ######################################################################
