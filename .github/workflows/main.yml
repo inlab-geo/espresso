@@ -5,6 +5,9 @@ on:
   pull_request:
     types:
       - closed
+  schedule:
+    # * is a special character in YAML so quote this string
+    #  - cron:  '0 0  * * *'
 
 jobs:
     job1:
