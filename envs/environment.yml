@@ -1,14 +1,15 @@
 name: cofi_env
+channels:
+  - conda-forge
+  - defaults
+  - gimli
 dependencies:
   - python=3.10
   - jupyterlab>=3
-  - numpy>=1.18
-  - scipy>=1.0.0
   - matplotlib>=3.5.0
-  - conda-forge::nodejs>=12
-  - gimli::pygimli
+  - nodejs>=12
+  - pygimli
   - pip
   - pip:
-    - cofi>=0.1.2.dev6
+    - cofi>=0.1.2.dev7
     - ipywidgets>=7.7.0
-    - watermark>=2.3.0

@@ -1,0 +1,13 @@
+name: cofi_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - jupyterlab>=3
+  - matplotlib>=3.5.0
+  - nodejs>=12
+  - pip
+  - pip:
+    - cofi>=0.1.2.dev7
+    - ipywidgets>=7.7.0

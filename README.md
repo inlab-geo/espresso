@@ -25,9 +25,13 @@ This repository contains examples for running inversion algorithms using CoFI wi
 (Strongly recommended) Create a virtual environment to avoid conflicts with your other projects:
 
 ```console
-$ conda env create -f environment.yml
+$ conda env create -f envs/environment.yml
 $ conda activate cofi_env
 ```
+
+> For MacOS M1 users, unfortunately `tetgen` (which is a dependency of `pygimli`) doesn't support
+> ARM machines yet. Please use `conda env create -f envs/environment_arm.yml` instead, and use
+> another X86 machine to run the notebooks that make use of `pygimli`.
 
 Otherwise (skip this if you've followed above), ensure you have `scipy` and `jupyter-lab` in your environment and then install `cofi` with:
 
