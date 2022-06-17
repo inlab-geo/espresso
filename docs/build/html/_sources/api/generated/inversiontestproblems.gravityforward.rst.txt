@@ -18,6 +18,7 @@
       ~gravityforward.get_data
       ~gravityforward.get_model
       ~gravityforward.gradient
+      ~gravityforward.inject_density
       ~gravityforward.plot_model
    
    

@@ -13,7 +13,7 @@ auxclass = getattr(
 
 
 class gravityforward(auxclass):
-    r""" Returns the vertical component of the gravitational force using a 3D density model. 
+    r""" Returns the vertical component of the gravitational force using a 3D density model.
 
     This Inversion Test Problem explores the gravitational response of a
     three-dimensional model containing densities at specified receiver locations.
@@ -197,7 +197,7 @@ class gravityforward(auxclass):
 
         m: The model in a 1-D array containing densities
 
-        --------------------
+
         """
 
         return self.m
@@ -212,7 +212,7 @@ class gravityforward(auxclass):
         datan: Measurements of gravitational force, with added
             gaussian noise.
 
-        --------------------
+
         """
 
         gz_rec = self._calculate_gravity(
