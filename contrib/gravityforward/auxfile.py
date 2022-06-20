@@ -88,7 +88,7 @@ class auxclass:
 
         return x_nodes, y_nodes, z_nodes
 
-    def inject_density(model, x_nodes, y_nodes, z_nodes, x, y, z, value):
+    def _inject_density(model, x_nodes, y_nodes, z_nodes, x, y, z, value):
         """ A function to change the density of a single grid cell based on coordinates.
 
         :param model: The model in a 1-D array containing densities [1xM]

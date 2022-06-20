@@ -17,12 +17,12 @@ conda activate ITP_env
 
 Linux/MacOS
 ```console
-python3 -m pip install --index-url https://test.pypi.org/simple/ inversiontestproblems-h-hollmann
+python3 -m pip install inversion-test-problems
 ```
 
 Windows:
 ```console
-py -m pip install --index-url https://test.pypi.org/simple/ inversiontestproblems-h-hollmann
+py -m pip install inversion-test-problems
 ```
 
 # Basic usage

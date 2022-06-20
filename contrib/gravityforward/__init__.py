@@ -60,25 +60,16 @@ class gravityforward(auxclass):
 
             name = __name__
 
-            # within package/mymodule1.py, for example
-
             tmp = pkgutil.get_data(__name__, "data/gravmodel1.txt")
             tmp2 = tmp.decode("utf-8")
             self.m = np.loadtxt(StringIO(tmp2))
-            # tmp = pkgutil.get_data(__name__, "data/gravmodel1.txt")
-            # tmp2=np.frombuffer(tmp, dtype='S3')
-            # self.m=tmp2.astype(np.float)
             del tmp, tmp2
-
-            # self.m=tmp3.astype(float)
-            # del tmp, tmp2, tmp3
 
             self.lmx = 12
             self.lmy = 12
             self.lmz = 12
             self.lrx = 17
             self.lry = 17
-            ##del tmp
 
             # Receiver locations in x and y direction
             x_rec = np.linspace(-80.0, 80.0, self.lrx)
@@ -157,9 +148,6 @@ class gravityforward(auxclass):
             self.rec_coords = np.append(tmp, z_rec, axis=1)
             del tmp
 
-            print(x_rec)
-            print(self.rec_coords)
-
             ## Create model and insert density anomaly
             # Create model
             m = np.zeros((self.lmx) * (self.lmy) * (self.lmz))
@@ -183,7 +171,7 @@ class gravityforward(auxclass):
 
         else:
 
-            raise("Error - example number not defined")
+            raise ValueError("The chosen example-number does not match any examples for this Inversion Test Problem.")
 
     def get_model(self):
         r""" Returns the starting model for the forward calculation.
@@ -590,5 +578,3 @@ class gravityforward(auxclass):
 
             plt.show()
 
-        else:
-            print("Error - example number not defined")

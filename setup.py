@@ -39,7 +39,7 @@ with open(str(_ROOT / "contrib" / "_version.py")) as f:
 
 
 setup(
-    name='inversiontestproblems-h-hollmann',
+    name='inversion-test-problems',
     version=VERSION,
     install_requires=[
         'importlib-metadata; python_version == "3.8"',
