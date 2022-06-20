@@ -245,7 +245,7 @@ def get_hessian(model, y_obs, forward_operator, lamda, Wm):
 # 
 
 # hyperparameters
-lamda = 3
+lamda = 10
 
 # cofi problem definition
 ert_problem = BaseProblem()
@@ -436,7 +436,7 @@ ax[0].set_title("Inferred model")
 
 
 ######################################################################
-# 5. Rectangular Mesh
+# 6. Rectangular Mesh
 # -------------------
 # 
 # Now lets do this on a rectangular mesh in the region of interests for
@@ -504,7 +504,7 @@ Wm2 = pg.utils.sparseMatrix2coo(Wm2)
 # 
 
 # hyperparameters
-lamda2 = 1
+lamda2 = 0.1
 
 # cofi problem definition
 ert_problem_rect = BaseProblem()
@@ -526,7 +526,7 @@ ert_problem_rect.set_initial_model(model_0)
 # Run the inversion with the same inversion options.
 # 
 
-inv_rect = Inversion(ert_problem_rect, inv_options_own_solver)
+inv_rect = Inversion(ert_problem_rect, inv_options)
 inv_rect_res = inv_rect.run()
 inv_rect_res.summary()
 
@@ -652,7 +652,7 @@ ert_problem_rect.set_walkers_starting_pos(walkers_start)
 # define inversion options
 inv_options_emcee = InversionOptions()
 inv_options_emcee.set_tool("emcee")
-inv_options_emcee.set_params(nwalkers=nwalkers, nsteps=nsteps)
+inv_options_emcee.set_params(nwalkers=nwalkers, nsteps=nsteps, progress=True)
 
 from emcee.moves import GaussianMove
 inv_options_emcee.set_params(moves=GaussianMove(1))
