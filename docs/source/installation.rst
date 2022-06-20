@@ -24,7 +24,7 @@ Install
 
        Install ITP with::
 
-         python3 -m pip install --index-url https://test.pypi.org/simple/ inversiontestproblems-h-hollmann
+         python3 -m pip install inversion-test-problems
 
 
    .. tab:: conda-forge
