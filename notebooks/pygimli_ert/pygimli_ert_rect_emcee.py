@@ -1,8 +1,19 @@
 """Eletrical Resistivity Tomography Inversion with PyGIMLi + CoFI
 
 This script runs:
-- ERT problem defined with PyGIMLi, and
+- ERT problem (rectangular mesh) defined with PyGIMLi, and
 - Bayesian sampling using emcee with CoFI
+
+
+To run this script, refer to the following examples:
+
+- `python pygimli_ert_rect_emcee.py` for a simple run, with all the figures saved to
+  current directory by default
+
+- `python pygimli_ert_rect_emcee.py -o figs` for the same run as above, with all the
+  figures saved to subfolder `figs`
+
+- `python pygimli_ert_rect_emcee.py -h` to see all available options
 
 """
 
@@ -153,7 +164,10 @@ def main():
     ######### 4. Plot the results #####################################################
     plot_model(fmesh, model_true, r"$\Omega m$", "True model")
     plot_model(imesh_rect, model_0, r"$\Omega m$", "Starting model")
-    plot_model(imesh_rect, inv_result.model, r"$\Omega m$", "Inferred model")
+    flat_samples = inv_result.sampler.get_chain(discard=100, thin=30, flat=True)
+    indices = np.random.randint(len(flat_samples), size=10) # get a random selection from posterior ensemble
+    for idx in indices:
+        plot_model(imesh_rect, flat_samples[idx], r"$\Omega m$", f"Inferred model - sample {idx}")
 
 
 if __name__ == "__main__":

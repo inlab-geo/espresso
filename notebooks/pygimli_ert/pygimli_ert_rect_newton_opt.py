@@ -1,8 +1,19 @@
 """Eletrical Resistivity Tomography Inversion with PyGIMLi + CoFI
 
 This script runs:
-- ERT problem defined with PyGIMLi, and
+- ERT problem (rectangular mesh) defined with PyGIMLi, and
 - Newton's optimisation method with CoFI
+
+
+To run this script, refer to the following examples:
+
+- `python pygimli_ert_rect_newton_opt.py` for a simple run, with all the figures saved to
+  current directory by default
+
+- `python pygimli_ert_rect_newton_opt.py -o figs` for the same run as above, with all the
+  figures saved to subfolder `figs`
+
+- `python pygimli_ert_rect_newton_opt.py -h` to see all available options
 
 """
 
