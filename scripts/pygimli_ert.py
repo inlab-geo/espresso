@@ -50,6 +50,8 @@ from pygimli.physics import ert
 
 from cofi import BaseProblem, InversionOptions, Inversion
 
+from pygimli_ert_lib import *
+
 np.random.seed(42)
 
 ######################################################################
@@ -67,22 +69,12 @@ np.random.seed(42)
 # mesh designed for the survey and true anomaly.
 # 
 
-# Generate the survey
-scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51),schemeName='dd')
-# Generate true model
-world = mt.createWorld(start=[-55, 0], end=[105, -80], worldMarker=True)
-conductive_anomaly = mt.createCircle(pos=[10, -7], radius=5, marker=2)
-plc = mt.mergePLC((world, conductive_anomaly))
-# Generate forward model mesh
-for s in scheme.sensors():
-    plc.createNode(s + [0.0, -0.2])
-mesh_coarse = mt.createMesh(plc, quality=33)
-fmesh = mesh_coarse.createH2()
-# link markers to resistivity
-rhomap = [[1, 200],
-          [2,  50],]
-# create model vector
-model_true = pg.solver.parseArgToArray(rhomap, fmesh.cellCount(), fmesh)
+# PyGIMLi - define measuring scheme, geometry, forward mesh and true model
+scheme = scheme_fwd()
+geometry = geometry_true()
+fmesh = mesh_fwd(scheme, geometry)
+rhomap = markers_to_resistivity()
+model_true = model_vec(rhomap, fmesh)
 
 # plot the compuational mesh and the true model
 ax=pg.show(fmesh)
@@ -99,15 +91,13 @@ ax[0].set_title("Resitivity")
 # information for plotting.
 # 
 
-survey = ert.simulate(
-        fmesh,
-        res=rhomap,
-        scheme=scheme,
-)
+# PyGIMLi - generate data
+survey = ert.simulate(fmesh, res=rhomap, scheme=scheme)
+
 ax=ert.showERTData(survey,label=r"$\Omega$m")
 ax[0].set_title("Aparent Resitivity")
 
-y_obs=np.log(survey['rhoa'].array())
+y_obs = np.log(survey['rhoa'].array())
 
 ######################################################################
 #
@@ -120,18 +110,10 @@ y_obs=np.log(survey['rhoa'].array())
 # problem underdetermined.
 # 
 
-world = mt.createWorld(
-    start=[-15, 0], end=[65, -30], worldMarker=False, marker=2)
+# PyGIMLi - create mesh for inversion
+imesh_tri = mesh_inv_triangular()
 
-# local refinement of mesh near electrodes
-for s in scheme.sensors():
-    world.createNode(s + [0.0, -0.4])
-
-mesh_coarse = mt.createMesh(world, quality=33)
-imesh = mesh_coarse.createH2()
-for nr, c in enumerate(imesh.cells()):
-    c.setMarker(nr)
-ax=pg.show(imesh)
+ax=pg.show(imesh_tri)
 ax[0].set_title("Inversion Mesh")
 
 ######################################################################
@@ -142,7 +124,7 @@ ax[0].set_title("Inversion Mesh")
 # Define the starting model on the inversion mesh.
 # 
 
-model_0 = np.ones(imesh.cellCount()) * 80.0
+model_0 = np.ones(imesh_tri.cellCount()) * 80.0
 
 ######################################################################
 #
@@ -158,7 +140,23 @@ forward_operator = ert.ERTModelling(
 )
 forward_operator.setComplex(False)
 forward_operator.setData(scheme)
-forward_operator.setMesh(imesh, ignoreRegionManager=True)
+forward_operator.setMesh(imesh_tri, ignoreRegionManager=True)
+
+######################################################################
+#
+
+
+######################################################################
+# Extract the regularisation weighting matrix defined by PyGIMLi.
+# 
+
+region_manager = forward_operator.regionManager()
+region_manager.setMesh(imesh_tri) 
+# region_manager.setVerbose(True)
+region_manager.setConstraintType(2)
+Wm = pg.matrix.SparseMapMatrix()
+region_manager.fillConstraints(Wm)
+Wm = pg.utils.sparseMatrix2coo(Wm)
 
 ######################################################################
 #
@@ -166,76 +164,19 @@ forward_operator.setMesh(imesh, ignoreRegionManager=True)
 
 ######################################################################
 # CoFI and other inference packages require a set of functions that
-# provide the misfit, the jacobian the resiudal with in the case of scipy
-# standardised interfaces.
+# provide the misfit, the jacobian the residual within the case of scipy
+# standardised interfaces. All these functions are defined in the library
+# file ``pygimli_ert_lib.py``, so open this file if you’d like to find out
+# the details. These functions are:
 # 
-
-def get_response(model, y_obs, forward_operator):
-    y_synth = np.array(forward_operator.response(model))
-    return np.log(y_synth)
-
-def get_jacobian(model, y_obs, forward_operator):
-    y_synth_log = get_response(model, y_obs, forward_operator)
-    forward_operator.createJacobian(model)
-    J0 = np.array(forward_operator.jacobian())
-    model_log = np.log(model)
-    J = J0 / np.exp(y_synth_log[:, np.newaxis]) * np.exp(model_log)[np.newaxis, :]
-    return J
-
-def get_residuals(model, y_obs, forward_operator):
-    y_synth_log = get_response(model, y_obs, forward_operator)
-    return y_obs - y_synth_log
-
-def get_misfit(model, y_obs, forward_operator, print_progress=False):
-    res = get_residuals(model, y_obs, forward_operator)
-    phi = np.abs(np.dot(res, res))
-    if print_progress: print("data misfit:", phi)
-    return phi
-
-######################################################################
-#
-
-
-######################################################################
-# Define the regularisation by PyGIMLi.
+# -  ``get_response``
+# -  ``get_jacobian``
+# -  ``get_residuals``
+# -  ``get_misfit``
+# -  ``get_regularisation``
+# -  ``get_gradient``
+# -  ``get_hessian``
 # 
-
-region_manager = forward_operator.regionManager()
-region_manager.setMesh(imesh) 
-# region_manager.setVerbose(True)
-region_manager.setConstraintType(2)
-Wm = pg.matrix.SparseMapMatrix()
-region_manager.fillConstraints(Wm)
-Wm = pg.utils.sparseMatrix2coo(Wm)
-
-def get_regularisation(model, Wm, print_progress=False):
-    weighted_model = Wm @ model
-    reg = weighted_model.T @ weighted_model
-    if print_progress: print("raw regularisation:", reg)
-    return reg
-
-######################################################################
-#
-
-
-######################################################################
-# To help optimisers terminate quicker, we provide gradient and hessian as
-# well.
-# 
-
-def get_gradient(model, y_obs, forward_operator, lamda, Wm):
-    res = get_residuals(model, y_obs, forward_operator)
-    jac = get_jacobian(model, y_obs, forward_operator)
-    grad = - res @ jac + lamda * Wm.T @ Wm @ model
-    return grad
-
-def get_hessian(model, y_obs, forward_operator, lamda, Wm):
-    jac = get_jacobian(model, y_obs, forward_operator)
-    hess = jac.T @ jac + lamda * Wm.T @ Wm
-    return hess
-
-######################################################################
-#
 
 
 ######################################################################
@@ -245,13 +186,13 @@ def get_hessian(model, y_obs, forward_operator, lamda, Wm):
 # 
 
 # hyperparameters
-lamda = 10
+lamda = 2
 
 # cofi problem definition
 ert_problem = BaseProblem()
-ert_problem.name = "Electrical Resistivity Tomography"
-ert_problem.set_forward(get_response, args=[y_obs, forward_operator])
-ert_problem.set_jacobian(get_jacobian, args=[y_obs, forward_operator])
+ert_problem.name = "Electrical Resistivity Tomography defined through PyGIMLi"
+ert_problem.set_forward(get_response, args=[forward_operator])
+ert_problem.set_jacobian(get_jacobian, args=[forward_operator])
 ert_problem.set_residual(get_residuals, args=[y_obs, forward_operator])
 ert_problem.set_data_misfit(get_misfit, args=[y_obs, forward_operator, True])
 ert_problem.set_regularisation(get_regularisation, lamda=lamda, args=[Wm, True])
@@ -285,7 +226,7 @@ ert_problem.suggest_solvers();
 
 inv_options = InversionOptions()
 inv_options.set_tool("scipy.optimize.minimize")
-inv_options.set_params(method="Newton-CG")
+inv_options.set_params(method="L-BFGS-B")
 
 ######################################################################
 #
@@ -332,7 +273,7 @@ ax=pg.show(
 ax[0].set_title("True model")
 
 ax=pg.show(
-    imesh,
+    imesh_tri,
     data=(model_0),
     label=r"$\Omega m$"
 )
@@ -340,7 +281,7 @@ ax[0].set_title("Starting model")
 
 
 ax=pg.show(
-    imesh,
+    imesh_tri,
     data=(inv_result.model),
     label=r"$\Omega m$"
 )
@@ -400,7 +341,7 @@ class MyNewtonSolver(BaseSolver):
 
 inv_options_own_solver = InversionOptions()
 inv_options_own_solver.set_tool(MyNewtonSolver)
-inv_options_own_solver.set_params(niter=30, step=1, verbose=True)
+inv_options_own_solver.set_params(niter=100, step=1, verbose=True)
 
 inv_own_solver = Inversion(ert_problem, inv_options_own_solver)
 inv_own_solver_res = inv_own_solver.run()
@@ -417,7 +358,7 @@ ax=pg.show(
 ax[0].set_title("True model")
 
 ax=pg.show(
-    imesh,
+    imesh_tri,
     data=(model_0),
     label=r"$\Omega m$"
 )
@@ -425,7 +366,7 @@ ax[0].set_title("Starting model")
 
 
 ax=pg.show(
-    imesh,
+    imesh_tri,
     data=(inv_own_solver_res.model),
     label=r"$\Omega m$"
 )
@@ -443,21 +384,15 @@ ax[0].set_title("Inferred model")
 # the inversion with boundary represented using triangles.
 # 
 
-imesh=pg.createGrid(x=np.linspace(start=-15, stop=60, num=11),
-                                y=np.linspace(start=-30, stop=0, num=5),
-                                marker=2)
-imesh = pg.meshtools.appendTriangleBoundary(imesh, marker=1,
-                                           xbound=50, ybound=50)
+imesh_rect = mesh_inv_rectangular()
 
-for nr, c in enumerate(imesh.cells()):
-    c.setMarker(nr)
-ax=pg.show(imesh)
+ax=pg.show(imesh_rect)
 ax[0].set_title("Inversion Mesh")
 
 ######################################################################
 #
 
-ax=pg.show(imesh,data=np.linspace(1,imesh.cellCount(),imesh.cellCount()))
+ax=pg.show(imesh_rect,data=np.linspace(1,imesh_rect.cellCount(),imesh_rect.cellCount()))
 ax[0].set_title("Cell indices")
 
 ######################################################################
@@ -468,7 +403,7 @@ ax[0].set_title("Cell indices")
 # Again, set the starting model value.
 # 
 
-model_0 = np.ones(imesh.cellCount()) * 80.0
+model_0 = np.ones(imesh_rect.cellCount()) * 80.0
 
 ######################################################################
 #
@@ -485,10 +420,11 @@ forward_operator2 = ert.ERTModelling(
 )
 forward_operator2.setComplex(False)
 forward_operator2.setData(scheme)
-forward_operator2.setMesh(imesh, ignoreRegionManager=True)
-# Regularisation
+forward_operator2.setMesh(imesh_rect, ignoreRegionManager=True)
+
+# Regularisation weight matrix
 rm2 = forward_operator2.regionManager()
-rm2.setMesh(imesh) 
+rm2.setMesh(imesh_rect) 
 # rm2.setVerbose(True)
 rm2.setConstraintType(2)
 Wm2 = pg.matrix.SparseMapMatrix()
@@ -504,13 +440,13 @@ Wm2 = pg.utils.sparseMatrix2coo(Wm2)
 # 
 
 # hyperparameters
-lamda2 = 0.1
+lamda2 = 2
 
 # cofi problem definition
 ert_problem_rect = BaseProblem()
-ert_problem_rect.name = "Electrical Resistivity Tomography"
-ert_problem_rect.set_forward(get_response, args=[y_obs, forward_operator2])
-ert_problem_rect.set_jacobian(get_jacobian, args=[y_obs, forward_operator2])
+ert_problem_rect.name = "Electrical Resistivity Tomography defined through PyGIMLi"
+ert_problem_rect.set_forward(get_response, args=[forward_operator2])
+ert_problem_rect.set_jacobian(get_jacobian, args=[forward_operator2])
 ert_problem_rect.set_residual(get_residuals, args=[y_obs, forward_operator2])
 ert_problem_rect.set_data_misfit(get_misfit, args=[y_obs, forward_operator2])
 ert_problem_rect.set_regularisation(get_regularisation, lamda=lamda2, args=[Wm2])
@@ -546,14 +482,14 @@ ax=pg.show(
 ax[0].set_title("True model")
 
 ax=pg.show(
-    imesh,
+    imesh_rect,
     data=(model_0),
     label=r"$\Omega m$"
 )
 ax[0].set_title("Starting model")
 
 ax=pg.show(
-    imesh,
+    imesh_rect,
     data=(inv_rect_res.model),
     label=r"$\Omega m$"
 )
@@ -586,14 +522,14 @@ ax=pg.show(
 ax[0].set_title("True model")
 
 ax=pg.show(
-    imesh,
+    imesh_rect,
     data=(model_0),
     label=r"$\Omega m$"
 )
 ax[0].set_title("Starting model")
 
 ax=pg.show(
-    imesh,
+    imesh_rect,
     data=(inv_rect_own_solver_res.model),
     label=r"$\Omega m$"
 )
