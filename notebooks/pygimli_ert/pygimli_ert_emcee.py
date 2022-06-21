@@ -2,7 +2,7 @@
 
 This script runs:
 - ERT problem defined with PyGIMLi, and
-- Newton's optimisation method with CoFI
+- Bayesian sampling using emcee with CoFI
 
 """
 
@@ -12,9 +12,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pygimli
 from pygimli.physics import ert
+from emcee.moves import GaussianMove
 
 from cofi import BaseProblem, InversionOptions, Inversion
-from cofi.solvers import BaseSolver
 
 from pygimli_ert_lib import *
 
@@ -31,37 +31,6 @@ _problem_name = "pygimli_ert"
 _solver_name = "newton_opt"
 _file_prefix = f"{_problem_name}_{_solver_name}"
 _figs_prefix = f"./{_file_prefix}"
-
-
-############# Define a custom solver (Newton's optimisation method) ###################
-
-class MyNewtonSolver(BaseSolver):
-    def __init__(self, inv_problem, inv_options):
-        __params = inv_options.get_params()
-        self._niter = __params["niter"]
-        self._step = __params["step"]
-        self._verbose = __params["verbose"]
-        self._model_0 = inv_problem.initial_model
-        self._gradient = inv_problem.gradient
-        self._hessian = inv_problem.hessian
-        self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
-        self._reg = inv_problem.regularisation if inv_problem.regularisation_defined else None
-        self._obj = inv_problem.objective if inv_problem.objective_defined else None
-        
-    def __call__(self):
-        current_model = np.array(self._model_0)
-        for i in range(self._niter):
-            term1 = self._hessian(current_model)
-            term2 = - self._gradient(current_model)
-            model_update = np.linalg.solve(term1, term2)
-            current_model = np.array(current_model + self._step * model_update)
-            if self._verbose:
-                print("-" * 80)
-                print(f"Iteration {i+1}")
-                if self._misfit: self._misfit(current_model)
-                if self._reg: self._reg(current_model)
-                # if self._obj: print("objective func:", self._obj(current_model))
-        return {"model": current_model, "success": True}
 
 
 ############# Plotting functions ######################################################
@@ -117,9 +86,8 @@ def main():
 
     # hyperparameters
     lamda = 2
-    niter = 500
-    learning_step = 1
-    inv_verbose = True
+    nwalkers = 32
+    nsteps = 1000
 
     # CoFI - define BaseProblem
     ert_problem = BaseProblem()
@@ -133,14 +101,42 @@ def main():
     ert_problem.set_hessian(get_hessian, args=[y_obs, forward_operator, lamda, Wm])
     ert_problem.set_initial_model(model_0)
 
+    # for emcee - define log_likelihood
+    sigma = 1.0                                     # common noise standard deviation
+    Cdinv = np.eye(len(y_obs))/(sigma**2)           # inverse data covariance matrix
+    def log_likelihood(model):
+        residual = ert_problem.residual(model)
+        return -0.5 * residual @ (Cdinv @ residual).T
+
+    # for emcee - define log_prior
+    m_lower_bound = np.zeros(model_0.shape)         # lower bound for uniform prior
+    m_upper_bound = np.ones(model_0.shape) * 250    # upper bound for uniform prior
+    def log_prior(model):                           # uniform distribution
+        for i in range(len(m_lower_bound)):
+            if model[i] < m_lower_bound[i] or model[i] > m_upper_bound[i]: return -np.inf
+        return 0.0 # model lies within bounds -> return log(1)
+
+    # for emcee - define walkers' starting positions
+    walkers_start = model_0 + 1e-6 * np.random.randn(nwalkers, model_0.shape[0])
+
+    # CoFI - add them into cofi's BaseProblem object
+    ert_problem.set_log_likelihood(log_likelihood)
+    ert_problem.set_log_prior(log_prior)
+    ert_problem.set_walkers_starting_pos(walkers_start)
+
     if show_summary:
         ert_problem.summary()
 
 
     ######### 2. Define the inversion options #########################################
     inv_options = InversionOptions()
-    inv_options.set_tool(MyNewtonSolver)
-    inv_options.set_params(niter=niter, step=learning_step, verbose=inv_verbose)
+    inv_options.set_tool("emcee")
+    inv_options.set_params(
+        nwalkers=nwalkers, 
+        nsteps=nsteps, 
+        moves=GaussianMove(1), 
+        progress=True
+    )
 
     if show_summary:
         inv_options.summary()
