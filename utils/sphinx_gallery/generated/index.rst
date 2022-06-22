@@ -2,7 +2,7 @@
 
 
 
-.. _sphx_glr_cofi-examples__sphinx_gallery_generated:
+.. _sphx_glr_cofi-examples_utils/sphinx_gallery_generated:
 
 Example Gallery
 ===============
@@ -37,10 +37,10 @@ Below is a gallery of examples.
 
 .. only:: html
 
- .. figure:: /cofi-examples/_sphinx_gallery/generated/images/thumb/sphx_glr_gravity_density_thumb.png
+ .. figure:: /cofi-examples/utils/sphinx_gallery/generated/images/thumb/sphx_glr_gravity_density_thumb.png
      :alt: Gravity Density Model
 
-     :ref:`sphx_glr_cofi-examples__sphinx_gallery_generated_gravity_density.py`
+     :ref:`sphx_glr_cofi-examples_utils/sphinx_gallery_generated_gravity_density.py`
 
 .. raw:: html
 
@@ -50,7 +50,7 @@ Below is a gallery of examples.
 .. toctree::
    :hidden:
 
-   /cofi-examples/_sphinx_gallery/generated/gravity_density
+   /cofi-examples/utils/sphinx_gallery/generated/gravity_density
 
 .. raw:: html
 
@@ -58,10 +58,10 @@ Below is a gallery of examples.
 
 .. only:: html
 
- .. figure:: /cofi-examples/_sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_dcip_thumb.png
+ .. figure:: /cofi-examples/utils/sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_dcip_thumb.png
      :alt: PyGIMLi - Complex valued ERT
 
-     :ref:`sphx_glr_cofi-examples__sphinx_gallery_generated_pygimli_dcip.py`
+     :ref:`sphx_glr_cofi-examples_utils/sphinx_gallery_generated_pygimli_dcip.py`
 
 .. raw:: html
 
@@ -71,7 +71,7 @@ Below is a gallery of examples.
 .. toctree::
    :hidden:
 
-   /cofi-examples/_sphinx_gallery/generated/pygimli_dcip
+   /cofi-examples/utils/sphinx_gallery/generated/pygimli_dcip
 
 .. raw:: html
 
@@ -79,10 +79,10 @@ Below is a gallery of examples.
 
 .. only:: html
 
- .. figure:: /cofi-examples/_sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_ert_thumb.png
+ .. figure:: /cofi-examples/utils/sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_ert_thumb.png
      :alt: PyGIMLi - Electrical Resistivity Tomography
 
-     :ref:`sphx_glr_cofi-examples__sphinx_gallery_generated_pygimli_ert.py`
+     :ref:`sphx_glr_cofi-examples_utils/sphinx_gallery_generated_pygimli_ert.py`
 
 .. raw:: html
 
@@ -92,7 +92,7 @@ Below is a gallery of examples.
 .. toctree::
    :hidden:
 
-   /cofi-examples/_sphinx_gallery/generated/pygimli_ert
+   /cofi-examples/utils/sphinx_gallery/generated/pygimli_ert
 
 .. raw:: html
 
@@ -100,10 +100,10 @@ Below is a gallery of examples.
 
 .. only:: html
 
- .. figure:: /cofi-examples/_sphinx_gallery/generated/images/thumb/sphx_glr_linear_regression_thumb.png
+ .. figure:: /cofi-examples/utils/sphinx_gallery/generated/images/thumb/sphx_glr_linear_regression_thumb.png
      :alt: Polynomial Linear Regression
 
-     :ref:`sphx_glr_cofi-examples__sphinx_gallery_generated_linear_regression.py`
+     :ref:`sphx_glr_cofi-examples_utils/sphinx_gallery_generated_linear_regression.py`
 
 .. raw:: html
 
@@ -113,7 +113,7 @@ Below is a gallery of examples.
 .. toctree::
    :hidden:
 
-   /cofi-examples/_sphinx_gallery/generated/linear_regression
+   /cofi-examples/utils/sphinx_gallery/generated/linear_regression
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

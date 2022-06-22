@@ -15,7 +15,7 @@ import pypandoc as pdoc
 import json
 
 NOTEBOOKS_FOLDER = "notebooks"
-SCRIPTS_FOLDER = "_sphinx_gallery/scripts"
+SCRIPTS_FOLDER = "utils/sphinx_gallery/scripts"
 
 BADGE_BEGIN = "<!--<badge>-->"
 BADGE_END = "<!--</badge>-->"
