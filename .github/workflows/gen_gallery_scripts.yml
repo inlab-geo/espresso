@@ -52,7 +52,7 @@ jobs:
       - name: Commit changes to scripts
         continue-on-error: true
         run: |
-          git add scripts/*
+          git add _sphinx_gallery/scripts/*
           git commit -m "chore: update scripts/"
           
       - name: Push back to repo
