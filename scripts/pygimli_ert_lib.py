@@ -14,17 +14,20 @@ from pygimli.physics import ert
 
 ############# Helper functions from PyGIMLi ###########################################
 
-def scheme_fwd():                   # Dipole Dipole (dd) measuring scheme
-    scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51),schemeName='dd')
+# Dipole Dipole (dd) measuring scheme
+def scheme_fwd(start=0, stop=50, num=51, schemeName="dd"):
+    scheme = ert.createData(elecs=np.linspace(start=start, stop=stop, num=num),schemeName=schemeName)
     return scheme
 
-def geometry_true():                # piecewise linear complex
-    world = meshtools.createWorld(start=[-55, 0], end=[105, -80], worldMarker=True)
-    conductive_anomaly = meshtools.createCircle(pos=[10, -7], radius=5, marker=2)
-    plc = meshtools.mergePLC((world, conductive_anomaly))    
+# piecewise linear complex
+def geometry_true(start=[-55, 0], end=[105, -80], anomaly_pos=[10,-7], anomaly_rad=5):
+    world = meshtools.createWorld(start=start, end=end, worldMarker=True)
+    conductive_anomaly = meshtools.createCircle(pos=anomaly_pos, radius=anomaly_rad, marker=2)
+    plc = meshtools.mergePLC((world, conductive_anomaly))
     return plc
 
-def mesh_fwd(scheme, plc):          # forward mesh
+# forward mesh
+def mesh_fwd(scheme, plc):
     # local refinement of mesh near electrodes
     for s in scheme.sensors():
         plc.createNode(s + [0.0, -0.2])
@@ -32,17 +35,20 @@ def mesh_fwd(scheme, plc):          # forward mesh
     fmesh = mesh_coarse.createH2()
     return fmesh
 
-def markers_to_resistivity():       # set resistivity values in each region
+# set resistivity values in each region
+def markers_to_resistivity():
     rhomap = [[1, 200],
               [2,  50],]
     return rhomap
 
-def model_vec(rhomap, fmesh):       # create true model vector
+# create true model vector
+def model_vec(rhomap, fmesh):
     model_true = pygimli.solver.parseArgToArray(rhomap, fmesh.cellCount(), fmesh)
     return model_true
 
-def mesh_inv_triangular(scheme):    # inverse mesh (triangular)
-    world = meshtools.createWorld(start=[-15, 0], end=[65, -30], worldMarker=False, marker=2)
+# inverse mesh (triangular)
+def mesh_inv_triangular(scheme, start=[-15, 0], end=[65, -30]):
+    world = meshtools.createWorld(start=start, end=end, worldMarker=False, marker=2)
     # local refinement of mesh near electrodes
     for s in scheme.sensors():
         world.createNode(s + [0.0, -0.4])
@@ -52,19 +58,22 @@ def mesh_inv_triangular(scheme):    # inverse mesh (triangular)
         c.setMarker(nr)
     return imesh
 
-def mesh_inv_rectangular():         # inverse mesh (rectangular)
-    imesh = pygimli.createGrid(x=np.linspace(start=-15, stop=60, num=11),
-                                y=np.linspace(start=-30, stop=0, num=5),
-                                marker=2)
+# inverse mesh (rectangular)
+def mesh_inv_rectangular(x_start=-15, x_stop=60, x_num=11, y_start=-30, y_stop=0, y_num=5):
+    imesh = pygimli.createGrid(x=np.linspace(start=x_start, stop=x_stop, num=x_num),
+                                y=np.linspace(start=y_start, stop=y_stop, num=y_num),
+                                worldMarker=False, marker=2)
     imesh = pygimli.meshtools.appendTriangleBoundary(imesh, marker=1,
                                             xbound=50, ybound=50)
     for nr, c in enumerate(imesh.cells()):
         c.setMarker(nr)
     return imesh
 
-def starting_model(imesh):
-    return np.ones(imesh.cellCount()) * 80.0
+# initialisation
+def starting_model(imesh, val=80.0):
+    return np.ones(imesh.cellCount()) * val
 
+# forward operator (PyGIMLi's ert.ErtModelling object)
 def forward_oprt(scheme, imesh):
     forward_operator = ert.ERTModelling(sr=False, verbose=False)
     forward_operator.setComplex(False)
@@ -72,6 +81,7 @@ def forward_oprt(scheme, imesh):
     forward_operator.setMesh(imesh, ignoreRegionManager=True)
     return forward_operator
 
+# for regularisation
 def weighting_matrix(forward_operator, imesh):
     region_manager = forward_operator.regionManager()
     region_manager.setMesh(imesh) 
