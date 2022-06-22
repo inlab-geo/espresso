@@ -93,7 +93,7 @@ written in inversion-test-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-72
+.. GENERATED FROM PYTHON SOURCE LINES 63-138
 
 --------------
 
@@ -104,8 +104,74 @@ written in inversion-test-problems
 
    <!-- I took out gx, gy for now to make it more straight forward. We can add all kinds of things once it is working.  -->
 
+This problem explores the gravitational acceleration of a
+three-dimensional density model onto specified receiver locations. In
+this example, only the z-component of the gravityational force is
+calculated. The underlying code itself is capable of calculating all
+three gravity components and six gradiometry components and could be
+modified quickly if there is the need.
 
-.. GENERATED FROM PYTHON SOURCE LINES 72-122
+The gravitational acceleration is calculated using Newton’s law of
+universal gravitation:
+
+.. math::
+
+
+       g (r) =- G \frac{ m} {r^2} 
+
+With G being the gravitational constant, r is the distance of the mass
+to the receiver and m is the overall mass of the model, which depends on
+the density :math:`\rho` and the volume V:
+
+.. math::
+
+
+       m = \int_V {\rho(r) dV}
+
+Here, we solve volume integral for the vertical component of :math:`g`
+analytically, using the approach by Plouff et al., 1976:
+
+.. math::
+
+
+   g_z(M,N)=G \rho \sum_{i=1}^2 \sum_{j=1}^2 \sum_{k=1}^2  (-1)^{i+j+k} [tan^{-1} \frac{a_ib_j}{z_k R_{ijk}} - a_i ln(R_{ijk} + b_j) - b_j ln(R_{ijk} + a_i)]
+
+with :math:`R_{ijk}=\sqrt{a_i^2 + b_j^2 + z_k^2}` and
+:math:`a_i, b_j, z_k` being the distances from receiver N to the nodes
+of the current prism M (i.e. grid cell) in x, y, and z directions. It is
+assumed that :math:`\rho=const.` within each grid cell. For more
+information, please see the original paper:
+
+Plouff, D., 1976. *Gravity and magnetic fields of polygonal prisms and
+application to magnetic terrain corrections.* **Geophysics**, 41(4),
+pp.727-741
+
+For further reading, see also Nagy et al., 2000:
+
+Nagy, D., Papp, G. and Benedek, J., 2000. *The gravitational potential
+and its derivatives for the prism.* **Journal of Geodesy**, 74(7),
+pp.552-560
+
+**Example details:**
+
+1. **Model:** Density values on a regularly spaced, rectangular grid.
+   Example-model one is a 3D cube of low density (10 :math:`kgm^{-3}`)
+   containing a centrally located high-density cube (1000
+   :math:`kgm^{-3}`). Example-model two repeats Figure 2 of Last and
+   Kubik, 1983, which means a pseudo-2D model containing zero-density
+   background cells and centrally high-density cells in the shape of a
+   cross (1000 :math:`kgm^{-3}`).
+
+   Last, B.J. and Kubik, K., 1983. *Compact gravity inversion.*
+   **Geophysics**, 48(6), pp.713-721
+
+2. **Returned data:** Gravitational acceleration (vertical component).
+
+3. **Forward:** The volume integral is solved analytically following the
+   above described approach by Plouff et al., 1976.
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 138-188
 
 .. code-block:: default
 
@@ -146,7 +212,7 @@ written in inversion-test-problems
     grav_problem.set_jacobian(Jz)
 
     # Set regularization; reg is a function that takes the model as input
-    grav_problem.set_regularisation(reg_l1, epsilon)
+    grav_problem.set_regularisation(reg_l1, epsilon, args=[W])
 
     # Use default L2 misfit
     grav_problem.set_data_misfit("L2")
@@ -155,7 +221,7 @@ written in inversion-test-problems
     # Set gradient, in hope of helping optimisers converge better
     def data_misfit_gradient(model):
         return 2* Jz.T @ (forward(model) - gz) / gz.shape[0]
-    grav_problem.set_gradient(lambda m: data_misfit_gradient(m) + epsilon*reg_gradient_l1(m))
+    grav_problem.set_gradient(lambda m: data_misfit_gradient(m) + epsilon*reg_gradient_l1(m, W))
 
     grav_problem.summary()
 
@@ -186,7 +252,7 @@ written in inversion-test-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-132
+.. GENERATED FROM PYTHON SOURCE LINES 193-198
 
 --------------
 
@@ -194,7 +260,7 @@ written in inversion-test-problems
 -----------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-138
+.. GENERATED FROM PYTHON SOURCE LINES 198-204
 
 .. code-block:: default
 
@@ -230,7 +296,7 @@ written in inversion-test-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 143-148
+.. GENERATED FROM PYTHON SOURCE LINES 209-214
 
 --------------
 
@@ -238,7 +304,7 @@ written in inversion-test-problems
 ----------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-152
+.. GENERATED FROM PYTHON SOURCE LINES 214-218
 
 .. code-block:: default
 
@@ -253,7 +319,7 @@ written in inversion-test-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 154-158
+.. GENERATED FROM PYTHON SOURCE LINES 220-224
 
 .. code-block:: default
 
@@ -371,12 +437,12 @@ written in inversion-test-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-165
+.. GENERATED FROM PYTHON SOURCE LINES 229-231
 
 Let’s see the density image from a vertical plane:
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-171
+.. GENERATED FROM PYTHON SOURCE LINES 231-237
 
 .. code-block:: default
 
@@ -402,16 +468,16 @@ Let’s see the density image from a vertical plane:
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f8ce49f0130>
+    <matplotlib.colorbar.Colorbar object at 0x7fa2e0200190>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 176-178
+.. GENERATED FROM PYTHON SOURCE LINES 242-244
 
 From a different angle:
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 178-182
+.. GENERATED FROM PYTHON SOURCE LINES 244-248
 
 .. code-block:: default
 
@@ -435,11 +501,11 @@ From a different angle:
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f8cde5a7220>
+    <matplotlib.colorbar.Colorbar object at 0x7fa2dc78cc70>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 187-192
+.. GENERATED FROM PYTHON SOURCE LINES 253-258
 
 --------------
 
@@ -447,7 +513,7 @@ Watermark
 ---------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 192-198
+.. GENERATED FROM PYTHON SOURCE LINES 258-264
 
 .. code-block:: default
 
@@ -480,7 +546,7 @@ Watermark
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  19.670 seconds)
+   **Total running time of the script:** ( 0 minutes  39.849 seconds)
 
 
 .. _sphx_glr_download_cofi-examples__sphinx_gallery_generated_gravity_density.py:

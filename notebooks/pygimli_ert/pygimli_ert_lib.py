@@ -1,4 +1,4 @@
-"""Wrappers around PyGIMLi library
+"""Wrappers around PyGIMLi library for ERT problem
 
 The file name should end with "_lib.py", otherwise our bot may fail when generating
 scripts for Sphinx Gallery. Furthermore, we recommend the file name to start with your

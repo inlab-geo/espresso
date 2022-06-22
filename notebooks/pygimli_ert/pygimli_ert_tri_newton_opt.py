@@ -2,18 +2,18 @@
 
 This script runs:
 - ERT problem (triangular mesh) defined with PyGIMLi, and
-- Scipy's optimisation with CoFI
+- Newton's optimisation method with CoFI
 
 
 To run this script, refer to the following examples:
 
-- `python pygimli_ert_tri_scipy_opt.py` for a simple run, with all the figures saved to
+- `python pygimli_ert_tri_newton_opt.py` for a simple run, with all the figures saved to
   current directory by default
 
-- `python pygimli_ert_tri_scipy_opt.py -o figs` for the same run as above, with all the
+- `python pygimli_ert_tri_newton_opt.py -o figs` for the same run as above, with all the
   figures saved to subfolder `figs`
 
-- `python pygimli_ert_tri_scipy_opt.py -h` to see all available options
+- `python pygimli_ert_tri_newton_opt.py -h` to see all available options
 
 """
 
@@ -25,6 +25,7 @@ import pygimli
 from pygimli.physics import ert
 
 from cofi import BaseProblem, InversionOptions, Inversion
+from cofi.solvers import BaseSolver
 
 from pygimli_ert_lib import *
 
@@ -43,12 +44,45 @@ _file_prefix = f"{_problem_name}_{_solver_name}"
 _figs_prefix = f"./{_file_prefix}"
 
 
+############# Define a custom solver (Newton's optimisation method) ###################
+
+class MyNewtonSolver(BaseSolver):
+    def __init__(self, inv_problem, inv_options):
+        __params = inv_options.get_params()
+        self._niter = __params["niter"]
+        self._step = __params["step"]
+        self._verbose = __params["verbose"]
+        self._model_0 = inv_problem.initial_model
+        self._gradient = inv_problem.gradient
+        self._hessian = inv_problem.hessian
+        self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
+        self._reg = inv_problem.regularisation if inv_problem.regularisation_defined else None
+        self._obj = inv_problem.objective if inv_problem.objective_defined else None
+        
+    def __call__(self):
+        current_model = np.array(self._model_0)
+        for i in range(self._niter):
+            term1 = self._hessian(current_model)
+            term2 = - self._gradient(current_model)
+            model_update = np.linalg.solve(term1, term2)
+            current_model = np.array(current_model + self._step * model_update)
+            if self._verbose:
+                print("-" * 80)
+                print(f"Iteration {i+1}")
+                if self._misfit: self._misfit(current_model)
+                if self._reg: self._reg(current_model)
+                # if self._obj: print("objective func:", self._obj(current_model))
+        return {"model": current_model, "success": True}
+
+
 ############# Plotting functions ######################################################
 
 def _post_plot(ax, title):
     ax[0].set_title(title)
     if save_plot:
         ax[0].figure.savefig(f"{_figs_prefix}_{title}")
+    if show_plot:
+        plt.show()
 
 def plot_mesh(mesh, title):
     ax = pygimli.show(mesh)
@@ -96,6 +130,9 @@ def main():
 
     # hyperparameters
     lamda = 2
+    niter = 100
+    learning_step = 1
+    inv_verbose = True
 
     # CoFI - define BaseProblem
     ert_problem = BaseProblem()
@@ -115,8 +152,8 @@ def main():
 
     ######### 2. Define the inversion options #########################################
     inv_options = InversionOptions()
-    inv_options.set_tool("scipy.optimize.minimize")
-    inv_options.set_params(method="L-BFGS-B")
+    inv_options.set_tool(MyNewtonSolver)
+    inv_options.set_params(niter=niter, step=learning_step, verbose=inv_verbose)
 
     if show_summary:
         inv_options.summary()

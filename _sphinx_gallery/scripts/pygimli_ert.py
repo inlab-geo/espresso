@@ -527,7 +527,7 @@ for idx in indices:
 # --------------
 # 
 # Watermark
-# =========
+# ---------
 # 
 
 watermark_list = ["cofi", "numpy", "scipy", "pygimli", "matplotlib", "emcee", "arviz"]

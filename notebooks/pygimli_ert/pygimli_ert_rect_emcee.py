@@ -50,6 +50,8 @@ def _post_plot(ax, title):
     ax[0].set_title(title)
     if save_plot:
         ax[0].figure.savefig(f"{_figs_prefix}_{title}")
+    if show_plot:
+        plt.show()
 
 def plot_mesh(mesh, title):
     ax = pygimli.show(mesh)
@@ -98,7 +100,7 @@ def main():
     # hyperparameters
     lamda = 2
     nwalkers = 32
-    nsteps = 1000
+    nsteps = 500
 
     # CoFI - define BaseProblem
     ert_problem = BaseProblem()

@@ -253,14 +253,14 @@ forward, get_jacobian = get_forward_jacobian()
 def depth_weight(z,z0,beta):
     return ((-z[::-1]+z0)**(-beta/2))
 
-def reg_l1(model):
+def reg_l1(model, W):
     return np.linalg.norm(W @ model, 1)
 
-def reg_l2(model):
+def reg_l2(model, W):
     return np.linalg.norm(W @ model, 2)
 
-def reg_gradient_l1(model):
+def reg_gradient_l1(model, W):
     return W @ np.sign(model)
 
-def reg_gradient_l2(model):
+def reg_gradient_l2(model, W):
     return 2 * model.T @ W.T @ W
