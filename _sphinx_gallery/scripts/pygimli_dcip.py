@@ -2,15 +2,18 @@
 PyGIMLi - Complex valued ERT
 ============================
 
-Using the ERT solver implemented provided by
-`PyGIMLi <https://www.pygimli.org/>`__, we use different ``cofi``
-solvers to solve the corresponding inverse problem.
-
-.. raw:: html
-
-   <!-- Please leave the cell below as it is -->
-
 """
+
+
+######################################################################
+# Using the ERT solver implemented provided by
+# `PyGIMLi <https://www.pygimli.org/>`__, we use different ``cofi``
+# solvers to solve the corresponding inverse problem.
+# 
+# .. raw:: html
+# 
+#    <!-- Please leave the cell below as it is -->
+# 
 
 
 ######################################################################
