@@ -1,8 +1,8 @@
 """
-Electrical Resistivity Tomography
-=================================
+PyGIMLi - Electrical Resistivity Tomography
+===========================================
 
-Using the ert solver implemented provided by
+Using the ERT solver implemented provided by
 `PyGIMLi <https://www.pygimli.org/>`__, we use different ``cofi``
 solvers to solve the corresponding inverse problem.
 

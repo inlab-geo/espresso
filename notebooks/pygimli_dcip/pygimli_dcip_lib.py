@@ -1,4 +1,4 @@
-"""Wrappers around PyGIMLi library for ERT problem
+"""Wrappers around PyGIMLi library for DCIP problem
 
 The file name should end with "_lib.py", otherwise our bot may fail when generating
 scripts for Sphinx Gallery. Furthermore, we recommend the file name to start with your
@@ -20,10 +20,14 @@ def scheme_fwd(start=0, stop=50, num=51, schemeName="dd"):
     return scheme
 
 # piecewise linear complex
-def geometry_true(start=[-55, 0], end=[105, -80], anomaly_pos=[10,-7], anomaly_rad=5):
+def geometry_true(start=[-55, 0], end=[105, -80], anomalies_pos=[[10,-7],[40,-7]], anomalies_rad=[5,5]):
     world = meshtools.createWorld(start=start, end=end, worldMarker=True)
-    conductive_anomaly = meshtools.createCircle(pos=anomaly_pos, radius=anomaly_rad, marker=2)
-    plc = meshtools.mergePLC((world, conductive_anomaly))
+    anomalies = []
+    for i, (pos, rad) in enumerate(zip(anomalies_pos, anomalies_rad)):
+        anomaly_i = meshtools.createCircle(pos=pos, radius=rad, marker=i+2)
+        anomalies.append(anomaly_i)
+    all_geometry = [world] + anomalies
+    plc = meshtools.mergePLC(all_geometry)
     return plc
 
 # forward mesh
@@ -31,14 +35,16 @@ def mesh_fwd(scheme, plc):
     # local refinement of mesh near electrodes
     for s in scheme.sensors():
         plc.createNode(s + [0.0, -0.2])
-    mesh_coarse = meshtools.createMesh(plc, quality=33)
-    fmesh = mesh_coarse.createH2()
+    mesh_corase = meshtools.createMesh(plc, quality=33)
+    fmesh = mesh_corase.createH2()
     return fmesh
 
 # set resistivity values in each region
 def markers_to_resistivity():
-    rhomap = [[1, 200],
-              [2,  50],]
+    rhomap = [[1, pygimli.utils.complex.toComplex(100, 0 / 1000)],
+                # Magnitude: 50 ohm m, Phase: -50 mrad
+                [2, pygimli.utils.complex.toComplex(50, 0 / 1000)],
+                [3, pygimli.utils.complex.toComplex(100, -50 / 1000)],]
     return rhomap
 
 # create true model vector
@@ -71,12 +77,12 @@ def mesh_inv_rectangular(x_start=-15, x_stop=60, x_num=11, y_start=-30, y_stop=0
 
 # initialisation
 def starting_model(imesh, val=80.0):
-    return np.ones(imesh.cellCount()) * val
+    return np.ones(imesh.cellCount()) * pygimli.utils.complex.toComplex(80, -0.01 / 1000)
 
 # forward operator (PyGIMLi's ert.ErtModelling object)
 def forward_oprt(scheme, imesh):
     forward_operator = ert.ERTModelling(sr=False, verbose=False)
-    forward_operator.setComplex(False)
+    forward_operator.setComplex(True)
     forward_operator.setData(scheme)
     forward_operator.setMesh(imesh, ignoreRegionManager=True)
     return forward_operator
@@ -96,15 +102,20 @@ def weighting_matrix(forward_operator, imesh):
 ############# Functions provided to CoFI ##############################################
 
 def get_response(model, forward_operator):
-    y_synth = np.array(forward_operator.response(model))
-    return np.log(y_synth)
+    x_re_im=pygimli.utils.squeezeComplex(model)
+    f_0 = np.array(forward_operator.response(x_re_im))
+    return np.log(pygimli.utils.toComplex(f_0))
 
 def get_jacobian(model, forward_operator):
-    y_synth_log = get_response(model, forward_operator)
-    forward_operator.createJacobian(model)
-    J0 = np.array(forward_operator.jacobian())
-    model_log = np.log(model)
-    J = J0 / np.exp(y_synth_log[:, np.newaxis]) * np.exp(model_log)[np.newaxis, :]
+    x_log = np.log(model)
+    x_re_im=pygimli.utils.squeezeComplex(model)
+    f_0 = np.array(forward_operator.response(x_re_im))
+    y_synth_log = np.log(pygimli.utils.toComplex(f_0))
+    J_block = forward_operator.createJacobian(x_re_im)
+    J_re = np.array(J_block.mat(0))
+    J_im = np.array(J_block.mat(1))
+    J0 = J_re + 1j * J_im
+    J = J0 / np.exp(y_synth_log[:, np.newaxis]) * np.exp(x_log)[np.newaxis, :]
     return J
 
 def get_residuals(model, y_obs, forward_operator):
