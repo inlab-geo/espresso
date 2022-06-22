@@ -16,6 +16,28 @@ solvers to solve the corresponding inverse problem.
 
 
 ######################################################################
+# .. raw:: html
+# 
+#    <!-- Again, please don't touch the markdown cell above. We'll generate badge 
+#         automatically from the above cell. -->
+# 
+# .. raw:: html
+# 
+#    <!-- This cell describes things related to environment setup, so please add more text 
+#         if something special (not listed below) is needed to run this notebook -->
+# 
+# ..
+# 
+#    If you are running this notebook locally, make sure you’ve followed
+#    `steps
+#    here <https://github.com/inlab-geo/cofi-examples#run-the-examples-with-cofi-locally>`__
+#    to set up the environment. (This
+#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/environment.yml>`__
+#    file specifies a list of packages required to run the notebooks)
+# 
+
+
+######################################################################
 # 0. Import modules
 # -----------------
 # 
@@ -41,8 +63,20 @@ solvers to solve the corresponding inverse problem.
 ######################################################################
 #
 
+
+######################################################################
+# We will need the following packages:
+# 
+# -  ``numpy`` for matrices and matrix-related functions
+# -  ``matplotlib`` for plotting
+# -  ``pygimli`` for forward modelling of the problem
+# -  ``cofi`` for accessing different inference solvers
+# 
+# Additionally, we wrap some ``pygimli`` code in file
+# ``pygimli_ert_lib.py`` and import it here for conciseness.
+# 
+
 import numpy as np
-import scipy as sp
 import matplotlib.pyplot as plt
 import pygimli as pg
 import pygimli.meshtools as mt
@@ -106,57 +140,72 @@ y_obs = np.log(survey['rhoa'].array())
 ######################################################################
 # The inversion can use a different mesh and the mesh to be used should
 # know nothing about the mesh that was designed based on the true model.
-# Here we first use a triangular mesh for the inversion, which makes the
-# problem underdetermined.
+# We wrap two kinds of mesh as examples in the library code
+# ``pygimli_ert_lib.py``, namely triangular and rectangular mesh.
+# 
+# Use ``imesh_tri = mesh_inv_triangular(scheme)`` to initialise a
+# triangular mesh, with the following optional arguments and corresponding
+# default values:
+# 
+# -  ``start=[-15, 0]``
+# -  ``end=[65, -30]``
+# 
+# Use ``imesh_rect = mesh_inv_rectangular()`` to initislise a rectangular
+# mesh, with the following optional arguments and corresponding default
+# values:
+# 
+# -  ``x_start=-15``
+# -  ``x_stop=60``
+# -  ``x_num=11``
+# -  ``y_start=-30``
+# -  ``y_stop=0``
+# -  ``y_num=5``
+# 
+# Here we first demonstrate how to use a *triangular mesh*. Note that this
+# makes the inversion problem under-determined.
+# 
+
+# PyGIMLi - quick demo of triangular mesh
+imesh_tri = mesh_inv_triangular(scheme)
+
+ax=pg.show(imesh_tri)
+ax[0].set_title("Inversion Mesh (triangular)");
+
+######################################################################
+#
+
+
+######################################################################
+# Check
+# `here <https://github.com/inlab-geo/cofi-examples/tree/main/notebooks/pygimli_ert>`__
+# for inversion examples using triangular mesh.
+# 
+# For the purpose of this notebook, we use a *rectangular mesh* for a
+# simple demonstration.
 # 
 
 # PyGIMLi - create mesh for inversion
-imesh_tri = mesh_inv_triangular()
-
-ax=pg.show(imesh_tri)
-ax[0].set_title("Inversion Mesh")
-
-######################################################################
-#
-
-
-######################################################################
-# Define the starting model on the inversion mesh.
-# 
-
-model_0 = np.ones(imesh_tri.cellCount()) * 80.0
+imesh = mesh_inv_rectangular()
+ax = pygimli.show(imesh)
+ax[0].set_title("Inversion Mesh (rectangular)");
 
 ######################################################################
 #
 
 
 ######################################################################
-# Setup a forward operator with the inversion mesh.
+# With the inversion mesh created, we now define a starting model, forward
+# operator and weighting matrix for regularisation using PyGIMLi.
 # 
 
-forward_operator = ert.ERTModelling(
-    sr=False,
-    # verbose=True,
-)
-forward_operator.setComplex(False)
-forward_operator.setData(scheme)
-forward_operator.setMesh(imesh_tri, ignoreRegionManager=True)
+# PyGIMLi - define the starting model on the inversion mesh
+model_0 = starting_model(imesh)
 
-######################################################################
-#
+# PyGIMLi - set up a forward operator with the inversion mesh
+forward_operator = forward_oprt(scheme, imesh)
 
-
-######################################################################
-# Extract the regularisation weighting matrix defined by PyGIMLi.
-# 
-
-region_manager = forward_operator.regionManager()
-region_manager.setMesh(imesh_tri) 
-# region_manager.setVerbose(True)
-region_manager.setConstraintType(2)
-Wm = pg.matrix.SparseMapMatrix()
-region_manager.fillConstraints(Wm)
-Wm = pg.utils.sparseMatrix2coo(Wm)
+# PyGIMLi - extract the regularisation weighting matrix
+Wm = weighting_matrix(forward_operator, imesh)
 
 ######################################################################
 #
@@ -186,7 +235,7 @@ Wm = pg.utils.sparseMatrix2coo(Wm)
 # 
 
 # hyperparameters
-lamda = 2
+lamda = 1
 
 # cofi problem definition
 ert_problem = BaseProblem()
@@ -215,8 +264,11 @@ ert_problem.summary()
 
 
 ######################################################################
-# 2. Define the inversion options
-# -------------------------------
+# 2. Define the inversion options and run
+# ---------------------------------------
+# 
+# 2.1 SciPy’s optimiser (`L-BFGS-B <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-lbfgsb.html#optimize-minimize-lbfgsb>`__)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 
 ert_problem.suggest_solvers();
@@ -241,12 +293,6 @@ inv_options.summary()
 ######################################################################
 #
 
-
-######################################################################
-# 3. Start an inversion
-# ---------------------
-# 
-
 inv = Inversion(ert_problem, inv_options)
 inv_result = inv.run()
 inv_result.summary()
@@ -261,8 +307,7 @@ inv_result.success
 
 
 ######################################################################
-# 4. Plotting
-# -----------
+# Plot the results:
 # 
 
 ax=pg.show(
@@ -273,7 +318,7 @@ ax=pg.show(
 ax[0].set_title("True model")
 
 ax=pg.show(
-    imesh_tri,
+    imesh,
     data=(model_0),
     label=r"$\Omega m$"
 )
@@ -281,7 +326,7 @@ ax[0].set_title("Starting model")
 
 
 ax=pg.show(
-    imesh_tri,
+    imesh,
     data=(inv_result.model),
     label=r"$\Omega m$"
 )
@@ -292,8 +337,8 @@ ax[0].set_title("Inferred model")
 
 
 ######################################################################
-# 5. Use a custom solver
-# ----------------------
+# 2.2 A custom `Newton’s optimisation <https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization>`__ approach
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Now we switch to a Newton’s iterative approach written by ourselves, so
 # you’ll have a closer look at what’s happening in the loop.
@@ -350,125 +395,6 @@ inv_own_solver_res.summary()
 ######################################################################
 #
 
-ax=pg.show(
-    fmesh,
-    data=(model_true),
-    label=r"$\Omega m$"
-)
-ax[0].set_title("True model")
-
-ax=pg.show(
-    imesh_tri,
-    data=(model_0),
-    label=r"$\Omega m$"
-)
-ax[0].set_title("Starting model")
-
-
-ax=pg.show(
-    imesh_tri,
-    data=(inv_own_solver_res.model),
-    label=r"$\Omega m$"
-)
-ax[0].set_title("Inferred model")
-
-######################################################################
-#
-
-
-######################################################################
-# 6. Rectangular Mesh
-# -------------------
-# 
-# Now lets do this on a rectangular mesh in the region of interests for
-# the inversion with boundary represented using triangles.
-# 
-
-imesh_rect = mesh_inv_rectangular()
-
-ax=pg.show(imesh_rect)
-ax[0].set_title("Inversion Mesh")
-
-######################################################################
-#
-
-ax=pg.show(imesh_rect,data=np.linspace(1,imesh_rect.cellCount(),imesh_rect.cellCount()))
-ax[0].set_title("Cell indices")
-
-######################################################################
-#
-
-
-######################################################################
-# Again, set the starting model value.
-# 
-
-model_0 = np.ones(imesh_rect.cellCount()) * 80.0
-
-######################################################################
-#
-
-
-######################################################################
-# Set up the operator and regularisation for the new mesh
-# 
-
-# Forward operator
-forward_operator2 = ert.ERTModelling(
-    sr=False,
-    # verbose=True,
-)
-forward_operator2.setComplex(False)
-forward_operator2.setData(scheme)
-forward_operator2.setMesh(imesh_rect, ignoreRegionManager=True)
-
-# Regularisation weight matrix
-rm2 = forward_operator2.regionManager()
-rm2.setMesh(imesh_rect) 
-# rm2.setVerbose(True)
-rm2.setConstraintType(2)
-Wm2 = pg.matrix.SparseMapMatrix()
-rm2.fillConstraints(Wm2)
-Wm2 = pg.utils.sparseMatrix2coo(Wm2)
-
-######################################################################
-#
-
-
-######################################################################
-# Define a new problem instance with the new forward operator.
-# 
-
-# hyperparameters
-lamda2 = 2
-
-# cofi problem definition
-ert_problem_rect = BaseProblem()
-ert_problem_rect.name = "Electrical Resistivity Tomography defined through PyGIMLi"
-ert_problem_rect.set_forward(get_response, args=[forward_operator2])
-ert_problem_rect.set_jacobian(get_jacobian, args=[forward_operator2])
-ert_problem_rect.set_residual(get_residuals, args=[y_obs, forward_operator2])
-ert_problem_rect.set_data_misfit(get_misfit, args=[y_obs, forward_operator2])
-ert_problem_rect.set_regularisation(get_regularisation, lamda=lamda2, args=[Wm2])
-ert_problem_rect.set_gradient(get_gradient, args=[y_obs, forward_operator2, lamda2, Wm2])
-ert_problem_rect.set_hessian(get_hessian, args=[y_obs, forward_operator2, lamda2, Wm2])
-ert_problem_rect.set_initial_model(model_0)
-
-######################################################################
-#
-
-
-######################################################################
-# Run the inversion with the same inversion options.
-# 
-
-inv_rect = Inversion(ert_problem_rect, inv_options)
-inv_rect_res = inv_rect.run()
-inv_rect_res.summary()
-
-######################################################################
-#
-
 
 ######################################################################
 # Plot the results:
@@ -482,15 +408,16 @@ ax=pg.show(
 ax[0].set_title("True model")
 
 ax=pg.show(
-    imesh_rect,
+    imesh,
     data=(model_0),
     label=r"$\Omega m$"
 )
 ax[0].set_title("Starting model")
 
+
 ax=pg.show(
-    imesh_rect,
-    data=(inv_rect_res.model),
+    imesh,
+    data=(inv_own_solver_res.model),
     label=r"$\Omega m$"
 )
 ax[0].set_title("Inferred model")
@@ -500,48 +427,8 @@ ax[0].set_title("Inferred model")
 
 
 ######################################################################
-# 6. Rectangular mesh with ``MyNewtonSolver`` and ``emcee``
-# ---------------------------------------------------------
-# 
-# 6.1. ``MyNewtonSolver``
-# ~~~~~~~~~~~~~~~~~~~~~~~
-# 
-
-inv_rect_own_solver = Inversion(ert_problem_rect, inv_options_own_solver)
-inv_rect_own_solver_res = inv_rect_own_solver.run()
-inv_rect_own_solver_res.summary()
-
-######################################################################
-#
-
-ax=pg.show(
-    fmesh,
-    data=(model_true),
-    label=r"$\Omega m$"
-)
-ax[0].set_title("True model")
-
-ax=pg.show(
-    imesh_rect,
-    data=(model_0),
-    label=r"$\Omega m$"
-)
-ax[0].set_title("Starting model")
-
-ax=pg.show(
-    imesh_rect,
-    data=(inv_rect_own_solver_res.model),
-    label=r"$\Omega m$"
-)
-ax[0].set_title("Inferred model")
-
-######################################################################
-#
-
-
-######################################################################
-# 6.2 ``emcee``
-# ~~~~~~~~~~~~~
+# 2.3 Bayesian sampling with emcee (exploration)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # CoFI needs more assumptions about the problem for a sampler to work -
 # these are the log of posterior distribution density and walkers’
@@ -552,11 +439,15 @@ ax[0].set_title("Inferred model")
 # ``log_posterior``.
 # 
 
+# hyperparameters
+nwalkers = 32
+nsteps = 10
+
 # define log_likelihood
 sigma = 1.0                                     # common noise standard deviation
 Cdinv = np.eye(len(y_obs))/(sigma**2)           # inverse data covariance matrix
 def log_likelihood(model):
-    residual = ert_problem_rect.residual(model)
+    residual = ert_problem.residual(model)
     return -0.5 * residual @ (Cdinv @ residual).T
 
 # define log_prior
@@ -568,14 +459,12 @@ def log_prior(model):                           # uniform distribution
     return 0.0 # model lies within bounds -> return log(1)
 
 # define walkers' starting positions
-nwalkers = 32
-nsteps = 1000
 walkers_start = model_0 + 1e-6 * np.random.randn(nwalkers, model_0.shape[0])
 
 # define them into cofi's BaseProblem object
-ert_problem_rect.set_log_likelihood(log_likelihood)
-ert_problem_rect.set_log_prior(log_prior)
-ert_problem_rect.set_walkers_starting_pos(walkers_start)
+ert_problem.set_log_likelihood(log_likelihood)
+ert_problem.set_log_prior(log_prior)
+ert_problem.set_walkers_starting_pos(walkers_start)
 
 ######################################################################
 #
@@ -594,7 +483,7 @@ from emcee.moves import GaussianMove
 inv_options_emcee.set_params(moves=GaussianMove(1))
 
 # run the inversion
-inv_rect_emcee = Inversion(ert_problem_rect, inv_options_emcee)
+inv_rect_emcee = Inversion(ert_problem, inv_options_emcee)
 inv_rect_emcee_res = inv_rect_emcee.run()
 
 ######################################################################
@@ -602,17 +491,33 @@ inv_rect_emcee_res = inv_rect_emcee.run()
 
 
 ######################################################################
-# --------------
+# Let’s sub-sample 10 models from the posterior ensemble and plot them
+# out.
 # 
-# Watermark
-# ---------
+# You’ll see that the results are not as good. That’s because we’ve used
+# only 32 walkers and 10 sampling steps.
 # 
 
-# In case watermark doesn't work (e.g. sphinx-gallery)
-watermark_list = ["cofi", "numpy", "scipy", "matplotlib", "emcee", "arviz", "pygimli"]
-for pkg in watermark_list:
-    pkg_var = __import__(pkg)
-    print(pkg, getattr(pkg_var, "__version__"))
+sampler = inv_rect_emcee_res.sampler
 
 ######################################################################
 #
+
+flat_samples = sampler.get_chain(discard=5, flat=True)
+indices = np.random.randint(len(flat_samples), size=10) # get a random selection from posterior ensemble
+for idx in indices:
+    ax=pg.show(
+        imesh,
+        data=(flat_samples[idx]),
+        label=r"$\Omega m$"
+    )
+    ax[0].set_title(f"Inferred model - sample {idx}")
+
+######################################################################
+#
+
+
+######################################################################
+# Not satisfied with the results? Go back to the code cell under 2.3 and
+# try with bigger numbers of walkers and steps 😉
+# 
