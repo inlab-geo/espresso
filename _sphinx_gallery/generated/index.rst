@@ -33,27 +33,6 @@ Below is a gallery of examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Using the ERT solver implemented provided by `PyGIMLi &lt;https://www.pygimli.org/&gt;`__, we use dif...">
-
-.. only:: html
-
- .. figure:: /cofi-examples/_sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_dcip_thumb.png
-     :alt: PyGIMLi - Complex valued ERT
-
-     :ref:`sphx_glr_cofi-examples__sphinx_gallery_generated_pygimli_dcip.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /cofi-examples/_sphinx_gallery/generated/pygimli_dcip
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="Gravity Density Model">
 
 .. only:: html
@@ -72,6 +51,27 @@ Below is a gallery of examples.
    :hidden:
 
    /cofi-examples/_sphinx_gallery/generated/gravity_density
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Using the ERT solver implemented provided by `PyGIMLi &lt;https://www.pygimli.org/&gt;`__, we use dif...">
+
+.. only:: html
+
+ .. figure:: /cofi-examples/_sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_dcip_thumb.png
+     :alt: PyGIMLi - Complex valued ERT
+
+     :ref:`sphx_glr_cofi-examples__sphinx_gallery_generated_pygimli_dcip.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /cofi-examples/_sphinx_gallery/generated/pygimli_dcip
 
 .. raw:: html
 
