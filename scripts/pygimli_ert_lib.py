@@ -62,7 +62,7 @@ def mesh_inv_triangular(scheme, start=[-15, 0], end=[65, -30]):
 def mesh_inv_rectangular(x_start=-15, x_stop=60, x_num=11, y_start=-30, y_stop=0, y_num=5):
     imesh = pygimli.createGrid(x=np.linspace(start=x_start, stop=x_stop, num=x_num),
                                 y=np.linspace(start=y_start, stop=y_stop, num=y_num),
-                                worldMarker=False, marker=2)
+                                marker=2)
     imesh = pygimli.meshtools.appendTriangleBoundary(imesh, marker=1,
                                             xbound=50, ybound=50)
     for nr, c in enumerate(imesh.cells()):
