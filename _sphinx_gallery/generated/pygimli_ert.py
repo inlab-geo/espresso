@@ -114,7 +114,7 @@ model_true = model_vec(rhomap, fmesh)
 ax=pg.show(fmesh)
 ax[0].set_title("Computational Mesh")
 ax=pg.show(fmesh,data=model_true,label=r"$\Omega m$")
-ax[0].set_title("Resitivity")
+ax[0].set_title("Resitivity");
 
 ######################################################################
 #
@@ -330,7 +330,7 @@ ax=pg.show(
     data=(inv_result.model),
     label=r"$\Omega m$"
 )
-ax[0].set_title("Inferred model")
+ax[0].set_title("Inferred model");
 
 ######################################################################
 #
@@ -420,7 +420,7 @@ ax=pg.show(
     data=(inv_own_solver_res.model),
     label=r"$\Omega m$"
 )
-ax[0].set_title("Inferred model")
+ax[0].set_title("Inferred model");
 
 ######################################################################
 #
@@ -511,7 +511,7 @@ for idx in indices:
         data=(flat_samples[idx]),
         label=r"$\Omega m$"
     )
-    ax[0].set_title(f"Inferred model - sample {idx}")
+    ax[0].set_title(f"Inferred model - sample {idx}");
 
 ######################################################################
 #
@@ -521,3 +521,19 @@ for idx in indices:
 # Not satisfied with the results? Go back to the code cell under 2.3 and
 # try with bigger numbers of walkers and steps 😉
 # 
+
+
+######################################################################
+# --------------
+# 
+# Watermark
+# =========
+# 
+
+watermark_list = ["cofi", "numpy", "scipy", "pygimli", "matplotlib", "emcee", "arviz"]
+for pkg in watermark_list:
+    pkg_var = __import__(pkg)
+    print(pkg, getattr(pkg_var, "__version__"))
+
+######################################################################
+#
