@@ -2,11 +2,14 @@
 PyGIMLi - Electrical Resistivity Tomography
 ===========================================
 
-Using the ERT solver implemented provided by
-`PyGIMLi <https://www.pygimli.org/>`__, we use different ``cofi``
-solvers to solve the corresponding inverse problem.
-
 """
+
+
+######################################################################
+# Using the ERT solver implemented provided by
+# `PyGIMLi <https://www.pygimli.org/>`__, we use different ``cofi``
+# solvers to solve the corresponding inverse problem.
+# 
 
 
 ######################################################################

@@ -10,12 +10,12 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_cofi-examples_utils/sphinx_gallery_generated_linear_regression.py>`
+        Click :ref:`here <sphx_glr_download_cofi-examples_utils_sphinx_gallery_generated_linear_regression.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_cofi-examples_utils/sphinx_gallery_generated_linear_regression.py:
+.. _sphx_glr_cofi-examples_utils_sphinx_gallery_generated_linear_regression.py:
 
 
 Polynomial Linear Regression
@@ -242,7 +242,7 @@ Recall that the function we are going to fit is:
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fa03a0606a0>
+    <matplotlib.legend.Legend object at 0x7fba872ed720>
 
 
 
@@ -736,7 +736,7 @@ any).
     List of functions/properties not set by you:
     ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularisation', 'forward', 'data_covariance', 'data_covariance_inv', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
     List of functions/properties got used by the backend tool:
-    ['data', 'jacobian']
+    ['jacobian', 'data']
 
 
 
@@ -783,7 +783,7 @@ ground truth.
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fa039dfca90>
+    <matplotlib.legend.Legend object at 0x7fba8d418c40>
 
 
 
@@ -994,7 +994,7 @@ CoFI.
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fa052df0c10>
+    <matplotlib.legend.Legend object at 0x7fba8d477280>
 
 
 
@@ -1515,7 +1515,7 @@ posterior ensemble and compare to the data.
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fa03a0635b0>
+    <matplotlib.legend.Legend object at 0x7fba8cb67a00>
 
 
 
@@ -1611,10 +1611,6 @@ to that estimated by least squares.
         m1  0.2959
         m2  0.2242
         m3  0.0811
-    [[   20.           -14.04081633    58.95501874  -110.79868932]
-     [  -14.04081633    58.95501874  -110.79868932   384.40528897]
-     [   58.95501874  -110.79868932   384.40528897 -1043.66047406]
-     [ -110.79868932   384.40528897 -1043.66047406  3391.47575545]]
 
     Model covariance matrix estimated by least squares
      [[ 0.19027447  0.05812534 -0.08168411 -0.02550866]
@@ -1683,7 +1679,7 @@ Watermark
 
  .. code-block:: none
 
-    cofi 0.1.2.dev6
+    cofi 0.1.2.dev7
     numpy 1.21.6
     scipy 1.8.1
     matplotlib 3.5.2
@@ -1696,10 +1692,10 @@ Watermark
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  21.160 seconds)
+   **Total running time of the script:** ( 0 minutes  10.038 seconds)
 
 
-.. _sphx_glr_download_cofi-examples_utils/sphinx_gallery_generated_linear_regression.py:
+.. _sphx_glr_download_cofi-examples_utils_sphinx_gallery_generated_linear_regression.py:
 
 
 .. only :: html

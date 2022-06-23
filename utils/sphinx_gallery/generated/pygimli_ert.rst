@@ -10,28 +10,31 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_cofi-examples_utils/sphinx_gallery_generated_pygimli_ert.py>`
+        Click :ref:`here <sphx_glr_download_cofi-examples_utils_sphinx_gallery_generated_pygimli_ert.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_cofi-examples_utils/sphinx_gallery_generated_pygimli_ert.py:
+.. _sphx_glr_cofi-examples_utils_sphinx_gallery_generated_pygimli_ert.py:
 
 
 PyGIMLi - Electrical Resistivity Tomography
 ===========================================
 
+.. GENERATED FROM PYTHON SOURCE LINES 9-13
+
 Using the ERT solver implemented provided by
 `PyGIMLi <https://www.pygimli.org/>`__, we use different ``cofi``
 solvers to solve the corresponding inverse problem.
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-16
+
+.. GENERATED FROM PYTHON SOURCE LINES 16-19
 
 .. raw:: html
 
 	<badge><a href="https://colab.research.google.com/github/inlab-geo/cofi-examples/blob/main/notebooks/pygimli_ert/pygimli_ert.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></badge>
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-38
+.. GENERATED FROM PYTHON SOURCE LINES 22-41
 
 .. raw:: html
 
@@ -53,13 +56,13 @@ solvers to solve the corresponding inverse problem.
    file specifies a list of packages required to run the notebooks)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-44
+.. GENERATED FROM PYTHON SOURCE LINES 44-47
 
 0. Import modules
 -----------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-63
+.. GENERATED FROM PYTHON SOURCE LINES 47-66
 
 .. code-block:: default
 
@@ -89,7 +92,7 @@ solvers to solve the corresponding inverse problem.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-78
+.. GENERATED FROM PYTHON SOURCE LINES 71-81
 
 We will need the following packages:
 
@@ -102,7 +105,7 @@ Additionally, we wrap some ``pygimli`` code in file
 ``pygimli_ert_lib.py`` and import it here for conciseness.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-91
+.. GENERATED FROM PYTHON SOURCE LINES 81-94
 
 .. code-block:: default
 
@@ -126,19 +129,19 @@ Additionally, we wrap some ``pygimli`` code in file
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-99
+.. GENERATED FROM PYTHON SOURCE LINES 99-102
 
 1. Define the problem
 ---------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-105
+.. GENERATED FROM PYTHON SOURCE LINES 105-108
 
 We first define the true model, the survey and map it on a computational
 mesh designed for the survey and true anomaly.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-119
+.. GENERATED FROM PYTHON SOURCE LINES 108-122
 
 .. code-block:: default
 
@@ -188,13 +191,13 @@ mesh designed for the survey and true anomaly.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-127
+.. GENERATED FROM PYTHON SOURCE LINES 127-130
 
 Generate the synthetic data as a container with all the necessary
 information for plotting.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-136
+.. GENERATED FROM PYTHON SOURCE LINES 130-139
 
 .. code-block:: default
 
@@ -219,7 +222,7 @@ information for plotting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-167
+.. GENERATED FROM PYTHON SOURCE LINES 144-170
 
 The inversion can use a different mesh and the mesh to be used should
 know nothing about the mesh that was designed based on the true model.
@@ -248,7 +251,7 @@ Here we first demonstrate how to use a *triangular mesh*. Note that this
 makes the inversion problem under-determined.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 167-174
+.. GENERATED FROM PYTHON SOURCE LINES 170-177
 
 .. code-block:: default
 
@@ -279,7 +282,7 @@ makes the inversion problem under-determined.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 179-186
+.. GENERATED FROM PYTHON SOURCE LINES 182-189
 
 Check
 `here <https://github.com/inlab-geo/cofi-examples/tree/main/notebooks/pygimli_ert>`__
@@ -289,7 +292,7 @@ For the purpose of this notebook, we use a *rectangular mesh* for a
 simple demonstration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 186-192
+.. GENERATED FROM PYTHON SOURCE LINES 189-195
 
 .. code-block:: default
 
@@ -319,13 +322,13 @@ simple demonstration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 197-200
+.. GENERATED FROM PYTHON SOURCE LINES 200-203
 
 With the inversion mesh created, we now define a starting model, forward
 operator and weighting matrix for regularisation using PyGIMLi.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 200-210
+.. GENERATED FROM PYTHON SOURCE LINES 203-213
 
 .. code-block:: default
 
@@ -346,7 +349,7 @@ operator and weighting matrix for regularisation using PyGIMLi.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 215-229
+.. GENERATED FROM PYTHON SOURCE LINES 218-232
 
 CoFI and other inference packages require a set of functions that
 provide the misfit, the jacobian the residual within the case of scipy
@@ -363,14 +366,14 @@ the details. These functions are:
 -  ``get_hessian``
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 232-236
+.. GENERATED FROM PYTHON SOURCE LINES 235-239
 
 With all the above forward operations set up with PyGIMLi, we now define
 the problem in ``cofi`` by setting the problem information for a
 ``BaseProblem`` object.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 236-252
+.. GENERATED FROM PYTHON SOURCE LINES 239-255
 
 .. code-block:: default
 
@@ -397,12 +400,12 @@ the problem in ``cofi`` by setting the problem information for a
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 257-259
+.. GENERATED FROM PYTHON SOURCE LINES 260-262
 
 Review what information is included in the ``BaseProblem`` object:
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 259-262
+.. GENERATED FROM PYTHON SOURCE LINES 262-265
 
 .. code-block:: default
 
@@ -436,7 +439,7 @@ Review what information is included in the ``BaseProblem`` object:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 267-273
+.. GENERATED FROM PYTHON SOURCE LINES 270-276
 
 2. Define the inversion options and run
 ---------------------------------------
@@ -445,7 +448,7 @@ Review what information is included in the ``BaseProblem`` object:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 273-276
+.. GENERATED FROM PYTHON SOURCE LINES 276-279
 
 .. code-block:: default
 
@@ -476,7 +479,7 @@ Review what information is included in the ``BaseProblem`` object:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 278-283
+.. GENERATED FROM PYTHON SOURCE LINES 281-286
 
 .. code-block:: default
 
@@ -492,12 +495,12 @@ Review what information is included in the ``BaseProblem`` object:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 288-290
+.. GENERATED FROM PYTHON SOURCE LINES 291-293
 
 Review what’s been defined for the inversion we are about to run:
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 290-293
+.. GENERATED FROM PYTHON SOURCE LINES 293-296
 
 .. code-block:: default
 
@@ -531,7 +534,7 @@ Review what’s been defined for the inversion we are about to run:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 295-300
+.. GENERATED FROM PYTHON SOURCE LINES 298-303
 
 .. code-block:: default
 
@@ -564,124 +567,120 @@ Review what’s been defined for the inversion we are about to run:
     raw regularisation: 10.893411237920638
     data misfit: 1325.135359647151
     raw regularisation: 4.464129155274968
-    data misfit: 1325.7525438833811
-    raw regularisation: 3.477259459784778
+    data misfit: 1325.7525438840648
+    raw regularisation: 3.4772594966141877
     data misfit: 1325.9161253098425
     raw regularisation: 3.2377373769833095
-    data misfit: 1264.5224957842584
-    raw regularisation: 1012.8227161445419
-    data misfit: 1310.7004959099122
-    raw regularisation: 54.45085548727792
-    data misfit: 1322.561654493989
-    raw regularisation: 8.579849219838769
-    data misfit: 1325.2029179367073
-    raw regularisation: 4.127365486399786
-    data misfit: 1325.7658184451464
-    raw regularisation: 3.4144837114354685
-    data misfit: 1325.8845086408692
-    raw regularisation: 3.27444109406676
-    data misfit: 1325.9094702083783
-    raw regularisation: 3.245433645438855
+    data misfit: 1264.5225380924262
+    raw regularisation: 1012.8214028054465
+    data misfit: 1310.700512532451
+    raw regularisation: 54.45078833447126
+    data misfit: 1322.5616608385817
+    raw regularisation: 8.579842870886884
+    data misfit: 1325.2029180298891
+    raw regularisation: 4.127364465120897
+    data misfit: 1325.7658184365007
+    raw regularisation: 3.414483516040101
+    data misfit: 1325.8845086272324
+    raw regularisation: 3.274441054179703
+    data misfit: 1325.9094702098662
+    raw regularisation: 3.2454336372595463
     data misfit: 1325.9147261583928
-    raw regularisation: 3.2393545612555887
+    raw regularisation: 3.239354559537397
     data misfit: 1325.915830240955
-    raw regularisation: 3.238077335808534
+    raw regularisation: 3.2380773354498102
     data misfit: 1325.9160639187135
-    raw regularisation: 3.2378088557243734
+    raw regularisation: 3.2378088556493587
     data misfit: 1325.916113938105
-    raw regularisation: 3.2377524009730303
+    raw regularisation: 3.237752400957324
     data misfit: 1325.916120497734
-    raw regularisation: 3.2377405226584632
-    data misfit: 1325.9161169013096
-    raw regularisation: 3.2377483623432126
-    data misfit: 1325.916117762816
-    raw regularisation: 3.237742145793666
-    data misfit: 1325.9161168403282
-    raw regularisation: 3.237746248715588
+    raw regularisation: 3.237740522655236
     data misfit: 1325.9161186890526
-    raw regularisation: 3.2377429879089594
-    data misfit: 1325.9161177820065
-    raw regularisation: 3.2377423105919054
-    data misfit: 1325.916117762816
-    raw regularisation: 3.237742145793666
+    raw regularisation: 3.237742990576089
+    data misfit: 1325.9161205294151
+    raw regularisation: 3.237741038911201
+    data misfit: 1325.9161204947036
+    raw regularisation: 3.2377406275063683
+    data misfit: 1325.916120497734
+    raw regularisation: 3.237740522655236
     ============================
     Summary for inversion result
     ============================
     SUCCESS
     ----------------------------
-    fun: 1329.1538599086095
-    jac: [ 3.92351568e-02  3.62388505e-01  1.32583944e-01  3.30928213e-01
-      3.97340148e-01  1.92100742e-01  6.77337016e-01  4.43997635e-01
-      8.19917918e-02  4.11619499e-01  2.44658540e-01  1.19599336e-01
-      1.74484752e-01 -1.28990866e-01  3.89933063e-01  4.58226528e-03
-      3.65620805e-01 -7.39992360e-02  1.08456923e-01  1.05594715e+00
-      1.14109340e-01  2.71480696e-01  2.78963365e-01  3.14252928e-01
-      7.47290440e-02  3.29102231e-01  1.97835110e-01  2.21707693e-01
-      2.97465337e-02  2.38245925e-01  9.22820262e-02  4.63133553e-01
-      8.24896289e-01  8.04083126e-02  1.29879329e-01  8.04685201e-02
-      4.93248853e-01  3.57741286e-01  2.80073156e-01  1.60919374e-01
-      9.84182884e-02  2.71168216e-01  8.74677541e-02  7.12422793e-01
-      1.86988200e-01  4.22983650e-02  3.98849379e-01  2.18123716e-02
-      9.42282361e-01 -8.35227088e-02  5.79934498e-01  1.72209869e-01
-     -8.96485535e-02  2.19287591e-01 -1.07436286e-02  9.82549964e-01
-      9.58239015e-01  1.52158641e-02  8.36710131e-02  3.83902853e-01
+    fun: 1329.1538610203893
+    jac: [ 3.92351570e-02  3.62388506e-01  1.32583944e-01  3.30928212e-01
+      3.97340149e-01  1.92100743e-01  6.77337020e-01  4.43997638e-01
+      8.19917922e-02  4.11619499e-01  2.44658540e-01  1.19599337e-01
+      1.74484753e-01 -1.28990864e-01  3.89933066e-01  4.58226536e-03
+      3.65620806e-01 -7.39992357e-02  1.08456923e-01  1.05594715e+00
+      1.14109340e-01  2.71480697e-01  2.78963365e-01  3.14252930e-01
+      7.47290444e-02  3.29102233e-01  1.97835111e-01  2.21707694e-01
+      2.97465341e-02  2.38245926e-01  9.22820264e-02  4.63133557e-01
+      8.24896273e-01  8.04083127e-02  1.29879330e-01  8.04685204e-02
+      4.93248857e-01  3.57741288e-01  2.80073158e-01  1.60919373e-01
+      9.84182886e-02  2.71168217e-01  8.74677549e-02  7.12422796e-01
+      1.86988200e-01  4.22983650e-02  3.98849382e-01  2.18123720e-02
+      9.42282360e-01 -8.35227074e-02  5.79934502e-01  1.72209870e-01
+     -8.96485509e-02  2.19287593e-01 -1.07436279e-02  9.82549965e-01
+      9.58239015e-01  1.52158657e-02  8.36710140e-02  3.83902856e-01
       2.57084669e-01  6.82318157e-01  2.86973904e-02  3.31625824e-01
-      7.72620515e-02  9.77413722e-02  5.62506745e-01  3.44636374e-01
-      1.09217725e-01  9.05857290e-02  1.45012116e-01  7.15466752e-01
-      1.26200740e-01  3.03179638e-01  2.27104636e-01  5.90428242e-01
-      3.24249638e-01  8.48605176e-01  1.61137664e+00  2.10324708e+00
-      7.11315455e-01  3.74521641e-01  2.15206911e-02  3.78276930e-01
-      1.25067377e+00  1.08548369e-02  4.22733479e-01  3.75235376e-01
-      1.80051270e-01  2.10327645e+00  4.28376053e-01  2.28656686e-01
-      5.42081197e-01  8.35450117e-01  5.58655901e-02  4.71954825e-01
-      7.54514194e-01  1.40324178e-01  1.15598955e+00  3.06897736e-01
-      1.59170651e-01  9.41471789e-02  1.71919644e-01 -8.67187961e-02
-      4.94027303e-01  1.07462881e-01  2.84755229e-01  4.88834788e-01
-      2.13315861e-01  1.90272733e-01  1.59639769e-01  9.36167289e-02
-      7.07863135e-02  1.51042500e-01  5.99603518e-02  8.30540811e-02
-      1.47584812e-01  6.15723037e-02  6.89660825e-02  1.67737327e-01
-      1.57804307e-01  7.96142632e-02  1.04373850e-01  1.96068287e-01
-      6.78754851e-02  1.06074441e-01  6.29149778e-02  1.94640079e-01
-      2.17064612e-01  1.07821304e-01  1.29347134e-01  1.38623419e-01
-      1.17137816e-01  6.16863113e-02  1.91775229e-01  4.95403314e-02
-      2.79664894e-02  7.62283165e-02  6.11970083e-02  1.02728438e-01
-      1.10363422e-01  2.27824973e-01  9.04379928e-02  8.87483237e-02
-      7.88690408e-02  3.07730445e-02  9.23813849e-02  1.23285181e-01
-      5.23061901e-02  3.25339014e-02  7.51294860e-02  2.54329118e-01
-      1.13188381e-01  6.97493222e-01  7.08745409e-01  3.16719157e-01
-     -3.97754991e-01 -1.12395642e+00 -1.45609689e+00 -1.17269298e+00
-     -3.74229896e-01  4.04139234e-01  7.57276584e-01  1.70089847e+00
-      1.76487738e+00 -4.17015521e-02 -3.09836966e+00 -6.03462726e+00
-     -7.65652181e+00 -6.82705222e+00 -3.41920941e+00  4.31793996e-01
-      1.93378916e+00  4.92713295e+00  6.21985676e+00 -9.41743453e+00
-     -2.39968643e+01 -3.78363279e+01 -4.68603855e+01 -4.55822552e+01
-     -3.03768009e+01 -1.93291967e+00  6.60189577e+00  1.11733850e+01
-      8.24522808e+01 -1.02338204e+02  1.66985961e+01 -2.76560200e+01
-      7.16665780e+00 -3.47087307e-01 -9.67104926e+01  2.44342345e+01
-      3.57606473e+01]
-    nfev: 25
-    njev: 25
+      7.72620516e-02  9.77413725e-02  5.62506746e-01  3.44636375e-01
+      1.09217725e-01  9.05857294e-02  1.45012116e-01  7.15466753e-01
+      1.26200740e-01  3.03179638e-01  2.27104636e-01  5.90428244e-01
+      3.24249640e-01  8.48605176e-01  1.61137664e+00  2.10324707e+00
+      7.11315457e-01  3.74521643e-01  2.15206911e-02  3.78276932e-01
+      1.25067377e+00  1.08548366e-02  4.22733481e-01  3.75235378e-01
+      1.80051271e-01  2.10327639e+00  4.28376046e-01  2.28656687e-01
+      5.42081199e-01  8.35450118e-01  5.58655902e-02  4.71954825e-01
+      7.54514195e-01  1.40324178e-01  1.15598955e+00  3.06897737e-01
+      1.59170651e-01  9.41471794e-02  1.71919645e-01 -8.67187966e-02
+      4.94027303e-01  1.07462881e-01  2.84755230e-01  4.88834790e-01
+      2.13315862e-01  1.90272734e-01  1.59639769e-01  9.36167293e-02
+      7.07863139e-02  1.51042500e-01  5.99603520e-02  8.30540815e-02
+      1.47584812e-01  6.15723040e-02  6.89660829e-02  1.67737328e-01
+      1.57804308e-01  7.96142635e-02  1.04373850e-01  1.96068288e-01
+      6.78754853e-02  1.06074442e-01  6.29149780e-02  1.94640079e-01
+      2.17064613e-01  1.07821304e-01  1.29347134e-01  1.38623420e-01
+      1.17137816e-01  6.16863116e-02  1.91775230e-01  4.95403315e-02
+      2.79664895e-02  7.62283168e-02  6.11970086e-02  1.02728439e-01
+      1.10363422e-01  2.27824974e-01  9.04379932e-02  8.87483243e-02
+      7.88690411e-02  3.07730445e-02  9.23813854e-02  1.23285181e-01
+      5.23061901e-02  3.25339014e-02  7.51294865e-02  2.54329119e-01
+      1.13188381e-01  6.97493225e-01  7.08745412e-01  3.16719158e-01
+     -3.97754993e-01 -1.12395643e+00 -1.45609689e+00 -1.17269297e+00
+     -3.74229885e-01  4.04139239e-01  7.57276587e-01  1.70089848e+00
+      1.76487738e+00 -4.17015448e-02 -3.09836968e+00 -6.03462728e+00
+     -7.65652180e+00 -6.82705218e+00 -3.41920935e+00  4.31794017e-01
+      1.93378916e+00  4.92713297e+00  6.21985675e+00 -9.41743459e+00
+     -2.39968648e+01 -3.78363284e+01 -4.68603859e+01 -4.55822555e+01
+     -3.03768008e+01 -1.93291961e+00  6.60189576e+00  1.11733850e+01
+      8.24522817e+01 -1.02338206e+02  1.66985970e+01 -2.76560195e+01
+      7.16665718e+00 -3.47087588e-01 -9.67104924e+01  2.44342347e+01
+      3.57606475e+01]
+    nfev: 23
+    njev: 23
     nit: 2
     status: 0
     message: CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH
     hess_inv: <193x193 LbfgsInvHessProduct with dtype=float64>
-    model: [79.99980835 79.99823626 79.99935212 79.99839858 79.99806961 79.9990644
-     79.99668925 79.99782263 79.99960053 79.99800633 79.99881699 79.99941897
-     79.99914864 80.00059981 79.99809254 79.9999789  79.9982188  80.00036053
-     79.99947942 79.99486695 79.99944329 79.99867589 79.99864677 79.99846803
-     79.99963586 79.99839297 79.99903489 79.99891866 79.99984889 79.9988416
-     79.99955095 79.99772371 79.99618301 79.99961111 79.9993659  79.99960826
+    model: [79.99980835 79.99823626 79.99935212 79.99839859 79.99806961 79.9990644
+     79.99668926 79.99782263 79.99960053 79.99800633 79.99881699 79.99941897
+     79.99914864 80.0005998  79.99809254 79.9999789  79.9982188  80.00036053
+     79.99947942 79.99486696 79.99944329 79.99867589 79.99864677 79.99846803
+     79.99963586 79.99839298 79.99903489 79.99891866 79.99984889 79.9988416
+     79.99955095 79.99772371 79.99618302 79.99961111 79.9993659  79.99960826
      79.99758297 79.99825859 79.9986329  79.99923394 79.999521   79.99867842
-     79.99957144 79.99653902 79.99910191 79.99979501 79.99805326 79.99989145
-     79.99547144 80.0003859  79.99716203 79.9991583  80.0004125  79.99892832
-     80.0000525  79.9952128  79.99534708 79.99991625 79.99959056 79.9981229
+     79.99957144 79.99653902 79.99910191 79.99979501 79.99805327 79.99989145
+     79.99547144 80.0003859  79.99716204 79.9991583  80.0004125  79.99892832
+     80.0000525  79.9952128  79.99534709 79.99991625 79.99959056 79.9981229
      79.99875961 79.99668331 79.99986204 79.99839434 79.99962697 79.99952368
      79.9972548  79.99832313 79.9994702  79.99956054 79.99929365 79.99651322
      79.99938589 79.99853098 79.99889681 79.9971208  79.99841751 79.99588466
-     79.99217012 79.98983094 79.99653428 79.99816622 79.9998969  79.99814895
-     79.99390983 79.99994774 79.99793319 79.99816349 79.99912074 79.99053395
+     79.99217012 79.98983095 79.99653428 79.99816622 79.9998969  79.99814895
+     79.99390984 79.99994774 79.9979332  79.99816349 79.99912074 79.99053395
      79.99797038 79.99888874 79.99735318 79.99593618 79.9997298  79.99770155
-     79.99633489 79.99931969 79.99435482 79.99850015 79.99922475 79.99954117
+     79.9963349  79.99931969 79.99435482 79.99850015 79.99922475 79.99954117
      79.99916028 80.00042513 79.99759746 79.9994836  79.99861562 79.99761112
      79.99896195 79.99907492 79.99922218 79.99954454 79.99965433 79.99926469
      79.99970893 79.99959566 79.99927966 79.99969957 79.99966399 79.99918292
@@ -690,19 +689,19 @@ Review what’s been defined for the inversion we are about to run:
      79.99943135 79.99969945 79.999066   79.99975951 79.99986485 79.99962937
      79.99970166 79.99949728 79.99946495 79.99889448 79.99955821 79.99956523
      79.99961703 79.99985209 79.99954952 79.99939785 79.99974813 79.99984263
-     79.99963208 79.99875655 79.99945255 79.99660262 79.99655228 79.99844538
+     79.99963208 79.99875655 79.99945256 79.99660262 79.99655228 79.99844538
      80.00189735 80.00540191 80.00699155 80.00560762 80.00174775 79.99800411
-     79.99630285 79.99172369 79.9914224  79.99998678 80.01467843 80.02876077
-     80.03648413 80.03242495 80.01600853 79.9977207  79.99057473 79.97586518
-     79.97101157 80.0437395  80.11835614 80.18457151 80.22966454 80.22364384
-     80.146637   80.00928874 79.96798339 79.94656219 79.56607157 80.53740001
-     79.89002785 80.16064329 79.96435442 79.9983894  80.49881032 79.85987201
-     79.82434259]
+     79.99630285 79.99172369 79.99142241 79.99998678 80.01467842 80.02876076
+     80.03648411 80.03242493 80.01600852 79.99772071 79.99057473 79.97586519
+     79.97101159 80.04373948 80.11835609 80.18457143 80.22966444 80.22364374
+     80.14663693 80.00928874 79.9679834  79.94656221 79.56607168 80.53739987
+     79.89002782 80.16064328 79.96435443 79.9983894  80.49881017 79.85987202
+     79.82434266]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 302-305
+.. GENERATED FROM PYTHON SOURCE LINES 305-308
 
 .. code-block:: default
 
@@ -724,12 +723,12 @@ Review what’s been defined for the inversion we are about to run:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 310-312
+.. GENERATED FROM PYTHON SOURCE LINES 313-315
 
 Plot the results:
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 312-335
+.. GENERATED FROM PYTHON SOURCE LINES 315-338
 
 .. code-block:: default
 
@@ -795,7 +794,7 @@ Plot the results:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 340-348
+.. GENERATED FROM PYTHON SOURCE LINES 343-351
 
 2.2 A custom `Newton’s optimisation <https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization>`__ approach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -806,7 +805,7 @@ you’ll have a closer look at what’s happening in the loop.
 First of all, define our own solver.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 348-379
+.. GENERATED FROM PYTHON SOURCE LINES 351-382
 
 .. code-block:: default
 
@@ -848,12 +847,12 @@ First of all, define our own solver.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 384-386
+.. GENERATED FROM PYTHON SOURCE LINES 387-389
 
 Now, make use of this custom solver and run inversion again:
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 386-395
+.. GENERATED FROM PYTHON SOURCE LINES 389-398
 
 .. code-block:: default
 
@@ -902,434 +901,434 @@ Now, make use of this custom solver and run inversion again:
     raw regularisation: 831.5091039759487
     --------------------------------------------------------------------------------
     Iteration 7
-    data misfit: 1296.4309015757412
-    raw regularisation: 997.508302457018
+    data misfit: 1296.4309036449204
+    raw regularisation: 997.5082751621485
     --------------------------------------------------------------------------------
     Iteration 8
-    data misfit: 1293.161980134579
-    raw regularisation: 1166.5649527426997
+    data misfit: 1293.1619801802674
+    raw regularisation: 1166.564947628923
     --------------------------------------------------------------------------------
     Iteration 9
-    data misfit: 1290.1131651172348
-    raw regularisation: 1336.9012584357135
+    data misfit: 1290.1131651283702
+    raw regularisation: 1336.9012543806923
     --------------------------------------------------------------------------------
     Iteration 10
-    data misfit: 1287.2625564537655
-    raw regularisation: 1507.000715073794
+    data misfit: 1287.2625905857285
+    raw regularisation: 1506.99754808286
     --------------------------------------------------------------------------------
     Iteration 11
-    data misfit: 1284.5916938097942
-    raw regularisation: 1675.627371810932
+    data misfit: 1284.5917073686364
+    raw regularisation: 1675.6249313816004
     --------------------------------------------------------------------------------
     Iteration 12
-    data misfit: 1282.0846663977163
-    raw regularisation: 1841.8043251139234
+    data misfit: 1282.0845684974122
+    raw regularisation: 1841.808724002244
     --------------------------------------------------------------------------------
     Iteration 13
-    data misfit: 1279.727612012332
-    raw regularisation: 2004.7786574777874
+    data misfit: 1279.72758726934
+    raw regularisation: 2004.7798568302264
     --------------------------------------------------------------------------------
     Iteration 14
-    data misfit: 1277.5082531061246
-    raw regularisation: 2163.984775097861
+    data misfit: 1277.5082383584652
+    raw regularisation: 2163.9853001940587
     --------------------------------------------------------------------------------
     Iteration 15
-    data misfit: 1275.4156326481932
-    raw regularisation: 2319.0109188523365
+    data misfit: 1275.4156233169629
+    raw regularisation: 2319.011404421769
     --------------------------------------------------------------------------------
     Iteration 16
-    data misfit: 1273.4399159109776
-    raw regularisation: 2469.5703710213893
+    data misfit: 1273.4399061872637
+    raw regularisation: 2469.5707415202305
     --------------------------------------------------------------------------------
     Iteration 17
-    data misfit: 1271.5721923220924
-    raw regularisation: 2615.4773160624914
+    data misfit: 1271.572182146506
+    raw regularisation: 2615.47764919727
     --------------------------------------------------------------------------------
     Iteration 18
-    data misfit: 1269.804333270248
-    raw regularisation: 2756.6270448385653
+    data misfit: 1269.8043270518829
+    raw regularisation: 2756.6273353985107
     --------------------------------------------------------------------------------
     Iteration 19
-    data misfit: 1268.128943639689
-    raw regularisation: 2892.979242609924
+    data misfit: 1268.1289328827136
+    raw regularisation: 2892.9796138069983
     --------------------------------------------------------------------------------
     Iteration 20
-    data misfit: 1266.5392247389138
-    raw regularisation: 3024.545442688773
+    data misfit: 1266.5392122914748
+    raw regularisation: 3024.5457331835137
     --------------------------------------------------------------------------------
     Iteration 21
-    data misfit: 1265.0289376363205
-    raw regularisation: 3151.377548959335
+    data misfit: 1265.0289270737524
+    raw regularisation: 3151.3777976447964
     --------------------------------------------------------------------------------
     Iteration 22
-    data misfit: 1263.5923687423303
-    raw regularisation: 3273.55924042317
+    data misfit: 1263.59235625766
+    raw regularisation: 3273.559462237167
     --------------------------------------------------------------------------------
     Iteration 23
-    data misfit: 1262.224268935002
-    raw regularisation: 3391.1986997951694
+    data misfit: 1262.2242612453867
+    raw regularisation: 3391.1989035331053
     --------------------------------------------------------------------------------
     Iteration 24
-    data misfit: 1260.919819065715
-    raw regularisation: 3504.4227357710633
+    data misfit: 1260.9198103917888
+    raw regularisation: 3504.4229194278037
     --------------------------------------------------------------------------------
     Iteration 25
-    data misfit: 1259.674625745899
-    raw regularisation: 3613.371917720042
+    data misfit: 1259.6746162533798
+    raw regularisation: 3613.372083529057
     --------------------------------------------------------------------------------
     Iteration 26
-    data misfit: 1258.4846475624165
-    raw regularisation: 3718.196675152047
+    data misfit: 1258.4846416967143
+    raw regularisation: 3718.196824809679
     --------------------------------------------------------------------------------
     Iteration 27
-    data misfit: 1257.346207211868
-    raw regularisation: 3819.054038496253
+    data misfit: 1257.3462000710108
+    raw regularisation: 3819.054172101203
     --------------------------------------------------------------------------------
     Iteration 28
-    data misfit: 1256.255960015029
-    raw regularisation: 3916.105037509905
+    data misfit: 1256.2559545178615
+    raw regularisation: 3916.105153055614
     --------------------------------------------------------------------------------
     Iteration 29
-    data misfit: 1255.2108686130066
-    raw regularisation: 4009.5125849862247
+    data misfit: 1255.2108762586258
+    raw regularisation: 4009.5429134188626
     --------------------------------------------------------------------------------
     Iteration 30
-    data misfit: 1254.2081587680152
-    raw regularisation: 4099.439777255809
+    data misfit: 1254.2080795079648
+    raw regularisation: 4099.467029727886
     --------------------------------------------------------------------------------
     Iteration 31
-    data misfit: 1253.2453451525823
-    raw regularisation: 4186.048482190107
+    data misfit: 1253.245265739411
+    raw regularisation: 4186.071637363276
     --------------------------------------------------------------------------------
     Iteration 32
-    data misfit: 1252.3201499017812
-    raw regularisation: 4269.498316247878
+    data misfit: 1252.3200728082693
+    raw regularisation: 4269.518772002468
     --------------------------------------------------------------------------------
     Iteration 33
-    data misfit: 1251.4305418432896
-    raw regularisation: 4349.945720518786
+    data misfit: 1251.4304611296193
+    raw regularisation: 4349.964318230037
     --------------------------------------------------------------------------------
     Iteration 34
-    data misfit: 1250.5746863286845
-    raw regularisation: 4427.543353837452
+    data misfit: 1250.5746056527285
+    raw regularisation: 4427.560530250052
     --------------------------------------------------------------------------------
     Iteration 35
-    data misfit: 1249.7509301066332
-    raw regularisation: 4502.439584505755
+    data misfit: 1249.7508491706976
+    raw regularisation: 4502.455466111917
     --------------------------------------------------------------------------------
     Iteration 36
-    data misfit: 1248.957806560379
-    raw regularisation: 4574.778123205424
+    data misfit: 1248.9577236393977
+    raw regularisation: 4574.793052995456
     --------------------------------------------------------------------------------
     Iteration 37
-    data misfit: 1248.1939897219972
-    raw regularisation: 4644.697771570813
+    data misfit: 1248.1939031644713
+    raw regularisation: 4644.711778467214
     --------------------------------------------------------------------------------
     Iteration 38
-    data misfit: 1247.4583033880242
-    raw regularisation: 4712.33231653016
+    data misfit: 1247.4582109574667
+    raw regularisation: 4712.345412355451
     --------------------------------------------------------------------------------
     Iteration 39
-    data misfit: 1246.749700596177
-    raw regularisation: 4777.810316161193
+    data misfit: 1246.7496160451908
+    raw regularisation: 4777.822539626358
     --------------------------------------------------------------------------------
     Iteration 40
-    data misfit: 1246.067272623189
-    raw regularisation: 4841.255180664707
+    data misfit: 1246.0671902368708
+    raw regularisation: 4841.2665831488575
     --------------------------------------------------------------------------------
     Iteration 41
-    data misfit: 1245.410207923158
-    raw regularisation: 4902.78516874814
+    data misfit: 1245.4101253298554
+    raw regularisation: 4902.795797567037
     --------------------------------------------------------------------------------
     Iteration 42
-    data misfit: 1244.7778085692735
-    raw regularisation: 4962.513437806288
+    data misfit: 1244.7777280986438
+    raw regularisation: 4962.523332574539
     --------------------------------------------------------------------------------
     Iteration 43
-    data misfit: 1244.1694694457804
-    raw regularisation: 5020.548137329068
+    data misfit: 1244.172934868425
+    raw regularisation: 5020.302325309834
     --------------------------------------------------------------------------------
     Iteration 44
-    data misfit: 1243.5846703523666
-    raw regularisation: 5076.992509148559
+    data misfit: 1243.5849508157453
+    raw regularisation: 5076.912244838667
     --------------------------------------------------------------------------------
     Iteration 45
-    data misfit: 1243.0229840034108
-    raw regularisation: 5131.9450322873445
+    data misfit: 1243.022685341977
+    raw regularisation: 5131.906100727638
     --------------------------------------------------------------------------------
     Iteration 46
-    data misfit: 1242.4840673627023
-    raw regularisation: 5185.499564916901
+    data misfit: 1242.4836124110263
+    raw regularisation: 5185.473955842417
     --------------------------------------------------------------------------------
     Iteration 47
-    data misfit: 1241.9676511708985
-    raw regularisation: 5237.745477832906
+    data misfit: 1241.9671403420473
+    raw regularisation: 5237.724970885688
     --------------------------------------------------------------------------------
     Iteration 48
-    data misfit: 1241.4735287048404
-    raw regularisation: 5288.767842047467
+    data misfit: 1241.4729886352286
+    raw regularisation: 5288.749407095661
     --------------------------------------------------------------------------------
     Iteration 49
-    data misfit: 1241.0015738980296
-    raw regularisation: 5338.647527270232
+    data misfit: 1241.0010159526396
+    raw regularisation: 5338.629957980002
     --------------------------------------------------------------------------------
     Iteration 50
-    data misfit: 1240.5517203560723
-    raw regularisation: 5387.461403966935
+    data misfit: 1240.5512111466223
+    raw regularisation: 5387.439914032409
     --------------------------------------------------------------------------------
     Iteration 51
-    data misfit: 1240.123974792514
-    raw regularisation: 5435.282458519151
+    data misfit: 1240.1233992311563
+    raw regularisation: 5435.263793964285
     --------------------------------------------------------------------------------
     Iteration 52
-    data misfit: 1239.7184005478016
-    raw regularisation: 5482.1799626640895
+    data misfit: 1239.7178048182934
+    raw regularisation: 5482.1619037643095
     --------------------------------------------------------------------------------
     Iteration 53
-    data misfit: 1239.3351133802264
-    raw regularisation: 5528.219575694087
+    data misfit: 1239.3344989145405
+    raw regularisation: 5528.201597430863
     --------------------------------------------------------------------------------
     Iteration 54
-    data misfit: 1238.9743044095487
-    raw regularisation: 5573.463466128779
+    data misfit: 1238.9736889734957
+    raw regularisation: 5573.445387827213
     --------------------------------------------------------------------------------
     Iteration 55
-    data misfit: 1238.6362282190212
-    raw regularisation: 5617.970447671425
+    data misfit: 1238.6355974110375
+    raw regularisation: 5617.9522869546045
     --------------------------------------------------------------------------------
     Iteration 56
-    data misfit: 1238.3211853780388
-    raw regularisation: 5661.796065475353
+    data misfit: 1238.3205438671885
+    raw regularisation: 5661.777658921583
     --------------------------------------------------------------------------------
     Iteration 57
-    data misfit: 1238.0295392509101
-    raw regularisation: 5704.992674468524
+    data misfit: 1238.0288861056874
+    raw regularisation: 5704.97405277719
     --------------------------------------------------------------------------------
     Iteration 58
-    data misfit: 1237.7617246225366
-    raw regularisation: 5747.609508687742
+    data misfit: 1237.761059274413
+    raw regularisation: 5747.590652959605
     --------------------------------------------------------------------------------
     Iteration 59
-    data misfit: 1237.518226848122
-    raw regularisation: 5789.692744069061
+    data misfit: 1237.5175534417103
+    raw regularisation: 5789.673659980754
     --------------------------------------------------------------------------------
     Iteration 60
-    data misfit: 1237.2995837541516
-    raw regularisation: 5831.285532219342
+    data misfit: 1237.2989191776894
+    raw regularisation: 5831.264819971265
     --------------------------------------------------------------------------------
     Iteration 61
-    data misfit: 1237.1064169387332
-    raw regularisation: 5872.428017698618
+    data misfit: 1237.10571670424
+    raw regularisation: 5872.407905075272
     --------------------------------------------------------------------------------
     Iteration 62
-    data misfit: 1236.93938519606
-    raw regularisation: 5913.157363721364
+    data misfit: 1236.9386727019948
+    raw regularisation: 5913.13714644387
     --------------------------------------------------------------------------------
     Iteration 63
-    data misfit: 1236.799228145695
-    raw regularisation: 5953.507708867347
+    data misfit: 1236.7984970924017
+    raw regularisation: 5953.487375248475
     --------------------------------------------------------------------------------
     Iteration 64
-    data misfit: 1236.6867365531982
-    raw regularisation: 5993.510166304572
+    data misfit: 1236.6859829812527
+    raw regularisation: 5993.489679937574
     --------------------------------------------------------------------------------
     Iteration 65
-    data misfit: 1236.6027528969669
-    raw regularisation: 6033.192791360493
+    data misfit: 1236.6019849212175
+    raw regularisation: 6033.1721401680925
     --------------------------------------------------------------------------------
     Iteration 66
-    data misfit: 1236.5481995442274
-    raw regularisation: 6072.580484214514
+    data misfit: 1236.547412879317
+    raw regularisation: 6072.559675286473
     --------------------------------------------------------------------------------
     Iteration 67
-    data misfit: 1236.5240500961713
-    raw regularisation: 6111.694968777014
+    data misfit: 1236.5232458574626
+    raw regularisation: 6111.673992080612
     --------------------------------------------------------------------------------
     Iteration 68
-    data misfit: 1236.5313320903135
-    raw regularisation: 6150.554681058004
+    data misfit: 1236.53051403514
+    raw regularisation: 6150.533556606983
     --------------------------------------------------------------------------------
     Iteration 69
-    data misfit: 1236.571145083125
-    raw regularisation: 6189.174707228246
+    data misfit: 1236.5703037115943
+    raw regularisation: 6189.153454168602
     --------------------------------------------------------------------------------
     Iteration 70
-    data misfit: 1236.6446128339728
-    raw regularisation: 6227.5666971444425
+    data misfit: 1236.6437525078247
+    raw regularisation: 6227.545327548708
     --------------------------------------------------------------------------------
     Iteration 71
-    data misfit: 1236.7529300527183
-    raw regularisation: 6265.738764617812
+    data misfit: 1236.7520474899613
+    raw regularisation: 6265.7172965982045
     --------------------------------------------------------------------------------
     Iteration 72
-    data misfit: 1236.8973398797414
-    raw regularisation: 6303.695430719423
+    data misfit: 1236.896428823767
+    raw regularisation: 6303.673869928626
     --------------------------------------------------------------------------------
     Iteration 73
-    data misfit: 1237.0791131542182
-    raw regularisation: 6341.437535915692
+    data misfit: 1237.0781780980235
+    raw regularisation: 6341.417179890487
     --------------------------------------------------------------------------------
     Iteration 74
-    data misfit: 1237.2995548955098
-    raw regularisation: 6378.962197938447
+    data misfit: 1237.2985915559657
+    raw regularisation: 6378.941133810582
     --------------------------------------------------------------------------------
     Iteration 75
-    data misfit: 1237.5599806005969
-    raw regularisation: 6416.262820251721
+    data misfit: 1237.55899685532
+    raw regularisation: 6416.241521869682
     --------------------------------------------------------------------------------
     Iteration 76
-    data misfit: 1237.8617460397693
-    raw regularisation: 6453.329055136683
+    data misfit: 1237.8607311551693
+    raw regularisation: 6453.307665898559
     --------------------------------------------------------------------------------
     Iteration 77
-    data misfit: 1238.2061873567297
-    raw regularisation: 6490.1469247403575
+    data misfit: 1238.2051441825095
+    raw regularisation: 6490.12550951153
     --------------------------------------------------------------------------------
     Iteration 78
-    data misfit: 1238.5946273945128
-    raw regularisation: 6526.698865528821
+    data misfit: 1238.5935523971466
+    raw regularisation: 6526.6774777310975
     --------------------------------------------------------------------------------
     Iteration 79
-    data misfit: 1239.0283873735564
-    raw regularisation: 6562.963938778132
+    data misfit: 1239.0272802889974
+    raw regularisation: 6562.942600109759
     --------------------------------------------------------------------------------
     Iteration 80
-    data misfit: 1239.508712834326
-    raw regularisation: 6598.918010271125
+    data misfit: 1239.5075683999992
+    raw regularisation: 6598.8967562971175
     --------------------------------------------------------------------------------
     Iteration 81
-    data misfit: 1240.0367962810096
-    raw regularisation: 6634.534046932426
+    data misfit: 1240.0356314835738
+    raw regularisation: 6634.512929780089
     --------------------------------------------------------------------------------
     Iteration 82
-    data misfit: 1240.6137837925637
-    raw regularisation: 6669.78249502448
+    data misfit: 1240.6125754147033
+    raw regularisation: 6669.761550399447
     --------------------------------------------------------------------------------
     Iteration 83
-    data misfit: 1241.2406764672007
-    raw regularisation: 6704.631649575036
+    data misfit: 1241.239422576983
+    raw regularisation: 6704.610904417102
     --------------------------------------------------------------------------------
     Iteration 84
-    data misfit: 1241.9183491388571
-    raw regularisation: 6739.048147289855
+    data misfit: 1241.9170688785027
+    raw regularisation: 6739.027636768318
     --------------------------------------------------------------------------------
     Iteration 85
-    data misfit: 1242.647587353606
-    raw regularisation: 6772.997488516372
+    data misfit: 1242.6462648081335
+    raw regularisation: 6772.977257236552
     --------------------------------------------------------------------------------
     Iteration 86
-    data misfit: 1243.428939844389
-    raw regularisation: 6806.444581290063
+    data misfit: 1243.4275788010427
+    raw regularisation: 6806.424672759121
     --------------------------------------------------------------------------------
     Iteration 87
-    data misfit: 1244.2627990238336
-    raw regularisation: 6839.354372538914
+    data misfit: 1244.2613993834161
+    raw regularisation: 6839.33481170003
     --------------------------------------------------------------------------------
     Iteration 88
-    data misfit: 1245.1493336104863
-    raw regularisation: 6871.692428238515
+    data misfit: 1245.1479010321339
+    raw regularisation: 6871.673252831409
     --------------------------------------------------------------------------------
     Iteration 89
-    data misfit: 1246.0884686935099
-    raw regularisation: 6903.425544017574
+    data misfit: 1246.0869916200772
+    raw regularisation: 6903.4068123995
     --------------------------------------------------------------------------------
     Iteration 90
-    data misfit: 1247.0798523804656
-    raw regularisation: 6934.522356263214
+    data misfit: 1247.0783575553355
+    raw regularisation: 6934.504057716883
     --------------------------------------------------------------------------------
     Iteration 91
-    data misfit: 1248.1228675359966
-    raw regularisation: 6964.9538126174575
+    data misfit: 1248.1213301833316
+    raw regularisation: 6964.935994209414
     --------------------------------------------------------------------------------
     Iteration 92
-    data misfit: 1249.216590191562
-    raw regularisation: 6994.693747562731
+    data misfit: 1249.2150258185932
+    raw regularisation: 6994.676436648246
     --------------------------------------------------------------------------------
     Iteration 93
-    data misfit: 1250.359748264118
-    raw regularisation: 7023.719269238967
+    data misfit: 1250.3581342942018
+    raw regularisation: 7023.702467920259
     --------------------------------------------------------------------------------
     Iteration 94
-    data misfit: 1251.5507447678415
-    raw regularisation: 7052.011072902592
+    data misfit: 1251.5491124227058
+    raw regularisation: 7051.994816060383
     --------------------------------------------------------------------------------
     Iteration 95
-    data misfit: 1252.7876422425343
-    raw regularisation: 7079.55377821708
+    data misfit: 1252.7859938723743
+    raw regularisation: 7079.538060237003
     --------------------------------------------------------------------------------
     Iteration 96
-    data misfit: 1254.0681477788892
-    raw regularisation: 7106.336005585524
+    data misfit: 1254.0664580693774
+    raw regularisation: 7106.320841162122
     --------------------------------------------------------------------------------
     Iteration 97
-    data misfit: 1255.3895901707588
-    raw regularisation: 7132.350490037167
+    data misfit: 1255.3878636473603
+    raw regularisation: 7132.335878846433
     --------------------------------------------------------------------------------
     Iteration 98
-    data misfit: 1256.7489189331964
-    raw regularisation: 7157.594088498758
+    data misfit: 1256.7471812485787
+    raw regularisation: 7157.580069910324
     --------------------------------------------------------------------------------
     Iteration 99
-    data misfit: 1258.142778597627
-    raw regularisation: 7182.067667559624
+    data misfit: 1258.1409978664863
+    raw regularisation: 7182.054214087828
     --------------------------------------------------------------------------------
     Iteration 100
-    data misfit: 1259.5674643511923
-    raw regularisation: 7205.7758946924105
+    data misfit: 1259.5656909054114
+    raw regularisation: 7205.76369801504
     ============================
     Summary for inversion result
     ============================
     SUCCESS
     ----------------------------
-    model: [ 63.61648233  60.29172357  61.12599046  69.34739212  60.67674119
-      66.36502558  54.01871054  55.35067311  72.09483487  66.68772497
-      68.7218397   75.78734095  71.74180565  85.96122999  56.70105899
-      81.09080505  57.58088032  84.0643723   74.41950584  62.18759349
-      75.27192991  61.46587483  58.31097428  51.91240018  55.15048249
-      53.9185414   64.2973657   63.26476921  79.83370162  52.23183873
-      76.08011632  48.93715029  47.92932843  72.22032661  55.27158149
-      74.09388114  50.49803038  56.12815861  53.36644345  48.36818178
-      67.47743614  53.29463711  79.10502764  56.97570067  64.18722178
-      65.84217696  53.26148028  81.46539162  52.35213434  84.14532695
-      57.78295387  63.44455254  85.17296619  53.87867335  82.17943198
-      55.57136531  53.44174388  82.30587071  79.42800386  50.59230548
-      73.05894893  60.49200809  66.35071712  58.81866136  56.84008106
-      65.3652476   64.64444424  62.58048     59.15944583  77.14189309
-      71.010698    55.63594026  54.63442765  68.65656741  59.28281774
-      50.09556286  54.16791331  66.3592119   55.76134291  60.48688485
-      58.10996267  51.60676638  79.52114682  52.29967773  54.59154421
-      81.13984771  49.89211537  70.86931468  75.56378618  53.50765321
-      52.94911226  71.15360663  65.96476024  53.78222679  74.05175714
-      57.04978525  54.79499215  59.68787446  52.72806265  62.3709058
-      58.71813311  78.07962563  73.01616079  83.84822674  61.68663621
-      77.97557566  60.64603782  64.98232564  60.94636766  58.91698553
-      66.32292605  68.42231697  76.0210826   61.70435006  68.12089609
-      70.89138633  72.48649399  66.25246918  69.73214407  73.80996276
-      74.61460523  74.56065847  72.46887338  60.64917042  59.69169236
-      54.85105937  55.50806227  58.40419772  59.06798456  66.50721341
-      63.81921384  58.6555572   59.53793373  56.15038007  55.77221696
-      60.77794701  64.51414013  62.22996745  63.71788166  77.79724816
-      73.5623136   66.75779193  66.88026169  67.94023843  64.45287075
-      66.22808603  71.40739228  71.5266928   69.71961774  62.74684507
-      61.90022417  68.94836143  69.11726299  63.0659933   68.24993177
-      75.55498982  82.41175528  87.49236465  90.00376416  89.33916388
-      85.37150704  79.02139308  72.92502579  59.66150609  66.20052346
-      77.52945161  86.92107702  93.30637891  96.91399247  96.47744536
-      90.7495386   80.11674879  70.79235089  53.68198501  60.70360919
-      81.67715848  93.61024242 100.0017907  104.84698613 105.53585394
-      98.90023962  80.03956794  65.06335605  45.98283962  45.63258025
-      80.7762631   83.87145524  82.18862028  84.04599463  85.92973658
-      91.96719614  72.16714168  53.38523845]
+    model: [ 63.61653559  60.29177801  61.12604649  69.34743985  60.67679675
+      66.36507416  54.01877481  55.35073647  72.09487827  66.68777448
+      68.72188501  75.78738389  71.74184773  85.96126327  56.70112041
+      81.09084206  57.58093706  84.06440749  74.41954442  62.18764546
+      75.27197187  61.46592972  58.31103025  51.91246775  55.15054632
+      53.9186066   64.29741734  63.26482182  79.83373538  52.231906
+      76.0801539   48.93722199  47.92940164  72.22036887  55.27164512
+      74.09392152  50.49809986  56.12822051  53.36650922  48.36825432
+      67.47748564  53.29470322  79.10506776  56.97576079  64.18727292
+      65.84222781  53.26154588  81.46542736  52.35220077  84.14535893
+      57.78301323  63.44460554  85.17300151  53.87873878  82.17946986
+      55.57142207  53.44180125  82.30590891  79.42804417  50.59237499
+      73.05899401  60.49206178  66.35076757  58.81871673  56.84014265
+      65.36529881  64.64449541  62.58053318  59.15950169  77.14193434
+      71.01074441  55.63599771  54.63449213  68.65661579  59.28287322
+      50.09563279  54.16797784  66.35926126  55.76139792  60.48693708
+      58.11001811  51.60683458  79.52118342  52.29974511  54.59160085
+      81.1398818   49.89218576  70.86936143  75.5638294   53.50770837
+      52.94916852  71.15365315  65.96481067  53.7822845   74.0517984
+      57.04984211  54.79504964  59.68792991  52.72811979  62.37095928
+      58.71818926  78.07966678  73.01620535  83.84826037  61.68668943
+      77.97561717  60.64609227  64.98237699  60.94642223  58.91704416
+      66.32297521  68.42236412  76.02112256  61.70440521  68.12094399
+      70.89143062  72.48653844  66.25251929  69.73219049  73.81000711
+      74.61464867  74.56070044  72.46891729  60.6492267   59.69175035
+      54.85112359  55.50812562  58.40425401  59.06804037  66.50726369
+      63.81926625  58.65561644  59.53799173  56.15044258  55.77227989
+      60.77800367  64.51419234  62.23002225  63.71793471  77.79728827
+      73.5623573   66.75784197  66.88031171  67.94028697  64.45292283
+      66.22813632  71.40743688  71.52673785  69.71966442  62.74689935
+      61.90027944  68.94840972  69.11731109  63.06604541  68.24997692
+      75.5550259   82.41178498  87.49239299  90.00379533  89.33919687
+      85.37154345  79.021434    72.92507087  59.6615622   66.20057028
+      77.5294828   86.92109857  93.30640089  96.91402404  96.47747543
+      90.74957243  80.11678924  70.79239703  53.68204924  60.70366355
+      81.67718122  93.61025132 100.00180546 104.84703802 105.53588186
+      98.90027031  80.03960867  65.06340472  45.98291596  45.63266225
+      80.77629126  83.87147472  82.18865104  84.0460425   85.92977998
+      91.96723166  72.16718568  53.38529161]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 400-402
+.. GENERATED FROM PYTHON SOURCE LINES 403-405
 
 Plot the results:
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 402-425
+.. GENERATED FROM PYTHON SOURCE LINES 405-428
 
 .. code-block:: default
 
@@ -1395,7 +1394,7 @@ Plot the results:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 430-441
+.. GENERATED FROM PYTHON SOURCE LINES 433-444
 
 2.3 Bayesian sampling with emcee (exploration)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1409,7 +1408,7 @@ For the log posterior, we define here by specifying ``log_prior`` and
 ``log_posterior``.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 441-469
+.. GENERATED FROM PYTHON SOURCE LINES 444-472
 
 .. code-block:: default
 
@@ -1448,12 +1447,12 @@ For the log posterior, we define here by specifying ``log_prior`` and
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 474-476
+.. GENERATED FROM PYTHON SOURCE LINES 477-479
 
 As usual, specify how you’d like to run the inversion and run it.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 476-489
+.. GENERATED FROM PYTHON SOURCE LINES 479-492
 
 .. code-block:: default
 
@@ -1480,24 +1479,12 @@ As usual, specify how you’d like to run the inversion and run it.
 
  .. code-block:: none
 
-
-      0%|          | 0/10 [00:00<?, ?it/s]
-     10%|#         | 1/10 [00:10<01:36, 10.69s/it]
-     20%|##        | 2/10 [00:20<01:20, 10.05s/it]
-     30%|###       | 3/10 [00:32<01:16, 10.86s/it]
-     40%|####      | 4/10 [00:42<01:04, 10.73s/it]
-     50%|#####     | 5/10 [00:51<00:50, 10.11s/it]
-     60%|######    | 6/10 [01:01<00:40, 10.11s/it]
-     70%|#######   | 7/10 [01:10<00:28,  9.57s/it]
-     80%|########  | 8/10 [01:19<00:18,  9.40s/it]
-     90%|######### | 9/10 [01:28<00:09,  9.50s/it]
-    100%|##########| 10/10 [01:42<00:00, 10.69s/it]
-    100%|##########| 10/10 [01:42<00:00, 10.23s/it]
+      0%|          | 0/10 [00:00<?, ?it/s]     10%|#         | 1/10 [00:07<01:03,  7.08s/it]     20%|##        | 2/10 [00:14<00:56,  7.08s/it]     30%|###       | 3/10 [00:21<00:49,  7.08s/it]     40%|####      | 4/10 [00:28<00:42,  7.08s/it]     50%|#####     | 5/10 [00:35<00:35,  7.08s/it]     60%|######    | 6/10 [00:42<00:28,  7.08s/it]     70%|#######   | 7/10 [00:49<00:21,  7.10s/it]     80%|########  | 8/10 [00:56<00:14,  7.09s/it]     90%|######### | 9/10 [01:03<00:07,  7.09s/it]    100%|##########| 10/10 [01:10<00:00,  7.08s/it]    100%|##########| 10/10 [01:10<00:00,  7.08s/it]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 494-500
+.. GENERATED FROM PYTHON SOURCE LINES 497-503
 
 Let’s sub-sample 10 models from the posterior ensemble and plot them
 out.
@@ -1506,7 +1493,7 @@ You’ll see that the results are not as good. That’s because we’ve used
 only 32 walkers and 10 sampling steps.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 500-503
+.. GENERATED FROM PYTHON SOURCE LINES 503-506
 
 .. code-block:: default
 
@@ -1520,7 +1507,7 @@ only 32 walkers and 10 sampling steps.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 505-516
+.. GENERATED FROM PYTHON SOURCE LINES 508-519
 
 .. code-block:: default
 
@@ -1531,97 +1518,97 @@ only 32 walkers and 10 sampling steps.
         ax=pg.show(
             imesh,
             data=(flat_samples[idx]),
-            label=r"$\Omega m$"utils/sphinx_gallery
+            label=r"$\Omega m$"
         )
-        ax[0].set_title(f"Inferreutils/sphinx_gallerye {idx}");
+        ax[0].set_title(f"Inferred model - sample {idx}");
 
 
 
 
-.. rst-class:: sphx-glr-horizontalutils/sphinx_gallery
+.. rst-class:: sphx-glr-horizontal
 
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_012.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_012.png
          :alt: Inferred model - sample 0
-         :srcset: /cofi-examples/_sutils/sphinx_galleryenerated/images/sphx_glr_pygimli_ert_012.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_012.png
          :class: sphx-glr-multi-img
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_013.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_013.png
          :alt: Inferred model - sample 130
-         :srcset: /cofi-examples/_sutils/sphinx_galleryenerated/images/sphx_glr_pygimli_ert_013.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_013.png
          :class: sphx-glr-multi-img
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_014.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_014.png
          :alt: Inferred model - sample 85
-         :srcset: /cofi-examples/_sutils/sphinx_galleryenerated/images/sphx_glr_pygimli_ert_014.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_014.png
          :class: sphx-glr-multi-img
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_015.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_015.png
          :alt: Inferred model - sample 61
-         :srcset: /cofi-examples/_sutils/sphinx_galleryenerated/images/sphx_glr_pygimli_ert_015.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_015.png
          :class: sphx-glr-multi-img
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_016.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_016.png
          :alt: Inferred model - sample 63
-         :srcset: /cofi-examples/_sutils/sphinx_galleryenerated/images/sphx_glr_pygimli_ert_016.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_016.png
          :class: sphx-glr-multi-img
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_017.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_017.png
          :alt: Inferred model - sample 144
-         :srcset: /cofi-examples/_sutils/sphinx_galleryenerated/images/sphx_glr_pygimli_ert_017.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_017.png
          :class: sphx-glr-multi-img
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_018.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_018.png
          :alt: Inferred model - sample 125
-         :srcset: /cofi-examples/_sutils/sphinx_galleryenerated/images/sphx_glr_pygimli_ert_018.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_018.png
          :class: sphx-glr-multi-img
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_019.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_019.png
          :alt: Inferred model - sample 104
-         :srcset: /cofi-examples/_sutils/sphinx_galleryenerated/images/sphx_glr_pygimli_ert_019.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_019.png
          :class: sphx-glr-multi-img
-utils/sphinx_gallery
+
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_020.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_020.png
          :alt: Inferred model - sample 61
-         :srcset: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_020.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_020.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_021.png
+      .. image-sg:: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_021.png
          :alt: Inferred model - sample 34
-         :srcset: /cofi-examples/_sphinx_gallery/generated/images/sphx_glr_pygimli_ert_021.png
+         :srcset: /cofi-examples/utils/sphinx_gallery/generated/images/sphx_glr_pygimli_ert_021.png
          :class: sphx-glr-multi-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 521-524
+.. GENERATED FROM PYTHON SOURCE LINES 524-527
 
 Not satisfied with the results? Go back to the code cell under 2.3 and
 try with bigger numbers of walkers and steps 😉
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 527-532
+.. GENERATED FROM PYTHON SOURCE LINES 530-535
 
 --------------
 
@@ -1629,7 +1616,7 @@ Watermark
 ---------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 532-538
+.. GENERATED FROM PYTHON SOURCE LINES 535-541
 
 .. code-block:: default
 
@@ -1649,12 +1636,12 @@ Watermark
 
  .. code-block:: none
 
-    cofi 0.1.2.dev6
+    cofi 0.1.2.dev7
     numpy 1.21.6
     scipy 1.8.1
     pygimli 1.2.6
     matplotlib 3.5.2
-    emcee 3.1.2utils/sphinx_gallery
+    emcee 3.1.2
     arviz 0.12.1
 
 
@@ -1663,10 +1650,10 @@ Watermark
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 5 minutes  12.062 seconds)
+   **Total running time of the script:** ( 2 minutes  23.018 seconds)
 
 
-.. _sphx_glr_download_cofi-examples__sphinx_gallery_generated_pygimli_ert.py:
+.. _sphx_glr_download_cofi-examples_utils_sphinx_gallery_generated_pygimli_ert.py:
 
 
 .. only :: html

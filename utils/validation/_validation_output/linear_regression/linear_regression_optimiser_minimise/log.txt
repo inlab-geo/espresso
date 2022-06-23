@@ -10,7 +10,7 @@ List of functions/properties created based on what you have provided:
 ['objective', 'residual']
 ---------------------------------------------------------------------
 List of functions/properties not set by you:
-['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_covariance', 'data_covariance_inv', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
 =============================
 Summary for inversion options
 =============================
@@ -28,15 +28,15 @@ Summary for inversion result
 ============================
 SUCCESS
 ----------------------------
-fun: 0.34859221629337445
-jac: [-1.11758709e-07  4.47034836e-08 -4.24683094e-07  1.16229057e-06]
-hess_inv: [[16.03375207  5.10437838 -6.66993651 -2.11071782]
- [ 5.10437838  7.20894841 -2.87890279 -1.54018835]
- [-6.66993651 -2.87890279  4.26644192  1.42602996]
- [-2.11071782 -1.54018835  1.42602996  0.56995601]]
+fun: 0.3485922162933735
+jac: [-1.15483999e-07  4.84287739e-08 -4.20957804e-07  1.16974115e-06]
+hess_inv: [[16.030667    5.10310795 -6.66806425 -2.11011884]
+ [ 5.10310795  7.20927576 -2.87817261 -1.54007632]
+ [-6.66806425 -2.87817261  4.26530198  1.42567176]
+ [-2.11011884 -1.54007632  1.42567176  0.56986057]]
 nfev: 135
 njev: 27
 status: 0
 message: Optimization terminated successfully.
 nit: 26
-model: [-5.41196935 -4.93925609  1.67801232  0.92007732]
+model: [-5.41196938 -4.93925608  1.67801234  0.92007733]

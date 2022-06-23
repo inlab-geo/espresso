@@ -10,7 +10,7 @@ List of functions/properties created based on what you have provided:
 ['log_posterior', 'log_posterior_with_blobs']
 ---------------------------------------------------------------------
 List of functions/properties not set by you:
-['objective', 'log_posterior', 'log_posterior_with_blobs', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_misfit', 'regularisation', 'forward', 'data', 'initial_model', 'bounds', 'constraints']
+['objective', 'log_posterior', 'log_posterior_with_blobs', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_misfit', 'regularisation', 'forward', 'data', 'data_covariance', 'data_covariance_inv', 'initial_model', 'bounds', 'constraints']
 =============================
 Summary for inversion options
 =============================

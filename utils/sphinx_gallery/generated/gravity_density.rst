@@ -10,12 +10,12 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_cofi-examples_utils/sphinx_gallery_generated_gravity_density.py>`
+        Click :ref:`here <sphx_glr_download_cofi-examples_utils_sphinx_gallery_generated_gravity_density.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_cofi-examples_utils/sphinx_gallery_generated_gravity_density.py:
+.. _sphx_glr_cofi-examples_utils_sphinx_gallery_generated_gravity_density.py:
 
 
 Gravity Density Model
@@ -468,7 +468,7 @@ Let’s see the density image from a vertical plane:
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7fa2e0200190>
+    <matplotlib.colorbar.Colorbar object at 0x7fba872bc220>
 
 
 
@@ -501,7 +501,7 @@ From a different angle:
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7fa2dc78cc70>
+    <matplotlib.colorbar.Colorbar object at 0x7fba870c4b50>
 
 
 
@@ -533,7 +533,7 @@ Watermark
 
  .. code-block:: none
 
-    cofi 0.1.2.dev6
+    cofi 0.1.2.dev7
     numpy 1.21.6
     scipy 1.8.1
     matplotlib 3.5.2
@@ -546,10 +546,10 @@ Watermark
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  39.849 seconds)
+   **Total running time of the script:** ( 0 minutes  19.879 seconds)
 
 
-.. _sphx_glr_download_cofi-examples_utils/sphinx_gallery_generated_gravity_density.py:
+.. _sphx_glr_download_cofi-examples_utils_sphinx_gallery_generated_gravity_density.py:
 
 
 .. only :: html
