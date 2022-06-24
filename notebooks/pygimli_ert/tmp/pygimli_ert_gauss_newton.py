@@ -159,7 +159,7 @@ class GaussNewton(BaseSolver):
         return {"model": current_model, "success": True}
 
 # hyperparameters
-lamda = 20
+lamda = 0.5
 niter = 50
 inv_verbose = True
 
@@ -180,12 +180,6 @@ inv_options = InversionOptions()
 inv_options.set_tool(GaussNewton)
 inv_options.set_params(niter=niter, verbose=inv_verbose)
 
-# objective function value of the true model
-# true_model = pygimli.solver.parseArgToArray(rhomap, imesh.cellCount(), imesh)
-# print("-" * 90)
-# print(ert_problem.objective(true_model))
-# print(ert_problem.objective(start_model))
-
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options)
 inv_result = inv.run()
@@ -196,21 +190,9 @@ ax = pygimli.show(imesh, data=inv_result.model, label=r"$\Omega m$")
 ax[0].set_title("Inferred model")
 ax[0].figure.savefig("figs/pygimli_ert_gauss_newton_inferred")
 
-# res = inv_result.model
-
-# true_model = pygimli.solver.parseArgToArray(rhomap, mesh.cellCount(), mesh)
-# print("-" * 90)
-# print(ert_problem.objective(true_model))
-# print(ert_problem.objective(start_model))
-
-# # print("min", np.min(res), "max", np.max(res))
-# # data_synth = forward_operator.response(res)
-# # # data_synth.remove(data_synth['rhoa'] < 0)
-# # ax = ert.show(data_synth)
-# # ax[0].figure.savefig("figs/data_synth")
-
-# data = ert.simulate(mesh, scheme=scheme, res=pygimli.solver.parseArgToArray(rhomap, mesh.cellCount(), mesh))
-# data.remove(data['rhoa'] < 0)
-# log_data = np.log(data['rhoa'].array())
-# ax = ert.show(data)
-# ax[0].figure.savefig("figs/data_synth")
+# plot synthetic data
+data = ert.simulate(imesh, scheme=scheme, res=inv_result.model)
+data.remove(data['rhoa'] < 0)
+log_data = np.log(data['rhoa'].array())
+ax = ert.show(data)
+ax[0].figure.savefig("figs/data_synth_inferred")
