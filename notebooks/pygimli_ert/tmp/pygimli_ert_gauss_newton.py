@@ -11,29 +11,28 @@ from cofi.solvers import BaseSolver
 
 ############# ERT Modelling with PyGIMLi ##############################################
 
+# measuring scheme
+scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51), schemeName="dd")
+
+# simulation mesh
 world = meshtools.createWorld(start=[-55,0], end=[105,-80], worldMarker=True)
 conductive_anomaly = meshtools.createCircle(pos=[10,-7], radius=5, marker=2)
 geom = world + conductive_anomaly
 ax = pygimli.show(geom)
 ax[0].figure.savefig("figs/true_geometry")
-
-scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51), schemeName="dd")
-for s in scheme.sensors():
+for s in scheme.sensors():          # local refinement 
     geom.createNode(s + [0.0, -0.2])
-
 rhomap = [[1, 200], [2,  50],]
-
 mesh = meshtools.createMesh(geom, quality=33)
 ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
 ax[0].figure.savefig("figs/true_model_coarse")
-
 # mesh = mesh.createH2()
 # ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
 # ax[0].figure.savefig("figs/true_model")
 
+# generate data
 data = ert.simulate(mesh, scheme=scheme, res=rhomap, noiseLevel=1,
                     noiseAbs=1e-6, seed=42)
-
 data.remove(data['rhoa'] < 0)
 log_data = np.log(data['rhoa'].array())
 ax = ert.show(data)
@@ -49,19 +48,33 @@ ax[0].figure.savefig("figs/data")
 
 ############# Extra info from PyGIMLi, required by our own solver #####################
 
+# inverse mesh
+iworld = meshtools.createWorld(start=[-55,0], end=[105,-80], worldMarker=True)
+for s in scheme.sensors():
+    iworld.createNode(s + [0.0, -0.2])
+imesh = meshtools.createMesh(iworld, quality=33)
+ax = pygimli.show(imesh, label="$\Omega m$", showMesh=True)
+ax[0].figure.savefig("figs/inverse_mesh_coarse")
+
+# ert.ERTModelling
 forward_operator = ert.ERTModelling(sr=False, verbose=False)
 forward_operator.setComplex(False)
 forward_operator.setData(scheme)
-forward_operator.setMesh(mesh, ignoreRegionManager=True)
+forward_operator.setMesh(imesh, ignoreRegionManager=True)
 
-start_model = np.ones(mesh.cellCount()) * 80.0
+# starting model
+start_model = np.ones(imesh.cellCount()) * 80.0
+ax = pygimli.show(imesh, data=start_model, label="$\Omega m$", showMesh=True)
+ax[0].figure.savefig("figs/start_model")
 
+# weighting matrix for regularisation
 region_manager = forward_operator.regionManager()
-region_manager.setMesh(mesh)
+region_manager.setMesh(imesh)
 region_manager.setConstraintType(2)
 Wm = pygimli.matrix.SparseMapMatrix()
 region_manager.fillConstraints(Wm)
 Wm = pygimli.utils.sparseMatrix2coo(Wm)
+
 
 def get_response(model, forward_operator):
     return np.log(np.array(forward_operator.response(model)))
@@ -88,7 +101,7 @@ def get_jac_residual(model, log_data, forward_operator):
 
 def get_data_misfit(model, log_data, forward_operator):
     residual = get_residual(model, log_data, forward_operator)
-    return residual.T @ residual
+    return np.abs(residual.T @ residual)
 
 def get_regularisation(model, Wm, lamda):
     return lamda * (Wm @ model).T @ (Wm @ model)
@@ -101,8 +114,8 @@ def get_objective(model, log_data, forward_operator, Wm, lamda):
 
 def get_gradient(model, log_data, forward_operator, Wm, lamda):
     jac, residual = get_jac_residual(model, log_data, forward_operator)
-    data_misfit_grad =  - 2 * residual @ jac
-    regularisation_grad = 2 * lamda * Wm.T @ Wm @ model
+    data_misfit_grad =  - residual @ jac
+    regularisation_grad = lamda * Wm.T @ Wm @ model
     return data_misfit_grad + regularisation_grad
 
 def get_hessian(model, log_data, forward_operator, Wm, lamda):
@@ -130,24 +143,24 @@ class GaussNewton(BaseSolver):
         self._hessian = inv_problem.hessian
         self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
         self._reg = inv_problem.regularisation if inv_problem.regularisation_defined else None
+        self._obj = inv_problem.objective if inv_problem.objective_defined else None
 
     def __call__(self):
         current_model = np.array(self._model_0)
         for i in range(self._niter):
+            if self._verbose:
+                print("-" * 80)
+                print(f"Iteration {i+1}")
+                if self._obj: print(self._obj(current_model))
             term1 = self._hessian(current_model)
             term2 = - self._gradient(current_model)
             model_update = np.linalg.solve(term1, term2)
             current_model = np.array(current_model + model_update)
-            if self._verbose:
-                print("-" * 80)
-                print(f"Iteration {i+1}")
-                if self._misfit: print(self._misfit(current_model))
-                if self._reg: print(self._reg(current_model))
         return {"model": current_model, "success": True}
 
 # hyperparameters
 lamda = 20
-niter = 100
+niter = 50
 inv_verbose = True
 
 # CoFI - define BaseProblem
@@ -167,12 +180,37 @@ inv_options = InversionOptions()
 inv_options.set_tool(GaussNewton)
 inv_options.set_params(niter=niter, verbose=inv_verbose)
 
+# objective function value of the true model
+# true_model = pygimli.solver.parseArgToArray(rhomap, imesh.cellCount(), imesh)
+# print("-" * 90)
+# print(ert_problem.objective(true_model))
+# print(ert_problem.objective(start_model))
+
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options)
 inv_result = inv.run()
 
 # plot inferred model
 inv_result.summary()
-ax = pygimli.show(mesh, data=inv_result.model, label=r"$\Omega m$")
+ax = pygimli.show(imesh, data=inv_result.model, label=r"$\Omega m$")
 ax[0].set_title("Inferred model")
 ax[0].figure.savefig("figs/pygimli_ert_gauss_newton_inferred")
+
+# res = inv_result.model
+
+# true_model = pygimli.solver.parseArgToArray(rhomap, mesh.cellCount(), mesh)
+# print("-" * 90)
+# print(ert_problem.objective(true_model))
+# print(ert_problem.objective(start_model))
+
+# # print("min", np.min(res), "max", np.max(res))
+# # data_synth = forward_operator.response(res)
+# # # data_synth.remove(data_synth['rhoa'] < 0)
+# # ax = ert.show(data_synth)
+# # ax[0].figure.savefig("figs/data_synth")
+
+# data = ert.simulate(mesh, scheme=scheme, res=pygimli.solver.parseArgToArray(rhomap, mesh.cellCount(), mesh))
+# data.remove(data['rhoa'] < 0)
+# log_data = np.log(data['rhoa'].array())
+# ax = ert.show(data)
+# ax[0].figure.savefig("figs/data_synth")
