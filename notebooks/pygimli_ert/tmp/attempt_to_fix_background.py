@@ -9,8 +9,6 @@ from cofi import BaseProblem, InversionOptions, Inversion
 from cofi.solvers import BaseSolver
 
 
-############# ERT Modelling with PyGIMLi ##############################################
-
 # measuring scheme
 scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51), schemeName="dd")
 
@@ -35,34 +33,36 @@ data = ert.simulate(mesh, scheme=scheme, res=rhomap, noiseLevel=1,
                     noiseAbs=1e-6, seed=42)
 data.remove(data['rhoa'] < 0)
 log_data = np.log(data['rhoa'].array())
-ax = ert.show(data)
-ax[0].figure.savefig("figs/data")
-
-
-############# Extra info from PyGIMLi, required by our own solver #####################
+# ax = ert.show(data)
+# ax[0].figure.savefig("figs/data")
 
 # inverse mesh
-iworld = meshtools.createWorld(start=[-55,0], end=[105,-80], worldMarker=True)
+# iworld = meshtools.createWorld(start=[-55,0], end=[105,-80], worldMarker=True)
+iworld = meshtools.createWorld(start=[-205, 0], end=[255, -230], worldMarker=True, marker=1)
+inv_area = meshtools.createRectangle(start=[-5, 0], end=[55, -20], marker=2)
+igeom = iworld + inv_area
 for s in scheme.sensors():
-    iworld.createNode(s + [0.0, -0.2])
-imesh = meshtools.createMesh(iworld, quality=33)
-ax = pygimli.show(imesh, label="$\Omega m$", showMesh=True)
+    igeom.createNode(s + [0.0, -0.1])
+iworld_mesh = meshtools.createMesh(igeom, quality=33)
+inv_mesh = meshtools.createMesh(inv_area)
+inv_mesh.createMeshByMarker(iworld_mesh, 2)
+ax = pygimli.show(iworld_mesh, label="$\Omega m$", showMesh=True, markers=True)
 ax[0].figure.savefig("figs/inverse_mesh_coarse")
 
 # ert.ERTModelling
 forward_operator = ert.ERTModelling(sr=False, verbose=False)
 forward_operator.setComplex(False)
 forward_operator.setData(scheme)
-forward_operator.setMesh(imesh, ignoreRegionManager=True)
+forward_operator.setMesh(iworld_mesh, ignoreRegionManager=True)
 
 # starting model
-start_model = np.ones(imesh.cellCount()) * 80.0
-ax = pygimli.show(imesh, data=start_model, label="$\Omega m$", showMesh=True)
+start_model = np.ones(inv_mesh.cellCount()) * 80.0
+ax = pygimli.show(inv_mesh, data=start_model, label="$\Omega m$", showMesh=True)
 ax[0].figure.savefig("figs/start_model")
 
 # weighting matrix for regularisation
 region_manager = forward_operator.regionManager()
-region_manager.setMesh(imesh)
+region_manager.setMesh(inv_mesh)
 region_manager.setConstraintType(2)
 Wm = pygimli.matrix.SparseMapMatrix()
 region_manager.fillConstraints(Wm)
