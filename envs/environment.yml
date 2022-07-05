@@ -9,6 +9,7 @@ dependencies:
   - matplotlib>=3.5.0
   - nodejs>=12
   - pygimli
+  - simpeg
   - pip
   - pip:
     - cofi>=0.1.2.dev7
