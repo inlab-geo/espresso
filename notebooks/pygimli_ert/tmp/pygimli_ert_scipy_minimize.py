@@ -68,6 +68,8 @@ Wm = pygimli.matrix.SparseMapMatrix()
 region_manager.fillConstraints(Wm)
 Wm = pygimli.utils.sparseMatrix2coo(Wm)
 
+print(Wm)
+
 
 def get_response(model, forward_operator):
     return np.log(np.array(forward_operator.response(model)))
@@ -139,17 +141,17 @@ inv_options_scipy = InversionOptions()
 inv_options_scipy.set_tool("scipy.optimize.minimize")
 inv_options_scipy.set_params(method="L-BFGS-B")
 inv = Inversion(ert_problem, inv_options_scipy)
-inv_result_scipy = inv.run()
+# inv_result_scipy = inv.run()
 
 # plot inferred model
-inv_result_scipy.summary()
-ax = pygimli.show(imesh, data=inv_result_scipy.model, label=r"$\Omega m$")
-ax[0].set_title("Inferred model")
-ax[0].figure.savefig("figs/pygimli_ert_gauss_newton_inferred_scipy")
+# inv_result_scipy.summary()
+# ax = pygimli.show(imesh, data=inv_result_scipy.model, label=r"$\Omega m$")
+# ax[0].set_title("Inferred model")
+# ax[0].figure.savefig("figs/pygimli_ert_gauss_newton_inferred_scipy")
 
-# plot synthetic data
-data = ert.simulate(imesh, scheme=scheme, res=inv_result_scipy.model)
-data.remove(data['rhoa'] < 0)
-log_data = np.log(data['rhoa'].array())
-ax = ert.show(data)
-ax[0].figure.savefig("figs/data_synth_inferred_scipy")
+# # plot synthetic data
+# data = ert.simulate(imesh, scheme=scheme, res=inv_result_scipy.model)
+# data.remove(data['rhoa'] < 0)
+# log_data = np.log(data['rhoa'].array())
+# ax = ert.show(data)
+# ax[0].figure.savefig("figs/data_synth_inferred_scipy")

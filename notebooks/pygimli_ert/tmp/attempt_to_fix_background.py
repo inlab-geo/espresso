@@ -43,11 +43,12 @@ inv_area = meshtools.createRectangle(start=[-5, 0], end=[55, -20], marker=2)
 igeom = iworld + inv_area
 for s in scheme.sensors():
     igeom.createNode(s + [0.0, -0.1])
-iworld_mesh = meshtools.createMesh(igeom, quality=33)
+iworld_mesh = meshtools.createMesh(igeom, quality=34)
 inv_mesh = meshtools.createMesh(inv_area)
 inv_mesh.createMeshByMarker(iworld_mesh, 2)
 ax = pygimli.show(iworld_mesh, label="$\Omega m$", showMesh=True, markers=True)
-ax[0].figure.savefig("figs/inverse_mesh_coarse")
+ax[0].figure.savefig("figs/inverse_mesh_background")
+# print(inv_mesh.cellCount())
 
 # ert.ERTModelling
 forward_operator = ert.ERTModelling(sr=False, verbose=False)
@@ -173,19 +174,19 @@ inv_options = InversionOptions()
 inv_options.set_tool(GaussNewton)
 inv_options.set_params(niter=niter, verbose=inv_verbose)
 
-# CoFI - define Inversion, run it
-inv = Inversion(ert_problem, inv_options)
-inv_result = inv.run()
+# # CoFI - define Inversion, run it
+# inv = Inversion(ert_problem, inv_options)
+# inv_result = inv.run()
 
-# plot inferred model
-inv_result.summary()
-ax = pygimli.show(imesh, data=inv_result.model, label=r"$\Omega m$")
-ax[0].set_title("Inferred model")
-ax[0].figure.savefig("figs/pygimli_ert_gauss_newton_inferred")
+# # plot inferred model
+# inv_result.summary()
+# ax = pygimli.show(imesh, data=inv_result.model, label=r"$\Omega m$")
+# ax[0].set_title("Inferred model")
+# ax[0].figure.savefig("figs/pygimli_ert_gauss_newton_inferred")
 
-# plot synthetic data
-data = ert.simulate(imesh, scheme=scheme, res=inv_result.model)
-data.remove(data['rhoa'] < 0)
-log_data = np.log(data['rhoa'].array())
-ax = ert.show(data)
-ax[0].figure.savefig("figs/data_synth_inferred")
+# # plot synthetic data
+# data = ert.simulate(imesh, scheme=scheme, res=inv_result.model)
+# data.remove(data['rhoa'] < 0)
+# log_data = np.log(data['rhoa'].array())
+# ax = ert.show(data)
+# ax[0].figure.savefig("figs/data_synth_inferred")
