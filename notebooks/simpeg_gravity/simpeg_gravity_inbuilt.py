@@ -149,9 +149,6 @@ observations = data.Data(survey, dobs=y_obs)
 observations.relative_error = 0.05
 observations.noise_floor = 1e-5
 
-maximum_anomaly = np.max(np.abs(y_obs))
-uncertainties = 0.01 * maximum_anomaly * np.ones(np.shape(y_obs))
-
 
 ############# Define starting model with SimPEG #######################################
 
@@ -185,6 +182,8 @@ reg.norms = np.c_[0, 2, 2, 2]
 # residual between the observed data and the data predicted for a given model.
 # Within the data misfit, the residual between predicted and observed data are
 # normalized by the data's standard deviation.
+maximum_anomaly = np.max(np.abs(y_obs))
+uncertainties = 0.01 * maximum_anomaly * np.ones(np.shape(y_obs))
 dmis = data_misfit.L2DataMisfit(data=observations, simulation=simulation)
 dmis.W = utils.sdiag(1 / uncertainties)
 

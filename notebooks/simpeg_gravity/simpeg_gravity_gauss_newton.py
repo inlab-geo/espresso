@@ -152,9 +152,6 @@ observations = data.Data(survey, dobs=y_obs)
 observations.relative_error = 0.05
 observations.noise_floor = 1e-5
 
-maximum_anomaly = np.max(np.abs(y_obs))
-uncertainties = 0.01 * maximum_anomaly * np.ones(np.shape(y_obs))
-
 
 ############# Define starting model with SimPEG #######################################
 
