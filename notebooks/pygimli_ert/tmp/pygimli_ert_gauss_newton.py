@@ -153,7 +153,7 @@ class GaussNewton(BaseSolver):
 
 # hyperparameters
 lamda = 20
-niter = 4
+niter = 100
 inv_verbose = True
 
 # CoFI - define BaseProblem

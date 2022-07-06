@@ -119,6 +119,9 @@ def get_hessian(model, log_data, forward_operator, Wm, lamda):
 
 ############# Inverted by SciPy optimiser through CoFI ################################
 
+# hyperparameters
+lamda = 20
+
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
 ert_problem.name = "Electrical Resistivity Tomography defined through PyGIMLi"
