@@ -68,8 +68,6 @@ Wm = pygimli.matrix.SparseMapMatrix()
 region_manager.fillConstraints(Wm)
 Wm = pygimli.utils.sparseMatrix2coo(Wm)
 
-print(Wm)
-
 
 def get_response(model, forward_operator):
     return np.log(np.array(forward_operator.response(model)))

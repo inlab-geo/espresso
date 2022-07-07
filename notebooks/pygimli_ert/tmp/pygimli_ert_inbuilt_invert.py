@@ -39,17 +39,10 @@ ax[0].figure.savefig("figs/data")
 
 mgr = ert.ERTManager(data, verbose=True, useBert=True)
 
-inv_mesh = mgr.createMesh(data)
-print(inv_mesh)
-ax = pygimli.show(inv_mesh, showMesh=True)
-ax[0].figure.savefig("inv_mesh")
+inv = mgr.invert(lam=20, verbose=True)
+fig = mgr.showResultAndFit()
+fig.savefig("figs/invert_result")
 
-# inv = mgr.invert(lam=20, verbose=True)
-# fig = mgr.showResultAndFit()
-# fig.savefig("figs/invert_result")
-# print(mgr.model)
-
-# print(mgr.mesh)
 
 # ax = pygimli.show(mgr.mesh, data=mgr.model, showMesh=True)
 # ax[0].figure.savefig("resulting_mesh")

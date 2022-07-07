@@ -1,3 +1,4 @@
+from matplotlib import markers
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -16,14 +17,14 @@ scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51), schemeName=
 world = meshtools.createWorld(start=[-55,0], end=[105,-80], worldMarker=True)
 conductive_anomaly = meshtools.createCircle(pos=[10,-7], radius=5, marker=2)
 geom = world + conductive_anomaly
-ax = pygimli.show(geom)
-ax[0].figure.savefig("figs/true_geometry")
+# ax = pygimli.show(geom)
+# ax[0].figure.savefig("figs/true_geometry")
 for s in scheme.sensors():          # local refinement 
     geom.createNode(s + [0.0, -0.2])
 rhomap = [[1, 200], [2,  50],]
 mesh = meshtools.createMesh(geom, quality=33)
 ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
-ax[0].figure.savefig("figs/true_model_coarse")
+ax[0].figure.savefig("figs/model_true")
 # mesh = mesh.createH2()
 # ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
 # ax[0].figure.savefig("figs/true_model")
@@ -37,38 +38,30 @@ log_data = np.log(data['rhoa'].array())
 # ax[0].figure.savefig("figs/data")
 
 # inverse mesh
-# iworld = meshtools.createWorld(start=[-55,0], end=[105,-80], worldMarker=True)
-iworld = meshtools.createWorld(start=[-205, 0], end=[255, -230], worldMarker=True, marker=1)
-inv_area = meshtools.createRectangle(start=[-5, 0], end=[55, -20], marker=2)
-igeom = iworld + inv_area
-for s in scheme.sensors():
-    igeom.createNode(s + [0.0, -0.1])
-iworld_mesh = meshtools.createMesh(igeom, quality=34)
-inv_mesh = meshtools.createMesh(inv_area)
-inv_mesh.createMeshByMarker(iworld_mesh, 2)
-ax = pygimli.show(iworld_mesh, label="$\Omega m$", showMesh=True, markers=True)
-ax[0].figure.savefig("figs/inverse_mesh_background")
-# print(inv_mesh.cellCount())
+mgr = ert.ERTManager(data, verbose=False, useBert=True)
+inv_mesh = mgr.createMesh(data)
+mgr.applyMesh(inv_mesh)
+ax = pygimli.show(inv_mesh, showMesh=True, markers=True)
+ax[0].figure.savefig("figs/gauss_newton_inv_mesh")
 
 # ert.ERTModelling
-forward_operator = ert.ERTModelling(sr=False, verbose=False)
+# forward_operator = ert.ERTModelling(sr=False, verbose=False)
+forward_operator = mgr.fop
 forward_operator.setComplex(False)
 forward_operator.setData(scheme)
-forward_operator.setMesh(iworld_mesh, ignoreRegionManager=True)
-
-# starting model
-start_model = np.ones(inv_mesh.cellCount()) * 80.0
-ax = pygimli.show(inv_mesh, data=start_model, label="$\Omega m$", showMesh=True)
-ax[0].figure.savefig("figs/start_model")
+forward_operator.setMesh(inv_mesh, ignoreRegionManager=True)
 
 # weighting matrix for regularisation
 region_manager = forward_operator.regionManager()
-region_manager.setMesh(inv_mesh)
 region_manager.setConstraintType(2)
 Wm = pygimli.matrix.SparseMapMatrix()
 region_manager.fillConstraints(Wm)
 Wm = pygimli.utils.sparseMatrix2coo(Wm)
 
+# starting model
+start_model = np.ones(mgr.paraDomain.cellCount()) * np.median(data['rhoa'].array())
+ax = pygimli.show(mgr.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
+ax[0].figure.savefig("figs/model_start")
 
 def get_response(model, forward_operator):
     return np.log(np.array(forward_operator.response(model)))
@@ -174,19 +167,19 @@ inv_options = InversionOptions()
 inv_options.set_tool(GaussNewton)
 inv_options.set_params(niter=niter, verbose=inv_verbose)
 
-# # CoFI - define Inversion, run it
-# inv = Inversion(ert_problem, inv_options)
-# inv_result = inv.run()
+# CoFI - define Inversion, run it
+inv = Inversion(ert_problem, inv_options)
+inv_result = inv.run()
 
-# # plot inferred model
-# inv_result.summary()
-# ax = pygimli.show(imesh, data=inv_result.model, label=r"$\Omega m$")
-# ax[0].set_title("Inferred model")
-# ax[0].figure.savefig("figs/pygimli_ert_gauss_newton_inferred")
+# plot inferred model
+inv_result.summary()
+ax = pygimli.show(mgr.paraDomain, data=inv_result.model, label=r"$\Omega m$")
+ax[0].set_title("Inferred model")
+ax[0].figure.savefig("figs/gauss_newton_inferred_model")
 
-# # plot synthetic data
-# data = ert.simulate(imesh, scheme=scheme, res=inv_result.model)
-# data.remove(data['rhoa'] < 0)
-# log_data = np.log(data['rhoa'].array())
-# ax = ert.show(data)
-# ax[0].figure.savefig("figs/data_synth_inferred")
+# plot synthetic data
+data = ert.simulate(mgr.paraDomain, scheme=scheme, res=inv_result.model)
+data.remove(data['rhoa'] < 0)
+log_data = np.log(data['rhoa'].array())
+ax = ert.show(data)
+ax[0].figure.savefig("figs/gauss_newton_inferred_data")
