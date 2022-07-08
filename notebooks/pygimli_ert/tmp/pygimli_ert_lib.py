@@ -65,9 +65,10 @@ def reg_matrix(forward_oprt):
     Wm = pygimli.utils.sparseMatrix2coo(Wm)
     return Wm
 
-def starting_model(ert_manager):
+def starting_model(ert_manager, val=None):
     data = ert_manager.data
     start_val = np.median(data['rhoa'].array())     # this is how pygimli initialises
+    start_val = start_val or val
     start_model = np.ones(ert_manager.paraDomain.cellCount()) * start_val
     return start_model
 
