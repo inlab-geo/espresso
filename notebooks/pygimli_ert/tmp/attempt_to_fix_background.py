@@ -1,4 +1,3 @@
-from matplotlib import markers
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -15,37 +14,32 @@ scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51), schemeName=
 
 # simulation mesh
 world = meshtools.createWorld(start=[-55,0], end=[105,-80], worldMarker=True)
+for s in scheme.sensors():          # local refinement 
+    world.createNode(s + [0.0, -0.1])
 conductive_anomaly = meshtools.createCircle(pos=[10,-7], radius=5, marker=2)
 geom = world + conductive_anomaly
-# ax = pygimli.show(geom)
-# ax[0].figure.savefig("figs/true_geometry")
-for s in scheme.sensors():          # local refinement 
-    geom.createNode(s + [0.0, -0.2])
 rhomap = [[1, 200], [2,  50],]
 mesh = meshtools.createMesh(geom, quality=33)
 ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
-ax[0].figure.savefig("figs/model_true")
-# mesh = mesh.createH2()
-# ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
-# ax[0].figure.savefig("figs/true_model")
+ax[0].figure.savefig("figs/gauss_newton_model_true")
 
 # generate data
 data = ert.simulate(mesh, scheme=scheme, res=rhomap, noiseLevel=1,
                     noiseAbs=1e-6, seed=42)
 data.remove(data['rhoa'] < 0)
 log_data = np.log(data['rhoa'].array())
-# ax = ert.show(data)
-# ax[0].figure.savefig("figs/data")
+ax = ert.show(data)
+ax[0].figure.savefig("figs/gauss_newton_data")
 
 # inverse mesh
 mgr = ert.ERTManager(data, verbose=False, useBert=True)
 inv_mesh = mgr.createMesh(data)
-mgr.applyMesh(inv_mesh)
+# inv_mesh = meshtools.createMesh(world, quality=33)
+mgr.setMesh(inv_mesh)
 ax = pygimli.show(inv_mesh, showMesh=True, markers=True)
 ax[0].figure.savefig("figs/gauss_newton_inv_mesh")
 
 # ert.ERTModelling
-# forward_operator = ert.ERTModelling(sr=False, verbose=False)
 forward_operator = mgr.fop
 forward_operator.setComplex(False)
 forward_operator.setData(scheme)
@@ -59,9 +53,10 @@ region_manager.fillConstraints(Wm)
 Wm = pygimli.utils.sparseMatrix2coo(Wm)
 
 # starting model
-start_model = np.ones(mgr.paraDomain.cellCount()) * np.median(data['rhoa'].array())
+start_val = np.median(data['rhoa'].array())     # this is how pygimli initialises
+start_model = np.ones(mgr.paraDomain.cellCount()) * start_val
 ax = pygimli.show(mgr.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
-ax[0].figure.savefig("figs/model_start")
+ax[0].figure.savefig("figs/gauss_newton_model_start")
 
 def get_response(model, forward_operator):
     return np.log(np.array(forward_operator.response(model)))
@@ -121,8 +116,9 @@ def get_hessian(model, log_data, forward_operator, Wm, lamda):
 class GaussNewton(BaseSolver):
     def __init__(self, inv_problem, inv_options):
         __params = inv_options.get_params()
-        self._niter = __params["niter"]
-        self._verbose = __params["verbose"]
+        self._niter = __params.get("niter", 100)
+        self._verbose = __params.get("verbose", True)
+        self._step = __params.get("step", 1)
         self._model_0 = inv_problem.initial_model
         self._residual = inv_problem.residual
         self._jacobian = inv_problem.jacobian
@@ -141,14 +137,15 @@ class GaussNewton(BaseSolver):
                 if self._obj: print(self._obj(current_model))
             term1 = self._hessian(current_model)
             term2 = - self._gradient(current_model)
-            model_update = np.linalg.solve(term1, term2)
+            model_update = np.linalg.solve(term1, term2) * self._step
             current_model = np.array(current_model + model_update)
         return {"model": current_model, "success": True}
 
 # hyperparameters
 lamda = 20
-niter = 4
+niter = 500
 inv_verbose = True
+step = 2
 
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
@@ -165,7 +162,7 @@ ert_problem.set_initial_model(start_model)
 # CoFI - define InversionOptions
 inv_options = InversionOptions()
 inv_options.set_tool(GaussNewton)
-inv_options.set_params(niter=niter, verbose=inv_verbose)
+inv_options.set_params(niter=niter, verbose=inv_verbose, step=step)
 
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options)
