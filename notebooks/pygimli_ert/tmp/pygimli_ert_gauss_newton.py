@@ -5,6 +5,7 @@ from cofi import BaseProblem, InversionOptions, Inversion
 from cofi.solvers import BaseSolver
 
 from pygimli_ert_lib import (
+    model_vec,
     survey_scheme,
     model_true,
     ert_simulate,
@@ -53,7 +54,20 @@ forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
 Wm = reg_matrix(forward_oprt)
 
 # initialise a starting model for inversion
-start_model = starting_model(ert_manager, val=80)
+start_model = starting_model(ert_manager)
+# start_model = ert_manager.invert(lam=20)
+
+# d = forward_oprt.response(start_model)
+# # print(np.min(data), np.max(data), np.median(data), np.mean(data))
+# log_data = np.log(np.array(d))
+# data = ert.simulate(ert_manager.paraDomain, scheme=scheme, res=start_model)
+# data['rhoa'] = d
+# # print(np.min(d), np.max(d), np.median(d), np.mean(d))
+# # data.remove(data['rhoa'] < 0)
+# # log_data = np.log(data['rhoa'].array())
+# ax = ert.show(data)
+# ax[0].figure.savefig("figs/inbuilt_solver_inferred_data")
+
 ax = pygimli.show(ert_manager.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
 ax[0].figure.savefig("figs/gauss_newton_model_start")
 
@@ -86,7 +100,9 @@ class GaussNewton(BaseSolver):
             if self._verbose:
                 print("-" * 80)
                 print(f"Iteration {i+1}")
-                if self._obj: print(self._obj(current_model))
+                print("model min and max:", np.min(current_model), np.max(current_model))
+                if self._misfit: print("data misfit:", self._misfit(current_model))
+                if self._reg: print("regularisation:", self._reg(current_model))
             term1 = self._hessian(current_model)
             term2 = - self._gradient(current_model)
             model_update = np.linalg.solve(term1, term2) * self._step
@@ -94,8 +110,8 @@ class GaussNewton(BaseSolver):
         return {"model": current_model, "success": True}
 
 # hyperparameters
-lamda = 20
-niter = 500
+lamda = 0.1
+niter = 50
 inv_verbose = True
 step = 2
 
@@ -127,7 +143,9 @@ ax[0].set_title("Inferred model")
 ax[0].figure.savefig("figs/gauss_newton_inferred_model")
 
 # plot synthetic data
+d = forward_oprt.response(inv_result.model)
 data = ert.simulate(ert_manager.paraDomain, scheme=scheme, res=inv_result.model)
+data["rhoa"] = d
 data.remove(data['rhoa'] < 0)
 log_data = np.log(data['rhoa'].array())
 ax = ert.show(data)

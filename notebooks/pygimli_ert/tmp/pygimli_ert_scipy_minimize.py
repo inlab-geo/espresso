@@ -52,7 +52,7 @@ forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
 Wm = reg_matrix(forward_oprt)
 
 # initialise a starting model for inversion
-start_model = starting_model(ert_manager)
+start_model = starting_model(ert_manager, val=80)
 ax = pygimli.show(ert_manager.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
 ax[0].figure.savefig("figs/scipy_opt_model_start")
 

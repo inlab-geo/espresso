@@ -6,6 +6,9 @@ from pygimli_ert_lib import (
     model_true,
     ert_simulate,
     ert_manager,
+    reg_matrix,
+    get_data_misfit,
+    get_regularisation,
 )
 
 ############# ERT Modelling with PyGIMLi ##############################################
@@ -32,3 +35,7 @@ mgr = ert_manager(data, verbose=True)
 inv = mgr.invert(lam=20, verbose=True)
 fig = mgr.showResultAndFit()
 fig.savefig("figs/inbuilt_solver_result")
+
+Wm = reg_matrix(mgr.fop)
+print("data misfit:", get_data_misfit(inv, log_data, mgr.fop))
+print("regularisation:", get_regularisation(inv, Wm, 20))

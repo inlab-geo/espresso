@@ -12,6 +12,7 @@ import pygimli
 from pygimli import meshtools
 from pygimli.physics import ert
 
+
 ############# Helper functions from PyGIMLi ###########################################
 
 # Dipole Dipole (dd) measuring scheme
@@ -65,12 +66,17 @@ def reg_matrix(forward_oprt):
     Wm = pygimli.utils.sparseMatrix2coo(Wm)
     return Wm
 
+# initialise model
 def starting_model(ert_manager, val=None):
     data = ert_manager.data
-    start_val = np.median(data['rhoa'].array())     # this is how pygimli initialises
-    start_val = start_val or val
+    start_val = val if val else np.median(data['rhoa'].array())     # this is how pygimli initialises
     start_model = np.ones(ert_manager.paraDomain.cellCount()) * start_val
     return start_model
+
+# convert model to numpy array
+def model_vec(rhomap, fmesh):
+    model_true = pygimli.solver.parseArgToArray(rhomap, fmesh.cellCount(), fmesh)
+    return model_true
 
 
 ############# Functions provided to CoFI ##############################################
