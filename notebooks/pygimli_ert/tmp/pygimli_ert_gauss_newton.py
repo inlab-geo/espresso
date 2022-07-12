@@ -5,7 +5,6 @@ from cofi import BaseProblem, InversionOptions, Inversion
 from cofi.solvers import BaseSolver
 
 from pygimli_ert_lib import (
-    model_vec,
     survey_scheme,
     model_true,
     ert_simulate,
@@ -32,11 +31,13 @@ scheme = survey_scheme()
 # create simulation mesh and true model
 mesh, rhomap = model_true(scheme)
 ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
+ax[0].set_title("True model")
 ax[0].figure.savefig("figs/gauss_newton_model_true")
 
 # generate data
 data, log_data = ert_simulate(mesh, scheme, rhomap)
 ax = ert.show(data)
+ax[0].set_title("Provided data")
 ax[0].figure.savefig("figs/gauss_newton_data")
 
 # create PyGIMLi's ERT manager
@@ -45,6 +46,7 @@ ert_manager = ert_manager(data)
 # create inversion mesh
 inv_mesh = inversion_mesh(ert_manager)
 ax = pygimli.show(inv_mesh, showMesh=True, markers=True)
+ax[0].set_title("Mesh used for inversion")
 ax[0].figure.savefig("figs/gauss_newton_inv_mesh")
 
 # PyGIMLi's forward operator (ERTModelling)
@@ -55,20 +57,8 @@ Wm = reg_matrix(forward_oprt)
 
 # initialise a starting model for inversion
 start_model = starting_model(ert_manager)
-# start_model = ert_manager.invert(lam=20)
-
-# d = forward_oprt.response(start_model)
-# # print(np.min(data), np.max(data), np.median(data), np.mean(data))
-# log_data = np.log(np.array(d))
-# data = ert.simulate(ert_manager.paraDomain, scheme=scheme, res=start_model)
-# data['rhoa'] = d
-# # print(np.min(d), np.max(d), np.median(d), np.mean(d))
-# # data.remove(data['rhoa'] < 0)
-# # log_data = np.log(data['rhoa'].array())
-# ax = ert.show(data)
-# ax[0].figure.savefig("figs/inbuilt_solver_inferred_data")
-
 ax = pygimli.show(ert_manager.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
+ax[0].set_title("Starting model")
 ax[0].figure.savefig("figs/gauss_newton_model_start")
 
 
@@ -111,7 +101,7 @@ class GaussNewton(BaseSolver):
 
 # hyperparameters
 lamda = 0.1
-niter = 50
+niter = 200
 inv_verbose = True
 step = 2
 
@@ -148,5 +138,6 @@ data = ert.simulate(ert_manager.paraDomain, scheme=scheme, res=inv_result.model)
 data["rhoa"] = d
 data.remove(data['rhoa'] < 0)
 log_data = np.log(data['rhoa'].array())
-ax = ert.show(data)
+ax = ert.showERTData(scheme, vals=d)
+ax[0].set_title("Synthetic data from inferred model")
 ax[0].figure.savefig("figs/gauss_newton_inferred_data")
