@@ -46,7 +46,7 @@ make html
 cd cofi-examples
 git commit -am "chore: sphinx gallery cache"
 cd ..
-git commit -an "chore: update cofi-examples"
+git commit -am "chore: update cofi-examples"
 ```
 
 
