@@ -262,8 +262,8 @@ ert_problem.summary()
 # 2. Define the inversion options and run
 # ---------------------------------------
 # 
-# 2.1 SciPy’s optimiser (`TNC <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-tnc.html#optimize-minimize-tnc>`__)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 2.1 SciPy’s optimiser (`Newton-CG <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-newtoncg.html#optimize-minimize-newtoncg>`__)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 
 ert_problem.suggest_solvers();
@@ -273,7 +273,7 @@ ert_problem.suggest_solvers();
 
 inv_options_scipy = InversionOptions()
 inv_options_scipy.set_tool("scipy.optimize.minimize")
-inv_options_scipy.set_params(method="trust-constr")
+inv_options_scipy.set_params(method="Newton-CG")
 
 ######################################################################
 #
