@@ -65,7 +65,7 @@ ax[0].figure.savefig("figs/scipy_opt_model_start")
 ############# Inverted by SciPy optimiser through CoFI ################################
 
 # hyperparameters
-lamda = 0.1
+lamda = 0.0005
 
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
@@ -82,8 +82,7 @@ ert_problem.set_initial_model(start_model)
 # CoFI - define InversionOptions
 inv_options_scipy = InversionOptions()
 inv_options_scipy.set_tool("scipy.optimize.minimize")
-inv_options_scipy.set_params(method="TNC")
-# inv_options_scipy.set_params(method="trust-constr")
+inv_options_scipy.set_params(method="trust-constr")
 
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options_scipy)

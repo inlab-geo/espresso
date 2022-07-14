@@ -100,8 +100,8 @@ class GaussNewton(BaseSolver):
         return {"model": current_model, "success": True}
 
 # hyperparameters
-lamda = 0.1
-niter = 200
+lamda = 0.0005
+niter = 50
 inv_verbose = True
 step = 2
 

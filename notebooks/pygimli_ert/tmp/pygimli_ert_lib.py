@@ -52,11 +52,21 @@ def inversion_mesh(ert_manager):
 
 # inversion mesh rectangular (the above is by default triangular)
 def inversion_mesh_rect(ert_manager):
-    x = np.linspace(start=-5, stop=55, num=61)
+    x = np.linspace(start=-5, stop=55, num=40)
     y = np.linspace(start=-20,stop=0,num=10)
     inv_mesh = pygimli.createGrid(x=x, y=y, marker=2)
     inv_mesh = pygimli.meshtools.appendTriangleBoundary(inv_mesh, marker=1, xbound=50, ybound=50)
     # print("model size", inv_mesh.cellCount())    # 1213
+    ert_manager.setMesh(inv_mesh)
+    return inv_mesh
+
+# inversion mesh rectangular (toy mesh, for testing emcee)
+def inverison_mesh_rect_toy(ert_manager):
+    x = np.linspace(start=-5, stop=55, num=20)
+    y = np.linspace(start=-20,stop=0,num=8)
+    inv_mesh = pygimli.createGrid(x=x, y=y, marker=2)
+    inv_mesh = pygimli.meshtools.appendTriangleBoundary(inv_mesh, marker=1, xbound=50, ybound=50)
+    print("model size", inv_mesh.cellCount())
     ert_manager.setMesh(inv_mesh)
     return inv_mesh
 
