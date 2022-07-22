@@ -125,7 +125,7 @@ ax[0].set_title("True model")
 # 
 
 # PyGIMLi - generate data
-data, log_data = ert_simulate(mesh, scheme, rhomap)
+data, log_data, data_cov_inv = ert_simulate(mesh, scheme, rhomap)
 
 ax = ert.show(data)
 ax[0].set_title("Provided data")

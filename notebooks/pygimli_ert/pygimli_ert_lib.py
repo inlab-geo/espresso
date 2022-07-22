@@ -32,12 +32,13 @@ def model_true(scheme, start=[-55, 0], end=[105, -80], anomaly_pos=[10,-7], anom
     return mesh, rhomap
 
 # generate synthetic data
-def ert_simulate(mesh, scheme, rhomap):
-    data = ert.simulate(mesh, scheme=scheme, res=rhomap, noiseLevel=1,
-                        noiceAbs=1e-6, seed=42)
+def ert_simulate(mesh, scheme, rhomap, noise_level=1, noise_abs=1e-6):
+    data = ert.simulate(mesh, scheme=scheme, res=rhomap, noiseLevel=noise_level,
+                        noise_abs=noise_abs, seed=42)
     data.remove(data["rhoa"] < 0)
     log_data = np.log(data["rhoa"].array())
-    return data, log_data
+    data_cov_inv = np.eye(log_data.shape[0]) * (data["err"] ** 2)
+    return data, log_data, data_cov_inv
 
 # PyGIMLi ert.ERTManager
 def ert_manager(data, verbose=False):
@@ -125,26 +126,29 @@ def get_jac_residual(model, log_data, forward_operator):
     jac = J / np.exp(response[:, np.newaxis]) * np.exp(np.log(model))[np.newaxis, :]
     return jac, residual
 
-def get_data_misfit(model, log_data, forward_operator):
+def get_data_misfit(model, log_data, forward_operator, data_cov_inv=None):
     residual = get_residual(model, log_data, forward_operator)
-    return np.abs(residual.T @ residual)
+    data_cov_inv = np.eye(log_data.shape[0]) if data_cov_inv is None else data_cov_inv
+    return np.abs(residual.T @ data_cov_inv @ residual)
 
 def get_regularisation(model, Wm, lamda):
     return lamda * (Wm @ model).T @ (Wm @ model)
 
-def get_objective(model, log_data, forward_operator, Wm, lamda):
-    data_misfit = get_data_misfit(model, log_data, forward_operator)
+def get_objective(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None):
+    data_misfit = get_data_misfit(model, log_data, forward_operator, data_cov_inv)
     regularisation = get_regularisation(model, Wm, lamda)
     obj = data_misfit + regularisation
     return obj
 
-def get_gradient(model, log_data, forward_operator, Wm, lamda):
+def get_gradient(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None):
     jac, residual = get_jac_residual(model, log_data, forward_operator)
-    data_misfit_grad =  - residual @ jac
+    data_cov_inv = np.eye(log_data.shape[0]) if data_cov_inv is None else data_cov_inv
+    data_misfit_grad =  - residual.T @ data_cov_inv @ jac
     regularisation_grad = lamda * Wm.T @ Wm @ model
     return data_misfit_grad + regularisation_grad
 
-def get_hessian(model, log_data, forward_operator, Wm, lamda):
+def get_hessian(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None):
     jac = get_jacobian(model, forward_operator)
-    hess = jac.T @ jac + lamda * Wm.T @ Wm
+    data_cov_inv = np.eye(log_data.shape[0]) if data_cov_inv is None else data_cov_inv
+    hess = jac.T @ data_cov_inv @ jac + lamda * Wm.T @ Wm
     return hess

@@ -36,7 +36,7 @@ ax[0].set_title("True model")
 ax[0].figure.savefig("figs/gauss_newton_armijo_linesearch_model_true")
 
 # generate data
-data, log_data = ert_simulate(mesh, scheme, rhomap)
+data, log_data, data_cov_inv = ert_simulate(mesh, scheme, rhomap)
 ax = ert.show(data)
 ax[0].set_title("Provided data")
 ax[0].figure.savefig("figs/gauss_newton_armijo_linesearch_data")
@@ -60,7 +60,7 @@ Wm = reg_matrix(forward_oprt)
 start_model = starting_model(ert_manager)
 ax = pygimli.show(ert_manager.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
 ax[0].set_title("Starting model")
-ax[0].figure.savefig("figs/gauss_newton_model_start")
+ax[0].figure.savefig("figs/gauss_newton_armijo_linesarch_model_start")
 
 
 ############# Inverted by our Gauss-Newton algorithm ##################################
@@ -98,7 +98,6 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
             term2 = - self._gradient(current_model)
             model_update_log = np.linalg.solve(term1, term2) #* self._step
         
-            # current_msft=self._misfit(current_model)
             current_obj = self._obj(current_model)
             print("line search")
 
@@ -106,7 +105,7 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
 
             while (tau > 1.0e-5):
                 trial_model_log = np.array(current_model_log) + np.array(model_update_log)*tau
-                trial_model=np.exp(trial_model_log)
+                trial_model = np.exp(trial_model_log)
 
                 if (np.min(trial_model)>1.0):
                     break
@@ -115,10 +114,10 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
             # Armjio Line search
             while (tau > 1.0e-5):          
                 trial_model_log = np.array(current_model_log) + np.array(model_update_log)*tau
-                trial_model=np.exp(trial_model_log)
-                trial_msft = self._obj(trial_model)
-                print("tau {} cmsft {} tmsft {} |dm| {}".format(tau,current_obj,trial_msft,np.linalg.norm(np.exp(model_update_log),2)))
-                if trial_msft<current_obj:
+                trial_model = np.exp(trial_model_log)
+                trial_obj = self._obj(trial_model)
+                print(f"tau {tau} current_obj {current_obj} trial_obj {trial_obj} |dm| {np.linalg.norm(np.exp(model_update_log*tau),2)}")
+                if trial_obj<current_obj:
                     current_model = trial_model
                     break
                 tau=tau*0.5
@@ -141,10 +140,10 @@ ert_problem.name = "Electrical Resistivity Tomography defined through PyGIMLi"
 ert_problem.set_forward(get_response, args=[forward_oprt])
 ert_problem.set_jacobian(get_jacobian, args=[forward_oprt])
 ert_problem.set_residual(get_residual, args=[log_data, forward_oprt])
-ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt])
+ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_cov_inv])
 ert_problem.set_regularisation(get_regularisation, args=[Wm, lamda])
-ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda])
-ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda])
+ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
+ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
 ert_problem.set_initial_model(start_model)
 
 # CoFI - define InversionOptions

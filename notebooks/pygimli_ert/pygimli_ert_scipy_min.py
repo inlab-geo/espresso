@@ -35,7 +35,7 @@ ax[0].set_title("True model")
 ax[0].figure.savefig("figs/scipy_opt_model_true")
 
 # generate data
-data, log_data = ert_simulate(mesh, scheme, rhomap)
+data, log_data, data_cov_inv = ert_simulate(mesh, scheme, rhomap)
 ax = ert.show(data)
 ax[0].set_title("Provided data")
 ax[0].figure.savefig("figs/scipy_opt_data")

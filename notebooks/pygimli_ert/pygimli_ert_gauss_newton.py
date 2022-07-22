@@ -35,7 +35,7 @@ ax[0].set_title("True model")
 ax[0].figure.savefig("figs/gauss_newton_model_true")
 
 # generate data
-data, log_data = ert_simulate(mesh, scheme, rhomap)
+data, log_data, data_cov_inv = ert_simulate(mesh, scheme, rhomap)
 ax = ert.show(data)
 ax[0].set_title("Provided data")
 ax[0].figure.savefig("figs/gauss_newton_data")
@@ -95,15 +95,16 @@ class GaussNewton(BaseSolver):
                 if self._reg: print("regularisation:", self._reg(current_model))
             term1 = self._hessian(current_model)
             term2 = - self._gradient(current_model)
-            model_update = np.linalg.solve(term1, term2) * self._step
-            current_model = np.array(current_model + model_update)
+            model_update_log = np.linalg.solve(term1, term2) * self._step
+            current_model_log = np.log(current_model)
+            current_model = np.exp(current_model_log + model_update_log)
         return {"model": current_model, "success": True}
 
 # hyperparameters
-lamda = 0.0005
-niter = 50
+lamda = 0.01
+niter = 1
 inv_verbose = True
-step = 2
+step = 1
 
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
@@ -111,10 +112,10 @@ ert_problem.name = "Electrical Resistivity Tomography defined through PyGIMLi"
 ert_problem.set_forward(get_response, args=[forward_oprt])
 ert_problem.set_jacobian(get_jacobian, args=[forward_oprt])
 ert_problem.set_residual(get_residual, args=[log_data, forward_oprt])
-ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt])
+ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_cov_inv])
 ert_problem.set_regularisation(get_regularisation, args=[Wm, lamda])
-ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda])
-ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda])
+ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
+ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
 ert_problem.set_initial_model(start_model)
 
 # CoFI - define InversionOptions

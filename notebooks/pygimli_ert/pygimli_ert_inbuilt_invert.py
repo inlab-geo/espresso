@@ -22,7 +22,7 @@ ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
 ax[0].figure.savefig("figs/inbuilt_solver_model_true")
 
 # generate data
-data, log_data = ert_simulate(mesh, scheme, rhomap)
+data, log_data, data_cov_inv = ert_simulate(mesh, scheme, rhomap)
 ax = ert.show(data)
 ax[0].figure.savefig("figs/inbuilt_solver_data")
 
@@ -37,5 +37,5 @@ fig = mgr.showResultAndFit()
 fig.savefig("figs/inbuilt_solver_result")
 
 Wm = reg_matrix(mgr.fop)
-print("data misfit:", get_data_misfit(inv, log_data, mgr.fop))
+print("data misfit:", get_data_misfit(inv, log_data, mgr.fop, data["err"]))
 print("regularisation:", get_regularisation(inv, Wm, 20))
