@@ -37,5 +37,5 @@ fig = mgr.showResultAndFit()
 fig.savefig("figs/inbuilt_solver_result")
 
 Wm = reg_matrix(mgr.fop)
-print("data misfit:", get_data_misfit(inv, log_data, mgr.fop, data["err"]))
-print("regularisation:", get_regularisation(inv, Wm, 20))
+print("data misfit:", get_data_misfit(inv, log_data, mgr.fop, data_cov_inv))
+print("regularisation:", get_regularisation(inv, Wm, 0.005))

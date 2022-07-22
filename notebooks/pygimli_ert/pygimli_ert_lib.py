@@ -37,7 +37,9 @@ def ert_simulate(mesh, scheme, rhomap, noise_level=1, noise_abs=1e-6):
                         noise_abs=noise_abs, seed=42)
     data.remove(data["rhoa"] < 0)
     log_data = np.log(data["rhoa"].array())
-    data_cov_inv = np.eye(log_data.shape[0]) * (data["err"] ** 2)
+    data_err = data["rhoa"] * data["err"]
+    data_err_log = np.log(data_err)
+    data_cov_inv = np.eye(log_data.shape[0]) / (data_err_log ** 2)
     return data, log_data, data_cov_inv
 
 # PyGIMLi ert.ERTManager
