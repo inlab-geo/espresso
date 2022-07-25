@@ -129,8 +129,7 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
 
 
 # hyperparameters
-lamda = 0.0005
-niter = 50
+lamda = 0.001
 inv_verbose = True
 step = 2
 
@@ -149,7 +148,7 @@ ert_problem.set_initial_model(start_model)
 # CoFI - define InversionOptions
 inv_options = InversionOptions()
 inv_options.set_tool(GaussNewtonArmjioLineaSearch)
-inv_options.set_params(niter=niter, verbose=inv_verbose, step=step)
+inv_options.set_params(verbose=inv_verbose, step=step)
 
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options)

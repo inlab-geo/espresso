@@ -34,7 +34,7 @@ def model_true(scheme, start=[-55, 0], end=[105, -80], anomaly_pos=[10,-7], anom
 # generate synthetic data
 def ert_simulate(mesh, scheme, rhomap, noise_level=1, noise_abs=1e-6):
     data = ert.simulate(mesh, scheme=scheme, res=rhomap, noiseLevel=noise_level,
-                        noise_abs=noise_abs, seed=42)
+                        noise_abs=noise_abs, seed=23)
     data.remove(data["rhoa"] < 0)
     log_data = np.log(data["rhoa"].array())
     data_err = data["rhoa"] * data["err"]
