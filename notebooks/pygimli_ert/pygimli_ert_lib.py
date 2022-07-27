@@ -95,6 +95,8 @@ def starting_model(ert_manager, val=None):
     data = ert_manager.data
     start_val = val if val else np.median(data['rhoa'].array())     # this is how pygimli initialises
     start_model = np.ones(ert_manager.paraDomain.cellCount()) * start_val
+    start_val_log = np.log(start_val)
+    start_model_log = np.ones(ert_manager.paraDomain.cellCount()) * start_val_log
     return start_model
 
 # convert model to numpy array
@@ -117,7 +119,7 @@ def get_jacobian(model, forward_operator):
     response = get_response(model, forward_operator)
     forward_operator.createJacobian(model)
     J = np.array(forward_operator.jacobian())
-    jac = J / np.exp(response[:, np.newaxis]) * np.exp(np.log(model))[np.newaxis, :]
+    jac = J / np.exp(response[:, np.newaxis]) * model[np.newaxis, :]
     return jac
 
 def get_jac_residual(model, log_data, forward_operator):
@@ -125,7 +127,7 @@ def get_jac_residual(model, log_data, forward_operator):
     residual = log_data - response
     forward_operator.createJacobian(model)
     J = np.array(forward_operator.jacobian())
-    jac = J / np.exp(response[:, np.newaxis]) * np.exp(np.log(model))[np.newaxis, :]
+    jac = J / np.exp(response[:, np.newaxis]) * model[np.newaxis, :]
     return jac, residual
 
 def get_data_misfit(model, log_data, forward_operator, data_cov_inv=None):

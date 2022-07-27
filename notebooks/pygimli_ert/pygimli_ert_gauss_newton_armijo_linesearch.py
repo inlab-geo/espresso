@@ -30,7 +30,7 @@ from pygimli_ert_lib import (
 scheme = survey_scheme() #start=-25,stop=75,num=101,schemeName="dd")
 
 # create simulation mesh and true model
-mesh, rhomap = model_true(scheme,anomaly_pos=[25,-7])
+mesh, rhomap = model_true(scheme)
 ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
 ax[0].set_title("True model")
 ax[0].figure.savefig("figs/gauss_newton_armijo_linesearch_model_true")
@@ -129,7 +129,7 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
 
 
 # hyperparameters
-lamda = 0.001
+lamda = 0.01
 inv_verbose = True
 step = 2
 

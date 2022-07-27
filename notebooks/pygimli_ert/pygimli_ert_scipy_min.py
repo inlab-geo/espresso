@@ -1,8 +1,6 @@
-import numpy as np
 import pygimli
 from pygimli.physics import ert
 from cofi import BaseProblem, InversionOptions, Inversion
-from cofi.solvers import BaseSolver
 
 from pygimli_ert_lib import (
     survey_scheme,
@@ -56,7 +54,7 @@ forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
 Wm = reg_matrix(forward_oprt)
 
 # initialise a starting model for inversion
-start_model = starting_model(ert_manager)
+start_model, start_model_log = starting_model(ert_manager)
 ax = pygimli.show(ert_manager.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
 ax[0].set_title("Starting model")
 ax[0].figure.savefig("figs/scipy_opt_model_start")
@@ -73,11 +71,11 @@ ert_problem.name = "Electrical Resistivity Tomography defined through PyGIMLi"
 ert_problem.set_forward(get_response, args=[forward_oprt])
 ert_problem.set_jacobian(get_jacobian, args=[forward_oprt])
 ert_problem.set_residual(get_residual, args=[log_data, forward_oprt])
-ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt])
+ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_cov_inv])
 ert_problem.set_regularisation(get_regularisation, args=[Wm, lamda])
-ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda])
-ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda])
-ert_problem.set_initial_model(start_model)
+ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
+ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
+ert_problem.set_initial_model(start_model_log)
 
 # CoFI - define InversionOptions
 inv_options_scipy = InversionOptions()
