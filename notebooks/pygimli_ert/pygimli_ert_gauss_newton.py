@@ -56,7 +56,7 @@ forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
 Wm = reg_matrix(forward_oprt)
 
 # initialise a starting model for inversion
-start_model = starting_model(ert_manager)
+start_model, start_model_log = starting_model(ert_manager)
 ax = pygimli.show(ert_manager.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
 ax[0].set_title("Starting model")
 ax[0].figure.savefig("figs/gauss_newton_model_start")
@@ -95,16 +95,15 @@ class GaussNewton(BaseSolver):
                 if self._reg: print("regularisation:", self._reg(current_model))
             term1 = self._hessian(current_model)
             term2 = - self._gradient(current_model)
-            model_update_log = np.linalg.solve(term1, term2) * self._step
-            current_model_log = np.log(current_model)
-            current_model = np.exp(current_model_log + model_update_log)
+            model_update = np.linalg.solve(term1, term2) * self._step
+            current_model = current_model + model_update
         return {"model": current_model, "success": True}
 
 # hyperparameters
-lamda = 0.01
-niter = 1
+lamda = 0.0005
+niter = 100
 inv_verbose = True
-step = 1
+step = 0.01
 
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
@@ -116,7 +115,7 @@ ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_
 ert_problem.set_regularisation(get_regularisation, args=[Wm, lamda])
 ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
 ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
-ert_problem.set_initial_model(start_model)
+ert_problem.set_initial_model(start_model_log)
 
 # CoFI - define InversionOptions
 inv_options = InversionOptions()
@@ -126,15 +125,16 @@ inv_options.set_params(niter=niter, verbose=inv_verbose, step=step)
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options)
 inv_result = inv.run()
+inv_result.summary()
+model = np.exp(inv_result.model)
 
 # plot inferred model
-inv_result.summary()
-ax = pygimli.show(ert_manager.paraDomain, data=inv_result.model, label=r"$\Omega m$")
+ax = pygimli.show(ert_manager.paraDomain, data=model, label=r"$\Omega m$")
 ax[0].set_title("Inferred model")
 ax[0].figure.savefig("figs/gauss_newton_inferred_model")
 
 # plot synthetic data
-d = forward_oprt.response(inv_result.model)
+d = forward_oprt.response(model)
 ax = ert.showERTData(scheme, vals=d)
 ax[0].set_title("Synthetic data from inferred model")
 ax[0].figure.savefig("figs/gauss_newton_inferred_data")

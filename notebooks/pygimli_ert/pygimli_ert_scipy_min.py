@@ -1,3 +1,4 @@
+import numpy as np
 import pygimli
 from pygimli.physics import ert
 from cofi import BaseProblem, InversionOptions, Inversion
@@ -85,15 +86,16 @@ inv_options_scipy.set_params(method="Newton-CG")
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options_scipy)
 inv_result = inv.run()
+inv_result.summary()
+model = np.exp(inv_result.model)
 
 # plot inferred model
-inv_result.summary()
-ax = pygimli.show(ert_manager.paraDomain, data=inv_result.model, label=r"$\Omega m$")
+ax = pygimli.show(ert_manager.paraDomain, data=model, label=r"$\Omega m$")
 ax[0].set_title("Inferred model")
 ax[0].figure.savefig("figs/scipy_opt_inferred_model")
 
 # plot synthetic data
-d = forward_oprt.response(inv_result.model)
+d = forward_oprt.response(model)
 ax = ert.showERTData(scheme, vals=d)
 ax[0].set_title("Synthetic data from inferred model")
 ax[0].figure.savefig("figs/scipy_opt_inferred_data")

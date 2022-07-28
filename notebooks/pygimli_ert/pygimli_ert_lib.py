@@ -97,7 +97,7 @@ def starting_model(ert_manager, val=None):
     start_model = np.ones(ert_manager.paraDomain.cellCount()) * start_val
     start_val_log = np.log(start_val)
     start_model_log = np.ones(ert_manager.paraDomain.cellCount()) * start_val_log
-    return start_model
+    return start_model, start_model_log
 
 # convert model to numpy array
 def model_vec(rhomap, fmesh):
@@ -107,8 +107,10 @@ def model_vec(rhomap, fmesh):
 
 ############# Functions provided to CoFI ##############################################
 
+## Note: all functions below assume the model in log space!
+
 def get_response(model, forward_operator):
-    return np.log(np.array(forward_operator.response(model)))
+    return np.log(np.array(forward_operator.response(np.exp(model))))
 
 def get_residual(model, log_data, forward_operator):
     response = get_response(model, forward_operator)
@@ -117,17 +119,17 @@ def get_residual(model, log_data, forward_operator):
 
 def get_jacobian(model, forward_operator):
     response = get_response(model, forward_operator)
-    forward_operator.createJacobian(model)
+    forward_operator.createJacobian(np.exp(model))
     J = np.array(forward_operator.jacobian())
-    jac = J / np.exp(response[:, np.newaxis]) * model[np.newaxis, :]
+    jac = J / np.exp(response[:, np.newaxis]) * np.exp(model)[np.newaxis, :]
     return jac
 
 def get_jac_residual(model, log_data, forward_operator):
     response = get_response(model, forward_operator)
     residual = log_data - response
-    forward_operator.createJacobian(model)
+    forward_operator.createJacobian(np.exp(model))
     J = np.array(forward_operator.jacobian())
-    jac = J / np.exp(response[:, np.newaxis]) * model[np.newaxis, :]
+    jac = J / np.exp(response[:, np.newaxis]) * np.exp(model)[np.newaxis, :]
     return jac, residual
 
 def get_data_misfit(model, log_data, forward_operator, data_cov_inv=None):
@@ -136,6 +138,7 @@ def get_data_misfit(model, log_data, forward_operator, data_cov_inv=None):
     return np.abs(residual.T @ data_cov_inv @ residual)
 
 def get_regularisation(model, Wm, lamda):
+    model = np.exp(model)
     return lamda * (Wm @ model).T @ (Wm @ model)
 
 def get_objective(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None):
@@ -148,7 +151,7 @@ def get_gradient(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None
     jac, residual = get_jac_residual(model, log_data, forward_operator)
     data_cov_inv = np.eye(log_data.shape[0]) if data_cov_inv is None else data_cov_inv
     data_misfit_grad =  - residual.T @ data_cov_inv @ jac
-    regularisation_grad = lamda * Wm.T @ Wm @ model
+    regularisation_grad = lamda * Wm.T @ Wm @ np.exp(model)
     return data_misfit_grad + regularisation_grad
 
 def get_hessian(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None):
