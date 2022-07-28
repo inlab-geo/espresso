@@ -1,5 +1,4 @@
 import numpy as np
-import numpy.linalg
 import pygimli
 from pygimli.physics import ert
 from cofi import BaseProblem, InversionOptions, Inversion
