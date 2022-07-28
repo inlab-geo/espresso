@@ -96,6 +96,6 @@ ax[0].figure.savefig("figs/scipy_opt_inferred_model")
 
 # plot synthetic data
 d = forward_oprt.response(model)
-ax = ert.showERTData(scheme, vals=d)
+ax = ert.showERTData(scheme, vals=d, cMin=np.min(data["rhoa"]), cMax=np.max(data["rhoa"]))
 ax[0].set_title("Synthetic data from inferred model")
 ax[0].figure.savefig("figs/scipy_opt_inferred_data")

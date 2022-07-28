@@ -101,7 +101,7 @@ class GaussNewton(BaseSolver):
 
 # hyperparameters
 lamda = 0.0005
-niter = 100
+niter = 150
 inv_verbose = True
 step = 0.01
 
@@ -135,6 +135,6 @@ ax[0].figure.savefig("figs/gauss_newton_inferred_model")
 
 # plot synthetic data
 d = forward_oprt.response(model)
-ax = ert.showERTData(scheme, vals=d)
+ax = ert.showERTData(scheme, vals=d, cMin=np.min(data["rhoa"]), cMax=np.max(data["rhoa"]))
 ax[0].set_title("Synthetic data from inferred model")
 ax[0].figure.savefig("figs/gauss_newton_inferred_data")

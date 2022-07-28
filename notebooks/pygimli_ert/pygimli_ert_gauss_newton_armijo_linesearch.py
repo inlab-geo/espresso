@@ -71,7 +71,8 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
         __params = inv_options.get_params()
         self._niter = __params.get("niter", 100)
         self._verbose = __params.get("verbose", True)
-        self._step = __params.get("step", 1)
+        self._tau_tol = __params.get("tau_tol", 1e-5)
+        self._update_tol = __params.get("update_tol", 1e-5)
         self._model_0 = inv_problem.initial_model
         self._residual = inv_problem.residual
         self._jacobian = inv_problem.jacobian
@@ -83,9 +84,10 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
 
     def __call__(self):
         current_model = np.array(self._model_0)
-        tau=1.0
+        tau = 1
 
         for i in range(self._niter):
+            tau = 1
             if self._verbose:
                 print("-" * 80)
                 print(f"Iteration {i+1}")
@@ -100,24 +102,24 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
             print("line search")
 
             # Reduce tau to ensure positivity (the following block is problem specific)
-            while (tau > 1.0e-5):
+            while (tau > self._tau_tol):
                 trial_model = current_model + model_update*tau
                 if (np.min(np.exp(trial_model))>1.0):
                     break
-                tau=tau*0.5
+                tau = tau * 0.5
 
             # Armjio Line search
-            while (tau > 1.0e-5):          
+            while (tau > self._tau_tol):          
                 trial_model = current_model + model_update*tau
                 trial_obj = self._obj(trial_model)
                 print(f"tau {tau} current_obj {current_obj} trial_obj {trial_obj} |dm| {np.linalg.norm(model_update*tau,2)}")
                 if trial_obj<current_obj:
                     current_model = trial_model
                     break
-                tau=tau*0.5
+                tau = tau * 0.5
 
             # the following block is problem specific
-            if (np.linalg.norm(np.exp(model_update),2) < 1.0e-5) or (tau < 1.0e-5):
+            if (np.linalg.norm(model_update*tau,2) < self._update_tol) or (tau < self._tau_tol):
                 break
 
         return {"model": current_model, "success": True}
@@ -127,6 +129,8 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
 # hyperparameters
 lamda = 0.0005
 inv_verbose = True
+tau_tol = 1e-3
+update_tol = 1e-1
 
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
@@ -143,7 +147,7 @@ ert_problem.set_initial_model(start_model_log)
 # CoFI - define InversionOptions
 inv_options = InversionOptions()
 inv_options.set_tool(GaussNewtonArmjioLineaSearch)
-inv_options.set_params(verbose=inv_verbose)
+inv_options.set_params(verbose=inv_verbose, tau_tol=tau_tol, update_tol=update_tol)
 
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options)
@@ -158,6 +162,6 @@ ax[0].figure.savefig("figs/gauss_newton_armijo_linesearch_inferred_model")
 
 # plot synthetic data
 d = forward_oprt.response(model)
-ax = ert.showERTData(scheme, vals=d)
+ax = ert.showERTData(scheme, vals=d, cMin=np.min(data["rhoa"]), cMax=np.max(data["rhoa"]))
 ax[0].set_title("Synthetic data from inferred model")
 ax[0].figure.savefig("figs/gauss_newton_armjio_linesearch_inferred_data")
