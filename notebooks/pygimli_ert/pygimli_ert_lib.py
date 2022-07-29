@@ -68,7 +68,7 @@ def inversion_mesh_rect_toy(ert_manager):
     y = np.linspace(start=-20,stop=0,num=6)
     inv_mesh = pygimli.createGrid(x=x, y=y, marker=2)
     inv_mesh = pygimli.meshtools.appendTriangleBoundary(inv_mesh, marker=1, xbound=50, ybound=50)
-    print("model size", inv_mesh.cellCount())    # 289
+    # print("model size", inv_mesh.cellCount())    # 289
     ert_manager.setMesh(inv_mesh)
     return inv_mesh
 
