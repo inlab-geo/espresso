@@ -32,13 +32,13 @@ scheme = survey_scheme()
 mesh, rhomap = model_true(scheme)
 ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
 ax[0].set_title("True model")
-ax[0].figure.savefig("figs/rect_gauss_newton_rect_model_true")
+ax[0].figure.savefig("figs/rect_mesh/rect_gauss_newton_rect_model_true")
 
 # generate data
 data, log_data, data_cov_inv = ert_simulate(mesh, scheme, rhomap)
 ax = ert.show(data)
 ax[0].set_title("Provided data")
-ax[0].figure.savefig("figs/rect_gauss_newton_data")
+ax[0].figure.savefig("figs/rect_mesh/rect_gauss_newton_data")
 
 # create PyGIMLi's ERT manager
 ert_manager = ert_manager(data)
@@ -47,7 +47,7 @@ ert_manager = ert_manager(data)
 inv_mesh = inversion_mesh_rect(ert_manager)
 ax = pygimli.show(inv_mesh, showMesh=True, markers=True)
 ax[0].set_title("Mesh used for inversion")
-ax[0].figure.savefig("figs/rect_gauss_newton_rect_inv_mesh")
+ax[0].figure.savefig("figs/rect_mesh/rect_gauss_newton_rect_inv_mesh")
 
 # PyGIMLi's forward operator (ERTModelling)
 forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
@@ -59,7 +59,7 @@ Wm = reg_matrix(forward_oprt)
 start_model, start_model_log = starting_model(ert_manager)
 ax = pygimli.show(ert_manager.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
 ax[0].set_title("Starting model")
-ax[0].figure.savefig("figs/rect_gauss_newton_rect_model_start")
+ax[0].figure.savefig("figs/rect_mesh/rect_gauss_newton_rect_model_start")
 
 
 ############# Inverted by our Gauss-Newton algorithm ##################################
@@ -131,10 +131,10 @@ model = np.exp(inv_result.model)
 # plot inferred model
 ax = pygimli.show(ert_manager.paraDomain, data=model, label=r"$\Omega m$")
 ax[0].set_title("Inferred model")
-ax[0].figure.savefig("figs/rect_gauss_newton_rect_inferred_model")
+ax[0].figure.savefig("figs/rect_mesh/rect_gauss_newton_rect_inferred_model")
 
 # plot synthetic data
 d = forward_oprt.response(model)
 ax = ert.showERTData(scheme, vals=d, cMin=np.min(data["rhoa"]), cMax=np.max(data["rhoa"]))
 ax[0].set_title("Synthetic data from inferred model")
-ax[0].figure.savefig("figs/rect_gauss_newton_rect_inferred_data")
+ax[0].figure.savefig("figs/rect_mesh/rect_gauss_newton_rect_inferred_data")

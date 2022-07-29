@@ -21,12 +21,12 @@ scheme = survey_scheme()
 # create simulation mesh and true model
 mesh, rhomap = model_true(scheme)
 ax = pygimli.show(mesh, data=rhomap, label="$\Omega m$", showMesh=True)
-ax[0].figure.savefig("figs/rect_inbuilt_solver_model_true")
+ax[0].figure.savefig("figs/rect_mesh/rect_inbuilt_solver_model_true")
 
 # generate data
 data, log_data, data_cov_inv = ert_simulate(mesh, scheme, rhomap)
 ax = ert.show(data)
-ax[0].figure.savefig("figs/rect_inbuilt_solver_data")
+ax[0].figure.savefig("figs/rect_mesh/rect_inbuilt_solver_data")
 
 # create PyGIMLi's ERT manager
 mgr = ert_manager(data, verbose=True)
@@ -34,14 +34,14 @@ mgr = ert_manager(data, verbose=True)
 # create rectangular inversion mesh
 inv_mesh = inversion_mesh_rect(mgr)
 ax = pygimli.show(inv_mesh, showMesh=True, markers=True)
-ax[0].figure.savefig("figs/rect_inbuilt_solver_mesh")
+ax[0].figure.savefig("figs/rect_mesh/rect_inbuilt_solver_mesh")
 
 
 ############# Inverted by PyGIMLi solvers #############################################
 
 inv = mgr.invert(lam=20, verbose=True)
 # fig = mgr.showResultAndFit()
-# fig.savefig("figs/rect_inbuilt_solver_result")
+# fig.savefig("figs/rect_mesh/rect_inbuilt_solver_result")
 
 Wm = reg_matrix(mgr.fop)
 print("data misfit:", get_data_misfit(np.log(inv), log_data, mgr.fop, data_cov_inv))
@@ -50,10 +50,10 @@ print("regularisation:", get_regularisation(np.log(inv), Wm, 0.0005))
 # plot inferred model
 ax = pygimli.show(mgr.paraDomain, data=inv, label=r"$\Omega m$")
 ax[0].set_title("Inferred model")
-ax[0].figure.savefig("figs/rect_inbuilt_solver_inferred_model")
+ax[0].figure.savefig("figs/rect_mesh/rect_inbuilt_solver_inferred_model")
 
 # plot synthetic data
 d = mgr.fop.response(inv)
 ax = ert.showERTData(scheme, vals=d, cMin=np.min(data["rhoa"]), cMax=np.max(data["rhoa"]))
 ax[0].set_title("Synthetic data from inferred model")
-ax[0].figure.savefig("figs/rect_inbuilt_solver_inferred_data")
+ax[0].figure.savefig("figs/rect_mesh/rect_inbuilt_solver_inferred_data")
