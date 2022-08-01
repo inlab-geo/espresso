@@ -75,27 +75,6 @@ Below is a gallery of examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="PyGIMLi - Complex valued ERT">
-
-.. only:: html
-
- .. figure:: /cofi-examples/utils/sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_dcip_thumb.png
-     :alt: PyGIMLi - Complex valued ERT
-
-     :ref:`sphx_glr_cofi-examples_utils_sphinx_gallery_generated_pygimli_dcip.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /cofi-examples/utils/sphinx_gallery/generated/pygimli_dcip
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="Polynomial Linear Regression">
 
 .. only:: html

@@ -1,9 +1,37 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+r"""
+Naive complex-valued electrical inversion
+-----------------------------------------
+
+This example presents a quick and dirty proof-of-concept for a complex-valued
+inversion, similar to Kemna, 2000. The normal equations are solved using numpy,
+and no optimization with respect to running time and memory consumptions are
+applied. As such this example is only a technology demonstration and should
+**not** be used for real-world inversion of complex resistivity data!
+
+Kemna, A.: Tomographic inversion of complex resistivity – theory and
+application, Ph.D.  thesis, Ruhr-Universität Bochum,
+doi:10.1111/1365-2478.12013, 2000.
+
+
+.. note::
+
+    This is a technology demonstration. Don't use this code for research. If
+    you require a complex-valued inversion, please contact us at
+    info@pygimli.org
+
+"""
+# sphinx_gallery_thumbnail_number = 5
 import numpy as np
 import matplotlib.pyplot as plt
 
 import pygimli as pg
 import pygimli.meshtools as mt
 from pygimli.physics import ert
+
+###############################################################################
+# For reference we later plot the true complex resistivity model as reference
 
 
 def get_scheme():
@@ -159,6 +187,8 @@ def plot_fwd_model(axes):
     fig.show()
 
 
+###############################################################################
+# Create a measurement scheme for 51 electrodes, spacing 1
 scheme = ert.createData(elecs=np.linspace(start=0, stop=50, num=51),
                         schemeName='dd')
 # Not strictly required, but we switch potential electrodes to yield positive
@@ -170,6 +200,8 @@ scheme['m'] = n
 scheme['n'] = m
 scheme.set('k', [1 for x in range(scheme.size())])
 
+###############################################################################
+# Mesh generation for the inversion
 world = mt.createWorld(
     start=[-15, 0], end=[65, -30], worldMarker=False, marker=2)
 
@@ -182,10 +214,14 @@ mesh = mesh_coarse.createH2()
 for nr, c in enumerate(mesh.cells()):
     c.setMarker(nr)
 pg.show(mesh)
-
+###############################################################################
+# Define start model of the inversion
+# [magnitude, phase]
 start_model = np.ones(mesh.cellCount()) * pg.utils.complex.toComplex(
     80, -0.01 / 1000)
 
+###############################################################################
+# Initialize the complex forward operator
 fop = ert.ERTModelling(
     sr=False,
     verbose=True,
@@ -195,6 +231,8 @@ fop.setData(scheme)
 fop.setMesh(mesh, ignoreRegionManager=True)
 fop.mesh()
 
+###############################################################################
+# Compute response for the starting model
 start_re_im = pg.utils.squeezeComplex(start_model)
 f_0 = np.array(fop.response(start_re_im))
 
@@ -204,6 +242,11 @@ J_re = np.array(J_block.mat(0))
 J_im = np.array(J_block.mat(1))
 J0 = J_re + 1j * J_im
 
+<<<<<<< HEAD
+=======
+###############################################################################
+# Regularization matrix
+>>>>>>> 13bd7cd1c5de483eaee2bad76741540d4462e711
 rm = fop.regionManager()
 rm.setMesh(mesh) # need to set here manually because of ignoreRegionManager=True
 rm.setVerbose(True)
@@ -215,6 +258,14 @@ rm.fillConstraints(Wm)
 #print(Wm.values())
 Wm = pg.utils.sparseMatrix2coo(Wm)
 #print(Wm)
+
+###############################################################################
+# read-in data and determine error parameters
+# filename = pg.getExampleFile(
+#     'CR/synthetic_modeling/data_rre_rim.dat', load=False, verbose=True)
+# data_rre_rim = np.loadtxt(filename)
+# N = int(data_rre_rim.size / 2)
+# d_rcomplex = data_rre_rim[:N] + 1j * data_rre_rim[N:]
 
 N = data_rcomplex.shape[0]
 dmag = np.abs(data_rcomplex)
@@ -255,6 +306,12 @@ err_mag_log = np.abs(1 / rmag_linear * err_mag_linear)
 Wd = np.diag(1.0 / err_mag_log)
 WdTwd = Wd.conj().dot(Wd)
 
+###############################################################################
+# Put together one iteration of a  naive inversion in log-log transformation
+# d = log(V)
+# m = log(sigma)
+
+# %%
 def plot_inv_pars(filename, d, response, Wd, iteration='start'):
     """Plot error-weighted residuals"""
     if 0:
@@ -282,6 +339,7 @@ def plot_inv_pars(filename, d, response, Wd, iteration='start'):
             'Error weighted residuals of iteration {}'.format(iteration), y=1.00)
 
     fig.tight_layout()
+# %%
 
 m_old = np.log(start_model)
 # d = np.log(pg.utils.toComplex(data_rre_rim))
@@ -313,6 +371,9 @@ for i in range(1):
 
     m1 = np.array(m_old + 1.0 * model_update).squeeze()
 
+
+###############################################################################
+# Now plot the residuals for the first iteration
 m_old = m1
 
 # Response for Starting model
@@ -321,6 +382,9 @@ response_re_im = np.array(fop.response(m_re_im))
 response = np.log(pg.utils.toComplex(response_re_im))
 
 plot_inv_pars('stats_it{}.jpg'.format(i + 1), d, response, Wd, iteration=1)
+
+###############################################################################
+# And finally, plot the inversion results
 
 fig, axes = plt.subplots(2, 3, figsize=(26 / 2.54, 15 / 2.54))
 plot_fwd_model(axes[0, :])

@@ -53,8 +53,8 @@ PyGIMLi - Electrical Resistivity Tomography
 
 # !pip install -U cofi
 
-# !MINICONDA_INSTALLER_SCRIPT=Miniconda3-4.5.4-Linux-x86_64.sh
-# !MINICONDA_PREFIX=/usr/local
+# %env MINICONDA_INSTALLER_SCRIPT=Miniconda3-py37_4.10.3-Linux-x86_64.sh
+# %env MINICONDA_PREFIX=/usr/local
 # !wget https://repo.continuum.io/miniconda/$MINICONDA_INSTALLER_SCRIPT
 # !chmod +x $MINICONDA_INSTALLER_SCRIPT
 # !./$MINICONDA_INSTALLER_SCRIPT -b -f -p $MINICONDA_PREFIX
@@ -80,9 +80,7 @@ PyGIMLi - Electrical Resistivity Tomography
 # 
 
 import numpy as np
-import matplotlib.pyplot as plt
 import pygimli
-from pygimli import meshtools
 from pygimli.physics import ert
 
 from cofi import BaseProblem, InversionOptions, Inversion
@@ -123,9 +121,12 @@ ax[0].set_title("True model")
 # Generate the synthetic data as a container with all the necessary
 # information for plotting.
 # 
+# In ERT problems, the model and data are by convention treated in log
+# space.
+# 
 
 # PyGIMLi - generate data
-data, log_data = ert_simulate(mesh, scheme, rhomap)
+data, log_data, data_cov_inv = ert_simulate(mesh, scheme, rhomap)
 
 ax = ert.show(data)
 ax[0].set_title("Provided data")
@@ -180,15 +181,19 @@ ax[0].set_title("Mesh used for inversion")
 
 
 ######################################################################
-# Check
-# `here <https://github.com/inlab-geo/cofi-examples/tree/main/notebooks/pygimli_ert>`__
-# for inversion examples using triangular mesh.
+# `This
+# folder <https://github.com/inlab-geo/cofi-examples/tree/main/notebooks/pygimli_ert>`__
+# contains examples scripts that run inversion for triangular or
+# rectangular meshes, with different inversion approaches.
 # 
 
 
 ######################################################################
 # With the inversion mesh created, we now define a starting model, forward
 # operator and weighting matrix for regularisation using PyGIMLi.
+# 
+# Recall that both our model and data will be in log space when we perform
+# inversion.
 # 
 
 # PyGIMLi's forward operator (ERTModelling)
@@ -198,7 +203,7 @@ forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
 Wm = reg_matrix(forward_oprt)
 
 # initialise a starting model for inversion
-start_model = starting_model(ert_manager)
+start_model, start_model_log = starting_model(ert_manager)
 ax = pygimli.show(ert_manager.paraDomain, data=start_model, label="$\Omega m$", showMesh=True)
 ax[0].set_title("Starting model")
 
@@ -216,7 +221,7 @@ ax[0].set_title("Starting model")
 # -  ``get_response``
 # -  ``get_jacobian``
 # -  ``get_residuals``
-# -  ``get_misfit``
+# -  ``get_data_misfit``
 # -  ``get_regularisation``
 # -  ``get_gradient``
 # -  ``get_hessian``
@@ -230,7 +235,7 @@ ax[0].set_title("Starting model")
 # 
 
 # hyperparameters
-lamda = 0.0005
+lamda = 0.0001
 
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
@@ -238,11 +243,11 @@ ert_problem.name = "Electrical Resistivity Tomography defined through PyGIMLi"
 ert_problem.set_forward(get_response, args=[forward_oprt])
 ert_problem.set_jacobian(get_jacobian, args=[forward_oprt])
 ert_problem.set_residual(get_residual, args=[log_data, forward_oprt])
-ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt])
+ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_cov_inv])
 ert_problem.set_regularisation(get_regularisation, args=[Wm, lamda])
-ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda])
-ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda])
-ert_problem.set_initial_model(start_model)
+ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
+ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
+ert_problem.set_initial_model(start_model_log)
 
 ######################################################################
 #
@@ -262,8 +267,8 @@ ert_problem.summary()
 # 2. Define the inversion options and run
 # ---------------------------------------
 # 
-# 2.1 SciPy’s optimiser (`Newton-CG <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-newtoncg.html#optimize-minimize-newtoncg>`__)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 2.1 SciPy’s optimiser (`trust-exact <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustexact.html#optimize-minimize-trustexact>`__)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 
 ert_problem.suggest_solvers();
@@ -273,7 +278,7 @@ ert_problem.suggest_solvers();
 
 inv_options_scipy = InversionOptions()
 inv_options_scipy.set_tool("scipy.optimize.minimize")
-inv_options_scipy.set_params(method="Newton-CG")
+inv_options_scipy.set_params(method="trust-exact")
 
 ######################################################################
 #
@@ -305,17 +310,20 @@ inv_result.success
 # Plot the results:
 # 
 
+# convert back to normal space from log space
+model = np.exp(inv_result.model)
+
 # plot inferred model
 inv_result.summary()
-ax = pygimli.show(ert_manager.paraDomain, data=inv_result.model, label=r"$\Omega m$")
+ax = pygimli.show(ert_manager.paraDomain, data=model, label=r"$\Omega m$")
 ax[0].set_title("Inferred model")
 
 ######################################################################
 #
 
 # plot synthetic data
-d = forward_oprt.response(inv_result.model)
-ax = ert.showERTData(scheme, vals=d)
+d = forward_oprt.response(model)
+ax = ert.showERTData(scheme, vals=d, cMin=np.min(data["rhoa"]), cMax=np.max(data["rhoa"]))
 ax[0].set_title("Synthetic data from inferred model")
 
 ######################################################################
@@ -359,7 +367,7 @@ class GaussNewton(BaseSolver):
             term1 = self._hessian(current_model)
             term2 = - self._gradient(current_model)
             model_update = np.linalg.solve(term1, term2) * self._step
-            current_model = np.array(current_model + model_update)
+            current_model = current_model + model_update
         return {"model": current_model, "success": True}
 
 ######################################################################
@@ -371,37 +379,54 @@ class GaussNewton(BaseSolver):
 # 
 
 # hyperparameters
-niter = 50
+lamda = 0.0001
+niter = 150
 inv_verbose = True
-step = 2
+step = 0.005
 
 # CoFI - define InversionOptions
-inv_options_gauss_newton = InversionOptions()
-inv_options_gauss_newton.set_tool(GaussNewton)
-inv_options_gauss_newton.set_params(niter=niter, verbose=inv_verbose, step=step)
+inv_options = InversionOptions()
+inv_options.set_tool(GaussNewton)
+inv_options.set_params(niter=niter, verbose=inv_verbose, step=step)
 
 # CoFI - define Inversion, run it
-inv = Inversion(ert_problem, inv_options_gauss_newton)
+inv = Inversion(ert_problem, inv_options)
 inv_result = inv.run()
 
 ######################################################################
 #
 
+# convert from log space
+model = np.exp(inv_result.model)
+
 # plot inferred model
-inv_result.summary()
-ax = pygimli.show(ert_manager.paraDomain, data=inv_result.model, label=r"$\Omega m$")
+ax = pygimli.show(ert_manager.paraDomain, data=model, label=r"$\Omega m$")
 ax[0].set_title("Inferred model")
 
 ######################################################################
 #
 
 # plot synthetic data
-d = forward_oprt.response(inv_result.model)
-ax = ert.showERTData(scheme, vals=d)
+d = forward_oprt.response(model)
+ax = ert.showERTData(scheme, vals=d, cMin=np.min(data["rhoa"]), cMax=np.max(data["rhoa"]))
 ax[0].set_title("Synthetic data from inferred model")
 
 ######################################################################
 #
+
+
+######################################################################
+# 3. What’s next?
+# ---------------
+# 
+# Now that we’ve seen the PyGIMLi ERT problem solved by two different
+# inversion approaches through CoFI, it would be nice to see more
+# inversion solvers (even a sampler!) and a similar problem defined with a
+# rectangular mesh. If you’d like to see some self-contained examples,
+# head to `this GitHub
+# folder <https://github.com/inlab-geo/cofi-examples/tree/main/notebooks/pygimli_ert>`__
+# to explore more.
+# 
 
 
 ######################################################################
