@@ -63,6 +63,9 @@ PyGIMLi - Electrical Resistivity Tomography
 # import sys
 # _ = (sys.path.append("/usr/local/lib/python3.7/site-packages"))
 
+# !git clone https://github.com/inlab-geo/cofi-examples.git
+# %cd cofi-examples/notebooks/pygimli_ert
+
 ######################################################################
 #
 
