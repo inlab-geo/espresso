@@ -10,3 +10,5 @@ Licensing is done individually by each contributor. If a contributor wants to
 freely share their code example we recommend the xxx license. To determine the
 license of an existing Inversion Test Problem, please consult the readthedocs
 section of that problem.
+
+.. https://opensource.stackexchange.com/questions/4512/how-to-combine-multiple-license-notes-into-single-file

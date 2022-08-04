@@ -1,7 +1,15 @@
 [build-system]
-requires = ["setuptools"]
+requires = [
+  "setuptools>=42",
+  "wheel",
+  "scikit-build>=0.12",
+  "cmake>=3.18",
+  "ninja",
+  "cython>=0.29.27",
+  "numpy>=1.18",
+  "pybind11[global]>=2.9.1",
+]
 build-backend = "setuptools.build_meta"
-
 
 # Format code to PEP8 standard:
 # black contrib/*

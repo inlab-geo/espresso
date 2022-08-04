@@ -7,7 +7,7 @@ import importlib
 
 # Import class auxclass containing functions like kernel
 auxclass = getattr(
-    importlib.import_module(".gravityforward.auxfile", package="inversiontestproblems"),
+    importlib.import_module(".gravityforward.auxfile", package="inversion_test_problems"),
     "auxclass",
 )
 

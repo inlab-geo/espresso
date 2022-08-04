@@ -13,17 +13,18 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-import inversiontestproblems
+import inversiontestproblems as itp
+import datetime
 
 # -- Project information -----------------------------------------------------
 
 project = 'Inversion Test Problems'
-copyright = '2022, InLab'
+copyright = f"{datetime.date.today().year}, InLab, {project} development team"
 author = 'InLab'
-version = "dev" if "dev" in inversiontestproblems.__version__ else f"v{inversiontestproblems.__version__}"
+version = "dev" if "dev" in itp.__version__ else f"v{itp.__version__}"
 
-# The full version, including alpha/beta/rc tags
-release = '0.0.1'
+# # The full version, including alpha/beta/rc tags
+# release = '0.0.1'
 
 
 # -- General configuration ---------------------------------------------------

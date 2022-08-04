@@ -22,5 +22,5 @@ for item in os.listdir(current_directory):
         if not item == ".ipynb_checkpoints" and not item == "__pycache__":
             dirpath = "." + item
             globals()["%s" % item] = getattr(
-                importlib.import_module(dirpath, package="inversiontestproblems"), item
+                importlib.import_module(dirpath, package="inversion_test_problems"), item
             )
