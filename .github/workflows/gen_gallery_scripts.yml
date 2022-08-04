@@ -6,8 +6,8 @@ on:
 #     branches: main
 #     paths:
 #       - 'notebooks/**'
-  schedule:
-    - cron: '54 13 * * *'
+#  schedule:
+#    - cron: '54 13 * * *'
 
 
 jobs:
