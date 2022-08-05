@@ -52,6 +52,15 @@ if __name__ == '__main__':
     print("🗂  Copying files...")
     for template_file, new_file in zip(template_files, new_files):
         print("file: "+template_file+" -> "+new_file)
-        copyfile(template_file, new_file)
+        if "README" in template_file:
+            example_name_capitalised = example_name.title().replace("_", " ")
+            with open(template_file, "r") as template_f:
+                content = template_f.read()
+            content = content.replace("example_name", example_name)
+            content = content.replace("Example Name Title", example_name_capitalised)
+            with open(new_file, "w") as new_f:
+                new_f.write(content)
+        else:
+            copyfile(template_file, new_file)
     print("\n🎉 OK. Please navigate to " + new_subfolder + " to write your own example. ")
     

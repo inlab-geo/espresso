@@ -18,6 +18,9 @@ examples:
     model_dimension: (789, 456)
     data_dimension: (1000, 2)
 extra_websites:
-  - __Some github link__
-  - __Some data source link__
-  - __Add more if needed__
+  - name: __Description__
+    link: __Some github link__
+  - name: __Description__
+    link: __Some data source link__
+  - name: __Description__
+    link: __Add more if needed__

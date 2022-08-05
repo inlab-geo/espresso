@@ -1,4 +1,4 @@
-# Example Name Title
+# Xray Tomography
 
 <!-- Please write anything you'd like to explain about the forward problem here -->
 
@@ -18,7 +18,7 @@ To complete this contribution, here are some ideas on what to do next:
    render some of the information in a more structured manner.
 - [ ] **Modify [LICENCE](LICENCE)**. The default one we've used is a 2-clauss BSD licence. 
    Feel free to replace the content with a licence that suits you best.
-- [ ] **Write code in [example_name.py](example_name.py) (and [__init__.py](__init__.py) if
+- [ ] **Write code in [xray_tomography.py](xray_tomography.py) (and [__init__.py](__init__.py) if
    necessary)**. Some basic functions have been defined in the template - these are the
    standard interface we'd like to enforce in inversion test problems (ITP). You'll see
    clearly some functionalities that are required to implement and others that are
