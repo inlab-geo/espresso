@@ -1,6 +1,6 @@
 # Command to create a new example folder:
 # In ROOT, execute:
-# python utils/_create_new_example.py <example-name>
+# python utils/new_contribution/create_new_contrib.py <example-name>
 # Replacing <example_name> with the new example name.
 
 from glob import glob
@@ -26,31 +26,32 @@ def getListOfFiles(dirName):
     return allFiles
 
 
-SOURCE_FOLDER = "src/inversion_test_problems"
-TEMPLATE_FOLDER = "utils/_template"
+CONTRIB_FOLDER = "contrib"
+TEMPLATE_FOLDER = "utils/new_contribution/_template"
 
 if __name__ == '__main__':
+    print("🥰 Thanks for contributing! \nWe are generating new contribution component from template...\n")
+
     # validate example name
     example_name = sys.argv[-1]
-    existing_examples = glob(SOURCE_FOLDER+"/*/")
-    existing_examples = [e for e in existing_examples if not e.startswith("notebooks/_")]
+    existing_examples = glob(CONTRIB_FOLDER+"/*/")
+    existing_examples = [e for e in existing_examples]
     existing_examples = [e.split("/")[1] for e in existing_examples]
-    print(existing_examples)
+    # print(existing_examples)
     if example_name in existing_examples:
         raise ValueError("The example name provided already exists, please choose another name")
     
-    new_subfolder = SOURCE_FOLDER+"/"+example_name
+    new_subfolder = CONTRIB_FOLDER+"/"+example_name
     os.makedirs(new_subfolder)    
     os.makedirs(new_subfolder+"/data")    
-    os.makedirs(new_subfolder+"/Jupyter") 
 
     template_files=getListOfFiles(TEMPLATE_FOLDER)
     new_files = [f.replace(TEMPLATE_FOLDER, new_subfolder) for f in template_files]
     new_files = [f.replace("example_name", example_name) for f in new_files]
 
-    print("Copying files...")
+    print("🗂  Copying files...")
     for template_file, new_file in zip(template_files, new_files):
         print("file: "+template_file+" -> "+new_file)
         copyfile(template_file, new_file)
-    print("\nOK. Please navigate to" + new_subfolder + " to write your own example.")
+    print("\n🎉 OK. Please navigate to " + new_subfolder + " to write your own example. ")
     
