@@ -52,8 +52,8 @@ def get_folder_content(folder_name):
     return names, paths
 
 def all_contribs():
-    # return list(zip(*get_folder_content(CONTRIB_FOLDER)))
-    return [("gravity_density", "contrib/gravity_density")]
+    return list(zip(*get_folder_content(CONTRIB_FOLDER)))
+    # return [("gravity_density", "contrib/gravity_density")]
 
 @pytest.fixture(params=all_contribs())
 def contrib(request):
