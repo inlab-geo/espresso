@@ -1,0 +1,26 @@
+name: itp_dev
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy>=1.20
+  - scipy>=1.0.0
+  - black
+  - sphinx
+  - jupyterlab
+  - matplotlib
+  - cython
+  - pybind11
+  - scikit-build
+  - pytest
+  - pip
+  - pip:
+    - pyyaml
+    - sphinx-book-theme
+    - sphinx-panels
+    - sphinx-togglebutton
+    - sphinx-gallery
+    - pypandoc
+    - myst-nb
+    - sphinxcontrib-mermaid
+    - sphinx-copybutton
