@@ -8,8 +8,9 @@ import pkgutil
 from io import StringIO
 import numpy as np
 from scipy.constants import G
+import matplotlib.pyplot as plt
 
-from auxfile import auxclass
+from lib import auxclass
 
 
 example_number = 0
@@ -47,8 +48,80 @@ def jacobian(model):
     jac = _calculate_gravity(model, x_nodes, y_nodes, z_nodes, rec_coords)
     raise NotImplementedError               # optional
 
-def plot_model(model):
-    raise NotImplementedError               # optional
+def plot_model(model, data):
+    if example_number == 0:
+        # gx_rec=data.gx_rec
+        # gy_rec=data.gy_rec
+        gz_rec = data
+
+        limx = (
+            max(rec_coords[:, 0])
+            + (rec_coords[1, 0] - rec_coords[0, 0]) * 0.5
+        )
+        limy = (
+            max(rec_coords[:, 1])
+            + (rec_coords[1, 1] - rec_coords[0, 1]) * 0.5
+        )
+
+        fig, axes = plt.subplots(1, 2, figsize=(17, 12))
+        axes[0].scatter(rec_coords[:, 1], rec_coords[:, 0], s=0.3, color="k")
+        img = axes[0].imshow(
+            np.reshape(gz_rec, [lrx, lry]), extent=[-limy, limy, -limx, limx]
+        )
+        axes[0].set_title("2D view of gz")
+        axes[0].set_xlabel("y [m]")
+        axes[0].set_ylabel("x [m]")
+        plt.colorbar(img, label="Gravity [mGal]")
+
+        model2d = model.reshape(lmx, lmy, lmz)
+        axes[1].set_title("Model slice at z = 30 m")
+        axes[1].scatter(rec_coords[:, 1], rec_coords[:, 0], s=3, color="r")
+        img = axes[1].imshow(model2d[7][:][:], extent=[-30, 30, -30, 30])
+        axes[1].set_xlabel("y [m]")
+        axes[1].set_ylabel("x [m]")
+        plt.colorbar(img, label="Density [kg/m$^3$]")
+        axes[1].set_xlim([-30, 30])
+        axes[1].set_ylim([-30, 30])
+
+        return fig
+    elif example_number == 1:
+
+        gz_rec = data
+
+        limx = (
+            max(rec_coords[:, 0])
+            + (rec_coords[1, 0] - rec_coords[0, 0]) * 0.5
+        )
+        limy = (
+            max(rec_coords[:, 1])
+            + (rec_coords[1, 1] - rec_coords[0, 1]) * 0.5
+        )
+
+        # model2d=model.reshape(3,1,9)
+        # plt.figure(figsize=(17, 8))
+        # plt.subplot(2, 1, 1)
+        # plt.title("Model slice at y=0")
+        # plt.imshow(model2d[:,0,:])
+        # plt.colorbar(label="density [kg/m^3]")
+
+        fig, axes = plt.subplots(1, 2, figsize=(17, 8))
+        axes[0].scatter(rec_coords[:, 0], rec_coords[:, 1], s=0.3, color="k")
+        img = axes[0].imshow(np.reshape(model, [lmz, lmx]))
+        axes[0].set_title("2D view of the model")
+        axes[0].set_xlabel("y [m]")
+        axes[0].set_ylabel("z [m]")
+        plt.colorbar(img, label="Density [kg/m^3]")
+
+        axes[1].plot(rec_coords[:, 0], data)
+        axes[1].set_title("gz")
+        axes[1].set_xlabel("Distance [m]")
+        axes[1].set_ylabel("Gravity [mGal]")
+        axes[1].grid()
+
+        return fig
+        
+    else:
+        raise NotImplementedError               # optional
 
 def plot_data(data):
     raise NotImplementedError               # optional
