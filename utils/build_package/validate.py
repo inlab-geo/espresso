@@ -30,7 +30,9 @@
     - [optional] contacts -> name, email, website
     - [optional] extra_websites -> name, link
 
-6. LICENCE file is not empty
+6. Check there are enough number of examples as documented in metadata.yml
+
+7. LICENCE file is not empty
 
 """
 
@@ -38,6 +40,8 @@ import os
 import sys
 import pytest
 import numpy as np
+from matplotlib.figure import Figure
+import yaml
 
 
 CONTRIB_FOLDER = "contrib"
@@ -48,11 +52,15 @@ def get_folder_content(folder_name):
     return names, paths
 
 def all_contribs():
-    return list(zip(*get_folder_content(CONTRIB_FOLDER)))
+    # return list(zip(*get_folder_content(CONTRIB_FOLDER)))
+    return [("gravity_density", "contrib/gravity_density")]
 
 @pytest.fixture(params=all_contribs())
 def contrib(request):
     return request.param
+
+def _array_like(obj):
+    return np.ndim(obj) != 0
 
 def test_contrib(contrib):
     contrib_name, contrib_sub_folder = contrib
@@ -67,6 +75,62 @@ def test_contrib(contrib):
     for file in required_files:
         assert file in names, \
             f"{file} is required but you don't have it in {contrib_sub_folder}"
+    
+    # 3 - functions are defined: set_example_number, suggested_model, data, forward
+    sys.path.insert(1, contrib_sub_folder)
+    contrib_mod = __import__(contrib_name)
+    contrib_mod.set_example_number(0)
+    _model = contrib_mod.suggested_model()
+    _data = contrib_mod.data()
+    _synthetics = contrib_mod.forward(_model)
+    assert _array_like(_model)
+    assert _array_like(_data)
+    assert _array_like(_synthetics)
+
+    # 4 - optional functions have correct signatures
+    try: _synthetics, _jacobian = contrib_mod.forward(_model, with_jacobian=True)
+    except NotImplementedError: pass
+    else:
+        assert _array_like(_synthetics)
+        assert _array_like(_jacobian)
+    try: _jacobian = contrib_mod.jacobian(_model)
+    except NotImplementedError: pass
+    else: assert _array_like(_jacobian)
+    try: _fig_model = contrib_mod.plot_model(_model)
+    except NotImplementedError: pass
+    else: assert isinstance(_fig_model, Figure)
+    try: _fig_data = contrib_mod.plot_data(_data)
+    except NotImplementedError: pass
+    else: assert isinstance(_fig_data, Figure)
+
+    # 5 - metadata.yml can be parsed and has necessary keys
+    with open(f"{contrib_sub_folder}/metadata.yml", "r") as stream:
+        meta_data = yaml.safe_load(stream)
+    for k in ["name", "short_description", "authors", "examples"]:
+        assert k in meta_data
+    n_examples = len(meta_data["examples"])
+    for example in meta_data["examples"]:
+        assert "description" in example
+        assert "model_dimension" in example
+        assert "data_dimension" in example
+    if "citation" in meta_data:
+        assert "doi" in meta_data["citation"]
+    if "contacts" in meta_data:
+        for contact in meta_data["contacts"]:
+            assert "name" in contact
+            assert "email" in contact
+    if "extra_websites" in meta_data:
+        for website in meta_data["extra_websites"]:
+            assert "name" in website
+            assert "link" in website
+    
+    # 6 - enough number of examples as documented in metadata.yml
+    for i in range(n_examples):
+        contrib_mod.set_example_number(i)
+    
+    # 7 - LICENCE file not empty
+    assert os.stat(f"{contrib_sub_folder}/LICENCE").st_size != 0
+
 
     print(f"✔️ Passed")
 

@@ -37,7 +37,7 @@ CONTENT_TYPE = "text/markdown"
 ########################## OTHER METADATA #############################################
 PACKAGE_NAME = "inversion_test_problems"
 AUTHOR = f"InLab, {PACKAGE_NAME} development team"
-DESCRIPTION = "An inversion test suite that collects examples from many disciplines within geoscience and elsewhere."
+DESCRIPTION = "A suite of forward codes for inversion testing"
 KEYWORDS = ["inversion", "inference", "python package", "geoscience", "geophysics"]
 CLASSIFIERS = [
     "Development Status :: 2 - Pre-Alpha",
@@ -64,6 +64,7 @@ PYTHON_REQUIRES = ">=3.6"
 INSTALL_REQUIRES = [
     "numpy>=1.18",
     "scipy>=1.0.0",
+    "matplotlib>=3.1",
 ]
 EXTRAS_REQUIRE = {
     "doc": [
