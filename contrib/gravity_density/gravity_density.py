@@ -13,17 +13,35 @@ import matplotlib.pyplot as plt
 from lib import auxclass
 
 
-example_number = 0
+_params = {"example_number": 0}
 
 def set_example_number(num):
-    example_number = num
-    setup_params = _setup(example_number)
-    m, rec_coords, x_nodes, y_nodes, z_nodes, lmx, lmy, lmz, lrx, lry = setup_params
+    _params["example_number"] = num
+    setup_params = _setup(_params["example_number"])
+    _to_expand = [
+        "m", 
+        "rec_coords", 
+        "x_nodes", 
+        "y_nodes", 
+        "z_nodes", 
+        "lmx", 
+        "lmy", 
+        "lmz", 
+        "lrx", 
+        "lry"
+    ]
+    for idx, name in enumerate(_to_expand):
+        _params[name] = setup_params[idx]
 
 def suggested_model():
-    return m
+    return _params["m"]
 
 def data():
+    m = _params["m"]
+    x_nodes = _params["x_nodes"]
+    y_nodes = _params["y_nodes"]
+    z_nodes = _params["z_nodes"]
+    rec_coords = _params["rec_coords"]
     gz_rec = _calculate_gravity(m, x_nodes, y_nodes, z_nodes, rec_coords)
     datan=gz_rec+np.random.normal(0,0.005*np.max(np.abs(gz_rec)),len(gz_rec))
     return datan
@@ -39,92 +57,91 @@ def forward(model, with_jacobian=False):
     :type gz_rec: numpy array
 
     """
+    x_nodes = _params["x_nodes"]
+    y_nodes = _params["y_nodes"]
+    z_nodes = _params["z_nodes"]
+    rec_coords = _params["rec_coords"]
     res = _calculate_gravity(
         model, x_nodes, y_nodes, z_nodes, rec_coords, with_jacobian
     )
     return res
 
 def jacobian(model):
+    x_nodes = _params["x_nodes"]
+    y_nodes = _params["y_nodes"]
+    z_nodes = _params["z_nodes"]
+    rec_coords = _params["rec_coords"]
     jac = _calculate_gravity(model, x_nodes, y_nodes, z_nodes, rec_coords)
-    raise NotImplementedError               # optional
+    return jac
 
-def plot_model(model, data):
-    if example_number == 0:
-        # gx_rec=data.gx_rec
-        # gy_rec=data.gy_rec
-        gz_rec = data
+def plot_model(model):
+    rec_coords = _params["rec_coords"]
+    lmx = _params["lmx"]
+    lmy = _params["lmy"]
+    lmz = _params["lmz"]
 
-        limx = (
-            max(rec_coords[:, 0])
-            + (rec_coords[1, 0] - rec_coords[0, 0]) * 0.5
-        )
-        limy = (
-            max(rec_coords[:, 1])
-            + (rec_coords[1, 1] - rec_coords[0, 1]) * 0.5
-        )
-
-        fig, axes = plt.subplots(1, 2, figsize=(17, 12))
-        axes[0].scatter(rec_coords[:, 1], rec_coords[:, 0], s=0.3, color="k")
-        img = axes[0].imshow(
-            np.reshape(gz_rec, [lrx, lry]), extent=[-limy, limy, -limx, limx]
-        )
-        axes[0].set_title("2D view of gz")
-        axes[0].set_xlabel("y [m]")
-        axes[0].set_ylabel("x [m]")
-        plt.colorbar(img, label="Gravity [mGal]")
-
+    if _params["example_number"] == 0:
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
         model2d = model.reshape(lmx, lmy, lmz)
-        axes[1].set_title("Model slice at z = 30 m")
-        axes[1].scatter(rec_coords[:, 1], rec_coords[:, 0], s=3, color="r")
-        img = axes[1].imshow(model2d[7][:][:], extent=[-30, 30, -30, 30])
-        axes[1].set_xlabel("y [m]")
-        axes[1].set_ylabel("x [m]")
+        ax.set_title("Model slice at z = 30 m")
+        ax.scatter(rec_coords[:, 1], rec_coords[:, 0], s=3, color="r")
+        img = ax.imshow(model2d[7][:][:], extent=[-30, 30, -30, 30])
+        ax.set_xlabel("y [m]")
+        ax.set_ylabel("x [m]")
         plt.colorbar(img, label="Density [kg/m$^3$]")
-        axes[1].set_xlim([-30, 30])
-        axes[1].set_ylim([-30, 30])
-
+        ax.set_xlim([-30, 30])
+        ax.set_ylim([-30, 30])
         return fig
-    elif example_number == 1:
-
-        gz_rec = data
-
-        limx = (
-            max(rec_coords[:, 0])
-            + (rec_coords[1, 0] - rec_coords[0, 0]) * 0.5
-        )
-        limy = (
-            max(rec_coords[:, 1])
-            + (rec_coords[1, 1] - rec_coords[0, 1]) * 0.5
-        )
-
-        # model2d=model.reshape(3,1,9)
-        # plt.figure(figsize=(17, 8))
-        # plt.subplot(2, 1, 1)
-        # plt.title("Model slice at y=0")
-        # plt.imshow(model2d[:,0,:])
-        # plt.colorbar(label="density [kg/m^3]")
-
-        fig, axes = plt.subplots(1, 2, figsize=(17, 8))
-        axes[0].scatter(rec_coords[:, 0], rec_coords[:, 1], s=0.3, color="k")
-        img = axes[0].imshow(np.reshape(model, [lmz, lmx]))
-        axes[0].set_title("2D view of the model")
-        axes[0].set_xlabel("y [m]")
-        axes[0].set_ylabel("z [m]")
+    elif _params["example_number"] == 1:
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        ax.scatter(rec_coords[:, 0], rec_coords[:, 1], s=0.3, color="k")
+        img = ax.imshow(np.reshape(model, [lmz, lmx]))
+        ax.set_title("2D view of the model")
+        ax.set_xlabel("y [m]")
+        ax.set_ylabel("z [m]")
         plt.colorbar(img, label="Density [kg/m^3]")
-
-        axes[1].plot(rec_coords[:, 0], data)
-        axes[1].set_title("gz")
-        axes[1].set_xlabel("Distance [m]")
-        axes[1].set_ylabel("Gravity [mGal]")
-        axes[1].grid()
-
         return fig
-        
     else:
         raise NotImplementedError               # optional
 
 def plot_data(data):
-    raise NotImplementedError               # optional
+    rec_coords = _params["rec_coords"]
+    lrx = _params["lrx"]
+    lry = _params["lry"]
+    gz_rec = data
+    limx = (
+        max(rec_coords[:, 0])
+        + (rec_coords[1, 0] - rec_coords[0, 0]) * 0.5
+    )
+    limy = (
+        max(rec_coords[:, 1])
+        + (rec_coords[1, 1] - rec_coords[0, 1]) * 0.5
+    )
+    if _params["example_number"] == 0:
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        ax.scatter(rec_coords[:, 1], rec_coords[:, 0], s=0.3, color="k")
+        img = ax.imshow(
+            np.reshape(gz_rec, [lrx, lry]), extent=[-limy, limy, -limx, limx]
+        )
+        ax.set_title("2D view of gz")
+        ax.set_xlabel("y [m]")
+        ax.set_ylabel("x [m]")
+        plt.colorbar(img, label="Gravity [mGal]")
+        return fig
+    elif _params["example_number"] == 1:
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        ax.plot(rec_coords[:, 0], data)
+        ax.set_title("gz")
+        ax.set_xlabel("Distance [m]")
+        ax.set_ylabel("Gravity [mGal]")
+        ax.grid()
+        return fig
+    else:
+        raise NotImplementedError               # optional
 
 
 def _kernel(ii, jj, kk, dx, dy, dz, dim):
@@ -442,5 +459,4 @@ def _setup(num):
         raise ValueError("The chosen example-number does not match any examples for this Inversion Test Problem.")
 
 
-setup_params = _setup(0)
-m, rec_coords, x_nodes, y_nodes, z_nodes, lmx, lmy, lmz, lrx, lry = setup_params
+set_example_number(0)
