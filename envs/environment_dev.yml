@@ -12,6 +12,7 @@ dependencies:
   - cython
   - pybind11
   - scikit-build
+  - pytest
   - pip
   - pip:
     - sphinx-book-theme
