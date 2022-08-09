@@ -1,4 +1,4 @@
-name: itp_dev
+name: esp_dev
 channels:
   - conda-forge
   - defaults

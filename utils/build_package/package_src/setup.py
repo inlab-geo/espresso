@@ -17,14 +17,14 @@ except ImportError:
 
 ########################## VERSION ####################################################
 _ROOT = pathlib.Path(__file__).parent
-with open(str(_ROOT / "src" / "inversion_test_problems" / "_version.py")) as f:
+with open(str(_ROOT / "src" / "espresso" / "_version.py")) as f:
     for line in f:
         if line.startswith("__version__="):
             _, _, version = line.partition("=")
             VERSION = version.strip(" \n'\"")
             break
     else:
-        raise RuntimeError("unable to read the version from src/inversion_test_problems/_version.py")
+        raise RuntimeError("unable to read the version from src/espresso/_version.py")
 
 
 ########################## LONG DESCRIPTION ###########################################
@@ -35,7 +35,7 @@ CONTENT_TYPE = "text/markdown"
 
 
 ########################## OTHER METADATA #############################################
-PACKAGE_NAME = "inversion_test_problems"
+PACKAGE_NAME = "espresso"
 AUTHOR = f"InLab, {PACKAGE_NAME} development team"
 DESCRIPTION = "A suite of forward codes for inversion testing"
 KEYWORDS = ["inversion", "inference", "python package", "geoscience", "geophysics"]
@@ -122,7 +122,7 @@ except SystemExit as e:
 
 
 # setup(
-#     name='inversion-test-problems',
+#     name='espresso',
 #     version=VERSION,
 #     install_requires=[
 #         'importlib-metadata; python_version == "3.8"',

@@ -19,12 +19,12 @@ Install
 
        It's optional, but recommended to use a virtual environment::
 
-         conda create -n ITP_env scipy jupyterlab matplotlib
-         conda activate ITP_env
+         conda create -n esp_env scipy jupyterlab matplotlib
+         conda activate esp_env
 
-       Install ITP with::
+       Install espression with::
 
-         python3 -m pip install inversion-test-problems
+         python3 -m pip install espresso
 
 
    .. tab:: conda-forge
@@ -37,10 +37,10 @@ Install
 
       If you'd like to build from source, clone the repository::
 
-        git clone https://github.com/inlab-geo/inversion-test-problems.git
-        cd inversion-test-problems
-        conda create -n ITP_env scipy matplotlib
-        conda activate ITP_env
+        git clone https://github.com/inlab-geo/espresso.git
+        cd espresso
+        conda create -n esp_env scipy matplotlib
+        conda activate esp_env
         pip install build
         python -m build
         pip install dist/*.whl

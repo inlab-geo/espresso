@@ -5,7 +5,7 @@ on:
   push:
     branches: main
     paths:
-      - "src/inversion-test-problems/_version.py"
+      - "src/espresso/_version.py"
 
 jobs:
   # if_merged:
@@ -93,7 +93,7 @@ jobs:
 
       - name: Extract Release Version
         id: release_version
-        working-directory: src/inversion-test-problems
+        working-directory: src/espresso
         run: |
           set -e
           python -c "import _version as v; print(v.__version__)"
