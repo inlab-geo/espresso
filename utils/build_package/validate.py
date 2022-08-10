@@ -8,20 +8,29 @@
     - metadata.yml
     - __init__.py
 
-3. Required functions are implemented and can run
+3. There an `__all__` variable in __init__.py with standard functions exposed
+    - set_example_number
+    - suggested_model
+    - data
+    - forward
+    - jacobian
+    - plot_model
+    - plot_data
+
+4. Required functions are implemented and can run
     - set_example_number(num) -> None
     - suggested_model() -> numpy.ndarray | pandas.Series | list
     - data() -> numpy.ndarray | pandas.Series | list
     - forward(model, with_jacobian=False) -> numpy.ndarray | pandas.Series | list
     * Check array like datatypes with `np.ndim(m) != 0`
 
-4. Optional functions, if implemented, have the correct signatures
+5. Optional functions, if implemented, have the correct signatures
     - forward(model, with_jacobian=True) -> tuple
     - jacobian(model) -> numpy.ndarray | pandas.Series | list
     - plot_model(model) -> matplotlib.figure.Figure
     - plot_data(model) -> matplotlib.figure.Figure
 
-5. The metadata.yml file can be parsed and has the following keys:
+6. The metadata.yml file can be parsed and has the following keys:
     - name
     - short_description
     - authors
@@ -30,9 +39,9 @@
     - [optional] contacts -> name, email, website
     - [optional] extra_websites -> name, link
 
-6. Check there are enough number of examples as documented in metadata.yml
+7. Check there are enough number of examples as documented in metadata.yml
 
-7. LICENCE file is not empty
+8. LICENCE file is not empty
 
 """
 
@@ -76,9 +85,22 @@ def test_contrib(contrib):
         assert file in names, \
             f"{file} is required but you don't have it in {contrib_sub_folder}"
     
-    # 3 - functions are defined: set_example_number, suggested_model, data, forward
-    sys.path.insert(1, contrib_sub_folder)
+    # 3 - __all__ includes standard functions exposed to users
+    sys.path.insert(1, CONTRIB_FOLDER)
     contrib_mod = __import__(contrib_name)
+    std_funcs = [
+        "set_example_number", 
+        "suggested_model", 
+        "data", 
+        "forward", 
+        "jacobian", 
+        "plot_model", 
+        "plot_data"
+    ]
+    for fun in std_funcs:
+        assert fun in contrib_mod.__all__
+
+    # 4 - functions are defined: set_example_number, suggested_model, data, forward
     contrib_mod.set_example_number(0)
     _model = contrib_mod.suggested_model()
     _data = contrib_mod.data()
@@ -87,7 +109,7 @@ def test_contrib(contrib):
     assert _array_like(_data)
     assert _array_like(_synthetics)
 
-    # 4 - optional functions have correct signatures
+    # 5 - optional functions have correct signatures
     try: _synthetics, _jacobian = contrib_mod.forward(_model, with_jacobian=True)
     except NotImplementedError: pass
     else:
@@ -103,7 +125,7 @@ def test_contrib(contrib):
     except NotImplementedError: pass
     else: assert isinstance(_fig_data, Figure)
 
-    # 5 - metadata.yml can be parsed and has necessary keys
+    # 6 - metadata.yml can be parsed and has necessary keys
     with open(f"{contrib_sub_folder}/metadata.yml", "r") as stream:
         meta_data = yaml.safe_load(stream)
     for k in ["name", "short_description", "authors", "examples"]:
@@ -124,16 +146,19 @@ def test_contrib(contrib):
             assert "name" in website
             assert "link" in website
     
-    # 6 - enough number of examples as documented in metadata.yml
+    # 7 - enough number of examples as documented in metadata.yml
     for i in range(n_examples):
         contrib_mod.set_example_number(i)
     
-    # 7 - LICENCE file not empty
-    assert os.stat(f"{contrib_sub_folder}/LICENCE").st_size != 0
-
+    # 8 - LICENCE file not empty
+    assert os.stat(f"{contrib_sub_folder}/LICENCE").st_size != 0, \
+        "LICENCE file shouldn't be empty"
 
     print(f"✔️ Passed")
 
 
+def main():
+    pytest.main(["utils/build_package/pre_build.py"])
+
 if __name__ == "__main__":
-    sys.exit(pytest.main(["utils/build_package/validate.py"]))
+    main()

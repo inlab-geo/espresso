@@ -29,7 +29,7 @@ def getListOfFiles(dirName):
 CONTRIB_FOLDER = "contrib"
 TEMPLATE_FOLDER = "utils/new_contribution/_template"
 
-if __name__ == '__main__':
+def main():
     print("🥰 Thanks for contributing! \nWe are generating new contribution component from template...\n")
 
     # validate example name
@@ -60,7 +60,15 @@ if __name__ == '__main__':
             content = content.replace("Example Name Title", example_name_capitalised)
             with open(new_file, "w") as new_f:
                 new_f.write(content)
+        elif "__init__.py" in template_file:
+            with open(template_file, "r") as template_f:
+                content = template_f.read()
+            content = content.replace("example_name", example_name)
+            with open(new_file, "w") as new_f:
+                new_f.write(content)
         else:
             copyfile(template_file, new_file)
     print("\n🎉 OK. Please navigate to " + new_subfolder + " to write your own example. ")
-    
+
+if __name__ == '__main__':
+    main()

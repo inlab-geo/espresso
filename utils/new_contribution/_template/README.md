@@ -33,3 +33,23 @@ To complete this contribution, here are some ideas on what to do next:
 - [ ] **Delete / comment out these initial instructions**. They are for your own reference
    so feel free to delete them or comment them out once you've finished the above
    checklist.
+
+
+## How to test your code
+
+***In order to test your code***, use `contrib` as your working directory and import your contribution
+in the following ways.
+
+(Python interactive mode)
+```python
+$ pwd                            # check you are in the right folder
+<path-to-espresso>/contrib
+$ python
+>>> from example_name import *   # import it this way
+```
+
+(Creating temporary Python file)
+```python
+# file contrib/tmp.py            # create tmp file in the right folder
+from example_name import *       # import it this way
+```
