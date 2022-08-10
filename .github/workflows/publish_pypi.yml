@@ -50,7 +50,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        ref: '_esp_build'
+        with:
+          ref: '_esp_build'
       
       - name: Install Python 3.9
         uses: actions/setup-python@v2
