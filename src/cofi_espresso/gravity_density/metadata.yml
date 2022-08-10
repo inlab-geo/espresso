@@ -1,0 +1,26 @@
+name: __Example name__
+short_description: __Enter a short description here__
+authors:
+  - __Author Name 1__
+  - __Author Name 2__
+contacts:
+  - name: __Author Name 1__
+    email: __Author 1 Email Here__
+    website:  __Any website you'd like to add__
+citations:
+  - doi: __DOI here__
+  - doi: __If there are more__
+examples:
+  - description: __Short description for example no.1__
+    model_dimension: (123, 456)
+    data_dimension: (1000, 2)
+  - description: __Short description for example no.2__
+    model_dimension: (789, 456)
+    data_dimension: (1000, 2)
+extra_websites:
+  - name: __Description__
+    link: __Some github link__
+  - name: __Description__
+    link: __Some data source link__
+  - name: __Description__
+    link: __Add more if needed__

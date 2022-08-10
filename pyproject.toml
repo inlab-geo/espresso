@@ -1,0 +1,35 @@
+[build-system]
+requires = [
+  "setuptools>=42",
+  "wheel",
+  "scikit-build>=0.12",
+  "cmake>=3.18",
+  "ninja",
+  "cython>=0.29.27",
+  "numpy>=1.18",
+  "pybind11[global]>=2.9.1",
+]
+build-backend = "setuptools.build_meta"
+
+# Format code to PEP8 standard:
+# black contrib/*
+# Check which files need to be formatted:
+# black --check contrib/
+[tool.black]
+line-length = 88
+target_version = ['py38']
+experimental_string_processing = true
+exclude = '''
+(
+  /(
+    \.git
+    | \.mypy_cache
+    | \.vscode
+    | build
+    | lib.*
+    | dist
+    | _skbuild
+  )/
+  | tests
+)
+'''

@@ -1,0 +1,4 @@
+# ninja log v5
+0	499	1660098714224146379	CMakeFiles/_f2py_runtime_library.dir/tmp/pip-build-env-86ttd4ya/overlay/lib/python3.9/site-packages/numpy/f2py/src/fortranobject.c.o	161dc17a1b5525e9
+499	521	1660098714248147157	lib_f2py_runtime_library.a	87ec8e2d50dda249
+521	528	0	CMakeFiles/install.util	35f79e53066e7013
