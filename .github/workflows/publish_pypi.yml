@@ -122,12 +122,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        with:
-          ref: '_esp_build'
 
       - name: Extract Release Version
         id: release_version
-        working-directory: src/cofi_espresso
         run: |
           set -e
           python -c "import _version as v; print(v.__version__)"
