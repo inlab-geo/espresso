@@ -17,14 +17,14 @@ except ImportError:
 
 ########################## VERSION ####################################################
 _ROOT = pathlib.Path(__file__).parent
-with open(str(_ROOT / "src" / "cofi-espresso" / "_version.py")) as f:
+with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
     for line in f:
         if line.startswith("__version__="):
             _, _, version = line.partition("=")
             VERSION = version.strip(" \n'\"")
             break
     else:
-        raise RuntimeError("unable to read the version from src/cofi-espresso/_version.py")
+        raise RuntimeError("unable to read the version from src/cofi_espresso/_version.py")
 
 
 ########################## LONG DESCRIPTION ###########################################
@@ -35,7 +35,7 @@ CONTENT_TYPE = "text/markdown"
 
 
 ########################## OTHER METADATA #############################################
-PACKAGE_NAME = "cofi-espresso"
+PACKAGE_NAME = "cofi_espresso"
 AUTHOR = f"InLab, {PACKAGE_NAME} development team"
 DESCRIPTION = "Earth Science PRoblems for the Evaluation of Strategies, Solvers and Optimizers"
 KEYWORDS = ["inversion", "inference", "python package", "geoscience", "geophysics"]
@@ -65,6 +65,7 @@ INSTALL_REQUIRES = [
     "numpy>=1.18",
     "scipy>=1.0.0",
     "matplotlib>=3.1",
+    "pooch>=1.6.0",
 ]
 EXTRAS_REQUIRE = {
     "doc": [

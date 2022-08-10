@@ -51,4 +51,4 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ################################################################################
 # Package content
 ################################################################################
-add_subdirectory(src/cofi-espresso/)
+add_subdirectory(src/cofi_espresso/)
