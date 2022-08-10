@@ -43,6 +43,8 @@ def move_pkg_metadata():
     move_folder_content(DOCS_SRC, f"{BUILD_FOLDER}/{DOCS_SRC}")
     copy("README.md", f"{BUILD_FOLDER}/README.md")
     copy("_version.py", f"{BUILD_FOLDER}/src/{PKG_NAME}/_version.py")
+    copy(".readthedocs.yml", f"{BUILD_FOLDER}/.readthedocs.yml")
+    copy(".gitignore", f"{BUILD_FOLDER}/.gitignore")
 
 def move_contrib_source():
     move_folder_content(CONTRIB_SRC, f"{BUILD_FOLDER}/src/{PKG_NAME}")
