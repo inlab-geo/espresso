@@ -35,7 +35,7 @@ place already, we hope to encourage more examples be developed and be contribute
     :maxdepth: 1
 
     contribute.rst
-    license.rst
+    licence.rst
 
 
 Indices and tables
