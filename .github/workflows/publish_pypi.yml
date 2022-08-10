@@ -40,11 +40,10 @@ jobs:
       - name: Deploy to _esp_build branch
         uses: s0/git-publish-subdir-action@develop
         env:
-          REPO: git@github.com:inlab-geo/espresso.git
+          REPO: self
           BRANCH: _esp_build
           FOLDER: _esp_build
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
 
   ######################## SOURCE DISTRIBUTION #########################
   build_sdist:
