@@ -45,7 +45,6 @@
 
 """
 
-from argparse import ArgumentError
 import os
 import sys
 import pytest
