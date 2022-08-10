@@ -1,5 +1,5 @@
 # This file contains functions that are vital for the Gravityforward -
-# Inversion Test Problem, but are not the focus and therefore stored
+# Espresso, but are not the focus and therefore stored
 # "under the hood" in this auxiliary file.
 
 import numpy as np

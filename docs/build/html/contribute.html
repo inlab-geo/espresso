@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     
-        <title>Contribute to Inversion Test Problems | Inversion Test Problems v0.0.30</title>
+        <title>Contribute to Espresso | Espresso v0.0.33</title>
     
 
     
@@ -25,8 +25,13 @@
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -35,13 +40,21 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
+    <link rel="shortcut icon" href="_static/inlab_logo_60px.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" />
-    <link rel="prev" title="inversiontestproblems.gravityforward" href="api/generated/inversiontestproblems.gravityforward.html" />
+    <link rel="next" title="Licence" href="licence.html" />
+    <link rel="prev" title="Frequently Asked questions" href="faq.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -80,7 +93,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">Inversion Test Problems <span class="project-version">v0.0.30</span></h1>
+      <h1 class="site-logo" id="site-title">Espresso <span class="project-version">v0.0.33</span></h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -88,9 +101,17 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Welcome to the documentation of Espresso!
+                </a>
+            </li>
+        </ul>
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Getting started
+  Guides
  </span>
 </p>
 <ul class="nav bd-sidenav">
@@ -107,42 +128,18 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Problems
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="api/index.html">
-   List of functions and classes (API)
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/inversiontestproblems.gravityforward.html">
-     inversiontestproblems.gravityforward
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developer notes
+  Development
  </span>
 </p>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Contribute to Inversion Test Problems
+   Contribute to Espresso
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="license.html">
-   License
+  <a class="reference internal" href="licence.html">
+   Licence
   </a>
  </li>
 </ul>
@@ -209,6 +206,68 @@ title="Fullscreen mode"
   </span>
 
 </button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/inlab-geo/espresso"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/inlab-geo/espresso/issues/new?title=Issue%20on%20page%20%2Fcontribute.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/inlab-geo/espresso/edit/main/docs/contribute.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
 
 <div class="menu-dropdown menu-dropdown-download-buttons">
   <button class="headerbtn menu-dropdown__trigger"
@@ -293,8 +352,8 @@ title="Print to PDF"
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#fork-and-clone-the-itp-repository">
-       Fork and clone the ITP repository
+      <a class="reference internal nav-link" href="#fork-and-clone-the-espresso-repository">
+       Fork and clone the Espresso repository
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
@@ -305,8 +364,8 @@ title="Print to PDF"
     </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#create-your-own-inversion-test-problem">
-     Create your own Inversion Test Problem
+    <a class="reference internal nav-link" href="#create-your-own-espresso-problem">
+     Create your own Espresso Problem
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -330,7 +389,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Contribute to Inversion Test Problems</h1>
+                <h1>Contribute to Espresso</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -356,8 +415,8 @@ title="Print to PDF"
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#fork-and-clone-the-itp-repository">
-       Fork and clone the ITP repository
+      <a class="reference internal nav-link" href="#fork-and-clone-the-espresso-repository">
+       Fork and clone the Espresso repository
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
@@ -368,8 +427,8 @@ title="Print to PDF"
     </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#create-your-own-inversion-test-problem">
-     Create your own Inversion Test Problem
+    <a class="reference internal nav-link" href="#create-your-own-espresso-problem">
+     Create your own Espresso Problem
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -394,22 +453,22 @@ title="Print to PDF"
                 
               <div>
                 
-  <section id="contribute-to-inversion-test-problems">
-<h1>Contribute to Inversion Test Problems<a class="headerlink" href="#contribute-to-inversion-test-problems" title="Permalink to this headline">#</a></h1>
+  <section id="contribute-to-espresso">
+<h1>Contribute to Espresso<a class="headerlink" href="#contribute-to-espresso" title="Permalink to this headline">#</a></h1>
 <section id="reporting-issues">
 <h2>Reporting issues<a class="headerlink" href="#reporting-issues" title="Permalink to this headline">#</a></h2>
 <p>Bug reports and feature requests are welcome. Please search before lodging an issue at
-our Github <a class="reference external" href="https://github.com/inlab-geo/inversion-test-problems">repository</a>.</p>
+our Github <a class="reference external" href="https://github.com/inlab-geo/espresso">repository</a>.</p>
 </section>
 <section id="how-to-contribute">
 <h2>How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">#</a></h2>
-<p>Thank you for contributing to Inversion Test Problems! ITP is
+<p>Thank you for contributing to Espresso! Espresso is
 a community driven effort to create a collection of forward
-codes, simulating a wide range of physical problems. ITP relies on you to
+codes, simulating a wide range of physical problems. Espresso relies on you to
 contribute your forward code! You do not need to know all the details to get started.
-Here we explain step by step how to contribute your code to ITP. If this page
+Here we explain step by step how to contribute your code to Espresso. If this page
 does not answer all of your questions, don’t hesitate to contact us via
-<a class="reference external" href="https://github.com/inlab-geo/inversion-test-problemscofi/issues/new/choose">GitHub issues</a>
+<a class="reference external" href="https://github.com/inlab-geo/espresso/issues/new/choose">GitHub issues</a>
 or <a class="reference external" href="https://inlab-geo.slack.com">Slack</a>.</p>
 <section id="setting-it-up-right">
 <h3>Setting it up right<a class="headerlink" href="#setting-it-up-right" title="Permalink to this headline">#</a></h3>
@@ -419,13 +478,13 @@ account or want to know how to set up a secure connection before contributing,
 please see here:</p>
 <p><a class="reference external" href="https://docs.github.com/en/get-started">Getting started with Github</a>,
 and <a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token">creating a personal access token</a>.</p>
-<section id="fork-and-clone-the-itp-repository">
-<h4>Fork and clone the ITP repository<a class="headerlink" href="#fork-and-clone-the-itp-repository" title="Permalink to this headline">#</a></h4>
+<section id="fork-and-clone-the-espresso-repository">
+<h4>Fork and clone the Espresso repository<a class="headerlink" href="#fork-and-clone-the-espresso-repository" title="Permalink to this headline">#</a></h4>
 <ol class="arabic" id="fork-clone">
-<li><p>Navigate to the <a class="reference external" href="https://github.com/inlab-geo/inversion-test-problems">GitHub repository</a></p></li>
+<li><p>Navigate to the <a class="reference external" href="https://github.com/inlab-geo/espresso">GitHub repository</a></p></li>
 <li><p>Click the “Fork” button on top right of the page (followed by a confirmation page
 with a “Create fork” button)</p></li>
-<li><p>Now you will be redirected to your own fork of Inversion Test Problems,
+<li><p>Now you will be redirected to your own fork of Espresso,
 where you can freely commit changes and add your code.</p>
 <div class="mermaid">
             %%{init: { 'logLevel': 'debug', 'theme': 'base', 'gitGraph': {'showCommitLabel': false}} }%%
@@ -441,9 +500,9 @@ where you can freely commit changes and add your code.</p>
     commit
     commit
         </div></li>
-<li><p>Next, create a local copy of your fork of the ITP repository using “clone”
+<li><p>Next, create a local copy of your fork of the Espresso repository using “clone”
 (the Github equivalent of download):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">YOUR_GITHUB_ACCOUNT</span><span class="o">/</span><span class="n">inversion</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="n">problems</span><span class="o">.</span><span class="n">git</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">YOUR_GITHUB_ACCOUNT</span><span class="o">/</span><span class="n">espresso</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 <p>replacing YOUR_GITHUB_ACCOUNT with your own account.</p>
@@ -464,18 +523,18 @@ Create a new environment using these commands:</p>
 </div>
 </section>
 </section>
-<section id="create-your-own-inversion-test-problem">
-<h3>Create your own Inversion Test Problem<a class="headerlink" href="#create-your-own-inversion-test-problem" title="Permalink to this headline">#</a></h3>
-<p id="create-prob">A new contribution to Inversion Test Problems has to conform to a consistent
+<section id="create-your-own-espresso-problem">
+<h3>Create your own Espresso Problem<a class="headerlink" href="#create-your-own-espresso-problem" title="Permalink to this headline">#</a></h3>
+<p id="create-prob">A new contribution to Espresso has to conform to a consistent
 file structure. The simplest way to ensure that a new contribution includes
 all files is to start the creation of a new problem from the template.
 Execute the following command in the ROOT folder of the cloned Github repository
-of ITP (replacing NEW_PROBLEM with the previous choice):</p>
+of Espresso (replacing NEW_PROBLEM with the previous choice):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">utils</span><span class="o">/</span><span class="n">_create_new_example</span><span class="o">.</span><span class="n">py</span> <span class="n">NEW_PROBLEM</span>
 </pre></div>
 </div>
 <p>A new folder with the name NEW_PROBLEM is created under ROOT/contrib/ that contains
-all files needed for a new contribution. Each ITP example is organised around a
+all files needed for a new contribution. Each Espresso example is organised around a
 central class object that contains, at minimum, a set of functions with names
 that are shared by all examples.</p>
 <p>This central class object is stored in <code class="docutils literal notranslate"><span class="pre">ROOT/contrib/NEW_PROBLEM/__init__.py</span></code>.</p>
@@ -488,7 +547,7 @@ understand what the new example is about. The name can contain more than
 one word, connected by <code class="docutils literal notranslate"><span class="pre">_</span></code> (i.e. NEW_PROBLEM). Spaces are not allowed.</p></li>
 <li><p>The name of the new contribution (NEW_PROBLEM) must be used twice:</p>
 <ul>
-<li><p>for the folder name: inversion-test-problems/contrib/NEW_PROBLEM</p></li>
+<li><p>for the folder name: espresso/contrib/NEW_PROBLEM</p></li>
 <li><p>for the central class object in NEW_PROBLEM/__init__.py, i.e.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```
 class new_problem():
@@ -542,7 +601,7 @@ include the following standard functions:</p>
 </li>
 <li><p>We aim to follow <cite>Python PEP8 style conventions &lt;https://peps.python.org/pep-0008/&gt;</cite>
 to make source code readable for any user. Once your forward code is converted
-into a contribution for ITP, we recommend to use <a class="reference external" href="https://pypi.org/project/pylint/">PyLint</a>  to enforce PEP8 coding standard in the
+into a contribution for Espresso, we recommend to use <a class="reference external" href="https://pypi.org/project/pylint/">PyLint</a>  to enforce PEP8 coding standard in the
 new contribution.</p></li>
 </ol>
 </section>
@@ -572,7 +631,7 @@ your new commits.</p>
 <p>Now that you’ve finished the coding and editing work, click on “Contribute” and
 -&gt; “Open pull request”. Write a description of your example and continue as prompted.</p>
 <p>If everything is in place, the pull request will automatically accepted and the
-new inversion test problem becomes part of the python package. Thank you for
+new Espresso problem becomes part of the python package. Thank you for
 your contribution!</p>
 </section>
 <section id="jupyter-notebook">
@@ -580,7 +639,7 @@ your contribution!</p>
 <p>Additionally, we encourage you to add a Jupyter Notebook with an identical name
 into the folder Jupyter Notebooks that contains the following:</p>
 <ol class="arabic simple">
-<li><p>An extensive description of the new Inversion Test Problem, containing
+<li><p>An extensive description of the new Espresso Problem, containing
 information about (but not limited to)…:</p>
 <ul class="simple">
 <li><p>the forward calculation (ie. the underlying physics) and how it was implemented.</p></li>
@@ -603,17 +662,17 @@ information about (but not limited to)…:</p>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="api/generated/inversiontestproblems.gravityforward.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="faq.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">inversiontestproblems.gravityforward</p>
+            <p class="prev-next-title">Frequently Asked questions</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="license.html" title="next page">
+    <a class='right-next' id="next-link" href="licence.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">License</p>
+        <p class="prev-next-title">Licence</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -624,9 +683,7 @@ information about (but not limited to)…:</p>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By InLab<br/>
-  
-      &copy; Copyright 2022, InLab.<br/>
+      &copy; Copyright 2022, InLab, Espresso development team.<br/>
 </p>
         </footer>
     </div>

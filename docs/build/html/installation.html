@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     
-        <title>Installation | Inversion Test Problems v0.0.30</title>
+        <title>Installation | Espresso v0.0.33</title>
     
 
     
@@ -25,8 +25,13 @@
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -35,14 +40,21 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/tabs.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
+    <link rel="shortcut icon" href="_static/inlab_logo_60px.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Frequently Asked questions" href="faq.html" />
-    <link rel="prev" title="Welcome to the documentation of Inversion Test Problems!" href="index.html" />
+    <link rel="prev" title="Welcome to the documentation of Espresso!" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -81,7 +93,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">Inversion Test Problems <span class="project-version">v0.0.30</span></h1>
+      <h1 class="site-logo" id="site-title">Espresso <span class="project-version">v0.0.33</span></h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -89,9 +101,17 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Welcome to the documentation of Espresso!
+                </a>
+            </li>
+        </ul>
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Getting started
+  Guides
  </span>
 </p>
 <ul class="current nav bd-sidenav">
@@ -108,42 +128,18 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Problems
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="api/index.html">
-   List of functions and classes (API)
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/inversiontestproblems.gravityforward.html">
-     inversiontestproblems.gravityforward
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developer notes
+  Development
  </span>
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="contribute.html">
-   Contribute to Inversion Test Problems
+   Contribute to Espresso
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="license.html">
-   License
+  <a class="reference internal" href="licence.html">
+   Licence
   </a>
  </li>
 </ul>
@@ -210,6 +206,68 @@ title="Fullscreen mode"
   </span>
 
 </button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/inlab-geo/espresso"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/inlab-geo/espresso/issues/new?title=Issue%20on%20page%20%2Finstallation.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/inlab-geo/espresso/edit/main/docs/installation.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
 
 <div class="menu-dropdown menu-dropdown-download-buttons">
   <button class="headerbtn menu-dropdown__trigger"
@@ -279,8 +337,13 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pre-requisite">
-   Pre-requisite
+  <a class="reference internal nav-link" href="#pre-requisites">
+   Pre-requisites
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#virtual-environment-setup">
+   Virtual environment setup
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -308,8 +371,13 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pre-requisite">
-   Pre-requisite
+  <a class="reference internal nav-link" href="#pre-requisites">
+   Pre-requisites
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#virtual-environment-setup">
+   Virtual environment setup
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -329,39 +397,113 @@ title="Print to PDF"
                 
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h1>
-<section id="pre-requisite">
-<h2>Pre-requisite<a class="headerlink" href="#pre-requisite" title="Permalink to this headline">#</a></h2>
-<p>Inversion Test Suite requires Python 3.6+, and the following dependencies:</p>
+<section id="pre-requisites">
+<h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">#</a></h2>
+<p>Espresso requires Python 3.6+, and the following dependencies:</p>
 <ul class="simple">
 <li><p>numpy&gt;=1.18</p></li>
 <li><p>scipy&gt;=1.0.0</p></li>
+<li><p>matplotlib&gt;=3.1</p></li>
 </ul>
+</section>
+<section id="virtual-environment-setup">
+<h2>Virtual environment setup<a class="headerlink" href="#virtual-environment-setup" title="Permalink to this headline">#</a></h2>
+<p>It’s optional, but recommended to use a virtual environment.</p>
+<div class="tabbed-set docutils">
+<input checked="checked" id="fb3bd501-af22-4def-aaee-17665dccec23" name="c27ae284-c4e9-48b5-9ba3-935d81e15001" type="radio">
+</input><label class="tabbed-label" for="fb3bd501-af22-4def-aaee-17665dccec23">
+venv</label><div class="tabbed-content docutils">
+<p>Ensure you have <cite>python&gt;=3.6</cite>.</p>
+<p>To create:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m venv &lt;path-to-new-env&gt;/esp_env</span>
+</pre></div>
+</div>
+<p>To activate:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">source &lt;path-to-new-env&gt;/esp_env/bin/activate</span>
+</pre></div>
+</div>
+<p>To exit:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">deactivate</span>
+</pre></div>
+</div>
+<p>To remove:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">rm -rf &lt;path-to-new-env&gt;/esp_env</span>
+</pre></div>
+</div>
+</div>
+<input id="968ced26-c46f-4e51-a550-6f5f7e1713f0" name="c27ae284-c4e9-48b5-9ba3-935d81e15001" type="radio">
+</input><label class="tabbed-label" for="968ced26-c46f-4e51-a550-6f5f7e1713f0">
+virtualenv</label><div class="tabbed-content docutils">
+<p>To create:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">virtualenv &lt;path-to-new-env&gt;/esp_env -p=3.10</span>
+</pre></div>
+</div>
+<p>To activate:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">source &lt;path-to-new-env&gt;/esp_env/bin/activate</span>
+</pre></div>
+</div>
+<p>To exit:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">deactivate</span>
+</pre></div>
+</div>
+<p>To remove:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">rm -rf &lt;path-to-new-env&gt;/esp_env</span>
+</pre></div>
+</div>
+</div>
+<input id="b7ec5340-e9a7-4f49-b6e8-15bb9bc54c9a" name="c27ae284-c4e9-48b5-9ba3-935d81e15001" type="radio">
+</input><label class="tabbed-label" for="b7ec5340-e9a7-4f49-b6e8-15bb9bc54c9a">
+conda / mamba</label><div class="tabbed-content docutils">
+<p>To create:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda create -n esp_env python=3.10</span>
+</pre></div>
+</div>
+<p>To activate:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda activate esp_env</span>
+</pre></div>
+</div>
+<p>To exit:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda deactivate</span>
+</pre></div>
+</div>
+<p>To remove:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda env remove -n esp_env</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">#</a></h2>
-<div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">PyPI</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">conda-forge</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">from source</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><p>It’s optional, but recommended to use a virtual environment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">ITP_env</span> <span class="n">scipy</span> <span class="n">jupyterlab</span> <span class="n">matplotlib</span>
-<span class="n">conda</span> <span class="n">activate</span> <span class="n">ITP_env</span>
+<div class="tabbed-set docutils">
+<input checked="checked" id="9ceaab2f-c7c7-4a73-9e89-3239c0aa652a" name="28b5594b-d456-4aec-b42e-4f2787184c62" type="radio">
+</input><label class="tabbed-label" for="9ceaab2f-c7c7-4a73-9e89-3239c0aa652a">
+PyPI</label><div class="tabbed-content docutils">
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install cofi-espresso</span>
 </pre></div>
 </div>
-<p>Install CoFI with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">index</span><span class="o">-</span><span class="n">url</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span> <span class="n">inversiontestproblems</span><span class="o">-</span><span class="n">h</span><span class="o">-</span><span class="n">hollmann</span>
-</pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><p>Uploading to conda-forge is still work in progress.</p>
+<input id="a93e754c-b611-4722-a0ae-0c6e63f4aa4e" name="28b5594b-d456-4aec-b42e-4f2787184c62" type="radio">
+</input><label class="tabbed-label" for="a93e754c-b611-4722-a0ae-0c6e63f4aa4e">
+conda-forge</label><div class="tabbed-content docutils">
+<p>Uploading to conda-forge is still work in progress.</p>
 <p>It won’t be long!</p>
-</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><p>If you’d like to build from source, clone the repository:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">inlab</span><span class="o">-</span><span class="n">geo</span><span class="o">/</span><span class="n">inversion</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="n">problems</span><span class="o">.</span><span class="n">git</span>
-<span class="n">cd</span> <span class="n">inversion</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="n">problems</span>
-<span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">ITP_env</span> <span class="n">scipy</span> <span class="n">matplotlib</span>
-<span class="n">conda</span> <span class="n">activate</span> <span class="n">ITP_env</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">build</span>
-<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">build</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">dist</span><span class="o">/*.</span><span class="n">whl</span>
+</div>
+<input id="4a45bede-4d31-4e1d-8d05-4421fddc7d48" name="28b5594b-d456-4aec-b42e-4f2787184c62" type="radio">
+</input><label class="tabbed-label" for="4a45bede-4d31-4e1d-8d05-4421fddc7d48">
+from source</label><div class="tabbed-content docutils">
+<p>If you’d like to build from source, clone the repository</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/inlab-geo/espresso.git</span>
+<span class="go">cd espresso</span>
 </pre></div>
 </div>
-</div></div>
+<p>And use either one of the following command to install</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install .         # library will be copied over to site-packages</span>
+<span class="go">pip install -e .      # developer mode, library will be symbol linked to site-packages</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
@@ -377,7 +519,7 @@ title="Print to PDF"
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Welcome to the documentation of Inversion Test Problems!</p>
+            <p class="prev-next-title">Welcome to the documentation of Espresso!</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="faq.html" title="next page">
@@ -394,9 +536,7 @@ title="Print to PDF"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By InLab<br/>
-  
-      &copy; Copyright 2022, InLab.<br/>
+      &copy; Copyright 2022, InLab, Espresso development team.<br/>
 </p>
         </footer>
     </div>

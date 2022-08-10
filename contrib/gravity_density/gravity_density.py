@@ -168,7 +168,7 @@ def _kernel(ii, jj, kk, dx, dy, dz, dim):
         columns); [Nx2]
     :type dz: numpy array
     :param dim: Specifies which part of the gravitational force is calculated.
-        For Inversion Test Problems, this is hard-coded to "gz".
+        For Espresso, this is hard-coded to "gz".
         Possible options are:
         - "gx": x-component of the gravitational force
         - "gy": y-component of the gravitational force
@@ -456,7 +456,7 @@ def _setup(num):
         return m, rec_coords, x_nodes, y_nodes, z_nodes, lmx, lmy, lmz, lrx, lry
 
     else:
-        raise ValueError("The chosen example-number does not match any examples for this Inversion Test Problem.")
+        raise ValueError("The chosen example-number does not match any examples for this Espresso problem.")
 
 
 set_example_number(0)

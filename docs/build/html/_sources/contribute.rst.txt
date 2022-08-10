@@ -1,5 +1,5 @@
 *************************************
-Contribute to Inversion Test Problems
+Contribute to Espresso
 *************************************
 
 Reporting issues
@@ -11,13 +11,13 @@ our Github `repository`_.
 How to contribute
 ==================
 
-Thank you for contributing to Inversion Test Problems! ITP is
+Thank you for contributing to Espresso! Espresso is
 a community driven effort to create a collection of forward
-codes, simulating a wide range of physical problems. ITP relies on you to
+codes, simulating a wide range of physical problems. Espresso relies on you to
 contribute your forward code! You do not need to know all the details to get started.
-Here we explain step by step how to contribute your code to ITP. If this page
+Here we explain step by step how to contribute your code to Espresso. If this page
 does not answer all of your questions, don't hesitate to contact us via
-`GitHub issues <https://github.com/inlab-geo/inversion-test-problemscofi/issues/new/choose>`_
+`GitHub issues <https://github.com/inlab-geo/espresso/issues/new/choose>`_
 or `Slack <https://inlab-geo.slack.com>`_.
 
 
@@ -32,14 +32,14 @@ please see here:
 `Getting started with Github <https://docs.github.com/en/get-started>`_,
 and `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_.
 
-Fork and clone the ITP repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fork and clone the Espresso repository
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. _fork_clone:
 
-1. Navigate to the `GitHub repository <https://github.com/inlab-geo/inversion-test-problems>`_
+1. Navigate to the `GitHub repository <https://github.com/inlab-geo/espresso>`_
 2. Click the "Fork" button on top right of the page (followed by a confirmation page
    with a "Create fork" button)
-3. Now you will be redirected to your own fork of Inversion Test Problems,
+3. Now you will be redirected to your own fork of Espresso,
    where you can freely commit changes and add your code.
 
    .. mermaid::
@@ -57,10 +57,10 @@ Fork and clone the ITP repository
          commit
          commit
 
-4. Next, create a local copy of your fork of the ITP repository using "clone"
+4. Next, create a local copy of your fork of the Espresso repository using "clone"
    (the Github equivalent of download)::
 
-     git clone https://github.com/YOUR_GITHUB_ACCOUNT/inversion-test-problems.git
+     git clone https://github.com/YOUR_GITHUB_ACCOUNT/espresso.git
 
    replacing YOUR_GITHUB_ACCOUNT with your own account.
 
@@ -80,20 +80,20 @@ Replace NEW_PROBLEM with a sensible name. Next, activate the new environment::
 
     conda activate NEW_PROBLEM
 
-Create your own Inversion Test Problem
---------------------------------------
+Create your own Espresso Problem
+--------------------------------
 .. _create_prob:
 
-A new contribution to Inversion Test Problems has to conform to a consistent
+A new contribution to Espresso has to conform to a consistent
 file structure. The simplest way to ensure that a new contribution includes
 all files is to start the creation of a new problem from the template.
 Execute the following command in the ROOT folder of the cloned Github repository
-of ITP (replacing NEW_PROBLEM with the previous choice)::
+of Espresso (replacing NEW_PROBLEM with the previous choice)::
 
   python utils/_create_new_example.py NEW_PROBLEM
 
 A new folder with the name NEW_PROBLEM is created under ROOT/contrib/ that contains
-all files needed for a new contribution. Each ITP example is organised around a
+all files needed for a new contribution. Each Espresso example is organised around a
 central class object that contains, at minimum, a set of functions with names
 that are shared by all examples.
 
@@ -110,7 +110,7 @@ There are several things to keep in mind to make a contribution successful:
 
 3. The name of the new contribution (NEW_PROBLEM) must be used twice:
 
-   - for the folder name: inversion-test-problems/contrib/NEW_PROBLEM
+   - for the folder name: espresso/contrib/NEW_PROBLEM
    - for the central class object in NEW_PROBLEM/__init__.py, i.e.::
 
        ```
@@ -160,7 +160,7 @@ There are several things to keep in mind to make a contribution successful:
 
 7. We aim to follow `Python PEP8 style conventions <https://peps.python.org/pep-0008/>`
    to make source code readable for any user. Once your forward code is converted
-   into a contribution for ITP, we recommend to use `PyLint
+   into a contribution for Espresso, we recommend to use `PyLint
    <https://pypi.org/project/pylint/>`_  to enforce PEP8 coding standard in the
    new contribution.
 
@@ -198,7 +198,7 @@ Now that you've finished the coding and editing work, click on "Contribute" and
 -> "Open pull request". Write a description of your example and continue as prompted.
 
 If everything is in place, the pull request will automatically accepted and the
-new inversion test problem becomes part of the python package. Thank you for
+new Espresso problem becomes part of the python package. Thank you for
 your contribution!
 
 Jupyter Notebook
@@ -207,7 +207,7 @@ Jupyter Notebook
 Additionally, we encourage you to add a Jupyter Notebook with an identical name
 into the folder Jupyter Notebooks that contains the following:
 
-1. An extensive description of the new Inversion Test Problem, containing
+1. An extensive description of the new Espresso Problem, containing
    information about (but not limited to)...:
 
    - the forward calculation (ie. the underlying physics) and how it was implemented.

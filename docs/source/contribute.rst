@@ -1,5 +1,5 @@
 *************************************
-Contribute to Inversion Test Problems
+Contribute to Espresso
 *************************************
 
 Reporting issues
@@ -11,7 +11,7 @@ our Github `repository`_.
 How to contribute
 ==================
 
-Thank you for contributing to Inversion Test Problems! Espresso is
+Thank you for contributing to Espresso! Espresso is
 a community driven effort to create a collection of forward
 codes, simulating a wide range of physical problems. Espresso relies on you to
 contribute your forward code! You do not need to know all the details to get started.
@@ -33,13 +33,13 @@ please see here:
 and `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_.
 
 Fork and clone the Espresso repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. _fork_clone:
 
 1. Navigate to the `GitHub repository <https://github.com/inlab-geo/espresso>`_
 2. Click the "Fork" button on top right of the page (followed by a confirmation page
    with a "Create fork" button)
-3. Now you will be redirected to your own fork of Inversion Test Problems,
+3. Now you will be redirected to your own fork of Espresso,
    where you can freely commit changes and add your code.
 
    .. mermaid::
@@ -80,11 +80,11 @@ Replace NEW_PROBLEM with a sensible name. Next, activate the new environment::
 
     conda activate NEW_PROBLEM
 
-Create your own Inversion Test Problem
---------------------------------------
+Create your own Espresso Problem
+--------------------------------
 .. _create_prob:
 
-A new contribution to Inversion Test Problems has to conform to a consistent
+A new contribution to Espresso has to conform to a consistent
 file structure. The simplest way to ensure that a new contribution includes
 all files is to start the creation of a new problem from the template.
 Execute the following command in the ROOT folder of the cloned Github repository
@@ -198,7 +198,7 @@ Now that you've finished the coding and editing work, click on "Contribute" and
 -> "Open pull request". Write a description of your example and continue as prompted.
 
 If everything is in place, the pull request will automatically accepted and the
-new inversion test problem becomes part of the python package. Thank you for
+new Espresso problem becomes part of the python package. Thank you for
 your contribution!
 
 Jupyter Notebook
@@ -207,7 +207,7 @@ Jupyter Notebook
 Additionally, we encourage you to add a Jupyter Notebook with an identical name
 into the folder Jupyter Notebooks that contains the following:
 
-1. An extensive description of the new Inversion Test Problem, containing
+1. An extensive description of the new Espresso Problem, containing
    information about (but not limited to)...:
 
    - the forward calculation (ie. the underlying physics) and how it was implemented.
