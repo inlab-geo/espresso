@@ -1,9 +1,9 @@
-"""Build the Python package "espresso"
+"""Build the Python package "cofi-espresso"
 
 1. Create clean folder "_esp_build"
 2. Move all files under "utils/build_package/package_src/" into "_esp_build/"
-3. Move all files under "contrib/" into "_esp_build/src/espresso/"
-4. Add all contribution's name into "_esp_build/src/espresso/CMakeLists.txt"
+3. Move all files under "contrib/" into "_esp_build/src/cofi-espresso/"
+4. Add all contribution's name into "_esp_build/src/cofi-espresso/CMakeLists.txt"
 5. Build the package with "pip install ."
 6. Test running the workflow again with installed package
 
@@ -17,7 +17,7 @@ from pathlib import Path
 
 
 BUILD_FOLDER = "_esp_build"
-PKG_NAME = "espresso"
+PKG_NAME = "cofi-espresso"
 PKG_SRC = "utils/build_package/_package_src"
 CONTRIB_SRC = "contrib"
 DOCS_SRC = "docs"
@@ -61,7 +61,7 @@ def move_contrib_source():
         f.write(init_file_all_var)
 
 def install_pkg():
-    subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_FOLDER)
+    return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_FOLDER)
 
 def main():
     print("🛠  Package building...")
@@ -83,8 +83,10 @@ def main():
     print("OK.")
     #
     print("\n🗂  Building Python package: Espresso..")
-    install_pkg()
-    print("OK.")
+    exit_code = install_pkg()
+    if exit_code == 0: print("OK.")
+    
+    return exit_code
 
 if __name__ == "__main__":
     main()

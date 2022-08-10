@@ -17,14 +17,14 @@ except ImportError:
 
 ########################## VERSION ####################################################
 _ROOT = pathlib.Path(__file__).parent
-with open(str(_ROOT / "src" / "espresso" / "_version.py")) as f:
+with open(str(_ROOT / "src" / "cofi-espresso" / "_version.py")) as f:
     for line in f:
         if line.startswith("__version__="):
             _, _, version = line.partition("=")
             VERSION = version.strip(" \n'\"")
             break
     else:
-        raise RuntimeError("unable to read the version from src/espresso/_version.py")
+        raise RuntimeError("unable to read the version from src/cofi-espresso/_version.py")
 
 
 ########################## LONG DESCRIPTION ###########################################
@@ -35,9 +35,9 @@ CONTENT_TYPE = "text/markdown"
 
 
 ########################## OTHER METADATA #############################################
-PACKAGE_NAME = "espresso"
+PACKAGE_NAME = "cofi-espresso"
 AUTHOR = f"InLab, {PACKAGE_NAME} development team"
-DESCRIPTION = "A suite of forward codes for inversion testing"
+DESCRIPTION = "Earth Science PRoblems for the Evaluation of Strategies, Solvers and Optimizers"
 KEYWORDS = ["inversion", "inference", "python package", "geoscience", "geophysics"]
 CLASSIFIERS = [
     "Development Status :: 2 - Pre-Alpha",
@@ -119,15 +119,3 @@ except SystemExit as e:
                      f"at https://github.com/inlab-geo/{PACKAGE_NAME}/issues for help\n"
     skbuild_error.args = (error_message,)
     sys.exit(skbuild_error)
-
-
-# setup(
-#     name='espresso',
-#     version=VERSION,
-#     install_requires=[
-#         'importlib-metadata; python_version == "3.8"',
-#     ],
-#     include_package_data=True,
-#     #packages=find_packages(exclude=("*.egg_info")),  
-#     package_dir={"inversiontestproblems": "contrib"},   # tell distutils packages are under src
-# )

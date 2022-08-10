@@ -54,7 +54,7 @@ from matplotlib.figure import Figure
 import yaml
 
 
-MODULE_NAME = "espresso"
+MODULE_NAME = "cofi-espresso"
 CONTRIB_FOLDER = "contrib"
 
 def get_folder_content(folder_name):

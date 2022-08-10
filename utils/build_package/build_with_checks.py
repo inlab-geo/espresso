@@ -12,7 +12,9 @@ def main():
         sys.exit(exit_code)
 
     # build package
-    build.main()
+    exit_code = build.main()
+    if exit_code:
+        sys.exit(exit_code)
 
     # post-build validation
     sys.argv.append("post")
