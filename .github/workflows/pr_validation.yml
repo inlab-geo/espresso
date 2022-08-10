@@ -1,0 +1,27 @@
+name: Validate Pull Request
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+
+jobs:
+  gen_pkg_source:
+    name: Generate package source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -r envs/requirements.txt
+      
+      - name: Build with pre and post validation
+        run: |
+          python utils/build_package/build_with_checks.py
