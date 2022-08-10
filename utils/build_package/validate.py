@@ -45,6 +45,7 @@
 
 """
 
+from argparse import ArgumentError
 import os
 import sys
 import pytest
@@ -53,6 +54,7 @@ from matplotlib.figure import Figure
 import yaml
 
 
+MODULE_NAME = "espresso"
 CONTRIB_FOLDER = "contrib"
 
 def get_folder_content(folder_name):
@@ -68,10 +70,19 @@ def all_contribs():
 def contrib(request):
     return request.param
 
+@pytest.fixture
+def pre_build():
+    pre_post = "pre"
+    if len(sys.argv) > 1:
+        pre_post = sys.argv[-1]
+        if pre_post not in ["pre", "post"]:
+            raise ValueError("Please either pass `pre` or `post` as the only argument")
+    return pre_post == "pre"
+
 def _array_like(obj):
     return np.ndim(obj) != 0
 
-def test_contrib(contrib):
+def test_contrib(contrib, pre_build):
     contrib_name, contrib_sub_folder = contrib
     print(f"\n🔍 Checking '{contrib_name}' at {contrib_sub_folder}...")
     names, paths = get_folder_content(contrib_sub_folder)
@@ -86,8 +97,12 @@ def test_contrib(contrib):
             f"{file} is required but you don't have it in {contrib_sub_folder}"
     
     # 3 - __all__ includes standard functions exposed to users
-    sys.path.insert(1, CONTRIB_FOLDER)
-    contrib_mod = __import__(contrib_name)
+    if pre_build:
+        sys.path.insert(1, CONTRIB_FOLDER)
+        contrib_mod = __import__(contrib_name)
+    else:
+        importlib = __import__('importlib')
+        contrib_mod = importlib.import_module(f"{MODULE_NAME}.{contrib_name}")
     std_funcs = [
         "set_example_number", 
         "suggested_model", 
@@ -158,7 +173,7 @@ def test_contrib(contrib):
 
 
 def main():
-    pytest.main(["utils/build_package/pre_build.py"])
+    return pytest.main(["utils/build_package/validate.py"])
 
 if __name__ == "__main__":
     main()
