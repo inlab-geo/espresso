@@ -3,8 +3,8 @@ name: Validate Pull Request
 on:
   workflow_dispatch:
   pull_request:
-    types: [opened, reopened]
-  
+
+
 jobs:
   gen_pkg_source:
     name: Generate package source
