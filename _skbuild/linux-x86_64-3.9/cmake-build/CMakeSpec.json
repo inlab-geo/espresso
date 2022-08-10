@@ -1,1 +1,0 @@
-{"args": ["/tmp/pip-build-env-vcqvckvq/overlay/bin/cmake", "-DSKBUILD=ON", "-DCMAKE_BUILD_TYPE:STRING=Release"], "version": "3.24.0", "environment": {"PYTHONNOUSERSITE": "1", "PYTHONPATH": "/tmp/pip-build-env-vcqvckvq/site"}}
