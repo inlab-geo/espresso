@@ -5,7 +5,7 @@ on:
   push:
     branches: main
     paths:
-      - "src/espresso/_version.py"
+      - "_version.py"
 
 jobs:
   # if_merged:
@@ -15,14 +15,42 @@ jobs:
   #   - run: |
   #       echo The PR was merged
 
-  ######################## SOURCE DISTRIBUTION #########################
-  build_sdist:
-    name: Build source distribution
+  ######################## GENERATE PACKAGE SOURCE #####################
+  gen_pkg_source:
     # needs: if_merged
+    name: Generate package source
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+
+      - name: Install Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      
+      - name: Build with pre and post validation
+        run: |
+          python utils/build_package/build_with_checks.py
+      
+      - name: Deploy to _esp_build branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: git@github.com:inlab-geo/espresso.git
+          BRANCH: _esp_build
+          FOLDER: _esp_build
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+
+  ######################## SOURCE DISTRIBUTION #########################
+  build_sdist:
+    name: Build source distribution
+    needs: gen_pkg_source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        ref: '_esp_build'
       
       - name: Install Python 3.9
         uses: actions/setup-python@v2
@@ -45,7 +73,7 @@ jobs:
   ######################## BINARY DISTRIBUTION #########################
   # build_wheels:
   #   name: Build wheels on ${{ matrix.os }}
-  #   # needs: if_merged
+  #   needs: gen_pkg_source
   #   runs-on: ${{ matrix.os }}
   #   strategy:
   #     matrix:
@@ -118,7 +146,6 @@ jobs:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
           verbose: true
-        # if: ${{ github.event.inputs.pypi_repo == 'testpypi' }}
 
       - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@v1.4.1
@@ -126,4 +153,3 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
           verbose: true
-        # if: ${{ github.event.inputs.pypi_repo == 'pypi' }}
