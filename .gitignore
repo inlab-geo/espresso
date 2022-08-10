@@ -1,0 +1,50 @@
+# Editor temporary/working/backup files #
+#########################################
+.vscode/
+
+# Packaging tmp stuff #
+#######################
+build
+
+# Compiled source #
+###################
+*.a
+*.o
+*.so
+*.mod
+
+# Doc generated files #
+#######################
+docs/build
+
+# Python files #
+################
+# setup.py working directory
+_skbuild
+_esp_build
+# setup.py dist directory
+dist
+# Egg metadata
+*.egg-info
+# other temporary files
+.coverage
+coverage.xml
+.deps
+.libs
+.eggs
+pip-wheel-metadata
+wheelhouse
+.tox
+# MANIFEST
+
+# pytest cache #
+################
+*.cache
+.pytest_cache
+*__pycache__
+.ipynb_checkpoints
+*.pyc
+
+# OS generated files #
+######################
+*.DS_Store*
