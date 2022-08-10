@@ -1,5 +1,0 @@
-global-include *.npy *.npz
-global-include *.txt
-
-prune */__pycache__ 
-prune */Jupyter

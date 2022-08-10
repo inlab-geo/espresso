@@ -13,7 +13,7 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-import inversiontestproblems as itp
+import espresso as esp
 import datetime
 
 # -- Project information -----------------------------------------------------
@@ -21,7 +21,7 @@ import datetime
 project = 'Inversion Test Problems'
 copyright = f"{datetime.date.today().year}, InLab, {project} development team"
 author = 'InLab'
-version = "dev" if "dev" in itp.__version__ else f"v{itp.__version__}"
+version = "dev" if "dev" in esp.__version__ else f"v{esp.__version__}"
 
 # # The full version, including alpha/beta/rc tags
 # release = '0.0.1'
@@ -68,5 +68,5 @@ html_static_path = ['_static']
 
 # -- Cutomised variables ------------------------------------------------------
 rst_epilog = """
-.. _repository: https://github.com/inlab-geo/inversion-test-problems
+.. _repository: https://github.com/inlab-geo/espresso
 """

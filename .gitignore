@@ -21,6 +21,7 @@ docs/build
 ################
 # setup.py working directory
 _skbuild
+_esp_build
 # setup.py dist directory
 dist
 # Egg metadata

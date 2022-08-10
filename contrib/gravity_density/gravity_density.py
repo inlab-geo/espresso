@@ -10,7 +10,7 @@ import numpy as np
 from scipy.constants import G
 import matplotlib.pyplot as plt
 
-from lib import auxclass
+from .lib import auxclass
 
 
 _params = {"example_number": 0}
