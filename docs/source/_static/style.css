@@ -1,0 +1,86 @@
+/* ALL: text font size */
+p {
+    font-size: 1rem;
+}
+
+/* TOP LEFT: logo + project title */
+div.navbar-brand-box a.navbar-brand img {
+    max-height: 10vh !important;
+}
+span.project-version {
+    color: rgb(181, 151, 141);
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-left: 3px;
+}
+
+/* TOP RIGHT: three little logos */
+/* .topbar .topbar-main button.topbarbtn {
+    font-size: 1.2em;
+}
+[aria-label] {
+    position: relative;
+}
+div.dropdown-buttons-trigger div.dropdown-buttons button.topbarbtn {
+    font-size: .85em !important;
+} */
+
+/* LEFT: side bar font size */
+.bd-sidenav a.reference.internal {
+    font-size: 0.8rem;
+}
+
+/* HOME: inference tree */
+div.mermaid:not([data-processed]) {
+    opacity: 0;
+}
+div.mermaid {
+    transition: transform .2s;
+}
+div.mermaid:hover {
+    transform: translateX(15%) scale(1.3);
+}
+
+
+/* HOME: panel button */
+.btn-outline-primary:hover {
+    color: rgb(51, 125, 222);
+    background-color: #ccdde2;
+    border-color: #ccdde2
+}
+.btn-outline-primary {
+    /* color: rgb(51, 125, 222); */
+    /* color: #99582a; */
+    border-color: #ccdde2;
+}
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.card:hover {
+    border: 1px solid rgb(51, 125, 222);
+}
+
+/* API: class/method name */
+span.sig-name {
+    color: #99582a;
+}
+code.xref {
+    text-decoration: underline;
+}
+code.literal.docutils {
+    color: #99582a;
+}
+table.autosummary p {
+    font-size: 0.8rem;
+}
+table.autosummary span {
+    font-size: 1rem;
+}
+
+/* Sphinx gallery */
+div.sphx-glr-download {
+    height: 0px;
+    visibility: hidden;
+}
