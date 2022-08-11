@@ -1,10 +1,10 @@
-.. Inversion Test Problems documentation master file, created by
+.. cofi-espresso documentation master file, created by
    sphinx-quickstart on Fri Jun  3 13:47:44 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
 Welcome to the documentation of Espresso!
-========================================================
+=========================================
 
 Espresso is a collection of clearly defined forward codes
 that simulate physical processes from many disciplines within the geosciences
@@ -18,29 +18,29 @@ place already, we hope to encourage more examples be developed and be contribute
 
 
 .. toctree::
-    :caption: Getting started
+    :caption: Guides
     :maxdepth: 1
 
     installation.rst
     faq.rst
 
 .. toctree::
-    :caption: Problems
-    :maxdepth: 1
+    :caption: Reference
+    :maxdepth: 2
 
-    api/index.rst
+    contrib/index.rst
 
 .. toctree::
-    :caption: Developer notes
+    :caption: Development
     :maxdepth: 1
 
     contribute.rst
-    license.rst
+    licence.rst
 
 
-Indices and tables
-==================
+.. Indices and tables
+.. ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`

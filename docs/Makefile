@@ -7,7 +7,8 @@ SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build
-APIDIR        = api
+APIDIR        = source/api
+CONTRIBDIR    = source/contrib
 SPHINXAPIDOC  = sphinx-apidoc
 SPHINXAUTOGEN = sphinx-autogen
 
@@ -19,6 +20,8 @@ clean:
 	rm -rf $(BUILDDIR)/doctrees
 	rm -rf $(BUILDDIR)/doctest
 	rm -rf $(APIDIR)/generated
+	rm -rf $(CONTRIBDIR)/generated
+	rm -rf $(CONTRIBDIR)/index.rst
 
 update_api: clean
 	@echo
