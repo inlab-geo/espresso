@@ -24,11 +24,11 @@ place already, we hope to encourage more examples be developed and be contribute
     installation.rst
     faq.rst
 
-.. .. toctree::
-..     :caption: Problems
-..     :maxdepth: 1
+.. toctree::
+    :caption: Reference
+    :maxdepth: 2
 
-..     api/index.rst
+    contrib/index.rst
 
 .. toctree::
     :caption: Development
