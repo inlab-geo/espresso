@@ -36,11 +36,11 @@ To complete this contribution, here are some ideas on what to do next:
 
 ## How to test your code
 
-> **Note that you cannot test your code directly inside your example subfolder**, due to
-> the relative import inside the contribution file. Check the following for details.
+> **Note that you cannot test your code directly inside your example subfolder**, if you
+> have any relative import inside the contribution file. Check the following for details.
 
-***In order to test your code***, use `contrib` as your working directory and import your contribution
-in the following ways.
+***In order to test your code in that case***, use `contrib` as your working directory and 
+import your contribution in the following ways.
 
 (Python interactive mode)
 ```python

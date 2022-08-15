@@ -36,4 +36,6 @@ class EspressoProblem(metaclass=ABCMeta):
         if key in self.params:
             return self.params[key]
         else:
-            raise AttributeError
+            raise AttributeError(
+                f"'{self.__class__.__name__}' object has no attribute '{key}'"
+            )
