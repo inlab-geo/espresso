@@ -6,9 +6,8 @@ Welcome to your new Espresso example!
 
 To complete this contribution, here are some ideas on what to do next:
 
-- [ ] **Modify [README.md](README.md)**. Replace the title above with your test problem name,
-   and document anything you'd like to add for this problem. Some recommended parts
-   include:
+- [ ] **Modify [README.md](README.md)**. Document anything you'd like to add for this problem
+  (in this README.md file). Some recommended parts include:
    - What this test problem is about
    - What you would recommend inversion practitioners to notice
    - etc.
