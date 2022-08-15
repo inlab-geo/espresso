@@ -41,32 +41,31 @@ Once a problem is imported, it's main functions can be called using the same
 structure for each problem. For instance:
 
 ```python
-from cofi_espresso.gravity_density import *
+from cofi_espresso import GravityDensity
 
-grav_model = suggested_model()
-grav_data = data()
-grav_synthetics = forward(grav_model)
-grav_jacobian = jacobian(grav_model)
-plot_model(grav_model)
-plot_data(grav_data)
+grav = GravityDensity(example_number=1)
+grav_model = grav.suggested_model()
+grav_data = grav.data()
+grav_synthetics = grav.forward(grav_model)
+grav_jacobian = grav.jacobian(grav_model)
+grav.plot_model(grav_model)
+grav.plot_data(grav_data)
 ```
 
-Other problem-specific parameters can be accessed through the ``<test-problem>`` module. For instance:
+Other problem-specific parameters can be accessed through the problem instance. For instance:
 
 ```python
-from cofi_espresso.gravity_density import params
-
-print(params.keys())
-# dict_keys(['example_number', 'm', 'rec_coords', 'x_nodes', 'y_nodes', 'z_nodes', 'lmx', 'lmy', 'lmz', 'lrx', 'lry'])
+print(grav.params.keys())
+# dict_keys(['m', 'rec_coords', 'x_nodes', 'y_nodes', 'z_nodes', 'lmx', 'lmy', 'lmz', 'lrx', 'lry'])
 ```
 
 Which additional values are set is highly example-specific and we suggest to 
-consult the [Espresso Documentation](https://cofi_espresso.readthedocs.io).
+consult the [Espresso Documentation](https://cofi-espresso.readthedocs.io).
 
 
 ## Contributing
 
-Interested in contributing? Please check out our [contributor's guide](https://cofi_espresso.readthedocs.io/en/latest/contribute.html).
+Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contribute.html).
 
 
 ## Licence
