@@ -1,3 +1,9 @@
+"""Gravity density library file
+
+Author: Hannes Hollmann, 2022
+
+"""
+
 import pkgutil
 from io import StringIO
 import numpy as np
