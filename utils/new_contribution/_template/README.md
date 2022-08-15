@@ -37,7 +37,8 @@ To complete this contribution, here are some ideas on what to do next:
 
 ## How to test your code
 
-TODO: update the following code after we make it OOP
+> **Note that you cannot test your code directly inside your example subfolder**, due to
+> the relative import inside the contribution file. Check the following for details.
 
 ***In order to test your code***, use `contrib` as your working directory and import your contribution
 in the following ways.
@@ -47,13 +48,11 @@ in the following ways.
 $ pwd                            # check you are in the right folder
 <path-to-espresso>/contrib
 $ python
->>> from example_name import *   # import it this way
+>>> from example_name import ExampleName   # import it this way
 ```
 
 (Creating temporary Python file)
 ```python
 # file contrib/tmp.py            # create tmp file in the right folder
-from example_name import *       # import it this way
+from example_name import ExampleName       # import it this way
 ```
-
-TODO: explain that you can't test it inside the example_name subfolder
