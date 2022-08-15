@@ -37,6 +37,8 @@ To complete this contribution, here are some ideas on what to do next:
 
 ## How to test your code
 
+TODO: update the following code after we make it OOP
+
 ***In order to test your code***, use `contrib` as your working directory and import your contribution
 in the following ways.
 
@@ -53,3 +55,5 @@ $ python
 # file contrib/tmp.py            # create tmp file in the right folder
 from example_name import *       # import it this way
 ```
+
+TODO: explain that you can't test it inside the example_name subfolder
