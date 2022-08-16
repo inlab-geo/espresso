@@ -2,6 +2,6 @@ Espresso Problems
 =================
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     
     generated/gravity_density/index.md
