@@ -34,6 +34,13 @@ LONG_DESCRIPTION = (this_directory / "README.md").read_text()
 CONTENT_TYPE = "text/markdown"
 
 
+########################## CLEAN CACHE ################################################
+from shutil import rmtree
+_skbuild_dir = this_directory / "_skbuild"
+if _skbuild_dir.exists() and _skbuild_dir.is_dir():
+    rmtree(_skbuild_dir)
+
+
 ########################## OTHER METADATA #############################################
 PACKAGE_NAME = "cofi_espresso"
 AUTHOR = f"InLab, {PACKAGE_NAME} development team"

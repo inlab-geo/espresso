@@ -1,11 +1,12 @@
 """Build the Python package "cofi_espresso"
 
 1. Create clean folder "_esp_build"
-2. Move all files under "utils/build_package/package_src/" into "_esp_build/"
+2. Move all files under "src/" into "_esp_build/src/"
 3. Move all files under "contrib/" into "_esp_build/src/cofi_espresso/"
-4. Add all contribution's name into "_esp_build/src/cofi_espresso/CMakeLists.txt"
-5. Build the package with "pip install ."
-6. Test running the workflow again with installed package
+4. Add all contribution's names into "_esp_build/src/cofi_espresso/CMakeLists.txt"
+5. Add all contribution's class names into "_esp_build/src/cofi_espresso/__init__.py"
+6. Build the package with "pip install ."
+7. Test running the workflow again with installed package
 
 """
 
@@ -16,15 +17,27 @@ from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
 
 
-BUILD_FOLDER = "_esp_build"
 PKG_NAME = "cofi_espresso"
-PKG_SRC = "utils/build_package/_package_src"
-CONTRIB_SRC = "contrib"
-DOCS_SRC = "docs"
+current_directory = Path(__file__).parent
+root = current_directory.parent.parent
+ROOT_DIR = str(root)
+BUILD_DIR = str(root / "_esp_build")
+PKG_SRC = str(root / "src")
+CONTRIB_SRC = str(root / "contrib")
+DOCS_SRC = str(root / "docs")
+META_FILES = [
+    "README.md",
+    "setup.py",
+    "pyproject.toml",
+    "CMakeLists.txt",
+    "LICENCE",
+    ".readthedocs.yml",
+    ".gitignore",
+]
 
 
 def clean_build_folder():
-    dirpath = Path(BUILD_FOLDER)
+    dirpath = Path(BUILD_DIR)
     if dirpath.exists() and dirpath.is_dir():
         rmtree(dirpath)
 
@@ -37,33 +50,35 @@ def move_folder_content(folder_path, dest_path):
     )
 
 def move_pkg_source():
-    move_folder_content(PKG_SRC, BUILD_FOLDER)
+    move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
 
 def move_pkg_metadata():
-    move_folder_content(DOCS_SRC, f"{BUILD_FOLDER}/{DOCS_SRC}")
-    copy("README.md", f"{BUILD_FOLDER}/README.md")
-    copy("_version.py", f"{BUILD_FOLDER}/src/{PKG_NAME}/_version.py")
-    copy(".readthedocs.yml", f"{BUILD_FOLDER}/.readthedocs.yml")
-    copy(".gitignore", f"{BUILD_FOLDER}/.gitignore")
+    move_folder_content(DOCS_SRC, f"{BUILD_DIR}/docs")
+    for f in META_FILES:
+        copy(f"{ROOT_DIR}/{f}", f"{BUILD_DIR}/{f}")
 
 def move_contrib_source():
-    move_folder_content(CONTRIB_SRC, f"{BUILD_FOLDER}/src/{PKG_NAME}")
+    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}")
     contribs = []
-    init_file_all_var = "\n__all__ = [\n"
+    init_file_imports = "\n"
+    init_file_all_var = "\n__additional_all__ = [\n"
     for path in Path(CONTRIB_SRC).iterdir():
         if path.is_dir():
             contrib = os.path.basename(path)
+            contrib_class = contrib.title().replace("_", "")
             contribs.append(contrib)
-            init_file_all_var += f"\t'{contrib}',\n"
-    init_file_all_var += "]"
-    with open(f"{BUILD_FOLDER}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
+            init_file_imports += f"from .{contrib} import {contrib_class}\n"
+            init_file_all_var += f"\t'{contrib_class}',\n"
+    init_file_all_var += "]\n__all__.append(__additional_all__)"
+    with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY {contrib} DESTINATION .)")
-    with open(f"{BUILD_FOLDER}/src/{PKG_NAME}/__init__.py", "a") as f:
+    with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
+        f.write(init_file_imports)
         f.write(init_file_all_var)
 
 def install_pkg():
-    return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_FOLDER)
+    return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
 
 def main():
     print("🛠  Package building...")

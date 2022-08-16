@@ -44,7 +44,7 @@ class GravityDensity(EspressoProblem):
             raise ValueError(
                 "The example number supplied is not supported, please consult "
                 "Espresso documentation at "
-                "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html"
+                "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html "
                 "for problem-specific metadata, e.g. number of examples provided"
             )
 
