@@ -99,6 +99,7 @@ def test_contrib(contrib, pre_build):
     else:
         importlib = __import__('importlib')
         contrib_mod = importlib.import_module(MODULE_NAME)
+        print(contrib_mod.__path__)
         with open(Path(__file__).parent.parent.parent / "_esp_build" / "src" / "cofi_espresso" / "__init__.py") as f:
             print(f.read())
     print(contrib_mod.__all__)

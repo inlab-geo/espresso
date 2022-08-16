@@ -99,7 +99,7 @@ def main():
     move_contrib_source()
     print("OK.")
     #
-    print("\n🗂  Building Python package: Espresso..")
+    print("\n🗂  Building Python package: cofi-espresso..")
     exit_code = install_pkg()
     if exit_code == 0: print("OK.")
     
