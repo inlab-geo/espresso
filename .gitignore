@@ -16,8 +16,8 @@ build
 # Doc generated files #
 #######################
 docs/build
-docs/source/contrib/generated
-docs/source/api/generated
+docs/source/user_guide/contrib/generated
+docs/source/user_guide/api/generated
 
 # Python files #
 ################
