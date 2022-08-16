@@ -12,8 +12,6 @@
 #
 import os
 import datetime
-# import sys
-# import subprocess
 from pathlib import Path
 from shutil import copy
 import yaml
@@ -23,9 +21,9 @@ import cofi_espresso as esp
 
 # -- Generate documentation for each contrib ---------------------------------
 def gen_contrib_docs(_):
-    all_contribs = esp.__all__
+    all_contribs = [nm for nm in dir(esp) if not nm.startswith("_") and nm[0].islower()]
     base_path = esp.__path__[0]
-    dest_path = Path(__file__).parent / "contrib" / "generated"
+    dest_path = Path(__file__).parent / "user_guide" / "contrib" / "generated"
     os.mkdir(dest_path)
     for contrib in all_contribs:
         contrib_dir = Path(f"{base_path}/{contrib}")
@@ -75,9 +73,9 @@ def gen_contrib_docs(_):
             with open(f"{dest_contrib_dir}/index.md", "w") as f:
                 f.write("\n".join(lines))
             # add contrib link to contrib/index.rst
-            with open(Path(__file__).parent / "contrib" / "_index.rst", "r") as f:
+            with open(Path(dest_path).parent / "_index.rst", "r") as f:
                 index_template = f.read()
-            with open(Path(__file__).parent / "contrib" / "index.rst", "w") as f:
+            with open(Path(dest_path).parent / "index.rst", "w") as f:
                 f.write(index_template)
                 f.write(f"    generated/{contrib}/index.md")
 
@@ -89,7 +87,6 @@ def setup(app):
 project = 'Espresso'
 copyright = f"{datetime.date.today().year}, InLab, {project} development team"
 version = "dev" if "dev" in esp.__version__ else f"v{esp.__version__}"
-print(version)
 
 
 # -- General configuration ---------------------------------------------------
@@ -117,8 +114,8 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = [
     ".DS_Store",
-    "api/index.rst",
-    "contrib/_index.rst",
+    "user_guide/api/index.rst",
+    "user_guide/contrib/_index.rst",
 ]
 
 source_suffix = ".rst"
