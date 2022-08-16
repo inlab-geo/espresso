@@ -94,7 +94,8 @@ def test_contrib(contrib, pre_build):
         contrib_mod = __import__(contrib_name)
     else:
         importlib = __import__('importlib')
-        contrib_mod = importlib.import_module(f"{MODULE_NAME}.{contrib_name}")
+        contrib_mod = importlib.import_module(MODULE_NAME)
+    print(contrib_mod.__all__)
     assert contrib_name_class in contrib_mod.__all__
     
     # 4 - metadata.yml can be parsed and has necessary keys

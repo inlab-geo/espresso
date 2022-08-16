@@ -69,7 +69,7 @@ def move_contrib_source():
             contribs.append(contrib)
             init_file_imports += f"from .{contrib} import {contrib_class}\n"
             init_file_all_var += f"\t'{contrib_class}',\n"
-    init_file_all_var += "]\n__all__.append(__additional_all__)"
+    init_file_all_var += "]\n__all__ += __additional_all__"
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY {contrib} DESTINATION .)")
