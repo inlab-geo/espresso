@@ -103,6 +103,7 @@ def test_contrib(contrib, pre_build):
         with open(Path(contrib_mod.__path__[0]) / "__init__.py") as f:
             print(f.read())
     print(contrib_mod.__all__)
+    print(contrib_mod.__additional_all__)
     assert contrib_name_class in contrib_mod.__all__
     
     # 4 - metadata.yml can be parsed and has necessary keys
