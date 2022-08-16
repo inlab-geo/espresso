@@ -4,6 +4,28 @@
 
 Welcome to your new Espresso example!
 
+## Pre-requisites
+
+Make sure you have Python>=3.6 installed in your system. 
+
+[`mamba`](https://mamba.readthedocs.io/en/latest/) is recommended, and we provide
+instructions that work for both `conda` and `mamba` below. Check contributor's guide in 
+[cofi-espresso documentation](https://cofi-espresso.readthedocs.io/en/latest/index.html) 
+for other options.
+
+1. Install required Python packages for contributing to `cofi-espresso`. Run the following
+   commands with the project root level as working directory:
+   ```console
+   $ conda env create -f envs/environment_contrib.yml
+   $ conda activate esp_contrib
+   ```
+2. Install `cofi-espresso` base package
+   ```console
+   $ pip install .
+   ```
+
+## Getting started
+
 To complete this contribution, here are some ideas on what to do next:
 
 - [ ] **Modify [README.md](README.md)**. Document anything you'd like to add for this problem
