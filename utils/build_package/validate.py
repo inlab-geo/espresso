@@ -100,7 +100,7 @@ def test_contrib(contrib, pre_build):
         importlib = __import__('importlib')
         contrib_mod = importlib.import_module(MODULE_NAME)
         print(contrib_mod.__path__)
-        with open(Path(contrib_mod.__path__[0]) / "src" / "cofi_espresso" / "__init__.py") as f:
+        with open(Path(contrib_mod.__path__[0]) / "__init__.py") as f:
             print(f.read())
     print(contrib_mod.__all__)
     assert contrib_name_class in contrib_mod.__all__
