@@ -65,10 +65,15 @@ jobs:
           echo ::set-output name=version::$(python -c "import _version as v; print(v.__version__)")
 
       - name: Create release build tag
-        uses: rickstaa/action-create-tag@v1.3.0
-        with:
-          tag: "v${{ steps.release_version.outputs.version }}_build"
-          force_push_tag: true
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git tag "v${{ steps.release_version.outputs.version }}-build"
+          git push origin "v${{ steps.release_version.outputs.version }}-build"
+        # uses: rickstaa/action-create-tag@v1.3.0
+        # with:
+        #   tag: "v${{ steps.release_version.outputs.version }}-build"
+        #   force_push_tag: true
 
 
   ######################## SOURCE DISTRIBUTION #########################
