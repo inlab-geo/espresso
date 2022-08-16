@@ -18,6 +18,7 @@ jobs:
   ######################## GENERATE PACKAGE SOURCE #####################
   gen_pkg_source:
     # needs: if_merged
+    if: github.repository_owner == 'inlab-geo'
     name: Generate package source
     runs-on: ubuntu-latest
     steps:
