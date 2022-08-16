@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Python 3.9
         uses: actions/setup-python@v2
@@ -38,11 +38,11 @@ jobs:
         run: |
           python utils/build_package/build_with_checks.py
 
-      - name: Deploy to _esp_build branch
+      - name: Deploy to esp_build branch
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
-          BRANCH: _esp_build
+          BRANCH: esp_build
           FOLDER: _esp_build
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       
@@ -52,9 +52,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout build branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          ref: '_esp_build'
+          ref: esp_build
       
       - name: Extract Release Version
         id: release_version
@@ -78,9 +78,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          ref: '_esp_build'
+          ref: esp_build
       
       - name: Install Python 3.9
         uses: actions/setup-python@v2
@@ -147,7 +147,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Extract Release Version
         id: release_version
