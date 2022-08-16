@@ -1,3 +1,6 @@
+from .espresso_problem import EspressoProblem
+
+
 try:
     from . import _version
 
@@ -5,6 +8,17 @@ try:
 except ImportError:
     pass
 
+
 __all__ = [
-	'gravity_density',
+    "EspressoProblem",
 ]
+
+# from .example_name import ExampleName
+# __all__.append("ExampleName")
+
+from .gravity_density import GravityDensity
+
+__additional_all__ = [
+	'GravityDensity',
+]
+__all__ += __additional_all__

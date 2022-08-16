@@ -46,7 +46,8 @@ def gen_contrib_docs(_):
             # include README.md
             lines.append("```{include} ./README.md\n```")
             # format metadata files
-            lines.append(":::{admonition} Contribution Metadata for {metadata['name']} \n:class: important")
+            lines.append(":::{admonition} Contribution Metadata for ")
+            lines[-1] += f"{metadata['name']} \n:class: important"
             lines.append(metadata['short_description'])
             lines.append("\n**Author(s)**")
             for author in metadata["authors"]:
