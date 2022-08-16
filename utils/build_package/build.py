@@ -78,6 +78,7 @@ def move_contrib_source():
         f.write(init_file_all_var)
 
 def install_pkg():
+    subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
     return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
 
 def main():
