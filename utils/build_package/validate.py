@@ -99,8 +99,8 @@ def test_contrib(contrib, pre_build):
     else:
         importlib = __import__('importlib')
         contrib_mod = importlib.import_module(MODULE_NAME)
-    with open(Path(__file__).parent.parent.parent / "_esp_build" / "src" / "cofi_espresso" / "__init__.py") as f:
-        print(f.read())
+        with open(Path(__file__).parent.parent.parent / "_esp_build" / "src" / "cofi_espresso" / "__init__.py") as f:
+            print(f.read())
     print(contrib_mod.__all__)
     assert contrib_name_class in contrib_mod.__all__
     
