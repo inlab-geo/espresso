@@ -37,6 +37,24 @@ jobs:
       - name: Build with pre and post validation
         run: |
           python utils/build_package/build_with_checks.py
+
+      - name: Deploy to _esp_build branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: _esp_build
+          FOLDER: _esp_build
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      
+  tag_pkg_source:
+    name: Tag package source
+    needs: gen_pkg_source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout build branch
+        uses: actions/checkout@v2
+        with:
+          ref: '_esp_build'
       
       - name: Extract Release Version
         id: release_version
@@ -45,14 +63,13 @@ jobs:
           set -e
           python -c "import _version as v; print(v.__version__)"
           echo ::set-output name=version::$(python -c "import _version as v; print(v.__version__)")
-      
-      - name: Deploy to _esp_build branch
-        uses: s0/git-publish-subdir-action@develop
-        env:
-          REPO: self
-          BRANCH: "_esp_build_v${{ steps.release_version.outputs.version }}"
-          FOLDER: _esp_build
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Create release build tag
+        uses: rickstaa/action-create-tag@v1.3.0
+        with:
+          tag: "v${{ steps.release_version.outputs.version }}_build"
+          force_push_tag: true
+
 
   ######################## SOURCE DISTRIBUTION #########################
   build_sdist:
@@ -134,6 +151,7 @@ jobs:
 
       - name: Extract Release Version
         id: release_version
+        working-directory: src/cofi_espresso
         run: |
           set -e
           python -c "import _version as v; print(v.__version__)"
