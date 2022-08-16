@@ -1,24 +1,24 @@
 import sys
-import validate
-import build
+import subprocess
+from pathlib import Path
 from pytest import ExitCode
 
-
 def main():
+    validate_script = str(Path(__file__).parent / "validate.py")
+    build_script = str(Path(__file__).parent / "build.py")
+
     # pre-build validate
-    sys.argv.append("pre")
-    exit_code = validate.main()
+    exit_code = subprocess.call([sys.executable, validate_script, "pre"])
     if exit_code != ExitCode.OK:
         sys.exit(exit_code)
 
     # build package
-    exit_code = build.main()
+    exit_code = subprocess.call([sys.executable, build_script])
     if exit_code:
         sys.exit(exit_code)
 
     # post-build validation
-    sys.argv.append("post")
-    exit_code = validate.main()
+    exit_code = subprocess.call([sys.executable, validate_script, "post"])
     sys.exit(exit_code)
 
 

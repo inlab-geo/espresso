@@ -7,12 +7,4 @@ For contributors: feel free to add your initialisation code here if needed.
 
 from .gravity_density import *
 
-__all__ = [
-    "set_example_number",
-    "suggested_model",
-    "data",
-    "forward",
-    "jacobian",
-    "plot_model",
-    "plot_data",
-]
+__all__ = [ "GravityDensity" ]

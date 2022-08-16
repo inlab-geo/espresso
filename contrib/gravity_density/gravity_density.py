@@ -10,138 +10,143 @@ import numpy as np
 from scipy.constants import G
 import matplotlib.pyplot as plt
 
-from .lib import auxclass
+from cofi_espresso import EspressoProblem
 
 
-_params = {"example_number": 0}
-
-def set_example_number(num):
-    _params["example_number"] = num
-    setup_params = _setup(_params["example_number"])
-    _to_expand = [
-        "m", 
-        "rec_coords", 
-        "x_nodes", 
-        "y_nodes", 
-        "z_nodes", 
-        "lmx", 
-        "lmy", 
-        "lmz", 
-        "lrx", 
-        "lry"
-    ]
-    for idx, name in enumerate(_to_expand):
-        _params[name] = setup_params[idx]
-
-def suggested_model():
-    return _params["m"]
-
-def data():
-    m = _params["m"]
-    x_nodes = _params["x_nodes"]
-    y_nodes = _params["y_nodes"]
-    z_nodes = _params["z_nodes"]
-    rec_coords = _params["rec_coords"]
-    gz_rec = _calculate_gravity(m, x_nodes, y_nodes, z_nodes, rec_coords)
-    datan=gz_rec+np.random.normal(0,0.005*np.max(np.abs(gz_rec)),len(gz_rec))
-    return datan
-
-def forward(model, with_jacobian=False):
-    r"""Calculates the gravitational force of each recording location.
-
-    *args
-    :param m: The model in a 1-D array containing densities; [1xM]
-    :type m: numpy array
-    :param gz_rec: Vertical component of the gravitational force at the recording
-        locations; [Nx1]
-    :type gz_rec: numpy array
-
+class GravityDensity(EspressoProblem):
+    """Forward simulation class
     """
-    x_nodes = _params["x_nodes"]
-    y_nodes = _params["y_nodes"]
-    z_nodes = _params["z_nodes"]
-    rec_coords = _params["rec_coords"]
-    res = _calculate_gravity(
-        model, x_nodes, y_nodes, z_nodes, rec_coords, with_jacobian
-    )
-    return res
 
-def jacobian(model):
-    x_nodes = _params["x_nodes"]
-    y_nodes = _params["y_nodes"]
-    z_nodes = _params["z_nodes"]
-    rec_coords = _params["rec_coords"]
-    jac = _calculate_gravity(model, x_nodes, y_nodes, z_nodes, rec_coords)
-    return jac
+    def __init__(self, example_number=0):
+        super().__init__(example_number)
 
-def plot_model(model):
-    rec_coords = _params["rec_coords"]
-    lmx = _params["lmx"]
-    lmy = _params["lmy"]
-    lmz = _params["lmz"]
+        """you might want to set other useful example specific parameters here
+        so that you can access them in the other functions see the following as an 
+        example (suggested) usage of `self.params`
+        """
+        setup_params = _setup(example_number)
+        if setup_params:
+            _to_expand = [
+                "m", 
+                "rec_coords", 
+                "x_nodes", 
+                "y_nodes", 
+                "z_nodes", 
+                "lmx", 
+                "lmy", 
+                "lmz", 
+                "lrx", 
+                "lry"
+            ]
+            for idx, name in enumerate(_to_expand):
+                self.params[name] = setup_params[idx]
+        else:
+            raise ValueError(
+                "The example number supplied is not supported, please consult "
+                "Espresso documentation at "
+                "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html "
+                "for problem-specific metadata, e.g. number of examples provided"
+            )
 
-    if _params["example_number"] == 0:
-        fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1)
-        model2d = model.reshape(lmx, lmy, lmz)
-        ax.set_title("Model slice at z = 30 m")
-        ax.scatter(rec_coords[:, 1], rec_coords[:, 0], s=3, color="r")
-        img = ax.imshow(model2d[7][:][:], extent=[-30, 30, -30, 30])
-        ax.set_xlabel("y [m]")
-        ax.set_ylabel("x [m]")
-        plt.colorbar(img, label="Density [kg/m$^3$]")
-        ax.set_xlim([-30, 30])
-        ax.set_ylim([-30, 30])
-        return fig
-    elif _params["example_number"] == 1:
-        fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1)
-        ax.scatter(rec_coords[:, 0], rec_coords[:, 1], s=0.3, color="k")
-        img = ax.imshow(np.reshape(model, [lmz, lmx]))
-        ax.set_title("2D view of the model")
-        ax.set_xlabel("y [m]")
-        ax.set_ylabel("z [m]")
-        plt.colorbar(img, label="Density [kg/m^3]")
-        return fig
-    else:
-        raise NotImplementedError               # optional
+    def suggested_model(self):
+        return self.m
+    
+    def data(self):
+        m = self.m
+        x_nodes = self.x_nodes
+        y_nodes = self.y_nodes
+        z_nodes = self.z_nodes
+        rec_coords = self.rec_coords
+        gz_rec = _calculate_gravity(m, x_nodes, y_nodes, z_nodes, rec_coords)
+        datan=gz_rec+np.random.normal(0,0.005*np.max(np.abs(gz_rec)),len(gz_rec))
+        return datan
 
-def plot_data(data):
-    rec_coords = _params["rec_coords"]
-    lrx = _params["lrx"]
-    lry = _params["lry"]
-    gz_rec = data
-    limx = (
-        max(rec_coords[:, 0])
-        + (rec_coords[1, 0] - rec_coords[0, 0]) * 0.5
-    )
-    limy = (
-        max(rec_coords[:, 1])
-        + (rec_coords[1, 1] - rec_coords[0, 1]) * 0.5
-    )
-    if _params["example_number"] == 0:
-        fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1)
-        ax.scatter(rec_coords[:, 1], rec_coords[:, 0], s=0.3, color="k")
-        img = ax.imshow(
-            np.reshape(gz_rec, [lrx, lry]), extent=[-limy, limy, -limx, limx]
+    def forward(self, model, with_jacobian=False):
+        x_nodes = self.x_nodes
+        y_nodes = self.y_nodes
+        z_nodes = self.z_nodes
+        rec_coords = self.rec_coords
+        res = _calculate_gravity(
+            model, x_nodes, y_nodes, z_nodes, rec_coords, with_jacobian
         )
-        ax.set_title("2D view of gz")
-        ax.set_xlabel("y [m]")
-        ax.set_ylabel("x [m]")
-        plt.colorbar(img, label="Gravity [mGal]")
-        return fig
-    elif _params["example_number"] == 1:
-        fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1)
-        ax.plot(rec_coords[:, 0], data)
-        ax.set_title("gz")
-        ax.set_xlabel("Distance [m]")
-        ax.set_ylabel("Gravity [mGal]")
-        ax.grid()
-        return fig
-    else:
-        raise NotImplementedError               # optional
+        return res
+    
+    def jacobian(self, model):
+        x_nodes = self.x_nodes
+        y_nodes = self.y_nodes
+        z_nodes = self.z_nodes
+        rec_coords = self.rec_coords
+        res = _calculate_gravity(model, x_nodes, y_nodes, z_nodes, rec_coords, True)
+        return res[1]
+
+    def plot_model(self, model):
+        rec_coords = self.rec_coords
+        lmx = self.lmx
+        lmy = self.lmy
+        lmz = self.lmz
+
+        if self.example_number == 0:
+            fig = plt.figure()
+            ax = fig.add_subplot(1, 1, 1)
+            model2d = model.reshape(lmx, lmy, lmz)
+            ax.set_title("Model slice at z = 30 m")
+            ax.scatter(rec_coords[:, 1], rec_coords[:, 0], s=3, color="r")
+            img = ax.imshow(model2d[7][:][:], extent=[-30, 30, -30, 30])
+            ax.set_xlabel("y [m]")
+            ax.set_ylabel("x [m]")
+            plt.colorbar(img, label="Density [kg/m$^3$]")
+            ax.set_xlim([-30, 30])
+            ax.set_ylim([-30, 30])
+            return fig
+        elif self.example_number == 1:
+            fig = plt.figure()
+            ax = fig.add_subplot(1, 1, 1)
+            ax.scatter(rec_coords[:, 0], rec_coords[:, 1], s=0.3, color="k")
+            img = ax.imshow(np.reshape(model, [lmz, lmx]))
+            ax.set_title("2D view of the model")
+            ax.set_xlabel("y [m]")
+            ax.set_ylabel("z [m]")
+            plt.colorbar(img, label="Density [kg/m^3]")
+            return fig
+        else:
+            raise NotImplementedError               # optional
+    
+    def plot_data(self, data):
+        rec_coords = self.rec_coords
+        lrx = self.lrx
+        lry = self.lry
+        gz_rec = data
+        limx = (
+            max(rec_coords[:, 0])
+            + (rec_coords[1, 0] - rec_coords[0, 0]) * 0.5
+        )
+        limy = (
+            max(rec_coords[:, 1])
+            + (rec_coords[1, 1] - rec_coords[0, 1]) * 0.5
+        )
+        if self.example_number == 0:
+            fig = plt.figure()
+            ax = fig.add_subplot(1, 1, 1)
+            ax.scatter(rec_coords[:, 1], rec_coords[:, 0], s=0.3, color="k")
+            img = ax.imshow(
+                np.reshape(gz_rec, [lrx, lry]), extent=[-limy, limy, -limx, limx]
+            )
+            ax.set_title("2D view of gz")
+            ax.set_xlabel("y [m]")
+            ax.set_ylabel("x [m]")
+            plt.colorbar(img, label="Gravity [mGal]")
+            return fig
+        elif self.example_number == 1:
+            fig = plt.figure()
+            ax = fig.add_subplot(1, 1, 1)
+            ax.plot(rec_coords[:, 0], data)
+            ax.set_title("gz")
+            ax.set_xlabel("Distance [m]")
+            ax.set_ylabel("Gravity [mGal]")
+            ax.grid()
+            return fig
+        else:
+            raise NotImplementedError               # optional
 
 
 def _kernel(ii, jj, kk, dx, dy, dz, dim):
@@ -456,7 +461,129 @@ def _setup(num):
         return m, rec_coords, x_nodes, y_nodes, z_nodes, lmx, lmy, lmz, lrx, lry
 
     else:
-        raise ValueError("The chosen example-number does not match any examples for this Espresso problem.")
+        return False
 
 
-set_example_number(0)
+class auxclass:
+    """This class contains functions that are vital for the GravityForward - Espresso
+    but are not the focus and therefore stored "under the hood" in this auxiliary class
+    """
+    @staticmethod
+    def _cartesian(arrays, out=None):
+        """Calculates the cartesian product between arrays and/or single numbers.
+
+        Used to create coordinates of all grid cells and recording locations.
+
+        *args
+
+        :param arrays: Input arrays as a [n,m] array, where n is the number of grid points in one direction and m is the number of directions.
+        :type arrays: numpy array
+        :param out: Returns all possible coordinate combinations as a [n^m,m] array.
+        :type out: numpy array
+
+        """
+        arrays = [np.asarray(x) for x in arrays]
+        dtype = arrays[0].dtype
+        n = np.prod([x.size for x in arrays])
+        if out is None:
+            out = np.zeros([n, len(arrays)], dtype=dtype)
+        # m = n / arrays[0].size
+        m = int(n / arrays[0].size)
+        out[:, 0] = np.repeat(arrays[0], m)
+        if arrays[1:]:
+            auxclass._cartesian(arrays[1:], out=out[0:m, 1:])
+            for j in range(1, arrays[0].size):
+                # for j in xrange(1, arrays[0].size):
+                out[j * m : (j + 1) * m, 1:] = out[0:m, 1:]
+        return out
+
+    def _node_maker(x_node_slice, y_node_slice, z_node_slice):
+        """ Creates arrays with coordinates for all nodes of the model.
+
+        Each returned array contains separate columns for the start and end
+        coordinates of each node: A model with M grid cells has M+1 nodes, and
+        node_maker returns 3 Mx2 arrays. These arrays together contain the start
+        and end coordinates of all nodes.
+
+        *args
+
+        :param x_node_slice: x-coordinates of all nodes
+        :type x_node_slice: numpy array
+        :param : y-coordinates of all nodes
+        :type y_node_slice: numpy array
+        :param : z-coordinates of all nodes
+        :type z_node_slice: numpy array
+        :param x_nodes: x-values of the cartesian product of the three input arrays
+        :type x_nodes: numpy array
+        :param y_nodes: y-values of the cartesian product of the three input arrays
+        :type y_nodes: numpy array
+        :param z_nodes: z-values of the cartesian product of the three input arrays
+        :type z_nodes: numpy array
+
+
+
+        """
+
+        coords_p1 = auxclass._cartesian(
+            (z_node_slice[0:-1], y_node_slice[0:-1], x_node_slice[0:-1])
+        )
+        coords_p2 = auxclass._cartesian(
+            (z_node_slice[1:], y_node_slice[1:], x_node_slice[1:])
+        )
+
+        temp1 = coords_p1[:, 0]
+        temp2 = coords_p2[:, 0]
+        temp1 = temp1[:, np.newaxis]
+        temp2 = temp2[:, np.newaxis]
+        z_nodes = np.append(temp1, temp2, axis=1)
+
+        temp1 = coords_p1[:, 1]
+        temp2 = coords_p2[:, 1]
+        temp1 = temp1[:, np.newaxis]
+        temp2 = temp2[:, np.newaxis]
+        y_nodes = np.append(temp1, temp2, axis=1)
+
+        temp1 = coords_p1[:, 2]
+        temp2 = coords_p2[:, 2]
+        temp1 = temp1[:, np.newaxis]
+        temp2 = temp2[:, np.newaxis]
+        x_nodes = np.append(temp1, temp2, axis=1)
+
+        return x_nodes, y_nodes, z_nodes
+
+    def _inject_density(model, x_nodes, y_nodes, z_nodes, x, y, z, value):
+        """ A function to change the density of a single grid cell based on coordinates.
+
+        :param model: The model in a 1-D array containing densities [1xM]
+        :type model: numpy array
+        :param x_nodes: x-values of the cartesian product of all node coordinates (x, y and z)
+        :type x_nodes: numpy array
+        :param y_nodes: y-values of the cartesian product of all node coordinates (x, y and z)
+        :type y_nodes: numpy array
+        :param z_nodes: z-values of the cartesian product of all node coordinates (x, y and z)
+        :type z_nodes: numpy array
+        :param x: x-coordinate that should be changed to the new density value
+        :type x: numpy array
+        :param y: y-coordinate that should be changed to the new density value
+        :type y: numpy array
+        :param z: z-coordinate that should be changed to the new density value
+        :type z: numpy array
+        :param value: New density value
+        :type value: float
+
+        """
+
+        x1 = x_nodes[:, 0]
+        y1 = y_nodes[:, 0]
+        z1 = z_nodes[:, 1]
+
+        bool1 = x1 == x
+        bool2 = y1 == y
+        bool3 = z1 == z
+
+        ind = np.where(np.asarray(bool1) & np.asarray(bool2) & np.asarray(bool3))
+        ind = np.squeeze(ind[0])
+
+        model[ind] = value
+
+        return model

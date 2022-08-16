@@ -25,7 +25,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install -r envs/requirements.txt
+          python -m pip install -r envs/requirements_test.txt
       
       - name: Build with pre and post validation
         run: |

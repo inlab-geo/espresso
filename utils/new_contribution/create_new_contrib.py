@@ -37,23 +37,28 @@ def main():
     existing_examples = glob(CONTRIB_FOLDER+"/*/")
     existing_examples = [e for e in existing_examples]
     existing_examples = [e.split("/")[1] for e in existing_examples]
-    # print(existing_examples)
     if example_name in existing_examples:
         raise ValueError("The example name provided already exists, please choose another name")
-    
+
+    # convert example name to other formats
+    example_name_capitalised = example_name.title().replace("_", " ")
+    example_name_no_space = example_name_capitalised.replace(" ", "")
+
+    # make new folders and subfolders
     new_subfolder = CONTRIB_FOLDER+"/"+example_name
     os.makedirs(new_subfolder)    
     os.makedirs(new_subfolder+"/data")    
 
+    # generate file names
     template_files=getListOfFiles(TEMPLATE_FOLDER)
     new_files = [f.replace(TEMPLATE_FOLDER, new_subfolder) for f in template_files]
     new_files = [f.replace("example_name", example_name) for f in new_files]
 
+    # generate example subfolder from template
     print("🗂  Copying files...")
     for template_file, new_file in zip(template_files, new_files):
         print("file: "+template_file+" -> "+new_file)
         if "README" in template_file:
-            example_name_capitalised = example_name.title().replace("_", " ")
             with open(template_file, "r") as template_f:
                 content = template_f.read()
             content = content.replace("example_name", example_name)
@@ -64,6 +69,13 @@ def main():
             with open(template_file, "r") as template_f:
                 content = template_f.read()
             content = content.replace("example_name", example_name)
+            content = content.replace("ExampleName", example_name_no_space)
+            with open(new_file, "w") as new_f:
+                new_f.write(content)
+        elif "example_name.py" in template_file:
+            with open(template_file, "r") as template_f:
+                content = template_f.read()
+            content = content.replace("ExampleName", example_name_no_space)
             with open(new_file, "w") as new_f:
                 new_f.write(content)
         else:

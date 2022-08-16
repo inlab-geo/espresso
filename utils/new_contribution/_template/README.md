@@ -4,11 +4,32 @@
 
 Welcome to your new Espresso example!
 
+## Pre-requisites
+
+Make sure you have Python>=3.6 installed in your system. 
+
+[`mamba`](https://mamba.readthedocs.io/en/latest/) is recommended, and we provide
+instructions that work for both `conda` and `mamba` below. Check contributor's guide in 
+[cofi-espresso documentation](https://cofi-espresso.readthedocs.io/en/latest/index.html) 
+for other options.
+
+1. Install required Python packages for contributing to `cofi-espresso`. Run the following
+   commands with the project root level as working directory:
+   ```console
+   $ conda env create -f envs/environment_contrib.yml
+   $ conda activate esp_contrib
+   ```
+2. Install `cofi-espresso` base package
+   ```console
+   $ pip install .
+   ```
+
+## Getting started
+
 To complete this contribution, here are some ideas on what to do next:
 
-- [ ] **Modify [README.md](README.md)**. Replace the title above with your test problem name,
-   and document anything you'd like to add for this problem. Some recommended parts
-   include:
+- [ ] **Modify [README.md](README.md)**. Document anything you'd like to add for this problem
+  (in this README.md file). Some recommended parts include:
    - What this test problem is about
    - What you would recommend inversion practitioners to notice
    - etc.
@@ -37,19 +58,22 @@ To complete this contribution, here are some ideas on what to do next:
 
 ## How to test your code
 
-***In order to test your code***, use `contrib` as your working directory and import your contribution
-in the following ways.
+> **Note that you cannot test your code directly inside your example subfolder**, if you
+> have any relative import inside the contribution file. Check the following for details.
+
+***In order to test your code in that case***, use `contrib` as your working directory and 
+import your contribution in the following ways.
 
 (Python interactive mode)
 ```python
 $ pwd                            # check you are in the right folder
 <path-to-espresso>/contrib
 $ python
->>> from example_name import *   # import it this way
+>>> from example_name import ExampleName   # import it this way
 ```
 
 (Creating temporary Python file)
 ```python
 # file contrib/tmp.py            # create tmp file in the right folder
-from example_name import *       # import it this way
+from example_name import ExampleName       # import it this way
 ```

@@ -8,45 +8,41 @@
     - metadata.yml
     - __init__.py
 
-3. There an `__all__` variable in __init__.py with standard functions exposed
-    - set_example_number
-    - suggested_model
-    - data
-    - forward
-    - jacobian
-    - plot_model
-    - plot_data
+3. There is an `__all__` variable in __init__.py with one class name exposed
 
-4. Required functions are implemented and can run
-    - set_example_number(num) -> None
-    - suggested_model() -> numpy.ndarray | pandas.Series | list
-    - data() -> numpy.ndarray | pandas.Series | list
-    - forward(model, with_jacobian=False) -> numpy.ndarray | pandas.Series | list
-    * Check array like datatypes with `np.ndim(m) != 0`
-
-5. Optional functions, if implemented, have the correct signatures
-    - forward(model, with_jacobian=True) -> tuple
-    - jacobian(model) -> numpy.ndarray | pandas.Series | list
-    - plot_model(model) -> matplotlib.figure.Figure
-    - plot_data(model) -> matplotlib.figure.Figure
-
-6. The metadata.yml file can be parsed and has the following keys:
+4. The metadata.yml file can be parsed and has the following keys:
     - name
     - short_description
     - authors
     - examples -> description, model_dimension, data_dimension
     - [optional] citations -> doi
     - [optional] contacts -> name, email, website
-    - [optional] extra_websites -> name, link
+    - [optional] extra_websites -> name, link 
 
-7. Check there are enough number of examples as documented in metadata.yml
+5. Required methods are implemented and can run in each example
+    - __init__(self, example_number) -> None
+    - suggested_model(self) -> numpy.ndarray | pandas.Series | list
+    - data(self) -> numpy.ndarray | pandas.Series | list
+    - forward(self, model, with_jacobian=False) -> numpy.ndarray | pandas.Series | list
+    * Check array like datatypes with `np.ndim(m) != 0`
 
-8. LICENCE file is not empty
+6. Optional functions, if implemented, have the correct signatures
+    - forward(self, model, with_jacobian=True) -> tuple
+    - jacobian(self, model) -> numpy.ndarray | pandas.Series | list
+    - plot_model(self, model) -> matplotlib.figure.Figure
+    - plot_data(self, model) -> matplotlib.figure.Figure
+
+7. LICENCE file is not empty
+
+
+NOTE: To use this script, run `python validate.py pre` for pre build validation, 
+    and run `python validate.py post` for post build validation.
 
 """
 
 import os
 import sys
+from pathlib import Path
 import pytest
 import numpy as np
 from matplotlib.figure import Figure
@@ -54,7 +50,7 @@ import yaml
 
 
 MODULE_NAME = "cofi_espresso"
-CONTRIB_FOLDER = "contrib"
+CONTRIB_FOLDER = str(Path(__file__).parent.parent.parent / "contrib")
 
 def get_folder_content(folder_name):
     names = [name for name in os.listdir(folder_name)]
@@ -63,7 +59,6 @@ def get_folder_content(folder_name):
 
 def all_contribs():
     return list(zip(*get_folder_content(CONTRIB_FOLDER)))
-    # return [("gravity_density", "contrib/gravity_density")]
 
 @pytest.fixture(params=all_contribs())
 def contrib(request):
@@ -83,6 +78,8 @@ def _array_like(obj):
 
 def test_contrib(contrib, pre_build):
     contrib_name, contrib_sub_folder = contrib
+    contrib_name_capitalised = contrib_name.title().replace("_", " ")
+    contrib_name_class = contrib_name_capitalised.replace(" ", "")
     print(f"\n🔍 Checking '{contrib_name}' at {contrib_sub_folder}...")
     names, paths = get_folder_content(contrib_sub_folder)
     
@@ -101,45 +98,10 @@ def test_contrib(contrib, pre_build):
         contrib_mod = __import__(contrib_name)
     else:
         importlib = __import__('importlib')
-        contrib_mod = importlib.import_module(f"{MODULE_NAME}.{contrib_name}")
-    std_funcs = [
-        "set_example_number", 
-        "suggested_model", 
-        "data", 
-        "forward", 
-        "jacobian", 
-        "plot_model", 
-        "plot_data"
-    ]
-    for fun in std_funcs:
-        assert fun in contrib_mod.__all__
-
-    # 4 - functions are defined: set_example_number, suggested_model, data, forward
-    contrib_mod.set_example_number(0)
-    _model = contrib_mod.suggested_model()
-    _data = contrib_mod.data()
-    _synthetics = contrib_mod.forward(_model)
-    assert _array_like(_model)
-    assert _array_like(_data)
-    assert _array_like(_synthetics)
-
-    # 5 - optional functions have correct signatures
-    try: _synthetics, _jacobian = contrib_mod.forward(_model, with_jacobian=True)
-    except NotImplementedError: pass
-    else:
-        assert _array_like(_synthetics)
-        assert _array_like(_jacobian)
-    try: _jacobian = contrib_mod.jacobian(_model)
-    except NotImplementedError: pass
-    else: assert _array_like(_jacobian)
-    try: _fig_model = contrib_mod.plot_model(_model)
-    except NotImplementedError: pass
-    else: assert isinstance(_fig_model, Figure)
-    try: _fig_data = contrib_mod.plot_data(_data)
-    except NotImplementedError: pass
-    else: assert isinstance(_fig_data, Figure)
-
-    # 6 - metadata.yml can be parsed and has necessary keys
+        contrib_mod = importlib.import_module(MODULE_NAME)
+    assert contrib_name_class in contrib_mod.__all__
+    
+    # 4 - metadata.yml can be parsed and has necessary keys
     with open(f"{contrib_sub_folder}/metadata.yml", "r") as stream:
         meta_data = yaml.safe_load(stream)
     for k in ["name", "short_description", "authors", "examples"]:
@@ -159,12 +121,35 @@ def test_contrib(contrib, pre_build):
         for website in meta_data["extra_websites"]:
             assert "name" in website
             assert "link" in website
-    
-    # 7 - enough number of examples as documented in metadata.yml
+
     for i in range(n_examples):
-        contrib_mod.set_example_number(i)
-    
-    # 8 - LICENCE file not empty
+        # 5 - functions are defined: set_example_number, suggested_model, data, forward
+        contrib_class = getattr(contrib_mod, contrib_name_class)
+        contrib_instance = contrib_class(i)
+        _model = contrib_instance.suggested_model()
+        _data = contrib_instance.data()
+        _synthetics = contrib_instance.forward(_model)
+        assert _array_like(_model)
+        assert _array_like(_data)
+        assert _array_like(_synthetics)
+
+        # 6 - optional functions have correct signatures
+        try: _synthetics, _jacobian = contrib_instance.forward(_model, with_jacobian=True)
+        except NotImplementedError: pass
+        else:
+            assert _array_like(_synthetics)
+            assert _array_like(_jacobian)
+        try: _jacobian = contrib_instance.jacobian(_model)
+        except NotImplementedError: pass
+        else: assert _array_like(_jacobian)
+        try: _fig_model = contrib_instance.plot_model(_model)
+        except NotImplementedError: pass
+        else: assert isinstance(_fig_model, Figure)
+        try: _fig_data = contrib_instance.plot_data(_data)
+        except NotImplementedError: pass
+        else: assert isinstance(_fig_data, Figure)
+
+    # 7 - LICENCE file not empty
     assert os.stat(f"{contrib_sub_folder}/LICENCE").st_size != 0, \
         "LICENCE file shouldn't be empty"
 
@@ -172,7 +157,7 @@ def test_contrib(contrib, pre_build):
 
 
 def main():
-    return pytest.main(["utils/build_package/validate.py"])
+    return pytest.main([Path(__file__)])
 
 if __name__ == "__main__":
     main()

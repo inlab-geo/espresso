@@ -1,43 +1,49 @@
-import numpy as np
+from cofi_espresso import EspressoProblem
 
 
-"""values set in _params can be accessed in all functions
-feel free to assign more values in the following dictionary
-check set_example_number function below for details"""
-_params = {"example_number": 0}
+class ExampleName(EspressoProblem):
+    """Forward simulation class
+    """
 
-def set_example_number(num):
-    _params["example_number"] = num
+    def __init__(self, example_number=0):
+        super().__init__(example_number)
 
-    """you might want to set other useful example specific parameters 
-    here so that you can access them in the other functions
-    see the following as an example (suggested) usage of `_params`"""
-    # if num == 0:
-    #     _params["model"] = np.ones(10, 10)
-    #     _params["data"] = np.ones(20,) * 2
-    # elif num == 1:
-    #     _params["model"] = np.ones(10, 10) * 3
-    #     _params["data"] = np.ones(100,) * 4
-    # else:
-    #     raise ValueError("Invalide example_number, please choose between [0, 1]")
+        """you might want to set other useful example specific parameters here
+        so that you can access them in the other functions see the following as an 
+        example (suggested) usage of `self.params`
+        """
+        # if example_number == 0:
+        #     self.params["some_attribute"] = some_value_0
+        #     self.params["another_attribte"] = another_value_0
+        # elif example_number == 1:
+        #     self.params["some_attribute"] = some_value_1
+        #     self.params["another_attribte"] = another_value_1
+        # else:
+        #     raise ValueError(
+        #         "The example number supplied is not supported, please consult "
+        #         "Espresso documentation at "
+        #         "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html "
+        #         "for problem-specific metadata, e.g. number of examples provided"
+        #     )
 
-def suggested_model():
-    raise NotImplementedError               # TODO implement me
 
-def data():
-    raise NotImplementedError               # TODO implement me
+    def suggested_model(self):
+        raise NotImplementedError               # TODO implement me
+    
+    def data(self):
+        raise NotImplementedError               # TODO implement me
 
-def forward(model, with_jacobian=False):
-    if with_jacobian:
-        raise NotImplementedError           # optional
-    else:
-        raise NotImplementedError           # TODO implement me
+    def forward(self, model, with_jacobian=False):
+        if with_jacobian:
+            raise NotImplementedError           # optional
+        else:
+            raise NotImplementedError           # TODO implement me
+    
+    def jacobian(self, model):
+        raise NotImplementedError               # optional
 
-def jacobian(model):
-    raise NotImplementedError               # optional
-
-def plot_model(model):
-    raise NotImplementedError               # optional
-
-def plot_data(data):
-    raise NotImplementedError               # optional
+    def plot_model(self, model):
+        raise NotImplementedError               # optional
+    
+    def plot_data(self, data):
+        raise NotImplementedError               # optional
