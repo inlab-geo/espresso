@@ -6,8 +6,10 @@ on:
     branches: main
     paths:
       - "contrib"
-      - "utils/build_package/_package_src"
+      - "src"
       - "docs"
+      - "setup.py"
+      - "pyproject.toml"
   
 jobs:
   ######################## GENERATE PACKAGE SOURCE #####################
@@ -26,6 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -r envs/requirements_test.txt
+          python -m pip install .
       
       - name: Build with pre and post validation
         run: |
