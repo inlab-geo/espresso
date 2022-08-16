@@ -7,6 +7,8 @@ from glob import glob
 import sys
 import os
 from shutil import copyfile
+from pathlib import Path
+
 
 def getListOfFiles(dirName):
     # create a list of file and sub directories 
@@ -26,8 +28,10 @@ def getListOfFiles(dirName):
     return allFiles
 
 
-CONTRIB_FOLDER = "contrib"
-TEMPLATE_FOLDER = "utils/new_contribution/_template"
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent.parent
+CONTRIB_FOLDER = str(root_dir / "contrib")
+TEMPLATE_FOLDER = str(root_dir / "utils/new_contribution/_template")
 
 def main():
     print("🥰 Thanks for contributing! \nWe are generating new contribution component from template...\n")
