@@ -5,7 +5,7 @@ on:
   push:
     branches: main
     paths:
-      - "_version.py"
+      - "src/cofi_espresso/_version.py"
 
 jobs:
   # if_merged:
