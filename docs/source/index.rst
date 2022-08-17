@@ -3,18 +3,18 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the documentation of Espresso!
-=========================================
+.. title:: Home
 
-Espresso is a collection of clearly defined forward codes
+====================================
+Welcome to Espresso's documentation!
+====================================
+
+Espresso (**E**\ arth **S**\ cience **PR**\ oblems for the **E**\ valuation of 
+**S**\ trategies, **S**\ olvers and **O**\ ptimizers) 
+is a collection of clearly defined forward codes
 that simulate physical processes from many disciplines within the geosciences
 and elsewhere. The goal of Espresso is to 
 bring together people developing physical simulations with those who need them.
-
-.. Espresso's simple and consistent code structure enables users to access a wide range
-.. of different forward code and contributors to share their solutions with a wider
-.. audience. Having the basic set up and several examples in
-.. place already, we hope to encourage more examples be developed and be contributed.
 
 This project is led by `InLab <http://www.inlab.edu.au/>`_.
 
@@ -70,14 +70,17 @@ This project is led by `InLab <http://www.inlab.edu.au/>`_.
         :classes: btn-outline-primary btn-block stretched-link
 
 
+Table of contents
+-----------------
 
 .. toctree::
     :caption: User Guide
     :maxdepth: 1
 
+    user_guide/introduction.rst
     user_guide/installation.rst
-    user_guide/faq.rst
     user_guide/contrib/index.rst
+    user_guide/faq.rst
 
 .. toctree::
     :caption: Contributor Guide
