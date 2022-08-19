@@ -1,9 +1,13 @@
 import sys
 from glob import glob
+from pathlib import Path
 
 import papermill as pm
 
-NOTEBOOKS_FOLDER = "notebooks"
+current_dir = Path(__file__).resolve().parent
+root_dir = current_dir.parent.parent
+NOTEBOOKS = "notebooks"
+NOTEBOOKS_DIR = str(root_dir / NOTEBOOKS)
 
 
 def execute(input, output, cwd=None, params=None):
@@ -13,7 +17,7 @@ def execute(input, output, cwd=None, params=None):
 if __name__ == '__main__':
     # collect all notebooks
     if sys.argv[-1] == "all":
-        all_notebooks = glob(f"{NOTEBOOKS_FOLDER}/*/*.ipynb")
+        all_notebooks = glob(f"{NOTEBOOKS_DIR}/*/*.ipynb")
     else:
         all_notebooks = [sys.argv[-1]]
     # execute listed notebooks

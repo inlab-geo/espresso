@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pygimli
 from pygimli.physics import ert
@@ -84,7 +85,7 @@ ert_problem.set_initial_model(start_model_log)
 
 # for emcee - hyperparameters
 nwalkers = 512
-nsteps = 1000
+nsteps = 1              # TODO change this to much bigger number when actually running
 
 # for emcee - define log_likelihood
 def log_likelihood(model):
@@ -135,4 +136,5 @@ for idx in indices:
         label=r"$\Omega m$"
     )
     ax[0].set_title(f"Inferred model - sample {idx}")
+    if not os.path.exists("figs/emcee_samples"): os.makedirs("figs/emcee_samples")
     ax[0].figure.savefig(f"figs/emcee_samples/{idx}")

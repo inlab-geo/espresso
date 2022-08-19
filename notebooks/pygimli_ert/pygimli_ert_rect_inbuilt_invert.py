@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pygimli
 from pygimli.physics import ert
@@ -12,6 +13,9 @@ from pygimli_ert_lib import (
     get_data_misfit,
     get_regularisation,
 )
+
+if not os.path.exists("figs/rect_mesh"): os.makedirs("figs/rect_mesh")
+
 
 ############# ERT Modelling with PyGIMLi ##############################################
 

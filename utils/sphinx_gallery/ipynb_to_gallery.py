@@ -10,12 +10,16 @@ https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe
 import sys
 from glob import glob
 from shutil import copyfile
+from pathlib import Path
 
 import pypandoc as pdoc
 import json
 
-NOTEBOOKS_FOLDER = "notebooks"
-SCRIPTS_FOLDER = "utils/sphinx_gallery/scripts"
+current_dir = Path(__file__).resolve().parent
+root_dir = current_dir.parent.parent
+NOTEBOOKS = "notebooks"
+NOTEBOOKS_DIR = str(root_dir / NOTEBOOKS)
+SCRIPTS_DIR = str(root_dir / "utils" / "sphinx_gallery" / "scripts")
 
 BADGE_BEGIN = "<!--<badge>-->"
 BADGE_END = "<!--</badge>-->"
@@ -56,14 +60,14 @@ def convert_ipynb_to_gallery(file_name):
     python_file = python_file.replace("\n%", "\n# %")
 
     file_name_without_path = file_name.split("/")[-1]
-    script_file_path = f"{SCRIPTS_FOLDER}/{file_name_without_path}"
+    script_file_path = f"{SCRIPTS_DIR}/{file_name_without_path}"
     script_file_path = script_file_path.replace(".ipynb", ".py")
     open(script_file_path, 'w').write(python_file)
 
 if __name__ == '__main__':
     # collect notebooks to convert to sphinx gallery scripts
     if sys.argv[-1] == "all":
-        all_scripts = glob(f"{NOTEBOOKS_FOLDER}/*/*.ipynb")
+        all_scripts = glob(f"{NOTEBOOKS_DIR}/*/*.ipynb")
         all_scripts = [name for name in all_scripts if "lab" not in name]
     else:
         all_scripts = [sys.argv[-1]]
@@ -73,14 +77,14 @@ if __name__ == '__main__':
         print(f"file: {script}")
         convert_ipynb_to_gallery(script)
     # collect all data and library files to move to scripts/
-    all_data = glob(f"{NOTEBOOKS_FOLDER}/*/*.npz")
-    all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*.dat"))
-    all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*.csv"))
-    all_data.extend(glob(f"{NOTEBOOKS_FOLDER}/*/*_lib.py"))
+    all_data = glob(f"{NOTEBOOKS_DIR}/*/*.npz")
+    all_data.extend(glob(f"{NOTEBOOKS_DIR}/*/*.dat"))
+    all_data.extend(glob(f"{NOTEBOOKS_DIR}/*/*.csv"))
+    all_data.extend(glob(f"{NOTEBOOKS_DIR}/*/*_lib.py"))
     # move
     print("\nMoving data files...")
     for data_file in all_data:
         data_filename_without_path = data_file.split("/")[-1]
-        dest_file_path = f"{SCRIPTS_FOLDER}/{data_filename_without_path}"
+        dest_file_path = f"{SCRIPTS_DIR}/{data_filename_without_path}"
         copyfile(data_file, dest_file_path)
     print("\nOK.")

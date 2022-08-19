@@ -5,17 +5,22 @@
 import subprocess
 from glob import glob
 import os
+import sys
 import shutil
 import filecmp
 import re
+from pathlib import Path
 import logging
 import numpy
 
-NOTEBOOKS_FOLDER = "notebooks"
-OUTPUT_FOLDER = "utils/validation/_output"
-VALIDATION_FOLDER = "utils/validation/_validation_output"
-
-PYTHON = "python"
+current_dir = Path(__file__).resolve().parent
+root_dir = current_dir.parent.parent
+NOTEBOOKS = "notebooks"
+NOTEBOOKS_DIR = str(root_dir / NOTEBOOKS)
+OUTPUT = "_output"
+OUTPUT_DIR = str(root_dir / "utils" / "validation" / OUTPUT)
+VALIDATION = "_validation_output"
+VALIDATION_DIR = str(root_dir / "utils" / "validation" / VALIDATION)
 
 class bcolors:
     PASSED   = '\033[92m'
@@ -26,13 +31,13 @@ class bcolors:
     BOLD     = '\033[1m'
 
 def listdir_nohidden():
-    for dir in glob(f"{NOTEBOOKS_FOLDER}/*/"):
-        if not dir.startswith("."):
+    for dir in glob(f"{NOTEBOOKS_DIR}/*/"):
+        if not dir.split("/")[-2].startswith("."):
             yield dir
 
 def listfiles_nohidden(dir):
     for f in glob(f"{dir}/*"):
-        if not f.startswith("."):
+        if not f.split("/")[-1].startswith(".") and "__pycache__" not in f:
             yield f
 
 def listpy_nohidden_notlib(dir):
@@ -132,13 +137,13 @@ def approximate_diff(file_name_1, file_name_2, tolerance=1.0e-03):
 
 def analyse_cmp_res(match, mismatch, errors, outdir, regdir, files):
     if (len(mismatch)==0 and len(errors)==0):
-        logging.critical(bcolors.PASSED +bcolors.BOLD+ '[PASSED] '+ bcolors.ENDC+regdir.replace(f"{VALIDATION_FOLDER}/",''))
+        logging.critical(bcolors.PASSED +bcolors.BOLD+ '[PASSED] '+ bcolors.ENDC+regdir.replace(f"{VALIDATION_DIR}/",''))
     elif (len(mismatch)>0 and len(errors)==0):
-        logging.warning(bcolors.WARNING +bcolors.BOLD+'[WARNING] '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
+        logging.warning(bcolors.WARNING +bcolors.BOLD+'[WARNING] '+regdir.replace(f"{VALIDATION_DIR}/",'') +bcolors.ENDC)
     elif (len(errors)==len(files)):
-        logging.error(bcolors.MISSING +bcolors.BOLD+  '[MISSING] '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
+        logging.error(bcolors.MISSING +bcolors.BOLD+  '[MISSING] '+regdir.replace(f"{VALIDATION_DIR}/",'') +bcolors.ENDC)
     elif (len(errors)>0):
-        logging.error(bcolors.FAILED +bcolors.BOLD+  '[FAILED] '+regdir.replace(f"{VALIDATION_FOLDER}/",'') +bcolors.ENDC)
+        logging.error(bcolors.FAILED +bcolors.BOLD+  '[FAILED] '+regdir.replace(f"{VALIDATION_DIR}/",'') +bcolors.ENDC)
     
     if (len(errors)==len(files)):
         logging.error('\tno output files found')
@@ -170,15 +175,16 @@ def analyse_cmp_res(match, mismatch, errors, outdir, regdir, files):
 
 def main():
     print("Validation starts.\n")
-    shutil.rmtree(OUTPUT_FOLDER, ignore_errors=True)
-    os.mkdir(OUTPUT_FOLDER)
+    shutil.rmtree(OUTPUT_DIR, ignore_errors=True)
+    os.mkdir(OUTPUT_DIR)
 
     # iterate through each example
     for example_dir in listdir_nohidden():
         logging.info(f"Testing example - {example_dir} ...")
-        out_dir = example_dir.replace(NOTEBOOKS_FOLDER, OUTPUT_FOLDER)
+        out_dir = example_dir.replace(NOTEBOOKS_DIR, OUTPUT_DIR)
         os.mkdir(out_dir)
-        val_dir = example_dir.replace(NOTEBOOKS_FOLDER, VALIDATION_FOLDER)
+        os.mkdir(out_dir + "figs")
+        val_dir = example_dir.replace(NOTEBOOKS_DIR, VALIDATION_DIR)
     
         # iterate through each script under current example
         for script in listpy_nohidden_notlib(example_dir):
@@ -189,15 +195,19 @@ def main():
             logging.info(f"script: {script}")
             # run the script
             logging.info(f"\tsaving outputs to folder {out_subdir}")
-            res = subprocess.run([
-                PYTHON, 
-                script, 
-                "--no-show-plot", 
-                "--save-plot", 
-                "--show-summary",
-                "--output-dir",
-                out_subdir,
-            ], stdout=subprocess.PIPE, text=True)
+            res = subprocess.run(
+                [
+                    sys.executable, 
+                    script, 
+                    "--no-show-plot", 
+                    "--save-plot", 
+                    "--show-summary",
+                    "--output-dir",
+                    out_dir,
+                ], 
+                stdout=subprocess.PIPE, 
+                cwd=out_dir,
+                text=True )
             # write log file
             with open(f"{out_subdir}/log.txt", "w") as log_file:
                 log_file.write(res.stdout)

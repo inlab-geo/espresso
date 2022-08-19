@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pygimli
 from pygimli.physics import ert
@@ -21,6 +22,8 @@ from pygimli_ert_lib import (
     get_gradient,
     get_hessian,
 )
+
+if not os.path.exists("figs/tri_mesh"): os.makedirs("figs/tri_mesh")
 
 
 ############# ERT Modelling with PyGIMLi ##############################################
