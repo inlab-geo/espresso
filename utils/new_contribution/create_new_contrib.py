@@ -28,7 +28,7 @@ def getListOfFiles(dirName):
     return allFiles
 
 
-current_dir = Path(__file__).parent
+current_dir = Path(__file__).resolve().parent
 root_dir = current_dir.parent.parent
 CONTRIB_FOLDER = str(root_dir / "contrib")
 TEMPLATE_FOLDER = str(root_dir / "utils/new_contribution/_template")

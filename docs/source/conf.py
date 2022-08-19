@@ -23,7 +23,7 @@ import cofi_espresso as esp
 def gen_contrib_docs(_):
     all_contribs = [nm for nm in dir(esp) if not nm.startswith("_") and nm[0].islower()]
     base_path = esp.__path__[0]
-    dest_path = Path(__file__).parent / "user_guide" / "contrib" / "generated"
+    dest_path = Path(__file__).resolve().parent / "user_guide" / "contrib" / "generated"
     os.mkdir(dest_path)
     for contrib in all_contribs:
         contrib_dir = Path(f"{base_path}/{contrib}")

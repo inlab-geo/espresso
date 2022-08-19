@@ -50,7 +50,7 @@ import yaml
 
 
 MODULE_NAME = "cofi_espresso"
-CONTRIB_FOLDER = str(Path(__file__).parent.parent.parent / "contrib")
+CONTRIB_FOLDER = str(Path(__file__).resolve().parent.parent.parent / "contrib")
 
 def get_folder_content(folder_name):
     names = [name for name in os.listdir(folder_name)]
