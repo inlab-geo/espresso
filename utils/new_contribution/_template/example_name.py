@@ -5,7 +5,7 @@ class ExampleName(EspressoProblem):
     """Forward simulation class
     """
 
-    def __init__(self, example_number=0):
+    def __init__(self, example_number=1):
         super().__init__(example_number)
 
         """you might want to set other useful example specific parameters here
@@ -26,10 +26,23 @@ class ExampleName(EspressoProblem):
         #         "for problem-specific metadata, e.g. number of examples provided"
         #     )
 
+    @property
+    def model_size(self):
+        raise NotImplementedError               # TODO implement me
 
-    def suggested_model(self):
+    @property
+    def data_size(self):
+        raise NotImplementedError               # TODO implement me
+
+    @property
+    def suggested_good_model(self):
+        raise NotImplementedError               # TODO implement me
+
+    @property
+    def starting_model(self):
         raise NotImplementedError               # TODO implement me
     
+    @property
     def data(self):
         raise NotImplementedError               # TODO implement me
 
@@ -45,5 +58,8 @@ class ExampleName(EspressoProblem):
     def plot_model(self, model):
         raise NotImplementedError               # optional
     
-    def plot_data(self, data):
+    def plot_data(self, data, data2=None):
         raise NotImplementedError               # optional
+
+    def suggested_misfit_function(self, data, data2):
+        raise NotImplementedError
