@@ -8,7 +8,7 @@ Espresso Problems
 
 This page contains detailed documentation for all the Espresso problems, 
 including their problem definition, authors' suggestions on inference and 
-some metadata.
+other metadata.
 
 
 .. toctree::

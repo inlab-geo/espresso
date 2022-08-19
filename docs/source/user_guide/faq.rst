@@ -1,5 +1,5 @@
 ==========================
-Frequently Asked questions
+Frequently Asked Questions
 ==========================
 
 Work in progress...

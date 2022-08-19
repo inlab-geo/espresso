@@ -37,7 +37,7 @@ Replace ``<testproblem>`` with one of the following currently available problems
 
 - ``gravity_density``
 
-Once a problem is imported, it's main functions can be called using the same 
+Once a problem is imported, its main functions can be called using the same 
 structure for each problem. For instance:
 
 ```python
@@ -57,6 +57,8 @@ Other problem-specific parameters can be accessed through the problem instance. 
 ```python
 print(grav.params.keys())
 # dict_keys(['m', 'rec_coords', 'x_nodes', 'y_nodes', 'z_nodes', 'lmx', 'lmy', 'lmz', 'lrx', 'lry'])
+print(grav.m)
+print(grav.rec_coords)
 ```
 
 Which additional values are set is highly example-specific and we suggest to 

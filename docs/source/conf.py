@@ -29,50 +29,79 @@ def gen_contrib_docs(_):
         contrib_dir = Path(f"{base_path}/{contrib}")
         dest_contrib_dir = Path(f"{dest_path}/{contrib}")
         if contrib_dir.exists() and contrib_dir.is_dir():
-            # locate files
+            # -> locate files
             file_metadata = contrib_dir / "metadata.yml"
             file_readme = contrib_dir / "README.md"
             file_licence = contrib_dir / "LICENCE"
-            # make new folder docs/source/contrib/<contrib-name>
+            # -> make new folder docs/source/contrib/<contrib-name>
             os.mkdir(dest_contrib_dir)
-            # copy README and LICENCE
+            # -> copy README and LICENCE
             copy(file_readme, f"{dest_contrib_dir}/README.md")
             copy(file_licence, f"{dest_contrib_dir}/LICENCE")
             with open(file_metadata, "r") as f:
                 metadata = yaml.safe_load(f)
             lines = []
-            # include README.md
+            # -> include README.md
             lines.append("```{include} ./README.md\n```")
-            # format metadata files
+            # -> format metadata files
             lines.append(":::{admonition} Contribution Metadata for ")
             lines[-1] += f"{metadata['name']} \n:class: important"
+            # metadata - short description
             lines.append(metadata['short_description'])
-            lines.append("\n**Author(s)**")
-            for author in metadata["authors"]:
-                lines.append(f"- {author}")
-            lines.append("\n**Contact(s)**")
-            for contact in metadata["contacts"]:
-                lines.append(f"- {contact['name']} {contact['email']} ")
-                lines[-1] += f"[website]({contact['website']})" if "website" in contact else ""
-            lines.append("\n**Citation**")
-            for citation in metadata["citations"]:
-                lines.append(f"- doi: {citation['doi']}")
-            lines.append("\n**Extra website**")
-            for extra_website in metadata["extra_websites"]:
-                lines.append(f"- [{extra_website['name']}]({extra_website['link']})")
-            lines.append("\n**Examples**")
+            lines.append("```{eval-rst}")
+            # metadata - authors
+            lines.append("\n:Author: " + ", ".join(metadata["authors"]))
+            # metadata - contacts
+            lines.append(":Contact:")
+            if "contacts" in metadata and len(metadata["contacts"]) > 0:
+                if len(metadata["contacts"]) == 1:
+                    contact = metadata["contacts"][0]
+                    lines.append(f"  {contact['name']} ({contact['email']}) ")
+                else:
+                    for contact in metadata["contacts"]:
+                        lines.append(f"  - {contact['name']} {contact['email']} ")
+            # metadata - citations
+            if "citations" in metadata and len(metadata["citations"]) > 0:
+                lines.append(":Citation:")
+                if len(metadata["citations"]) == 1:
+                    citation = metadata["citations"][0]
+                    lines.append(f"  doi: {citation['doi']}")
+                else:
+                    for citation in metadata["citations"]:
+                        lines.append(f"  - doi: {citation['doi']}")
+            # metadata - extra website
+            if "extra_websites" in metadata and len(metadata["extra_websites"]) > 0:
+                lines.append(":Extra website:")
+                if len(metadata["extra_websites"]) == 1:
+                    extra_website = metadata["extra_websites"][0]
+                    lines.append(f"  [{extra_website['name']}]({extra_website['link']})")
+                else:
+                    for extra_website in metadata["extra_websites"]:
+                        lines.append(f"  - `{extra_website['name']} <{extra_website['link']}>`_")
+            # metadata - examples
+            lines.append(":Examples:\n")
+            lines.append("  .. list-table::")
+            lines.append("    :widths: 10 40 25 25")
+            lines.append("    :header-rows: 1")
+            lines.append("    :stub-columns: 1\n")
+            lines.append("    * - index")
+            lines.append("      - description")
+            lines.append("      - model dimension")
+            lines.append("      - data dimension")
             for idx, example in enumerate(metadata["examples"]):
-                lines.append(f"{idx+1}. {example['description']}")
-                lines.append(f"    - model dimension: {example['model_dimension']}")
-                lines.append(f"    - data dimension: {example['data_dimension']}")
+                lines.append(f"    * - {idx+1}")
+                lines.append(f"      - {example['description']}")
+                lines.append(f"      - {example['model_dimension']}")
+                lines.append(f"      - {example['data_dimension']}")
+            lines.append("```")
             lines.append(":::")
-            # include LICENCE
+            # -> include LICENCE
             lines.append("## LICENCE\n")
             lines.append("```{include} ./LICENCE\n```")
-            # write to index.md file
+            # -> write to index.md file
             with open(f"{dest_contrib_dir}/index.md", "w") as f:
                 f.write("\n".join(lines))
-            # add contrib link to contrib/index.rst
+            # -> add contrib link to contrib/index.rst
             with open(Path(dest_path).parent / "_index.rst", "r") as f:
                 index_template = f.read()
             with open(Path(dest_path).parent / "index.rst", "w") as f:
@@ -197,4 +226,5 @@ myst_enable_extensions = [
 # -- Cutomised variables ------------------------------------------------------
 rst_epilog = """
 .. _repository: https://github.com/inlab-geo/espresso
+.. _slack: https://inlab-geo.slack.com
 """
