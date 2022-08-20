@@ -5,7 +5,6 @@
 2. The following files exist:
     - README.md
     - LICENCE
-    - metadata.yml
     - __init__.py
 
 3. There is an `__all__` variable in __init__.py with one class name exposed
@@ -73,8 +72,11 @@ def pre_build():
             raise ValueError("Please either pass `pre` or `post` as the only argument")
     return pre_post == "pre"
 
-def _array_like(obj):
-    return np.ndim(obj) != 0
+def _flat_array_like(obj):
+    return np.ndim(obj) == 1
+
+def _2d_array_like(obj):
+    return np.ndim(obj) == 2
 
 def test_contrib(contrib, pre_build):
     contrib_name, contrib_sub_folder = contrib
@@ -87,7 +89,7 @@ def test_contrib(contrib, pre_build):
     assert f"{contrib_name}.py" in names
 
     # 2 - files exist: README.md, LICENCE, metadata.yml, __init__.py
-    required_files = ["README.md", "LICENCE", "metadata.yml", "__init__.py"]
+    required_files = ["README.md", "LICENCE", "__init__.py"]
     for file in required_files:
         assert file in names, \
             f"{file} is required but you don't have it in {contrib_sub_folder}"
@@ -101,53 +103,80 @@ def test_contrib(contrib, pre_build):
         contrib_mod = importlib.import_module(MODULE_NAME)
     assert contrib_name_class in contrib_mod.__all__
     
-    # 4 - metadata.yml can be parsed and has necessary keys
-    with open(f"{contrib_sub_folder}/metadata.yml", "r") as stream:
-        meta_data = yaml.safe_load(stream)
-    for k in ["name", "short_description", "authors", "examples"]:
-        assert k in meta_data
-    n_examples = len(meta_data["examples"])
-    for example in meta_data["examples"]:
-        assert "description" in example
-        assert "model_dimension" in example
-        assert "data_dimension" in example
-    if "citation" in meta_data:
-        assert "doi" in meta_data["citation"]
-    if "contacts" in meta_data:
-        for contact in meta_data["contacts"]:
-            assert "name" in contact
-            assert "email" in contact
-    if "extra_websites" in meta_data:
-        for website in meta_data["extra_websites"]:
-            assert "name" in website
-            assert "link" in website
+    # 4 - Check metadata is present within module
+    assert type(contrib_mod.problem_title) is str and len(contrib_mod.problem_title)>0
+    assert type(contrib_mod.problem_short_description) is str # Allow empty field
+    assert type(contrib_mod.author_names) is list
+    assert len(contrib_mod.author_names)>0
+    for author in contrib_mod.author_names: assert type(author) is str and len(author)>0
+    assert type(contrib_mod.contact_name) is str and len(contrib_mod.contact_name)>0
+    assert type(contrib_mod.contact_email) is str and "@" in contrib_mod.contact_email
+    assert type(contrib_mod.citations) is list
+    for citation in contrib_mod.citations: 
+        assert type(citation) is tuple and len(citation)==2
+        for field in citation: assert type(field) is str
+    assert type(contrib_mod.linked_sites) is list
+    for site in contrib_mod.linked_sites:
+        assert type(site) is tuple and len(site)==2
+        for field in site: assert type(field) is str
 
-    for i in range(n_examples):
+    # We don't know how many examples there. We start at 1 and work up until it breaks.
+    i = 0
+    while True:
+        i+=1 # Example numbering starts at 1
+        if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
         # 5 - functions are defined: set_example_number, suggested_model, data, forward
         contrib_class = getattr(contrib_mod, contrib_name_class)
-        contrib_instance = contrib_class(i)
-        _model = contrib_instance.suggested_model()
-        _data = contrib_instance.data()
+        try:
+            contrib_instance = contrib_class(i)
+        except ValueError:
+            # Assume that we've found all the examples
+            n_examples = i-1
+            assert n_examples > 0
+            break
+        _nmodel = contrib_instance.model_size
+        _ndata = contrib_instance.data_size
+        _model = contrib_instance.good_model
+        _null_model = contrib_instance.starting_model
+        _data = contrib_instance.data
+        _cov = contrib_instance.covariance_matrix
         _synthetics = contrib_instance.forward(_model)
-        assert _array_like(_model)
-        assert _array_like(_data)
-        assert _array_like(_synthetics)
+        assert _flat_array_like(_model) and np.shape(_model) == (_nmodel,)
+        assert _flat_array_like(_null_model) and np.shape(_null_model) == (_nmodel,)
+        assert _flat_array_like(_data) and np.shape(_data) ==  (_ndata,)
+        assert _2d_array_like(_cov) and np.shape(_cov) == (_ndata, _ndata)
+        assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,)
 
         # 6 - optional functions have correct signatures
-        try: _synthetics, _jacobian = contrib_instance.forward(_model, with_jacobian=True)
+        try: _description = contrib_instance.description
         except NotImplementedError: pass
+        else: assert type(_description) is str
+        try: _inv_cov = contrib_instance.inverse_covariance_matrix
+        except NotImplementedError: pass
+        else: assert _2d_array_like(_inv_cov) and np.shape(_inv_cov) == (_ndata, _ndata) and np.allclose(np.dot(_cov, _inv_cov), np.eye(_ndata))
+        try: _synthetics, _jacobian = contrib_instance.forward(_model, with_jacobian=True)
+        except NotImplementedError: pass # Note that we've already tested the case `with_jacobian=False`
         else:
-            assert _array_like(_synthetics)
-            assert _array_like(_jacobian)
+            assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,)
+            assert _2d_array_like(_jacobian) and np.shape(_jacobian) == (_ndata, _nmodel)
         try: _jacobian = contrib_instance.jacobian(_model)
         except NotImplementedError: pass
-        else: assert _array_like(_jacobian)
+        else: assert _2d_array_like(_jacobian) and np.shape(_jacobian) == (_ndata, _nmodel)
         try: _fig_model = contrib_instance.plot_model(_model)
         except NotImplementedError: pass
         else: assert isinstance(_fig_model, Figure)
         try: _fig_data = contrib_instance.plot_data(_data)
         except NotImplementedError: pass
         else: assert isinstance(_fig_data, Figure)
+        try: _misfit = contrib_instance.misfit(_data,_data)
+        except NotImplementedError: pass 
+        else: assert type(_misfit) is float and _misfit==0.
+        try: _log_likelihood = contrib_instance.log_likelihood(_data,_data)
+        except NotImplementedError: pass
+        else: assert type(_log_likelihood) is float
+        try: _log_prior = contrib_instance.log_prior(_model)
+        except NotImplementedError: pass
+        else: assert type(_log_prior) is float
 
     # 7 - LICENCE file not empty
     assert os.stat(f"{contrib_sub_folder}/LICENCE").st_size != 0, \

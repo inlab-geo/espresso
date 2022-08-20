@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABCMeta
+from ast import Not
 
 
 class EspressoProblem(metaclass=ABCMeta):
@@ -11,6 +12,16 @@ class EspressoProblem(metaclass=ABCMeta):
         self.example_number = example_number
         self.params = dict()
     
+    @property
+    def description(self):
+        """
+        Returns (desc,) with
+        
+        desc - str -- A string containing a brief (1-3 sentence) 
+            description of the example.
+        """
+        raise NotImplementedError
+
     @property
     @abstractmethod
     def model_size(self):
@@ -31,16 +42,19 @@ class EspressoProblem(metaclass=ABCMeta):
         N - integer -- The number of data points (i.e. the
             dimension of a data vector).
         """
+        raise NotImplementedError
 
     @property
     @abstractmethod
-    def suggested_model(self):
+    def good_model(self):
         """
         Returns (m,) with
         
         m - np.array, shape(model_size) -- A model vector that the 
             contributor regards as being a 'correct' or 'sensible' 
-            explanation of the dataset.
+            explanation of the dataset. (In some problems it may 
+            be the case that there are many 'equally good' models.
+            The contributor should select just one of these.)
         """
         raise NotImplementedError
 
@@ -66,7 +80,29 @@ class EspressoProblem(metaclass=ABCMeta):
             format as output by forward().
         """
         raise NotImplementedError
-    
+
+    @property
+    @abstractmethod
+    def covariance_matrix(self):
+        """
+        Returns (C,) with
+
+        C - np.array, shape(data_size, data_size) -- The covariance
+            matrix describing any uncertainty and correlations in the
+            data vector.
+        """
+        raise NotImplementedError
+
+    @property
+    def inverse_covariance_matrix(self):
+        """
+        Returns (iC,) with
+        
+        iC - np.array, shape(data_size, data_size) -- The inverse
+             data covariance matrix.
+        """
+        raise NotImplementedError
+
     @abstractmethod
     def forward(self, model, with_jacobian=False):
         """
@@ -123,7 +159,45 @@ class EspressoProblem(metaclass=ABCMeta):
         to a second dataset.
         """
         raise NotImplementedError
+
+    def misfit(self, data, pred):
+        """
+        data - np.array, shape(data_size)
+        pred - np.array, shape(data_size)
+
+        Returns (phi,) with
+
+        phi - float -- A measure of the extent to which a predicted data
+            vector, `pred`, agrees with observed data, `data`. Smaller 
+            numbers imply better agreement; 0 -> perfect match.
+        """
+        raise NotImplementedError
     
+    def log_likelihood(self, data, pred):
+        """
+        data - np.array, shape(data_size)
+        pred - np.array, shape(data_size)
+        
+        Returns (p,) with
+
+        p - float -- The log likelihood that `data` is an imperfect 
+            observation of a system generating data `pred`.
+
+        """
+        raise NotImplementedError
+
+    def log_prior(self, model):
+        """
+        model - np.array, shape(model_size)
+
+        Returns (p,) with
+
+        p - float -- The log probability that a system is described by
+            `model` prior to seeing any data.
+        """
+        raise NotImplementedError
+        
+
     def __getattr__(self, key):
         if key in self.params:
             return self.params[key]
