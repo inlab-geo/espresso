@@ -33,10 +33,6 @@ To complete this contribution, here are some ideas on what to do next:
    - What this test problem is about
    - What you would recommend inversion practitioners to notice
    - etc.
-- [ ] **Modify [metadata.yml](metadata.yml)**. As the name suggests, this file contains basic
-   information about the problem itself, authors, citations, example information and
-   other extra information you'd like to include. It's a yaml file so that we can 
-   render some of the information in a more structured manner.
 - [ ] **Modify [LICENCE](LICENCE)**. The default one we've used is a 2-clauss BSD licence. 
    Feel free to replace the content with a licence that suits you best.
 - [ ] **Write code in [example_name.py](example_name.py) (and [__init__.py](__init__.py) if
