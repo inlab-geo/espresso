@@ -10,7 +10,6 @@ from shutil import copyfile
 from pathlib import Path
 
 
-from click import UsageError
 
 def getListOfFiles(dirName):
     # create a list of file and sub directories 
