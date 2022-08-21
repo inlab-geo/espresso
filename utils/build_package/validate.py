@@ -9,13 +9,13 @@
 
 3. There is an `__all__` variable in __init__.py with one class name exposed
 
-4. The metadata.yml file can be parsed and has the following keys:
-    - name
-    - short_description
-    - authors
-    - examples -> description, model_dimension, data_dimension
+4. The contribution provides access to the correct metadata, including:
+    - problem_title
+    - problem_short_description
+    - author_names
+    - contact_name
+    - contact_email
     - [optional] citations -> doi
-    - [optional] contacts -> name, email, website
     - [optional] extra_websites -> name, link 
 
 5. Required methods are implemented and can run in each example
