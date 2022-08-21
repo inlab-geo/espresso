@@ -1,6 +1,4 @@
 from abc import abstractmethod, ABCMeta
-from ast import Not
-
 
 class EspressoProblem(metaclass=ABCMeta):
     """Base class for all Espresso problems
