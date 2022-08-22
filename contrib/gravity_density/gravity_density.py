@@ -12,22 +12,22 @@ import matplotlib.pyplot as plt
 
 from cofi_espresso import EspressoProblem
 
-problem_title = "Gravity calculation from a density model"
-problem_short_description = "This example implements a simple gravity" \
-                            "forward problem. The model represents density within" \
-                            "the earth on a 3D Cartesian grid." 
-
-author_names = ["Hannes Hollmann"]
-
-contact_name = "Hannes Hollmann"
-contact_email = "hannes.hollmann@anu.edu.au"
-
-citations = []
-linked_sites = []
 
 class GravityDensity(EspressoProblem):
     """Forward simulation class
     """
+    problem_title = "Gravity calculation from a density model"
+    problem_short_description = "This example implements a simple gravity" \
+                                "forward problem. The model represents density within" \
+                                "the earth on a 3D Cartesian grid." 
+
+    author_names = ["Hannes Hollmann"]
+
+    contact_name = "Hannes Hollmann"
+    contact_email = "hannes.hollmann@anu.edu.au"
+
+    citations = []
+    linked_sites = []
 
     def __init__(self, example_number=1):
         super().__init__(example_number)

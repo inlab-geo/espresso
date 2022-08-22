@@ -1,5 +1,42 @@
 from abc import abstractmethod, ABCMeta
 
+
+def abstract_class_attributes(*names):
+    """Class decorator to add one or more abstract attribute.
+    ref: https://stackoverflow.com/questions/45248243/most-pythonic-way-to-declare-an-abstract-class-property
+    """
+
+    def _func(cls, *names):
+        """ Function that extends the __init_subclass__ method of a class."""
+        for name in names:
+            setattr(cls, name, NotImplemented)
+        orig_init_subclass = cls.__init_subclass__
+
+        def new_init_subclass(cls, **kwargs):
+            try:
+                orig_init_subclass(cls, **kwargs)
+            except TypeError:
+                orig_init_subclass(**kwargs)
+            for name in names:
+                if getattr(cls, name, NotImplemented) is NotImplemented:
+                    raise NotImplementedError(
+                        f"{name} is required as a class attribute but you haven't defined it"
+                    )
+        cls.__init_subclass__ = classmethod(new_init_subclass)
+        return cls
+
+    return lambda cls: _func(cls, *names)
+
+
+@abstract_class_attributes(
+    "problem_title",
+    "problem_short_description",
+    "author_names",
+    "contact_name",
+    "contact_email",
+    "citations",
+    "linked_sites",
+)
 class EspressoProblem(metaclass=ABCMeta):
     """Base class for all Espresso problems
 
@@ -9,7 +46,7 @@ class EspressoProblem(metaclass=ABCMeta):
     def __init__(self, example_number=1):
         self.example_number = example_number
         self.params = dict()
-    
+
     @property
     def description(self):
         """

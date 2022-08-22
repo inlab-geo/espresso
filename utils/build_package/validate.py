@@ -15,8 +15,8 @@
     - author_names
     - contact_name
     - contact_email
-    - [optional] citations -> doi
-    - [optional] extra_websites -> name, link 
+    - [optional] citations -> []
+    - [optional] linked_sites -> [(name, link)]
 
 5. Required methods are implemented and can run in each example
     - __init__(self, example_number) -> None
@@ -45,11 +45,12 @@ from pathlib import Path
 import pytest
 import numpy as np
 from matplotlib.figure import Figure
-import yaml
+import subprocess
 
 
-MODULE_NAME = "cofi_espresso"
-CONTRIB_FOLDER = str(Path(__file__).parent.parent.parent / "contrib")
+PKG_NAME = "cofi_espresso"
+ROOT = str(Path(__file__).resolve().parent.parent.parent)
+CONTRIB_FOLDER = ROOT + "/contrib"
 
 def get_folder_content(folder_name):
     names = [name for name in os.listdir(folder_name)]
@@ -63,14 +64,17 @@ def all_contribs():
 def contrib(request):
     return request.param
 
-@pytest.fixture
-def pre_build():
+def _pre_build():
     pre_post = "pre"
     if len(sys.argv) > 1:
         pre_post = sys.argv[-1]
         if pre_post not in ["pre", "post"]:
             raise ValueError("Please either pass `pre` or `post` as the only argument")
     return pre_post == "pre"
+
+@pytest.fixture
+def pre_build():
+    return _pre_build()
 
 def _flat_array_like(obj):
     return np.ndim(obj) == 1
@@ -97,26 +101,27 @@ def test_contrib(contrib, pre_build):
     # 3 - __all__ includes standard functions exposed to users
     if pre_build:
         sys.path.insert(1, CONTRIB_FOLDER)
-        contrib_mod = __import__(contrib_name)
+        parent_mod = __import__(contrib_name)
     else:
         importlib = __import__('importlib')
-        contrib_mod = importlib.import_module(MODULE_NAME)
-    assert contrib_name_class in contrib_mod.__all__
+        parent_mod = importlib.import_module(PKG_NAME)
+    assert contrib_name_class in parent_mod.__all__
+    contrib_class = getattr(parent_mod, contrib_name_class)
     
-    # 4 - Check metadata is present within module
-    assert type(contrib_mod.problem_title) is str and len(contrib_mod.problem_title)>0
-    assert type(contrib_mod.problem_short_description) is str # Allow empty field
-    assert type(contrib_mod.author_names) is list
-    assert len(contrib_mod.author_names)>0
-    for author in contrib_mod.author_names: assert type(author) is str and len(author)>0
-    assert type(contrib_mod.contact_name) is str and len(contrib_mod.contact_name)>0
-    assert type(contrib_mod.contact_email) is str and "@" in contrib_mod.contact_email
-    assert type(contrib_mod.citations) is list
-    for citation in contrib_mod.citations: 
+    # 4 - Check metadata is present within class
+    assert type(contrib_class.problem_title) is str and len(contrib_class.problem_title)>0
+    assert type(contrib_class.problem_short_description) is str # Allow empty field
+    assert type(contrib_class.author_names) is list
+    assert len(contrib_class.author_names)>0
+    for author in contrib_class.author_names: assert type(author) is str and len(author)>0
+    assert type(contrib_class.contact_name) is str and len(contrib_class.contact_name)>0
+    assert type(contrib_class.contact_email) is str and "@" in contrib_class.contact_email
+    assert type(contrib_class.citations) is list
+    for citation in contrib_class.citations: 
         assert type(citation) is tuple and len(citation)==2
         for field in citation: assert type(field) is str
-    assert type(contrib_mod.linked_sites) is list
-    for site in contrib_mod.linked_sites:
+    assert type(contrib_class.linked_sites) is list
+    for site in contrib_class.linked_sites:
         assert type(site) is tuple and len(site)==2
         for field in site: assert type(field) is str
 
@@ -126,7 +131,6 @@ def test_contrib(contrib, pre_build):
         i+=1 # Example numbering starts at 1
         if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
         # 5 - functions are defined: set_example_number, suggested_model, data, forward
-        contrib_class = getattr(contrib_mod, contrib_name_class)
         try:
             contrib_instance = contrib_class(i)
         except ValueError:
@@ -186,6 +190,9 @@ def test_contrib(contrib, pre_build):
 
 
 def main():
+    if (_pre_build()):
+        subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
+        subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
     sys.exit(pytest.main([Path(__file__)]))
 
 if __name__ == "__main__":
