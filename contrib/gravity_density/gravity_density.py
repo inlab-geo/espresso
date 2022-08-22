@@ -16,8 +16,20 @@ from cofi_espresso import EspressoProblem
 class GravityDensity(EspressoProblem):
     """Forward simulation class
     """
+    problem_title = "Gravity calculation from a density model"
+    problem_short_description = "This example implements a simple gravity" \
+                                "forward problem. The model represents density within" \
+                                "the earth on a 3D Cartesian grid." 
 
-    def __init__(self, example_number=0):
+    author_names = ["Hannes Hollmann"]
+
+    contact_name = "Hannes Hollmann"
+    contact_email = "hannes.hollmann@anu.edu.au"
+
+    citations = []
+    linked_sites = []
+
+    def __init__(self, example_number=1):
         super().__init__(example_number)
 
         """you might want to set other useful example specific parameters here
@@ -48,9 +60,23 @@ class GravityDensity(EspressoProblem):
                 "for problem-specific metadata, e.g. number of examples provided"
             )
 
-    def suggested_model(self):
+    @property
+    def model_size(self):
+        return self.lmx*self.lmy*self.lmz
+
+    @property
+    def data_size(self):
+        return len(self.rec_coords)
+
+    @property
+    def starting_model(self):
+        return np.zeros_like(self.m)
+
+    @property
+    def good_model(self):
         return self.m
     
+    @property
     def data(self):
         m = self.m
         x_nodes = self.x_nodes
@@ -60,6 +86,11 @@ class GravityDensity(EspressoProblem):
         gz_rec = _calculate_gravity(m, x_nodes, y_nodes, z_nodes, rec_coords)
         datan=gz_rec+np.random.normal(0,0.005*np.max(np.abs(gz_rec)),len(gz_rec))
         return datan
+
+    @property
+    def covariance_matrix(self):
+        print("This needs fixing")
+        return np.zeros([self.data_size,self.data_size])
 
     def forward(self, model, with_jacobian=False):
         x_nodes = self.x_nodes

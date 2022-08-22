@@ -10,6 +10,7 @@ from shutil import copyfile
 from pathlib import Path
 
 
+
 def getListOfFiles(dirName):
     # create a list of file and sub directories 
     # names in the given directory 
@@ -37,6 +38,8 @@ def main():
     print("🥰 Thanks for contributing! \nWe are generating new contribution component from template...\n")
 
     # validate example name
+    if len(sys.argv)!=2:
+        raise RuntimeError("No example name detected.\n\nUsage: python create_new_contrib.py EXAMPLE_NAME\n\n")
     example_name = sys.argv[-1]
     existing_examples = glob(CONTRIB_FOLDER+"/*/")
     existing_examples = [e for e in existing_examples]
