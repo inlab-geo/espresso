@@ -117,7 +117,6 @@ class EspressoProblem(metaclass=ABCMeta):
         raise NotImplementedError
 
     @property
-    @abstractmethod
     def covariance_matrix(self):
         """
         Returns (C,) with
