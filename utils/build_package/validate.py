@@ -186,7 +186,7 @@ def test_contrib(contrib, pre_build):
 
 
 def main():
-    return pytest.main([Path(__file__)])
+    sys.exit(pytest.main([Path(__file__)]))
 
 if __name__ == "__main__":
     main()
