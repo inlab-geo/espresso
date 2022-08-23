@@ -13,6 +13,10 @@ _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/gravity_density/metada
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/gravity_density/data/__init__.py
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/gravity_density/data/gravmodel1.txt
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/gravity_density/data/testdata.txt
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/simple_regression/LICENCE
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/simple_regression/README.md
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/simple_regression/__init__.py
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/simple_regression/simple_regression.py
 src/cofi_espresso/__init__.py
 src/cofi_espresso/_version.py
 src/cofi_espresso/espresso_problem.py
