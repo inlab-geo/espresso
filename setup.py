@@ -71,6 +71,7 @@ INSTALL_REQUIRES = [
     "numpy>=1.18",
     "scipy>=1.0.0",
     "matplotlib>=3.1",
+    "tqdm>=4.0",
     # "pooch>=1.6.0",   # TODO
 ]
 EXTRAS_REQUIRE = {
