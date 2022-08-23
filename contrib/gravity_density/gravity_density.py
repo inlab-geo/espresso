@@ -11,6 +11,7 @@ from scipy.constants import G
 import matplotlib.pyplot as plt
 
 from cofi_espresso import EspressoProblem
+from cofi_espresso.utils import loadtxt
 
 
 class GravityDensity(EspressoProblem):
@@ -379,10 +380,11 @@ def _calculate_gravity(model, x_nodes, y_nodes, z_nodes, rec_coords, with_jacobi
             return gz_rec
 
 def _setup(num):
-    tmp = pkgutil.get_data(__name__, "data/gravmodel1.txt")
-    tmp2 = tmp.decode("utf-8")
-    m = np.loadtxt(StringIO(tmp2))
-    del tmp, tmp2
+    # tmp = pkgutil.get_data(__name__, "data/gravmodel1.txt")
+    # tmp2 = tmp.decode("utf-8")
+    # m = np.loadtxt(StringIO(tmp2))
+    m = loadtxt("data/gravmodel1.txt")
+    # del tmp, tmp2
 
     if num == 0:
         lmx = 12

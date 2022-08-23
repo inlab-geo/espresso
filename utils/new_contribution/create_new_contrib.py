@@ -10,7 +10,6 @@ from shutil import copyfile
 from pathlib import Path
 
 
-
 def getListOfFiles(dirName):
     # create a list of file and sub directories 
     # names in the given directory 
@@ -45,7 +44,14 @@ def main():
     existing_examples = [e for e in existing_examples]
     existing_examples = [e.split("/")[1] for e in existing_examples]
     if example_name in existing_examples:
-        raise ValueError("The example name provided already exists, please choose another name")
+        raise ValueError(
+            "The example name provided already exists, please choose another name"
+        )
+    elif example_name in ["utils"]:
+        raise ValueError(
+            "This sub-folder name is occupied in Espresso core library, "
+            "please choose another name"
+        )
 
     # convert example name to other formats
     example_name_capitalised = example_name.title().replace("_", " ").replace("-", " ")
