@@ -25,20 +25,24 @@ structure for each problem. For instance:
     from cofi_espresso import GravityDensity
 
     grav = GravityDensity(example_number=1)
-    grav_model = grav.suggested_model()
+    grav_model = grav.good_model()
     grav_data = grav.data()
     grav_synthetics = grav.forward(grav_model)
-    grav_jacobian = grav.jacobian(grav_model)
-    grav.plot_model(grav_model)
-    grav.plot_data(grav_data)
+    fig_model = grav.plot_model(grav_model)
+    fig_data = grav.plot_data(grav_data)
+
+You can access related metadata programatically:
+
+.. code-block:: python
+    print(GravityDensity.problem_title)
+    print(GravityDensity.problem_short_description)
+    print(GravityDensity.author_names)
 
 
 Other problem-specific parameters can be accessed through the problem instance. For instance:
 
 .. code-block:: python
 
-    print(grav.params.keys())
-    # dict_keys(['m', 'rec_coords', 'x_nodes', 'y_nodes', 'z_nodes', 'lmx', 'lmy', 'lmz', 'lrx', 'lry'])
     print(grav.m)
     print(grav.rec_coords)
 

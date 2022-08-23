@@ -81,5 +81,7 @@ Modify EspressoProblem class
    Examine reported error (if any) to locate whether to change scripts themselves, or to
    edit the template files under :code:`utils/new_contribution/_template`.
 
+5. Check if you need to change :code:`README.md` file for the repository.
 
-
+6. Check if you need to update contents in `introduction page <../user_guide/introduction.html>`_.
+   If yes, modify file :code:`docs/source/user_guide/introduction.rst`.

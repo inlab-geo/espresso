@@ -69,30 +69,35 @@ structure for each problem. For instance:
 from cofi_espresso import GravityDensity
 
 grav = GravityDensity(example_number=1)
-grav_model = grav.suggested_model()
+grav_model = grav.good_model()
 grav_data = grav.data()
 grav_synthetics = grav.forward(grav_model)
-grav_jacobian = grav.jacobian(grav_model)
-grav.plot_model(grav_model)
-grav.plot_data(grav_data)
+fig_model = grav.plot_model(grav_model)
+fig_data = grav.plot_data(grav_data)
+```
+
+You can access related metadata programatically:
+
+```python
+print(GravityDensity.problem_title)
+print(GravityDensity.problem_short_description)
+print(GravityDensity.author_names)
 ```
 
 Other problem-specific parameters can be accessed through the problem instance. For instance:
 
 ```python
-print(grav.params.keys())
-# dict_keys(['m', 'rec_coords', 'x_nodes', 'y_nodes', 'z_nodes', 'lmx', 'lmy', 'lmz', 'lrx', 'lry'])
 print(grav.m)
 print(grav.rec_coords)
 ```
 
-Which additional values are set is highly example-specific and we suggest to 
+Which additional values are set is highly probl-specific and we suggest to 
 consult the [Espresso Documentation](https://cofi-espresso.readthedocs.io).
 
 
 ## Contributing
 
-Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contribute.html).
+Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
 
 
 ## Licence
