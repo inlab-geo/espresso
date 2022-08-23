@@ -18,11 +18,14 @@
     - [optional] citations -> []
     - [optional] linked_sites -> [(name, link)]
 
-5. Required methods are implemented and can run in each example
+5. Required methods/properties are implemented and can run in each example
     - __init__(self, example_number) -> None
-    - suggested_model(self) -> numpy.ndarray | pandas.Series | list
-    - data(self) -> numpy.ndarray | pandas.Series | list
-    - forward(self, model, with_jacobian=False) -> numpy.ndarray | pandas.Series | list
+    - model_size
+    - data_size
+    - good_model: flat array like
+    - starting_model: flat array like
+    - data: flat array like
+    - forward(self, model, with_jacobian=False) -> flat array like
     * Check array like datatypes with `np.ndim(m) != 0`
 
 6. Optional functions, if implemented, have the correct signatures
@@ -130,7 +133,8 @@ def test_contrib(contrib, pre_build):
     while True:
         i+=1 # Example numbering starts at 1
         if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
-        # 5 - functions are defined: set_example_number, suggested_model, data, forward
+        # 5 - functions/properties are defined:
+        #    model_size, data_size, good_model, starting_model, data, forward
         try:
             contrib_instance = contrib_class(i)
         except ValueError:
@@ -143,21 +147,28 @@ def test_contrib(contrib, pre_build):
         _model = contrib_instance.good_model
         _null_model = contrib_instance.starting_model
         _data = contrib_instance.data
-        _cov = contrib_instance.covariance_matrix
+        # _cov = contrib_instance.covariance_matrix
         _synthetics = contrib_instance.forward(_model)
         assert _flat_array_like(_model) and np.shape(_model) == (_nmodel,)
         assert _flat_array_like(_null_model) and np.shape(_null_model) == (_nmodel,)
         assert _flat_array_like(_data) and np.shape(_data) ==  (_ndata,)
-        assert _2d_array_like(_cov) and np.shape(_cov) == (_ndata, _ndata)
+        # assert _2d_array_like(_cov) and np.shape(_cov) == (_ndata, _ndata)
         assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,)
 
-        # 6 - optional functions have correct signatures
+        # 6 - optional functions have correct signatures:
+        #    description, covariance_matrix, inverse_covariance_matrix
         try: _description = contrib_instance.description
         except NotImplementedError: pass
         else: assert type(_description) is str
+        _cov = None
+        _inv_cov = None
+        try: _cov = contrib_instance.covariance_matrix
+        except NotImplementedError: pass
+        else: assert _2d_array_like(_cov) and np.shape(_cov) == (_ndata, _ndata)
         try: _inv_cov = contrib_instance.inverse_covariance_matrix
         except NotImplementedError: pass
-        else: assert _2d_array_like(_inv_cov) and np.shape(_inv_cov) == (_ndata, _ndata) and np.allclose(np.dot(_cov, _inv_cov), np.eye(_ndata))
+        else: assert _2d_array_like(_inv_cov) and np.shape(_inv_cov) == (_ndata, _ndata)
+        if _cov is not None and _inv_cov is not None: np.allclose(np.dot(_cov, _inv_cov), np.eye(_ndata))
         try: _synthetics, _jacobian = contrib_instance.forward(_model, with_jacobian=True)
         except NotImplementedError: pass # Note that we've already tested the case `with_jacobian=False`
         else:
