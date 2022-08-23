@@ -1,17 +1,38 @@
 # How-to Guides
 
-## Fork and clone this repository
+This is a minimal guide on using the scripts in this folder.
 
-## Create a new contribution
+For more details about contributing to Espresso, check 
+[this documentation page](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
 
-## Commit and push your changes
+## Generate new Espresso problem
 
-## Validate a new contribution
+```console
+python new_contribution/create_new_contrb.py <example_name>
+```
 
-## Building the updated package locally
+## Validate a new Espresso contribution (pre building)
 
-## Validate built package
+```console
+python build_package/validate.py
+```
 
-## Build the updated package with pre-/post- validations
+## Build Espresso with all contributions
 
-## Create a pull request
+```console
+python build_package/build.py
+```
+
+## Validate a new Espresso contribution (post building)
+
+```console
+python build_package/validate.py post
+```
+
+## Build Espresso with pre/post validation
+
+(combination of the three operations above)
+
+```console
+python build_package/build_with_checks.py
+```

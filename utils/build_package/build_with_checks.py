@@ -4,8 +4,8 @@ from pathlib import Path
 from pytest import ExitCode
 
 def main():
-    validate_script = str(Path(__file__).parent / "validate.py")
-    build_script = str(Path(__file__).parent / "build.py")
+    validate_script = str(Path(__file__).resolve().parent / "validate.py")
+    build_script = str(Path(__file__).resolve().parent / "build.py")
 
     # pre-build validate
     exit_code = subprocess.call([sys.executable, validate_script, "pre"])

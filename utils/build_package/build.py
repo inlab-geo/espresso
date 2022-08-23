@@ -18,7 +18,7 @@ from pathlib import Path
 
 
 PKG_NAME = "cofi_espresso"
-current_directory = Path(__file__).parent
+current_directory = Path(__file__).resolve().parent
 root = current_directory.parent.parent
 ROOT_DIR = str(root)
 BUILD_DIR = str(root / "_esp_build")
