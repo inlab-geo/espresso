@@ -18,7 +18,7 @@ contribute your forward code! You do not need to know all the details to get sta
 Here we explain step by step how to contribute your code to Espresso. If this page
 does not answer all of your questions, don't hesitate to contact us via
 `GitHub issues <https://github.com/inlab-geo/espresso/issues/new/choose>`_
-or `Slack <https://inlab-geo.slack.com>`_.
+or `Slack`_.
 
 
 Setting it up right
