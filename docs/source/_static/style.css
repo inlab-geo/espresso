@@ -84,3 +84,16 @@ div.sphx-glr-download {
     height: 0px;
     visibility: hidden;
 }
+
+/* TOC .. contents:: */
+#developer-notes section div.contents {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+}
+#developer-notes section div.contents ul {
+    list-style-type: square;
+}
+#developer-notes div.contents > ul > li > p > a {
+    font-size: 1em;
+}
