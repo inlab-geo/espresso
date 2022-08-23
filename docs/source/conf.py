@@ -133,5 +133,5 @@ myst_enable_extensions = [
 # -- Cutomised variables ------------------------------------------------------
 rst_epilog = """
 .. _repository: https://github.com/inlab-geo/espresso
-.. _slack: https://inlab-geo.slack.com
+.. _Slack: https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg
 """

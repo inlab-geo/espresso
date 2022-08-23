@@ -12,7 +12,7 @@ If you'd like to contribute with a new forward problem, welcome 🥰! Please hea
 If you'd like to raise an issue or feedback, please search before lodging an issue at
 our Github `repository`_. 
 
-We also welcome you to join our inlab-community `slack`_.
+We also welcome you to join our inlab-community `Slack`_.
 
 .. rubric:: Developing Espresso
 

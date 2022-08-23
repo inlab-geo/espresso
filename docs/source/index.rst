@@ -64,7 +64,7 @@ This project is led by `InLab <http://www.inlab.edu.au/>`_.
 
     💬 Join our Slack workspace
 
-    .. link-button:: https://inlab-geo.slack.com
+    .. link-button:: https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg
         :type: url
         :text: Join the conversation
         :classes: btn-outline-primary btn-block stretched-link

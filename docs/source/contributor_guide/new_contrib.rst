@@ -13,7 +13,7 @@ There are generally three steps involved in submiting your code:
 - **Upload** - :ref:`submit your changes to our main repository <submit_changes>`
 
 In the following paragraphs, we are going to show you how to complete each of the steps
-above. Again, feel free to `contact us <faq.html>`_ when in doubt.
+above. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
 
 
 .. _get_own_copy:
@@ -21,20 +21,20 @@ above. Again, feel free to `contact us <faq.html>`_ when in doubt.
 Get your own copy of Espresso
 -----------------------------
 
-1. Open your browser and go to the Espresso `repository`_.
-2. Ensure you have a GitHub account and it's signed in. If not, click the "Sign Up"
+#. Open your browser and go to the Espresso `repository`_.
+#. Ensure you have a GitHub account and it's signed in. If not, click the "Sign Up"
    button on the top right and fill in the necessary information to sign up an account.
-3. Now click the "Fork" button on the top right.
+#. Now click the "Fork" button on the top right.
 
    .. figure:: ../_static/contrib_fork.png
     :align: center
 
-4. Leave everything by default and click the green "Create fork" button.
+#. Leave everything by default and click the green "Create fork" button.
 
    .. figure:: ../_static/contrib_fork2.png
     :align: center
 
-5. Now you will be redirected to your own "fork" of the Espresso repository.
+#. Now you will be redirected to your own "fork" of the Espresso repository.
 
    This fork is your own version of Espresso, and you can make changes however you 
    want. We will later demonstrate that after you make your own changes, you are
@@ -43,13 +43,13 @@ Get your own copy of Espresso
    .. figure:: ../_static/contrib_fork3.png
     :align: center
 
-6. We will clone your fork into your local machine. Click the green "Code" button first, 
+#. We will clone your fork into your local machine. Click the green "Code" button first, 
    and then copy the content under the "HTTPS" tab.
 
    .. figure:: ../_static/contrib_fork4.png
     :align: center
 
-7. Clone your fork to somewhere in your computer.
+#. Clone your fork to somewhere in your computer.
 
    - For **MacOS** and **Linux** users, open your "Terminal" app, change your working 
      directory into somehwere you'd like to place the Espresso code, then run the 
@@ -79,7 +79,7 @@ Get your own copy of Espresso
         `Generating a new SSH key and adding it to the ssh-agent <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`_
         for how to set up SSH keys with GitHub.
 
-8. Open :code:`<path-to-espresso>/espresso` folder with your favourite code editor. 
+#. Open :code:`<path-to-espresso>/espresso` folder with your favourite code editor. 
    You will see a copy of Espresso in front of you, cheers ☕️! 
 
 
@@ -148,4 +148,33 @@ Add your own Espresso problem
 Submit your changes
 -------------------
 
+#. It's helpful to "commit" your changes when you have any progress. Feel free to make 
+   commits as often as necesary.
+   
+   - Use :code:`git add <file-name-1> <file-name-2>` to choose which files you'd like to 
+     include in the following "commit".
+   - Use :code:`git commit -m "progress in xxx"` to commit your changes.
+   - Use :code:`git push origin <branch-name>` to push your changes onto your GitHub fork,
+     where :code:`<branch-name>` is :code:`main` by default.
 
+   .. seealso::
+
+    Check `this cheatsheet <https://education.github.com/git-cheat-sheet-education.pdf>`_
+    for a good reference of using Git.
+
+#. After you've commited code changes and pushed your commits up to your fork, open your 
+   fork on GitHub :code:`https://github.com/<your-gh-account>/espresso` in a browser.
+
+#. Find the word "Contribute" on top of the page, click it and choose the green "Open 
+   pull request" button. Follow the prompts and fill in necessary message you'd like us
+   to know.
+
+   ..    TODO insert a screenshot here
+
+#. Once your pull request is submitted, some automatic checks will be triggered. Rest 
+   assured - we will review your contribution, comment if necessary, and proceed to merge
+   your contribution into our main repository when everything's ready.
+
+   ..    TODO insert a screenshot here
+
+#. Thanks again, for your contribution to open source 🌟 
