@@ -1,5 +1,6 @@
 import numpy as np
 from cofi_espresso import EspressoProblem
+from cofi_espresso.utils import loadtxt, absolute_path
 from PIL import Image
 import matplotlib.pyplot as plt
 import tqdm
@@ -195,7 +196,7 @@ def tracer(model,paths,extent=(0,1,0,1)):
     return attns,A
 
 def load_data(filename):
-    data = np.loadtxt(filename,skiprows=1)
+    data = loadtxt(filename,skiprows=1)
     ndata = data.shape[0]
     paths = np.zeros((ndata,4))
     attns = np.zeros(ndata)
@@ -259,7 +260,7 @@ def generateSurfacePoints(nPerSide,extent=(0,1,0,1),surface=[True,True,True,True
     return np.array(out)
 
 def pngToModel(pngfile,nx,ny,bg=1.,sc=1.):
-    png = Image.open(pngfile)
+    png = Image.open(absolute_path(pngfile))
     png.load()
 
     model = sc*(bg+np.asarray(png.convert('L').resize((nx,ny)).transpose(Image.ROTATE_270))/255.)
