@@ -17,6 +17,16 @@ _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/simple_regression/LICE
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/simple_regression/README.md
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/simple_regression/__init__.py
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/simple_regression/simple_regression.py
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/utils/__init__.py
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/utils/data_loader.py
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/LICENCE
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/README.md
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/__init__.py
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/xray_tomography.py
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/data/__init__.py
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/data/csiro_logo.png
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/data/example1.dat
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/data/example2.dat
 src/cofi_espresso/__init__.py
 src/cofi_espresso/_version.py
 src/cofi_espresso/espresso_problem.py
