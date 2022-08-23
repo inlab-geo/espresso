@@ -65,7 +65,7 @@ consult the [Espresso Documentation](https://cofi-espresso.readthedocs.io).
 
 ## Contributing
 
-Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contribute.html).
+Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
 
 
 ## Licence
