@@ -110,6 +110,15 @@ Add your own Espresso problem
             `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_
             in the virtual environment with your preferred tool.
 
+#. Install Espresso core library - this enables you to access the base class for an Espresso problem
+   :code:`EspressoProblem` and some utility functions to help the development.
+
+   Run the following in your terminal, with :code:`<path-to-espresso>/` as your working directory.
+
+   .. code-block:: bash
+
+      pip install .
+
 #. Create a folder for your new contribution under :code:`contrib/<problem-name>`,
    by running the following in your terminal:
 
