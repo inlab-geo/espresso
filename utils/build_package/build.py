@@ -18,7 +18,7 @@ from pathlib import Path
 
 
 PKG_NAME = "cofi_espresso"
-current_directory = Path(__file__).parent
+current_directory = Path(__file__).resolve().parent
 root = current_directory.parent.parent
 ROOT_DIR = str(root)
 BUILD_DIR = str(root / "_esp_build")
@@ -72,7 +72,7 @@ def move_contrib_source():
     init_file_all_var += "]\n__all__ += __additional_all__"
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
-            f.write(f"install(DIRECTORY {contrib} DESTINATION .)")
+            f.write(f"install(DIRECTORY {contrib} DESTINATION .)\n")
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_all_var)

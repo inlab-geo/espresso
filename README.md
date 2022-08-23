@@ -2,7 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/cofi-espresso?logo=pypi&style=flat-square&color=bde0fe)](https://pypi.org/project/cofi-espresso/)
 [![Documentation Status](https://img.shields.io/readthedocs/cofi-espresso?logo=readthedocs&style=flat-square&color=faedcd)](https://cofi-espresso.readthedocs.io/en/latest/?badge=latest)
-[![Slack](https://img.shields.io/badge/Slack-inlab-4A154B?logo=slack&style=flat-square&color=cdb4db)](https://inlab-geo.slack.com)
+[![Slack](https://img.shields.io/badge/Slack-inlab-4A154B?logo=slack&style=flat-square&color=cdb4db)](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg)
 
 ## Introduction
 
@@ -37,35 +37,42 @@ Replace ``<testproblem>`` with one of the following currently available problems
 
 - ``gravity_density``
 
-Once a problem is imported, it's main functions can be called using the same 
+Once a problem is imported, its main functions can be called using the same 
 structure for each problem. For instance:
 
 ```python
 from cofi_espresso import GravityDensity
 
 grav = GravityDensity(example_number=1)
-grav_model = grav.suggested_model()
+grav_model = grav.good_model()
 grav_data = grav.data()
 grav_synthetics = grav.forward(grav_model)
-grav_jacobian = grav.jacobian(grav_model)
-grav.plot_model(grav_model)
-grav.plot_data(grav_data)
+fig_model = grav.plot_model(grav_model)
+fig_data = grav.plot_data(grav_data)
+```
+
+You can access related metadata programatically:
+
+```python
+print(GravityDensity.problem_title)
+print(GravityDensity.problem_short_description)
+print(GravityDensity.author_names)
 ```
 
 Other problem-specific parameters can be accessed through the problem instance. For instance:
 
 ```python
-print(grav.params.keys())
-# dict_keys(['m', 'rec_coords', 'x_nodes', 'y_nodes', 'z_nodes', 'lmx', 'lmy', 'lmz', 'lrx', 'lry'])
+print(grav.m)
+print(grav.rec_coords)
 ```
 
-Which additional values are set is highly example-specific and we suggest to 
+Which additional values are set is highly probl-specific and we suggest to 
 consult the [Espresso Documentation](https://cofi-espresso.readthedocs.io).
 
 
 ## Contributing
 
-Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contribute.html).
+Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
 
 
 ## Licence

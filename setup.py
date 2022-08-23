@@ -16,7 +16,7 @@ except ImportError:
 
 
 ########################## VERSION ####################################################
-_ROOT = pathlib.Path(__file__).parent
+_ROOT = pathlib.Path(__file__).resolve().parent
 with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
     for line in f:
         if line.startswith("__version__="):
@@ -29,14 +29,13 @@ with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
 
 ########################## LONG DESCRIPTION ###########################################
 from pathlib import Path
-this_directory = Path(__file__).parent
-LONG_DESCRIPTION = (this_directory / "README.md").read_text()
+LONG_DESCRIPTION = (_ROOT / "README.md").read_text()
 CONTENT_TYPE = "text/markdown"
 
 
 ########################## CLEAN CACHE ################################################
 from shutil import rmtree
-_skbuild_dir = this_directory / "_skbuild"
+_skbuild_dir = _ROOT / "_skbuild"
 if _skbuild_dir.exists() and _skbuild_dir.is_dir():
     rmtree(_skbuild_dir)
 
