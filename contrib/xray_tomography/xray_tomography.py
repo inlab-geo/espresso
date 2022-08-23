@@ -263,5 +263,5 @@ def pngToModel(pngfile,nx,ny,bg=1.,sc=1.):
     png = Image.open(absolute_path(pngfile))
     png.load()
 
-    model = sc*(bg+np.asarray(png.convert('L').resize((nx,ny)).transpose(Image.ROTATE_270))/255.)
+    model = sc*(bg+np.asarray(png.convert('L').resize((nx,ny)).transpose(Image.Transpose.ROTATE_270))/255.)
     return model
