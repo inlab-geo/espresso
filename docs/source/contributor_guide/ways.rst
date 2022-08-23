@@ -4,13 +4,15 @@ Contribute to Espresso
 
 .. rubric:: New forward example
 
-If you'd like to contribute with a new forward problem, welcome! Please head to 
+If you'd like to contribute with a new forward problem, welcome 🥰! Please head to 
 `this page <new_contrib.html>`_ for detailed instructions.
 
 .. rubric:: Issue report and feedback
 
 If you'd like to raise an issue or feedback, please search before lodging an issue at
-our Github `repository`_. We also welcome you to join our inlab-community `slack`_.
+our Github `repository`_. 
+
+We also welcome you to join our inlab-community `slack`_.
 
 .. rubric:: Developing Espresso
 

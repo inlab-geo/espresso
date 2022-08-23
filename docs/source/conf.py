@@ -39,7 +39,7 @@ extensions = [
     "myst_nb",
     # "sphinx_gallery.gen_gallery",
     "sphinxcontrib.mermaid",
-    "generate_contrib_docs",
+    "generate_contrib_docs",                # our own extension
 ]
 
 # Add any paths that contain templates here, relative to this directory.

@@ -26,27 +26,27 @@ Get your own copy of Espresso
    button on the top right and fill in the necessary information to sign up an account.
 3. Now click the "Fork" button on the top right.
 
-.. figure:: ../_static/contrib_fork.png
-   :align: center
+   .. figure:: ../_static/contrib_fork.png
+    :align: center
 
 4. Leave everything by default and click the green "Create fork" button.
 
-.. figure:: ../_static/contrib_fork2.png
+   .. figure:: ../_static/contrib_fork2.png
     :align: center
 
 5. Now you will be redirected to your own "fork" of the Espresso repository.
 
-    This fork is your own version of Espresso, and you can make changes however you 
-    want. We will later demonstrate that after you make your own changes, you are
-    able to "contribute" back to the main repository.
+   This fork is your own version of Espresso, and you can make changes however you 
+   want. We will later demonstrate that after you make your own changes, you are
+   able to "contribute" back to the main repository.
 
-.. figure:: ../_static/contrib_fork3.png
+   .. figure:: ../_static/contrib_fork3.png
     :align: center
 
 6. We will clone your fork into your local machine. Click the green "Code" button first, 
    and then copy the content under the "HTTPS" tab.
 
-.. figure:: ../_static/contrib_fork4.png
+   .. figure:: ../_static/contrib_fork4.png
     :align: center
 
 7. Clone your fork to somewhere in your computer.
@@ -58,18 +58,26 @@ Get your own copy of Espresso
      and open "Git Bash" to run the following commands. In the steps afterwards, it's
      always "Git Bash" when we refer to a "terminal" if you are on Windows.
 
-.. code-block:: console
+   .. code-block:: console
 
     cd <path-to-espresso>
     git clone <url-you-copied-in-step-6>
 
-.. attention::
+   .. admonition:: Instructions for first-time GitHub users
+    :class: dropdown, attention
 
-    If this is the first time you clone a GitHub repository, it's very likely that you 
-    will need a personal access token as your password. Check out this page:
-    `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_
-    for how to create a personal access token, and use it as your password when you are
-    asked to enter it in the terminal.
+        If this is the first time you clone a GitHub repository, it's very likely that you 
+        will need a personal access token as your password. 
+        
+        **Option 1** - Check out this page:
+        `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_
+        for how to create a personal access token, and use it as your password when you are
+        asked to enter it in the terminal.
+
+        **Option 2** - Alternatively, set up SSH key and upload your public key to your 
+        GitHub account. Follow instructions in this page:
+        `Generating a new SSH key and adding it to the ssh-agent <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`_
+        for how to set up SSH keys with GitHub.
 
 8. Open :code:`<path-to-espresso>/espresso` folder with your favourite code editor. 
    You will see a copy of Espresso in front of you, cheers ☕️! 
@@ -80,7 +88,60 @@ Get your own copy of Espresso
 Add your own Espresso problem
 -----------------------------
 
-1. Let's now ensure that you have a Python installed.
+#. Let's now ensure that you have a correct environment set up. Python >= 3.6 is required,
+   and see this 
+   `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_ 
+   file for a list of required packages.
+
+   .. toggle::
+        
+        - Choose a Python environment manager first. 
+            `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
+            `conda <https://docs.conda.io/en/latest/>`_ is recommended as it can set 
+            up system-wide dependencies as well, but feel free to use the one you are most 
+            familiar with.
+
+        - Python >= 3.6 is required.
+
+        - If you use `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
+            `conda <https://docs.conda.io/en/latest/>`_, run 
+            :code:`conda create -f envs/environment_contrib.yml` under the project root folder.
+            Otherwise, make sure you have the list of packages in 
+            `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_
+            in the virtual environment with your preferred tool.
+
+#. Create a folder for your new contribution under :code:`contrib/<problem-name>`,
+   by running the following in your terminal:
+
+   .. code-block:: bash
+
+        python <path-to-espresso>/utils/new_contribution/create_new_contrib.py <problem-name>
+
+   Replacing :code:`path-to-espresso` with your path to the espresso folder you've just cloned,
+   and :code:`problem-name` with your Espresso problem name, with lower case words connected
+   by underscores (e.g. :code:`gravity_density`, :code:`polynomial_regression`).
+
+#. Navigate to folder :code:`<path-to-espresso>/contrib/<problem-name>`, and you'll see template 
+   files.
+
+   .. figure:: ../_static/contrib_edit1.png
+    :align: center
+
+#. Read instructions in the :code:`README.md` file, and you will know what to do next 🧑🏽‍💻👩🏻‍💻👨‍💻
+
+   #. You should already have all the "pre-requisites" installed if you've gone through 
+      the steps above.
+
+   #. Check the boxes under "getting started". These are pretty much all the things you've
+      got to do to complete this contribution.
+
+   #. When you'd like to perform a quick local test by running your own code, tips under
+      "how to unit test your code" can be useful.
+
+   #. When you think you've finished the coding, use scripts under "how to test building your
+      contribution with :code:`cofi-expresso`" to include your contribution into the package
+      locally.
+
 
 .. _submit_changes:
 

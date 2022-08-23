@@ -10,6 +10,7 @@ from shutil import copyfile
 from pathlib import Path
 
 
+
 def getListOfFiles(dirName):
     # create a list of file and sub directories 
     # names in the given directory 
@@ -37,6 +38,8 @@ def main():
     print("🥰 Thanks for contributing! \nWe are generating new contribution component from template...\n")
 
     # validate example name
+    if len(sys.argv)!=2:
+        raise RuntimeError("No example name detected.\n\nUsage: python create_new_contrib.py EXAMPLE_NAME\n\n")
     example_name = sys.argv[-1]
     existing_examples = glob(CONTRIB_FOLDER+"/*/")
     existing_examples = [e for e in existing_examples]
@@ -62,23 +65,12 @@ def main():
     print("🗂  Copying files...")
     for template_file, new_file in zip(template_files, new_files):
         print("file: "+template_file+" -> "+new_file)
-        if "README" in template_file:
+        files_to_adapt = ["README", "__init__.py", "example_name.py"]
+        if any([fname in template_file for fname in files_to_adapt]):
             with open(template_file, "r") as template_f:
                 content = template_f.read()
             content = content.replace("example_name", example_name)
             content = content.replace("Example Name Title", example_name_capitalised)
-            with open(new_file, "w") as new_f:
-                new_f.write(content)
-        elif "__init__.py" in template_file:
-            with open(template_file, "r") as template_f:
-                content = template_f.read()
-            content = content.replace("example_name", example_name)
-            content = content.replace("ExampleName", example_name_no_space)
-            with open(new_file, "w") as new_f:
-                new_f.write(content)
-        elif "example_name.py" in template_file:
-            with open(template_file, "r") as template_f:
-                content = template_f.read()
             content = content.replace("ExampleName", example_name_no_space)
             with open(new_file, "w") as new_f:
                 new_f.write(content)
