@@ -14,3 +14,4 @@ dependencies:
   - pip:
     - cofi>=0.1.2.dev7
     - ipywidgets>=7.7.0
+    - tqdm>=4.0
