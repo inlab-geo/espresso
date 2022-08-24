@@ -17,37 +17,45 @@ from pygimli.physics import ert
 ############# Helper functions from PyGIMLi ###########################################
 
 # Dipole Dipole (dd) measuring scheme
-def scheme_fwd(start=0, stop=50, num=51, schemeName="dd"):
+def survey_scheme(start=0, stop=50, num=51, schemeName="dd"):
     scheme = ert.createData(elecs=np.linspace(start=start, stop=stop, num=num),schemeName=schemeName)
+    # switch potential electrodes to yield positive geometric factors
+    # this is also done for the synthetic data inverted later
+    # ref: https://www.pygimli.org/_examples_auto/3_dc_and_ip/plot_07_simple_complex_inversion.html
+    m = scheme["m"]
+    n = scheme["n"]
+    scheme["m"] = n
+    scheme["n"] = m
+    scheme.set("k", [1 for _ in range(scheme.size())])
     return scheme
 
 # true geometry, forward mesh and true model
 def model_true(scheme, start=[-55, 0], end=[105, -80], anomalies_pos=[[10,-7],[40,-7]], anomalies_rad=[5,5]):
     world = meshtools.createWorld(start=start, end=end, worldMarker=True)
-    for s in scheme.sensors():          # local refinement 
-        world.createNode(s + [0.0, -0.1])
     anomalies = []
     for i, (pos, rad) in enumerate(zip(anomalies_pos, anomalies_rad)):
         anomaly_i = meshtools.createCircle(pos=pos, radius=rad, marker=i+2)
         anomalies.append(anomaly_i)
-    geom = [world] + anomalies
+    geom = meshtools.mergePLC([world] + anomalies)
+    for s in scheme.sensors():          # local refinement 
+        geom.createNode(s + [0.0, -0.2])
+    mesh = meshtools.createMesh(geom, quality=33)
     rhomap = [[1, pygimli.utils.complex.toComplex(100, 0 / 1000)],
                 # Magnitude: 50 ohm m, Phase: -50 mrad
                 [2, pygimli.utils.complex.toComplex(50, 0 / 1000)],
                 [3, pygimli.utils.complex.toComplex(100, -50 / 1000)],]
-    mesh = meshtools.createMesh(geom, quality=33)
     return mesh, rhomap
 
 # generate synthetic data
-def ert_simulate(mesh, scheme, rhomap, noise_level=1, noise_abs=1e-6):
-    data = ert.simulate(mesh, scheme=scheme, res=rhomap, noiseLevel=noise_level,
-                        noise_abs=noise_abs, seed=42)
-    data_vals = data["rhoa"].array() * np.exp(1j * data["phia"].array())
-    log_data = np.log(data_vals)            # real: log magnitude; imaginary: phase [rad]
-    data_err = data["rhoa"] * data["err"]
+def ert_simulate(mesh, scheme, rhomap, noise_level=0, noise_abs=1e-4):
+    data_all = ert.simulate(mesh, scheme=scheme, res=rhomap,
+                            noiseLevel=noise_level, noise_abs=noise_abs, seed=42)
+    r_complex = data_all["rhoa"].array() * np.exp(1j * data_all["phia"].array())
+    r_complex_log = np.log(r_complex)            # real: log magnitude; imaginary: phase [rad]
+    data_err = data_all["rhoa"] * data_all["err"]
     data_err_log = np.log(data_err)
-    data_cov_inv = np.eye(log_data.shape[0]) / (data_err_log ** 2)
-    return data, log_data, data_cov_inv
+    data_cov_inv = np.eye(r_complex_log.shape[0]) / (data_err_log ** 2)
+    return data_all, r_complex, r_complex_log, data_cov_inv
 
 # PyGIMLi ert.ERTManager
 def ert_manager(data, verbose=False):
@@ -83,12 +91,12 @@ def inversion_mesh_rect_toy(ert_manager):
 # PyGIMLi ert.ERTModelling
 def ert_forward_operator(ert_manager, scheme, inv_mesh):
     forward_operator = ert_manager.fop
-    forward_operator.setComplex(False)
+    forward_operator.setComplex(True)
     forward_operator.setData(scheme)
     forward_operator.setMesh(inv_mesh, ignoreRegionManager=True)
     return forward_operator
 
-# regularisation matrix
+# regularisation matrix TODO
 def reg_matrix(forward_oprt):
     region_manager = forward_oprt.regionManager()
     region_manager.setConstraintType(2)
@@ -97,7 +105,7 @@ def reg_matrix(forward_oprt):
     Wm = pygimli.utils.sparseMatrix2coo(Wm)
     return Wm
 
-# initialise model
+# initialise model TODO
 def starting_model(ert_manager, val=None):
     data = ert_manager.data
     start_val = val if val else np.median(data['rhoa'].array())     # this is how pygimli initialises
@@ -106,7 +114,7 @@ def starting_model(ert_manager, val=None):
     start_model_log = np.ones(ert_manager.paraDomain.cellCount()) * start_val_log
     return start_model, start_model_log
 
-# convert model to numpy array
+# convert model to numpy array TODO
 def model_vec(rhomap, fmesh):
     model_true = pygimli.solver.parseArgToArray(rhomap, fmesh.cellCount(), fmesh)
     return model_true
@@ -117,7 +125,9 @@ def model_vec(rhomap, fmesh):
 ## Note: all functions below assume the model in log space!
 
 def get_response(model, forward_operator):
-    return np.log(np.array(forward_operator.response(np.exp(model))))
+    x_re_im = np.exp(pygimli.utils.squeezeComplex(model))
+    print(x_re_im)
+    return np.log(np.array(forward_operator.response(x_re_im)))
 
 def get_residual(model, log_data, forward_operator):
     response = get_response(model, forward_operator)
