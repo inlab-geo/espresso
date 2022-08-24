@@ -3,11 +3,11 @@
 Thanks for considering contributing :tada:! You don't have to know all of the details
 in order to contribute, and we welcome contributions of any forms (e.g. issues,
 pull requests, etc.). If you've read the instructions below and are still unsure
-where to start, feel free to contact us via [Slack](https://inlab-geo.slack.com/).
+where to start, feel free to contact us via [Slack](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg).
 
 ## ***To report bugs or typos***
 Please head to either [GitHub issues](https://github.com/inlab-geo/cofi-examples/issues) 
-or our [Slack workspace](https://inlab-geo.slack.com/).
+or our [Slack workspace](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg).
 
 ## ***To add a domain-specific (e.g. geoscience) example***
 Here is a general workflow in a contribution process:
