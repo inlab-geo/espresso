@@ -88,7 +88,6 @@ Table of contents
 
     contributor_guide/ways.rst
     contributor_guide/new_contrib.rst
-    .. contributor_guide/contribute.rst    
 
 .. toctree::
     :caption: Developer Notes

@@ -52,6 +52,7 @@ exclude_patterns = [
     ".DS_Store",
     "user_guide/api/index.rst",
     "user_guide/contrib/_index.rst",
+    "contributor_guide/contribute.rst",     # TODO migrate to new_contrib.rst
 ]
 
 source_suffix = ".rst"

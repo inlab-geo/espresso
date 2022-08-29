@@ -34,6 +34,7 @@ structure for each problem. For instance:
 You can access related metadata programatically:
 
 .. code-block:: python
+
     print(GravityDensity.problem_title)
     print(GravityDensity.problem_short_description)
     print(GravityDensity.author_names)
