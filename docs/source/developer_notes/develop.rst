@@ -47,7 +47,7 @@ How-to Guides
 Build the package locally
 -------------------------
 
-Check out contributor guide `here <../contributor_guide/new_contrib.html>`_.
+Check out the `contributor guide  <../contributor_guide/new_contrib.html>`_.
 
 Build the documentation locally
 -------------------------------
