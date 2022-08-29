@@ -30,7 +30,7 @@ def read_metadata(contrib_name, lines):
     contrib_class_name = contrib_name.title().replace("_", "")
     contrib_class = getattr(esp, contrib_class_name)
     lines.append(":::{admonition} Contribution Metadata for ")
-    lines[-1] += f"{contrib_class.problem_title} \n:class: important"
+    lines[-1] += f"*{contrib_class.problem_title}* \n:class: important"
     # metadata - short description
     lines.append(contrib_class.problem_short_description)
     lines.append("```{eval-rst}")
