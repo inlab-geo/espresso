@@ -33,6 +33,11 @@
     - jacobian(self, model) -> numpy.ndarray | pandas.Series | list
     - plot_model(self, model) -> matplotlib.figure.Figure
     - plot_data(self, model) -> matplotlib.figure.Figure
+    - covariance_matrix
+    - inverse_covariance_matrix
+    - misfit
+    - log_likelihood
+    - log_prior
 
 7. LICENCE file is not empty
 
@@ -156,7 +161,8 @@ def test_contrib(contrib, pre_build):
         assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,)
 
         # 6 - optional functions have correct signatures:
-        #    description, covariance_matrix, inverse_covariance_matrix
+        #    description, covariance_matrix, inverse_covariance_matrix, jacobian, 
+        #    plot_model, plot_data, misfit, log_likelihood, log_prior
         try: _description = contrib_instance.description
         except NotImplementedError: pass
         else: assert type(_description) is str

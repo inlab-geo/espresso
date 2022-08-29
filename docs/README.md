@@ -22,19 +22,26 @@ $ cd espresso/docs
 $ mamba env create -f environment.yml
 ```
 
-3. To build your changes
+3. Install `cofi_espresso` with all contributions by running one of the below
+
+```console
+$ python utils/build_package/build.py               # if you want to be quick
+$ python utils/build_package/build_with_checks.py   # if you want to feel safe
+```
+
+4. To build your changes
 
 ```console
 $ make html
 ```
 
-4. Serve the built files
+5. Serve the built files
 
 ```console
 $ python -m http.server 8000 -d build/html
 ```
 
-5. Open `localhost:8000` in your browser.
+6. Open `localhost:8000` in your browser.
 
 Redo step 3 (potentially in a different terminal session) when you've made new changes.
 
