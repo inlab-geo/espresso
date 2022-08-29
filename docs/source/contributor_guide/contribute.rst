@@ -90,7 +90,7 @@ all files is to start the creation of a new problem from the template.
 Execute the following command in the ROOT folder of the cloned Github repository
 of Espresso (replacing NEW_PROBLEM with the previous choice)::
 
-  python scripts/_create_new_example.py NEW_PROBLEM
+  python tools/_create_new_example.py NEW_PROBLEM
 
 A new folder with the name NEW_PROBLEM is created under ROOT/contrib/ that contains
 all files needed for a new contribution. Each Espresso example is organised around a

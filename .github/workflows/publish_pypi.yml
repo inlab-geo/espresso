@@ -36,7 +36,7 @@ jobs:
       
       - name: Build with pre and post validation
         run: |
-          python scripts/build_package/build_with_checks.py
+          python tools/build_package/build_with_checks.py
           python -m pip install .
 
       - name: Deploy to esp_build branch
