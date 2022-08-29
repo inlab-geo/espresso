@@ -111,16 +111,6 @@ html_context = {
 }
 
 
-# -- Sphinx Gallery settings --------------------------------------------------
-sphinx_gallery_conf = {
-    "examples_dirs": "cofi-examples/utils/sphinx_gallery/scripts",
-    "gallery_dirs": "cofi-examples/utils/sphinx_gallery/generated",
-    "filename_pattern": ".",
-    "ignore_pattern": "._lib.py",
-    "pypandoc": True,
-    "download_all_examples": False,
-}
-
 # -- myst-nb settings ---------------------------------------------------------
 myst_enable_extensions = [
     "amsmath",

@@ -92,24 +92,24 @@ from example_name import ExampleName       # import it this way
 1. To **validate your contribution** when almost finished, run
 
    ```console
-   $ python utils/build_package/validate.py
+   $ python scripts/build_package/validate.py
    ```
 
 2. To **build your contribution into cofi-espresso**, run
 
    ```console
-   $ python utils/build_package/build.py
+   $ python scripts/build_package/build.py
    ```
 
 3. To **validate your built contribution** after running the build script above, run
 
    ```console
-   $ python utils/build_package/validate.py post
+   $ python scripts/build_package/validate.py post
    ```
 
 4. To do **pre-build validation**, **build**, **post-build validation** (1-3 above) all together at once,
 run
 
    ```console
-   $ python utils/build_package/build_with_checks.py
+   $ python scripts/build_package/build_with_checks.py
    ```

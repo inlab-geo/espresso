@@ -1,6 +1,8 @@
 # How-to Guides
 
-This is a minimal guide on using the scripts in this folder.
+Scripts in this folder are mainly to be used by our contributors and developers.
+
+This page contains a minimal guide on using the scripts in this folder.
 
 For more details about contributing to Espresso, check 
 [this documentation page](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).

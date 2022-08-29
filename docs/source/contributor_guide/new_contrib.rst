@@ -124,7 +124,7 @@ Add your own Espresso problem
 
    .. code-block:: bash
 
-        python <path-to-espresso>/utils/new_contribution/create_new_contrib.py <problem-name>
+        python <path-to-espresso>/scripts/new_contribution/create_new_contrib.py <problem-name>
 
    Replacing :code:`path-to-espresso` with your path to the espresso folder you've just cloned,
    and :code:`problem-name` with your Espresso problem name, with lower case words connected

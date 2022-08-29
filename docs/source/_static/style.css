@@ -1,3 +1,8 @@
+/* ALL: links color */
+:root {
+    --pst-color-link: 141, 66, 76
+}
+
 /* ALL: text font size */
 p {
     font-size: 1rem;
@@ -8,7 +13,7 @@ div.navbar-brand-box a.navbar-brand img {
     max-height: 10vh !important;
 }
 span.project-version {
-    color: rgb(181, 151, 141);
+    color: #649A69;
     font-size: 0.8em;
     font-weight: 600;
     margin-left: 3px;
@@ -44,14 +49,14 @@ div.mermaid:hover {
 
 /* HOME: panel button */
 .btn-outline-primary:hover {
-    color: rgb(51, 125, 222);
-    background-color: #ccdde2;
-    border-color: #ccdde2
+    color: #8D424C;
+    background-color: #FFD883;
+    border-color: #FFD883;
 }
 .btn-outline-primary {
     /* color: rgb(51, 125, 222); */
     /* color: #99582a; */
-    border-color: #ccdde2;
+    border-color: #FFD883;
 }
 .card-body {
     display: flex;
@@ -59,7 +64,7 @@ div.mermaid:hover {
     justify-content: space-between;
 }
 .card:hover {
-    border: 1px solid rgb(51, 125, 222);
+    border: 1px solid #8D424C;
 }
 
 /* API: class/method name */
