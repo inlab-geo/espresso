@@ -8,34 +8,34 @@
 ====================================
 Welcome to Espresso's documentation!
 ====================================
+Espresso (**E**\ arth **S**\ cience **PR**\ oblems for the **E**\ valuation of **S**\ trategies, 
+**S**\ olvers and **O**\ ptimizers) is a collection of datasets, and 
+associated simulation codes, spanning a wide range of geoscience problems. 
+Together they form a suite of real-world test problems that can be used to 
+support the development, evaluation and benchmarking of a wide range of tools
+and algorithms for inference, inversion and optimisation. All problems are 
+designed to share a common interface, so that changing from one test problem
+to another requires changing one line of code. 
 
-Espresso (**E**\ arth **S**\ cience **PR**\ oblems for the **E**\ valuation of 
-**S**\ trategies, **S**\ olvers and **O**\ ptimizers) 
-is a collection of clearly defined forward codes
-that simulate physical processes from many disciplines within the geosciences
-and elsewhere. The goal of Espresso is to 
-bring together people developing physical simulations with those who need them.
-
-This project is led by `InLab <http://www.inlab.edu.au/>`_.
 
 
 .. panels::
     :header: text-center text-large
     :card: border-1 m-1 text-center
 
-    **Installation**
+    **Install and use Espresso**
     ^^^^^^^^^^^^^^^^^^^
 
     🐣 New to Espresso?
 
-    .. link-button:: user_guide/installation
+    .. link-button:: user_guide/introduction
         :type: ref
         :text: User Guide
         :classes: btn-outline-primary btn-block stretched-link
 
     ---
 
-    **Contribute with a new problem**
+    **Contribute a new problem**
     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     🍻 Forward codes are always welcomed
@@ -47,7 +47,7 @@ This project is led by `InLab <http://www.inlab.edu.au/>`_.
 
     ---
 
-    **Improve Espresso package**
+    **Improve the core Espresso package**
     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     🛠 Let's build a better Espresso together
@@ -68,6 +68,14 @@ This project is led by `InLab <http://www.inlab.edu.au/>`_.
         :type: url
         :text: Join the conversation
         :classes: btn-outline-primary btn-block stretched-link
+
+
+The Espresso project is a community effort - if you think it sounds useful,
+please consider contributing an example or two from your own research. The project
+is currently being coordinated by `InLab <http://www.inlab.edu.au/>`_, with support from the CoFI development
+team.
+
+
 
 
 Table of contents
