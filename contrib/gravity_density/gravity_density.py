@@ -54,12 +54,7 @@ class GravityDensity(EspressoProblem):
             for idx, name in enumerate(_to_expand):
                 self.params[name] = setup_params[idx]
         else:
-            raise InvalidExampleError(
-                "The example number supplied is not supported, please consult "
-                "Espresso documentation at "
-                "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html "
-                "for problem-specific metadata, e.g. number of examples provided"
-            )
+            raise InvalidExampleError
 
     @property
     def model_size(self):

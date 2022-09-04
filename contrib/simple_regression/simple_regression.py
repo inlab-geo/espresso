@@ -57,12 +57,7 @@ class SimpleRegression(EspressoProblem):
             self._desc = "Fitting a polynomial to a dataset with a gap"
             self._sigma = 0.1
         else:
-            raise InvalidExampleError(
-                "The example number supplied is not supported, please consult "
-                "Espresso documentation at "
-                "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html "
-                "for problem-specific metadata, e.g. number of examples provided"
-            )
+            raise InvalidExampleError
 
     @property
     def description(self):
