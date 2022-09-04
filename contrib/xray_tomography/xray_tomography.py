@@ -1,5 +1,5 @@
 import numpy as np
-from cofi_espresso import EspressoProblem
+from cofi_espresso import EspressoProblem, InvalidExampleError
 from cofi_espresso.utils import loadtxt, absolute_path
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -37,7 +37,7 @@ class XrayTomography(EspressoProblem):
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)
         else:
-            raise ValueError(
+            raise InvalidExampleError(
                  "The example number supplied is not supported, please consult "
                  "Espresso documentation at "
                  "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html "

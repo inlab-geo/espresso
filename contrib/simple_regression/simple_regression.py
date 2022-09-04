@@ -1,5 +1,5 @@
 import numpy as np
-from cofi_espresso import EspressoProblem
+from cofi_espresso import EspressoProblem, InvalidExampleError
 
 
 class SimpleRegression(EspressoProblem):
@@ -57,7 +57,7 @@ class SimpleRegression(EspressoProblem):
             self._desc = "Fitting a polynomial to a dataset with a gap"
             self._sigma = 0.1
         else:
-            raise ValueError(
+            raise InvalidExampleError(
                 "The example number supplied is not supported, please consult "
                 "Espresso documentation at "
                 "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html "

@@ -10,7 +10,7 @@ import numpy as np
 from scipy.constants import G
 import matplotlib.pyplot as plt
 
-from cofi_espresso import EspressoProblem
+from cofi_espresso import EspressoProblem, InvalidExampleError
 from cofi_espresso.utils import loadtxt
 
 
@@ -54,7 +54,7 @@ class GravityDensity(EspressoProblem):
             for idx, name in enumerate(_to_expand):
                 self.params[name] = setup_params[idx]
         else:
-            raise ValueError(
+            raise InvalidExampleError(
                 "The example number supplied is not supported, please consult "
                 "Espresso documentation at "
                 "https://cofi-espresso.readthedocs.io/en/latest/contrib/index.html "
