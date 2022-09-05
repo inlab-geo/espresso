@@ -80,6 +80,7 @@ Table of contents
     user_guide/introduction.rst
     user_guide/installation.rst
     user_guide/contrib/index.rst
+    user_guide/api/index.rst
     user_guide/faq.rst
 
 .. toctree::
