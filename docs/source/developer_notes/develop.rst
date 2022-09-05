@@ -53,7 +53,7 @@ Build the documentation locally
 -------------------------------
 
 Check out README file under docs folder 
-`here <https://github.com/jwhhh/espresso/tree/main/docs/README.md>`_.
+`here <https://github.com/inlab-geo/espresso/tree/main/docs/README.md>`_.
 
 Modify EspressoProblem class
 ----------------------------
