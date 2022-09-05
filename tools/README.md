@@ -1,9 +1,9 @@
 # How-to Guides
 
-This is a minimal guide on using the scripts in this folder.
+Scripts in this folder are mainly to be used by our contributors and developers.
 
-For more details about contributing to Espresso, check 
-[this documentation page](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
+This page contains a minimal guide on using them. For more details about contributing to Espresso, check 
+our [Contributor Guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
 
 ## Generate new Espresso problem
 
@@ -14,7 +14,7 @@ python new_contribution/create_new_contrb.py <example_name>
 ## Validate a new Espresso contribution (pre building)
 
 ```console
-python build_package/validate.py
+python build_package/validate.py [--pre] [--contrib <example_name>] [--all]
 ```
 
 ## Build Espresso with all contributions
@@ -26,7 +26,7 @@ python build_package/build.py
 ## Validate a new Espresso contribution (post building)
 
 ```console
-python build_package/validate.py post
+python build_package/validate.py --post [--contrib <example_name>] [--all]
 ```
 
 ## Build Espresso with pre/post validation

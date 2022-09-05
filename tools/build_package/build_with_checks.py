@@ -8,7 +8,7 @@ def main():
     build_script = str(Path(__file__).resolve().parent / "build.py")
 
     # pre-build validate
-    exit_code = subprocess.call([sys.executable, validate_script, "pre"])
+    exit_code = subprocess.call([sys.executable, validate_script, "--pre"])
     if exit_code != ExitCode.OK:
         sys.exit(exit_code)
 
@@ -18,8 +18,12 @@ def main():
         sys.exit(exit_code)
 
     # post-build validation
-    exit_code = subprocess.call([sys.executable, validate_script, "post"])
-    sys.exit(exit_code)
+    exit_code = subprocess.call([sys.executable, validate_script, "--post"])
+    if exit_code != ExitCode.OK:
+        sys.exit(exit_code)
+    else:
+        print("\n🍰 All done 🍰")
+        sys.exit(exit_code)
 
 
 if __name__ == "__main__":

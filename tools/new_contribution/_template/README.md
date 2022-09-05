@@ -89,27 +89,51 @@ from example_name import ExampleName       # import it this way
 
 ## How to test building your contribution with `cofi-espresso`
 
-1. To **validate your contribution** when almost finished, run
+1. To **validate your contribution** when almost finished, run the following (replacing `<example_name>` with your problem name, e.g. `simple_regression`)
 
    ```console
-   $ python utils/build_package/validate.py
+   $ python tools/build_package/validate.py -c <example_name1>
+   ```
+
+   Or the following for more than one contributions (replacing `<example_name_1>` and `<example_name_2>` with your problem names)
+
+   ```console
+   $ python tools/build_package/validate.py -c <example_name_1> -c <example_name_2>
+   ```
+
+   Or the following for all existing contributions
+
+   ```console
+   $ python tools/build_package/validate.py --all
    ```
 
 2. To **build your contribution into cofi-espresso**, run
 
    ```console
-   $ python utils/build_package/build.py
+   $ python tools/build_package/build.py
    ```
 
-3. To **validate your built contribution** after running the build script above, run
+3. To **validate your built contribution** after running the build script above, run the following ()
 
    ```console
-   $ python utils/build_package/validate.py post
+   $ python tools/build_package/validate.py --post -c <example_name1>
+   ```
+
+   Or the following for more than one contributions (replacing `<example_name_1>` and `<example_name_2>` with your problem names)
+
+   ```console
+   $ python tools/build_package/validate.py --post -c <example_name_1> -c <example_name_2>
+   ```
+
+   Or the following for all existing contributions
+
+   ```console
+   $ python tools/build_package/validate.py --post --all
    ```
 
 4. To do **pre-build validation**, **build**, **post-build validation** (1-3 above) all together at once,
 run
 
    ```console
-   $ python utils/build_package/build_with_checks.py
+   $ python tools/build_package/build_with_checks.py
    ```

@@ -72,9 +72,9 @@ To complete this contribution, here are some ideas on what to do next:
 - [ ] **Validate and build your contribution locally**. We have seperate scripts for 
    validation and packaging.
    ```console
-   $ python utils/build_package/validate.py         # to validate your contribution
-   $ python utils/build_package/build.py            # to install updated Espresso in your environment
-   $ python utils/build_package/validate_build.py   # to run both of above together
+   $ python tools/build_package/validate.py         # to validate your contribution
+   $ python tools/build_package/build.py            # to install updated Espresso in your environment
+   $ python tools/build_package/validate_build.py   # to run both of above together
    ```
 - [ ] **Delete / comment out these initial instructions**. They are for your own reference
    so feel free to delete them or comment them out once you've finished the above
