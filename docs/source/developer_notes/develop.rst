@@ -99,3 +99,11 @@ Modify build/validation scripts
    - :code:`tools/README.md`
    - :code:`tools/new_contribution/_template/README.md`
    - :code:`docs/source/contributor_guide/new_contrib.rst`
+
+Add a new EspressoError
+-----------------------
+
+1. Add the exception in file :code:`src/cofi_espresso/exceptions.py`.
+2. Add docstring inside the class itself, and add its name to the docstring of the 
+   super class :code:`EspressoError`.
+3. Add new exception into the list in file :code:`docs/source/_templates/exception.rst`.

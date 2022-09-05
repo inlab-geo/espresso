@@ -13,13 +13,20 @@ List of functions and classes (API)
     or `Slack`_ workspace.
 
 
-APIs for Basic Usage
---------------------
-
-This is a placeholder text until a proper one is written.
-
 .. autosummary::
     :toctree: generated/
+    :nosignatures:
 
     cofi_espresso.EspressoProblem
 
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    cofi_espresso.EspressoError
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+    
+    cofi_espresso.utils

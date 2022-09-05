@@ -2,8 +2,8 @@
 
     <div class="api-module">
 
-``{{ fullname }}``
-{% for i in range(fullname|length + 15) %}-{% endfor %}
+Utility Functions
+-----------------
 
 .. raw:: html
 
@@ -11,43 +11,46 @@
 
 .. automodule:: {{ fullname }}
 
-{% block classes %}
-{% if classes %}
-.. rubric:: Classes
+    .. rubric:: Reference details
 
-.. autosummary::
-  :toctree: ./
-{% for item in classes %}
-  {{ fullname }}.{{ item }}
-{% endfor %}
-{% endif %}
-{% endblock %}
+.. {% block classes %}
+.. {% if classes %}
+.. .. rubric:: Classes
+
+.. .. autosummary::
+..   :toctree: ./
+.. {% for item in classes %}
+..   {{ fullname }}.{{ item }}
+.. {% endfor %}
+.. {% endif %}
+.. {% endblock %}
 
 
 {% block functions %}
 {% if functions %}
 .. rubric:: Functions
 
-.. autosummary::
-  :toctree: ./
+
+.. automethod:: cofi_espresso.list_problems
+.. automethod:: cofi_espresso.list_problem_names
 {% for item in functions %}
-  {{ fullname }}.{{ item }}
+.. automethod:: {{ fullname }}.{{ item }}
 {% endfor %}
 {% endif %}
 {% endblock %}
 
 
-{% block exceptions %}
-{% if exceptions %}
-.. rubric:: Exceptions
+.. {% block exceptions %}
+.. {% if exceptions %}
+.. .. rubric:: Exceptions
 
-.. autosummary::
-  :toctree: ./
-{% for item in exceptions %}
-  {{ fullname }}.{{ item }}
-{% endfor %}
-{% endif %}
-{% endblock %}
+.. .. autosummary::
+..   :toctree: ./
+.. {% for item in exceptions %}
+..   {{ fullname }}.{{ item }}
+.. {% endfor %}
+.. {% endif %}
+.. {% endblock %}
 
 .. raw:: html
 

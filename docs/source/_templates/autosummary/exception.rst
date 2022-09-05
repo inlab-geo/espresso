@@ -1,9 +1,11 @@
-{{ fullname | escape | underline }}
-
+.. role:: hidden
+    :class: hidden-section
 .. currentmodule:: {{ module }}
 
-.. autoexception:: {{ objname }}
+{{ name | underline}}
 
+.. autoexception:: {{ objname }}
+.. autoexception:: InvalidExampleError
 
 .. raw:: html
 
