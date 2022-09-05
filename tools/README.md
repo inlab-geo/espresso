@@ -2,10 +2,8 @@
 
 Scripts in this folder are mainly to be used by our contributors and developers.
 
-This page contains a minimal guide on using the scripts in this folder.
-
-For more details about contributing to Espresso, check 
-[this documentation page](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
+This page contains a minimal guide on using them. For more details about contributing to Espresso, check 
+our [Contributor Guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
 
 ## Generate new Espresso problem
 

@@ -54,35 +54,70 @@ import pytest
 import numpy as np
 from matplotlib.figure import Figure
 import subprocess
+import argparse
+import warnings
 
 
+# --> constants
 PKG_NAME = "cofi_espresso"
 ROOT = str(Path(__file__).resolve().parent.parent.parent)
 CONTRIB_FOLDER = ROOT + "/contrib"
 
+
+# --> define arguments to be parsed with Python command
+parser = argparse.ArgumentParser(
+    description="Script to validate specified or all contributions for Espresso, pre/post build for the package"
+)
+parser.add_argument(
+    "--contrib", "-c", "--contribution", 
+    dest="contribs", action="append", 
+    help="Specify which contribution to validate")
+parser.add_argument(
+    "--all", "-a", default=None,
+    dest="all", action="store_true")
+parser.add_argument(
+    "--pre", dest="pre", action="store_true", default=None,
+    help="Run tests before building the package")
+parser.add_argument(
+    "--post", dest="post", action="store_true", default=None,
+    help="Run tests after building the package " + 
+        "(we assume you've built the package so won't build it for you; " + 
+        "otherwise please use `python build.py` beforehand)")
+args = parser.parse_args()
+
+def _pre_build():
+    return args.pre or (not args.pre and not args.post)
+
+@pytest.fixture()
+def pre_build():
+    return _pre_build()
+
+
+# --> helper methods
 def get_folder_content(folder_name):
     names = [name for name in os.listdir(folder_name)]
     paths = [f"{folder_name}/{name}" for name in names]
     return names, paths
 
 def all_contribs():
-    return list(zip(*get_folder_content(CONTRIB_FOLDER)))
+    _contribs = args.contribs
+    _all = args.all
+    all_contribs = get_folder_content(CONTRIB_FOLDER)
+    all_contribs_zipped = list(zip(*all_contribs))
+    if (not _contribs) or _all:    # if no "contrib" is specified, or "all" is explicitly set
+        contribs = all_contribs_zipped
+    else:
+        contribs = [c for c in all_contribs_zipped if c[0] in _contribs]
+        contribs_not_in_folder = [c for c in _contribs if c not in all_contribs[0]]
+        if contribs_not_in_folder:
+            warnings.warn(
+                "these examples are not detected in 'contrib' folder: " + ", ".join(contribs_not_in_folder)
+            )
+    return contribs
 
 @pytest.fixture(params=all_contribs())
 def contrib(request):
     return request.param
-
-def _pre_build():
-    pre_post = "pre"
-    if len(sys.argv) > 1:
-        pre_post = sys.argv[-1]
-        if pre_post not in ["pre", "post"]:
-            raise ValueError("Please either pass `pre` or `post` as the only argument")
-    return pre_post == "pre"
-
-@pytest.fixture
-def pre_build():
-    return _pre_build()
 
 def _flat_array_like(obj):
     return np.ndim(obj) == 1
@@ -90,11 +125,14 @@ def _flat_array_like(obj):
 def _2d_array_like(obj):
     return np.ndim(obj) == 2
 
-def test_contrib(contrib, pre_build):
+# --> main test (once for each contribution)
+def test_contrib(pre_build, contrib):
     contrib_name, contrib_sub_folder = contrib
     contrib_name_capitalised = contrib_name.title().replace("_", " ")
     contrib_name_class = contrib_name_capitalised.replace(" ", "")
-    print(f"\n🔍 Checking '{contrib_name}' at {contrib_sub_folder}...")
+    _pre_post = "pre" if pre_build else "post"
+    print(f"\n🔍 Performing {_pre_post}-build test on '{contrib_name}' at {contrib_sub_folder}...")
+    print("❗️ We assume you've built the package so won't build it for you, otherwise please use `python tools/build_package/build.py` beforehand")
     names, paths = get_folder_content(contrib_sub_folder)
     
     # 1 - contribution folder name matches the main Python file name
@@ -207,7 +245,13 @@ def test_contrib(contrib, pre_build):
 
 
 def main():
-    if (_pre_build()):
+    contribs = all_contribs()
+    pre = _pre_build()
+    print("🥃 Running " + ("pre-" if pre else "post-") + "build tests for the following contributions:")
+    print("- " + "\n- ".join([c[0] for c in contribs]) + "\n")
+    if not pre:
+        print("❗️ We assume you've built the package so won't build it for you, otherwise please use `python tools/build_packge/build.py` beforehand")
+    if (pre):
         subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
         subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
     sys.exit(pytest.main([Path(__file__)]))
