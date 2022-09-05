@@ -5,6 +5,7 @@ setup.py
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/__init__.py
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/_version.py
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/espresso_problem.py
+_skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/exceptions.py
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/gravity_density/LICENCE
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/gravity_density/README.md
 _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/gravity_density/__init__.py
@@ -30,6 +31,7 @@ _skbuild/linux-x86_64-3.9/cmake-install/src/cofi_espresso/xray_tomography/data/e
 src/cofi_espresso/__init__.py
 src/cofi_espresso/_version.py
 src/cofi_espresso/espresso_problem.py
+src/cofi_espresso/exceptions.py
 src/cofi_espresso.egg-info/PKG-INFO
 src/cofi_espresso.egg-info/SOURCES.txt
 src/cofi_espresso.egg-info/dependency_links.txt

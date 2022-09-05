@@ -1,4 +1,5 @@
 from .espresso_problem import EspressoProblem
+from .exceptions import EspressoError, InvalidExampleError
 
 
 try:
@@ -11,6 +12,8 @@ except ImportError:
 
 __all__ = [
     "EspressoProblem",
+    "EspressoError",
+    "InvalidExampleError",
 ]
 
 # from .example_name import ExampleName
