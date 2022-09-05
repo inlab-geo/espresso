@@ -76,6 +76,7 @@ def move_contrib_source():
     init_file_rtn_all_nms = "\nlist_problem_names = lambda: __all_problem_names__\n"
     init_file_all_cls += "]"
     init_file_rtn_all_cls = "\nlist_problems = lambda: __all_problems__\n"
+    init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY {contrib} DESTINATION .)\n")
@@ -86,6 +87,7 @@ def move_contrib_source():
         f.write(init_file_rtn_all_nms)
         f.write(init_file_all_cls)
         f.write(init_file_rtn_all_cls)
+        f.write(init_file_add_funcs)
 
 def install_pkg():
     subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
