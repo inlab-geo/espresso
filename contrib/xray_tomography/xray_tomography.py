@@ -10,17 +10,20 @@ import tqdm
 class XrayTomography(EspressoProblem):
     """Forward simulation class
     """
-    problem_title = "X-ray tomography" 
-    problem_short_description = "" # 1-3 sentences
 
-    author_names = ["Andrew Valentine"] 
+    metadata = {
+        "problem_title": "X-ray tomography",
+        "problem_short_description": "",
 
-    contact_name = "Andrew Valentine" 
-    contact_email = "andrew.valentine@durham.ac.uk"
+        "author_names": ["Andrew Valentine"],
 
-    citations = [("Tarantola, A., 2005. *Inverse problem theory and methods for parameter estimation*, Sec.5.6.","")] 
+        "contact_name": "Andrew Valentine",
+        "contact_email": "andrew.valentine@durham.ac.uk",
 
-    linked_sites = [] 
+        "citations": [("Tarantola, A., 2005. *Inverse problem theory and methods for parameter estimation*, Sec.5.6.","")],
+
+        "linked_sites": [],
+    }
 
     def __init__(self, example_number=1):
         super().__init__(example_number)

@@ -29,34 +29,35 @@ def read_metadata(contrib_name, lines):
     # - [optional] linked_sites -> [(name, link)]
     contrib_class_name = contrib_name.title().replace("_", "")
     contrib_class = getattr(esp, contrib_class_name)
+    class_metadata = contrib_class.metadata
     lines.append(":::{admonition} Contribution Metadata for ")
-    lines[-1] += f"*{contrib_class.problem_title}* \n:class: important"
+    lines[-1] += "*" + class_metadata["problem_title"] + "* \n:class: important"
     # metadata - short description
-    lines.append(contrib_class.problem_short_description)
+    lines.append(class_metadata["problem_short_description"])
     lines.append("```{eval-rst}")
     # metadata - authors
-    lines.append("\n:Author: " + ", ".join(contrib_class.author_names))
+    lines.append("\n:Author: " + ", ".join(class_metadata["author_names"]))
     # metadata - contact
-    lines.append(f":Contact: {contrib_class.contact_name} ({contrib_class.contact_email})")
+    lines.append(":Contact: " + class_metadata["contact_name"] + "(" + class_metadata["contact_email"] + ")")
     # metadata - citations
-    if hasattr(contrib_class, "citations") and len(contrib_class.citations) > 0:
+    if len(class_metadata["citations"]) > 0:
         lines.append(":Citation:")
-        if len(contrib_class.citations) == 1:
-            citation = contrib_class.citations[0]
+        if len(class_metadata["citations"]) == 1:
+            citation = class_metadata["citations"][0]
             lines.append(f"  {citation[0]}")
             if citation[1]: lines[-1] += f", {citation[1]}"
         else:
-            for citation in contrib_class.citations:
+            for citation in class_metadata["citations"]:
                 lines.append(f"  - {citation[0]}")
                 if citation[1]: lines[-1] += f", {citation[1]}"
     # metadata - extra website
-    if hasattr(contrib_class, "linked_sites") and len(contrib_class.linked_sites) > 0:
+    if len(class_metadata["linked_sites"]) > 0:
         lines.append(":Extra website:")
-        if len(contrib_class.linked_sites) == 1:
-            name, link = contrib_class.linked_sites[0]
+        if len(class_metadata["linked_sites"]) == 1:
+            name, link = class_metadata["linked_sites"][0]
             lines.append(f"  [{name}]({link})")
         else:
-            for (name, link) in contrib_class.linked_sites:
+            for (name, link) in class_metadata["linked_sites"]:
                 lines.append(f"  - [{name}]({link})")
     # ending
     lines.append("```")
