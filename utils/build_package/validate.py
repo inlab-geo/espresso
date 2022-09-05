@@ -115,6 +115,7 @@ def test_contrib(contrib, pre_build):
         parent_mod = importlib.import_module(PKG_NAME)
     assert contrib_name_class in parent_mod.__all__
     contrib_class = getattr(parent_mod, contrib_name_class)
+    exception_class = getattr(parent_mod, "InvalidExampleError")
     
     # 4 - Check metadata is present within class
     assert type(contrib_class.problem_title) is str and len(contrib_class.problem_title)>0
@@ -142,7 +143,7 @@ def test_contrib(contrib, pre_build):
         #    model_size, data_size, good_model, starting_model, data, forward
         try:
             contrib_instance = contrib_class(i)
-        except ValueError:
+        except exception_class:
             # Assume that we've found all the examples
             n_examples = i-1
             assert n_examples > 0
