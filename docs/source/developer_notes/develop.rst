@@ -85,3 +85,17 @@ Modify EspressoProblem class
 
 6. Check if you need to update contents in `introduction page <../user_guide/introduction.html>`_.
    If yes, modify file :code:`docs/source/user_guide/introduction.rst`.
+
+
+Modify build/validation scripts
+-------------------------------
+
+1. Navigate to :code:`tools/build_package/` folder, all the scripts are there. Make changes as you need.
+2. Ensure the other scripts still work. For example, you might want to change usage of :code:`validate.py`
+   inside :code:`build_with_checks.py` after the argument parser is modified. Check by running them on
+   your own.
+3. Ensure documentations are up to date. The following places need checking:
+
+   - :code:`tools/README.md`
+   - :code:`tools/new_contribution/_template/README.md`
+   - :code:`docs/source/contributor_guide/new_contrib.rst`

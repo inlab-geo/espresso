@@ -14,7 +14,7 @@ python new_contribution/create_new_contrb.py <example_name>
 ## Validate a new Espresso contribution (pre building)
 
 ```console
-python build_package/validate.py
+python build_package/validate.py [--pre] [--contrib <example_name>] [--all]
 ```
 
 ## Build Espresso with all contributions
@@ -26,7 +26,7 @@ python build_package/build.py
 ## Validate a new Espresso contribution (post building)
 
 ```console
-python build_package/validate.py post
+python build_package/validate.py --post [--contrib <example_name>] [--all]
 ```
 
 ## Build Espresso with pre/post validation
