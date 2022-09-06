@@ -11,8 +11,6 @@ Utility Functions
 
 .. automodule:: {{ fullname }}
 
-    .. rubric:: Reference details
-
 .. {% block classes %}
 .. {% if classes %}
 .. .. rubric:: Classes

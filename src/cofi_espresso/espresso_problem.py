@@ -53,8 +53,6 @@ class EspressoProblem(metaclass=ABCMeta):
         when you've passed in an example number that isn't included in current problem
 
 
-    Methods and Properties
-    ----------------------
 
     .. rubric:: Metadata
     
