@@ -1,7 +1,8 @@
 from abc import abstractmethod, ABCMeta
+from collections import defaultdict
 
 
-def abstract_class_attributes(*names):
+def abstract_metadata_key(*names):
     """Class decorator to add one or more abstract attribute.
     ref: https://stackoverflow.com/questions/45248243/most-pythonic-way-to-declare-an-abstract-class-property
     """
@@ -17,10 +18,15 @@ def abstract_class_attributes(*names):
                 orig_init_subclass(cls, **kwargs)
             except TypeError:
                 orig_init_subclass(**kwargs)
+            if getattr(cls, "metadata", NotImplemented) is NotImplemented:
+                raise NotImplementedError(
+                    "please define the metadata as a dicttionary field in problem class"
+                )
             for name in names:
-                if getattr(cls, name, NotImplemented) is NotImplemented:
+                # if getattr(cls, name, NotImplemented) is NotImplemented:
+                if name not in cls.metadata:
                     raise NotImplementedError(
-                        f"{name} is required as a class attribute but you haven't defined it"
+                        f"{name} is required as a metadata entry but you haven't defined it"
                     )
         cls.__init_subclass__ = classmethod(new_init_subclass)
         return cls
@@ -28,7 +34,7 @@ def abstract_class_attributes(*names):
     return lambda cls: _func(cls, *names)
 
 
-@abstract_class_attributes(
+@abstract_metadata_key(
     "problem_title",
     "problem_short_description",
     "author_names",
@@ -343,8 +349,10 @@ class EspressoProblem(metaclass=ABCMeta):
         
 
     def __getattr__(self, key):
-        if key in self.params:
+        if hasattr(self, "params") and key in self.params:
             return self.params[key]
+        if key in self.metadata:
+            return self.metadata[key]
         else:
             raise AttributeError(
                 f"'{self.__class__.__name__}' object has no attribute '{key}'"
