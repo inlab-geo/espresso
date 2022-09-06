@@ -10,6 +10,7 @@ on:
       - 'docs/**'
       - 'setup.py'
       - 'pyproject.toml'
+      - 'CHANGELOG.md'
   
 jobs:
   ######################## GENERATE PACKAGE SOURCE #####################

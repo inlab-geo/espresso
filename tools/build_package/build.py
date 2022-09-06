@@ -33,6 +33,7 @@ META_FILES = [
     "LICENCE",
     ".readthedocs.yml",
     ".gitignore",
+    "CHANGELOG.md",
 ]
 
 
