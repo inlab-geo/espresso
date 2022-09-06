@@ -64,20 +64,20 @@ Get your own copy of Espresso
     git clone <url-you-copied-in-step-6>
 
    .. admonition:: Instructions for first-time GitHub users
-    :class: dropdown, attention
+      :class: dropdown, attention
 
-        If this is the first time you clone a GitHub repository, it's very likely that you 
-        will need a personal access token as your password. 
-        
-        **Option 1** - Check out this page:
-        `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_
-        for how to create a personal access token, and use it as your password when you are
-        asked to enter it in the terminal.
+      If this is the first time you clone a GitHub repository, it's very likely that you 
+      will need a personal access token as your password. 
+      
+      **Option 1** - Check out this page:
+      `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_
+      for how to create a personal access token, and use it as your password when you are
+      asked to enter it in the terminal.
 
-        **Option 2** - Alternatively, set up SSH key and upload your public key to your 
-        GitHub account. Follow instructions in this page:
-        `Generating a new SSH key and adding it to the ssh-agent <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`_
-        for how to set up SSH keys with GitHub.
+      **Option 2** - Alternatively, set up SSH key and upload your public key to your 
+      GitHub account. Follow instructions in this page:
+      `Generating a new SSH key and adding it to the ssh-agent <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`_
+      for how to set up SSH keys with GitHub.
 
 #. Open :code:`<path-to-espresso>/espresso` folder with your favourite code editor. 
    You will see a copy of Espresso in front of you, cheers ☕️! 
@@ -96,19 +96,19 @@ Add your own Espresso problem
    .. toggle::
         
         - Choose a Python environment manager first. 
-            `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
-            `conda <https://docs.conda.io/en/latest/>`_ is recommended as it can set 
-            up system-wide dependencies as well, but feel free to use the one you are most 
-            familiar with.
+          `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
+          `conda <https://docs.conda.io/en/latest/>`_ is recommended as it can set 
+          up system-wide dependencies as well, but feel free to use the one you are most 
+          familiar with.
 
         - Python >= 3.6 is required.
 
         - If you use `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
-            `conda <https://docs.conda.io/en/latest/>`_, run 
-            :code:`conda create -f envs/environment_contrib.yml` under the project root folder.
-            Otherwise, make sure you have the list of packages in 
-            `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_
-            in the virtual environment with your preferred tool.
+          `conda <https://docs.conda.io/en/latest/>`_, run 
+          :code:`conda create -f envs/environment_contrib.yml` under the project root folder.
+          Otherwise, make sure you have the list of packages in 
+          `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_
+          in the virtual environment with your preferred tool.
 
 #. Install Espresso core library - this enables you to access the base class for an Espresso problem
    :code:`EspressoProblem` and some utility functions to help the development.
