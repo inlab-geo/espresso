@@ -50,10 +50,10 @@ TODO:
 √ Add content into this docstring
 √ Change list_problem_names & list_problems from lambda to named functions
 √ Add docstring for 2 functions above
-4. Add docstring for EspressoProblem class
-5. Check formatting of the docstrings for all in espresso_problem.py
-6. Add docstring for EspressoError class
-7. Check formatting of the docstrings for all in exceptions.py
+√ Add docstring for EspressoProblem class
+√ Check formatting of the docstrings for all in espresso_problem.py
+√ Add docstring for EspressoError class
+√ Check formatting of the docstrings for all in exceptions.py
 8. Add content into utils docstring
 9. Add docstrings for utils functions
 

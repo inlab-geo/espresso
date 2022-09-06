@@ -8,7 +8,7 @@
 
 .. autoclass:: {{ objname }}
 
-    .. rubric:: Reference Details
+.. rubric:: Reference Details
 
 .. ----
 
