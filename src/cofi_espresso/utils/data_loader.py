@@ -14,8 +14,6 @@ def _absolute_path(relative_path):
 def absolute_path(relative_path):
     r"""Returns the absolute path of a data file
 
-    .. important::
-
     Please always use this function or :func:`loadtxt` when trying to load data from 
     a relative path into an Espresso problem class.
 

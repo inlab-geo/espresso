@@ -95,6 +95,7 @@ Table of contents
     :maxdepth: 1
 
     developer_notes/develop.rst
+    developer_notes/changelog.md
     developer_notes/licence.rst
 
 .. Indices and tables
