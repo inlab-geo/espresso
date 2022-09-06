@@ -23,12 +23,12 @@ This project is led by `InLab <http://www.inlab.edu.au/>`_.
     :header: text-center text-large
     :card: border-1 m-1 text-center
 
-    **Installation**
+    **Introduction to Espresso**
     ^^^^^^^^^^^^^^^^^^^
 
     🐣 New to Espresso?
 
-    .. link-button:: user_guide/installation
+    .. link-button:: user_guide/introduction
         :type: ref
         :text: User Guide
         :classes: btn-outline-primary btn-block stretched-link
@@ -47,7 +47,7 @@ This project is led by `InLab <http://www.inlab.edu.au/>`_.
 
     ---
 
-    **Improve Espresso package**
+    **Improve Espresso core**
     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     🛠 Let's build a better Espresso together
@@ -80,6 +80,7 @@ Table of contents
     user_guide/introduction.rst
     user_guide/installation.rst
     user_guide/contrib/index.rst
+    user_guide/api/index.rst
     user_guide/faq.rst
 
 .. toctree::
@@ -94,6 +95,7 @@ Table of contents
     :maxdepth: 1
 
     developer_notes/develop.rst
+    developer_notes/changelog.md
     developer_notes/licence.rst
 
 .. Indices and tables

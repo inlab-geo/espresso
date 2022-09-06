@@ -13,8 +13,29 @@
 import datetime
 import os
 import sys
+import subprocess
+from pathlib import Path
 
 import cofi_espresso as esp
+
+
+# -- Generate API references doc ---------------------------------------------
+def run_autogen(_):
+    cmd_path = "sphinx-autogen"
+    if hasattr(sys, "real_prefix"):  # Check to see if we are in a virtualenv
+        # If we are, assemble the path manually
+        cmd_path = os.path.abspath(os.path.join(sys.prefix, "bin", cmd_path))
+    subprocess.check_call(
+        [
+            cmd_path, "-i", 
+            "-t", Path(__file__).parent / "_templates", 
+            "-o", Path(__file__).parent / "user_guide" / "api" / "generated", 
+            Path(__file__).parent / "user_guide" / "api" / "index.rst"
+        ]
+    )
+
+def setup(app):
+    app.connect("builder-inited", run_autogen)
 
 
 # -- Project information -----------------------------------------------------
@@ -26,8 +47,8 @@ version = "dev" if "dev" in esp.__version__ else f"v{esp.__version__}"
 # -- General configuration ---------------------------------------------------
 sys.path.append(os.path.abspath("./_ext"))
 extensions = [
-    # "sphinx.ext.autodoc",
-    # "sphinx.ext.autosummary",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
     "sphinx.ext.doctest",
@@ -50,7 +71,6 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = [
     ".DS_Store",
-    "user_guide/api/index.rst",
     "user_guide/contrib/_index.rst",
     "contributor_guide/contribute.rst",     # TODO migrate to new_contrib.rst
 ]
@@ -63,8 +83,10 @@ add_function_parentheses = False
 
 # Configuration to include links to other project docs
 intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
 }
 
 # Disable including boostrap CSS for sphinx_panels since it's already included

@@ -3,7 +3,10 @@
 List of functions and classes (API)
 ===================================
 
-.. automodule:: inversiontestproblems
+🚧 This page is under construction. 
+
+Please `contact us <../user_guide/faq.html>`_ directly if you have questions.
+
 
 .. attention::
 
@@ -12,16 +15,4 @@ List of functions and classes (API)
     feedback or issues through `GitHub issues <https://github.com/inlab-geo/cofi/issues/new/choose>`_
     or `Slack`_ workspace.
 
-APIs for Basic Usage
---------------------
-
-This is a placeholder text until a proper one is written.
-
-
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    gravityforward
-    
+.. automodule:: cofi_espresso

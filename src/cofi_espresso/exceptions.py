@@ -1,5 +1,6 @@
 class EspressoError(Exception):
-    """ Base class for all Espresso errors """
+    """Base class for all Espresso errors
+    """
     pass
 
 # Multiple inheritance means this can be caught by all of the following:
@@ -7,7 +8,22 @@ class EspressoError(Exception):
 # ... except EspressoError
 # ... except ValueError
 class InvalidExampleError(EspressoError, ValueError):
-    """ Raised if user attempts to instantiate an example number that does not exist """
+    r"""Raised if user attempts to instantiate an example number that does not exist
+
+    This is a subclass of both :exc:`EspressoError` and :exc:`ValueError`.
+
+    Examples
+    --------
+
+    >>> from cofi_espresso import SimpleRegression, InvalidExampleError
+    >>> try:
+    ...     reg = SimpleRegression(6)
+    ... except InvalidExampleError:
+    ...     print("InvalidExampleError triggered")
+    ... 
+    InvalidExampleError triggered
+    
+    """
     def __init__(self, *args):
         super().__init__(*args)
     def __str__(self):
