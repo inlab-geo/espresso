@@ -61,8 +61,8 @@ def move_contrib_source():
     move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}")
     contribs = []
     init_file_imports = "\n"
-    init_file_all_nms = "\n__all_problem_names__ = [\n"
-    init_file_all_cls = "\n__all_problems__ = [\n"
+    init_file_all_nms = "\n_all_problem_names = [\n"
+    init_file_all_cls = "\n_all_problems = [\n"
     for path in Path(CONTRIB_SRC).iterdir():
         if path.is_dir():
             contrib = os.path.basename(path)
@@ -72,22 +72,22 @@ def move_contrib_source():
             init_file_all_nms += f"\t'{contrib_class}',\n"
             init_file_all_cls += f"\t{contrib_class},\n"
     init_file_all_nms += "]"
-    init_file_add_all_nms = "\n__all__ += __all_problem_names__"
-    init_file_rtn_all_nms = "\nlist_problem_names = lambda: __all_problem_names__\n"
     init_file_all_cls += "]"
-    init_file_rtn_all_cls = "\nlist_problems = lambda: __all_problems__\n"
+    init_file_imp_funcs = "\nfrom .list_problems import list_problem_names, list_problems"
+    init_file_add_all_nms = "\n__all__ += list_problem_names()"
     init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY {contrib} DESTINATION .)\n")
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
-        f.write(init_file_all_nms)
+        f.write(init_file_imp_funcs)
         f.write(init_file_add_all_nms)
-        f.write(init_file_rtn_all_nms)
-        f.write(init_file_all_cls)
-        f.write(init_file_rtn_all_cls)
         f.write(init_file_add_funcs)
+    with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
+        f.write(init_file_imports)
+        f.write(init_file_all_nms)
+        f.write(init_file_all_cls)
 
 def install_pkg():
     subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
@@ -114,7 +114,7 @@ def main():
     #
     print("\n🗂  Building Python package: cofi-espresso...")
     exit_code = install_pkg()
-    if exit_code == 0: print("OK.")
+    if exit_code == 0: print("🍰 Espresso installed 🍰")
     
     return exit_code
 

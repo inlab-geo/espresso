@@ -34,9 +34,6 @@ __all__ = [
 
 # from .example_name import ExampleName
 
-# __all_problem_names__ = [ "ExampleName", ]
-# __all__ += __all_problem_names__
-# list_problem_names = lambda: __all_problem_names__
-
-# __all_problems__ = [ ExampleName, ]
-# list_problems = lambda: __all_problems__
+# from .list_problems import list_problem_names, list_problems
+# __all__ += list_problem_names()
+# __all__ += ["list_problem_names", "list_problems"]
