@@ -5,19 +5,23 @@ from cofi_espresso import EspressoProblem, InvalidExampleError
 class SimpleRegression(EspressoProblem):
     """Forward simulation class
     """
-    problem_title = "Simple 1D regression" 
-    problem_short_description = "This example includes various small 1D regression (curve-fitting) " \
-                            "problems. Several different forms of basis function are supported: " \
-                            "polynomial, Fourier and discrete." 
 
-    author_names = ["Andrew Valentine"]  
+    metadata = {
+        "problem_title": "Simple 1D regression",
+        "problem_short_description": "This example includes various small 1D regression (curve-fitting) " \
+                                "problems. Several different forms of basis function are supported: " \
+                                "polynomial, Fourier and discrete.",
 
-    contact_name = "Andrew Valentine" 
-    contact_email = "andrew.valentine@durham.ac.uk"
+        "author_names": ["Andrew Valentine"],
 
-    citations = [] 
+        "contact_name": "Andrew Valentine",
+        "contact_email": "andrew.valentine@durham.ac.uk",
 
-    linked_sites = [] 
+        "citations": [],
+
+        "linked_sites": [],
+    }
+    
 
     def __init__(self, example_number=1):
         super().__init__(example_number)
