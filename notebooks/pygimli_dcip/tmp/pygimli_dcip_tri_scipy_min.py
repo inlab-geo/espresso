@@ -67,4 +67,3 @@ forward_oprt = ert_forward_operator(mgr, scheme, inv_mesh)
 
 # extract regularisation matrix
 Wm = reg_matrix(forward_oprt)
-print(Wm)

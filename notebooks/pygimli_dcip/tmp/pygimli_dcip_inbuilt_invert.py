@@ -56,8 +56,8 @@ ax[0].figure.savefig("figs/rect_mesh/rect_inbuilt_solver_mesh")
 # ############# Inverted by PyGIMLi solvers #############################################
 
 inv = mgr.invert(verbose=True)
-fig = mgr.showResultAndFit()
-fig.savefig("figs/rect_mesh/inbuilt_solver_result")
+# fig = mgr.showResultAndFit()
+# fig.savefig("figs/rect_mesh/inbuilt_solver_result")
 
 # plot inferred model
 fig, axes = plt.subplots(1, 2)
