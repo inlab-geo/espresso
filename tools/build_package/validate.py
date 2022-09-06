@@ -156,19 +156,20 @@ def test_contrib(pre_build, contrib):
     exception_class = getattr(parent_mod, "InvalidExampleError")
     
     # 4 - Check metadata is present within class
-    assert type(contrib_class.problem_title) is str and len(contrib_class.problem_title)>0
-    assert type(contrib_class.problem_short_description) is str # Allow empty field
-    assert type(contrib_class.author_names) is list
-    assert len(contrib_class.author_names)>0
-    for author in contrib_class.author_names: assert type(author) is str and len(author)>0
-    assert type(contrib_class.contact_name) is str and len(contrib_class.contact_name)>0
-    assert type(contrib_class.contact_email) is str and "@" in contrib_class.contact_email
-    assert type(contrib_class.citations) is list
-    for citation in contrib_class.citations: 
+    class_metadata = contrib_class.metadata
+    assert type(class_metadata["problem_title"]) is str and len(class_metadata["problem_title"])>0
+    assert type(class_metadata["problem_short_description"]) is str # Allow empty field
+    assert type(class_metadata["author_names"]) is list
+    assert len(class_metadata["author_names"])>0
+    for author in class_metadata["author_names"]: assert type(author) is str and len(author)>0
+    assert type(class_metadata["contact_name"]) is str and len(class_metadata["contact_name"])>0
+    assert type(class_metadata["contact_email"]) is str and "@" in class_metadata["contact_email"]
+    assert type(class_metadata["citations"]) is list
+    for citation in class_metadata["citations"]: 
         assert type(citation) is tuple and len(citation)==2
         for field in citation: assert type(field) is str
-    assert type(contrib_class.linked_sites) is list
-    for site in contrib_class.linked_sites:
+    assert type(class_metadata["linked_sites"]) is list
+    for site in class_metadata["linked_sites"]:
         assert type(site) is tuple and len(site)==2
         for field in site: assert type(field) is str
 

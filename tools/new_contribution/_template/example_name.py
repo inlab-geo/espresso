@@ -6,25 +6,27 @@ class ExampleName(EspressoProblem):
     """
 
     # TODO fill in the following metadata.
-    problem_title = "" # To be used in docs
-    problem_short_description = "" # 1-3 sentences
+    metadata = {
+        "problem_title": "",                # To be used in docs
+        "problem_short_description": "",    # 1-3 sentences
 
-    author_names = ["",""]  # List of names e.g. author_names = ["Sally Smith", "Mark Brown"]
+        "author_names": ["",""],    # List of names e.g. author_names = ["Sally Smith", "Mark Brown"]
 
-    contact_name = "" # Contact for contributor/maintainer of espresso example.
-    contact_email = ""
+        "contact_name": "",         # Contact for contributor/maintainer of espresso example
+        "contact_email": "",
 
-    citations = [("","")] # Reference to publication(s) that describe this example. In most 
-                        # cases there will only be a single entry in this list.
-                        # List of (citation, doi) pairs e.g. 
-                        # citations = [("Newton, I (1687). Philosophiae naturalis principia mathematica.", None)]
-                        # If there are no citations, use empty list `[]`
+        "citations": [("","")], # Reference to publication(s) that describe this example. In most 
+                                # cases there will only be a single entry in this list.
+                                # List of (citation, doi) pairs e.g. 
+                                # citations = [("Newton, I (1687). Philosophiae naturalis principia mathematica.", None)]
+                                # If there are no citations, use empty list `[]`
 
-    linked_sites = [("","")] # List of (title, address) pairs for any websites that 
-                            # should be linked in the documentation, e.g.
-                            # linked_sites = [("Parent project on Github","https://github.com/user/repo"),
-                            #                 ("Data source"),"https://www.data.com") ]
-                            # If there are no links, use empty list `[]`
+        "linked_sites": [("","")],  # List of (title, address) pairs for any websites that 
+                                    # should be linked in the documentation, e.g.
+                                    # linked_sites = [("Parent project on Github","https://github.com/user/repo"),
+                                    #                 ("Data source"),"https://www.data.com") ]
+                                    # If there are no links, use empty list `[]`
+    }
 
 
     def __init__(self, example_number=1):
