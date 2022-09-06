@@ -30,9 +30,6 @@ Utility Functions
 {% if functions %}
 .. rubric:: Functions
 
-
-.. automethod:: cofi_espresso.list_problems
-.. automethod:: cofi_espresso.list_problem_names
 {% for item in functions %}
 .. automethod:: {{ fullname }}.{{ item }}
 {% endfor %}

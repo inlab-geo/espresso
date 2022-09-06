@@ -17,13 +17,17 @@ List of functions and classes (API)
     :toctree: generated/
     :nosignatures:
 
-    cofi_espresso.EspressoProblem
+    EspressoProblem
+
+.. autofunction:: list_problems
+.. autofunction:: list_problem_names
+
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    cofi_espresso.EspressoError
+    EspressoError
 
 .. autosummary::
     :toctree: generated/
