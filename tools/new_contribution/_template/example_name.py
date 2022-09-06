@@ -66,7 +66,7 @@ class ExampleName(EspressoProblem):
         raise NotImplementedError               # TODO implement me
 
     @property
-    def covariance_matrix(self):                # TODO implement me
+    def covariance_matrix(self):                # optional
         raise NotImplementedError
 
     @property
@@ -88,11 +88,11 @@ class ExampleName(EspressoProblem):
     def plot_data(self, data, data2=None):
         raise NotImplementedError               # optional
 
-    def misfit(self, data, data2):              # optional
-        raise NotImplementedError
+    def misfit(self, data, data2):
+        raise NotImplementedError               # optional
 
-    def log_likelihood(self,data,data2):        # optional
-        raise NotImplementedError
+    def log_likelihood(self,data,data2):
+        raise NotImplementedError               # optional
     
-    def log_prior(self, model):                 # optional
-        raise NotImplementedError
+    def log_prior(self, model):
+        raise NotImplementedError               # optional

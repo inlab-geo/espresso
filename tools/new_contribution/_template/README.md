@@ -45,6 +45,9 @@ To complete this contribution, here are some ideas on what to do next:
    standard interface we'd like to enforce in Espresso. You'll see
    clearly some functionalities that are required to implement and others that are
    optional.
+   - If you would like to load data from files, please use our 
+     [utility functions](https://cofi-espresso.readthedocs.io/en/latest/user_guide/api/generated/cofi_espresso.utils.html) 
+     to get absoluate path before calling your load function.
 - [ ] **Validate and build your contribution locally**. We have seperate scripts for 
    validation and packaging. Check 
    [how to test building your contribution](README.md#how-to-test-building-your-contribution-with-cofi-espresso) 
