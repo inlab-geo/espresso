@@ -9,5 +9,6 @@ dependencies:
   - nodejs>=12
   - pip
   - pip:
-    - cofi>=0.1.2.dev7
+    - cofi>=0.1.2.dev9
+    - espresso>=0.0.1.dev4
     - ipywidgets>=7.7.0
