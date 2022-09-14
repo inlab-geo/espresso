@@ -15,7 +15,7 @@
 
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_cofi-examples_utils_sphinx_gallery_generated_linear_regression.py:
+.. _sphx_glr_cofi-examples_tools_sphinx_gallery_generated_linear_regression.py:
 
 
 Polynomial Linear Regression

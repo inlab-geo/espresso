@@ -15,7 +15,7 @@
 
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_cofi-examples_utils_sphinx_gallery_generated_pygimli_ert.py:
+.. _sphx_glr_cofi-examples_tools_sphinx_gallery_generated_pygimli_ert.py:
 
 
 PyGIMLi - Electrical Resistivity Tomography
