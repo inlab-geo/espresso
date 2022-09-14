@@ -1,9 +1,5 @@
 :orphan:
 
-
-
-.. _sphx_glr_cofi-examples_utils_sphinx_gallery_generated:
-
 Example Gallery
 ===============
 
@@ -33,14 +29,59 @@ Below is a gallery of examples.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Gravity Density Model">
 
 .. only:: html
 
- .. figure:: /cofi-examples/tools/sphinx_gallery/generated/images/thumb/sphx_glr_gravity_density_thumb.png
-     :alt: Gravity Density Model
+  .. image:: /cofi-examples/tools/sphinx_gallery/generated/images/thumb/sphx_glr_gravity_density_thumb.png
+    :alt: Gravity Density Model
 
-     :ref:`sphx_glr_cofi-examples_utils_sphinx_gallery_generated_gravity_density.py`
+  :ref:`sphx_glr_cofi-examples_tools_sphinx_gallery_generated_gravity_density.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Gravity Density Model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="PyGIMLi - Electrical Resistivity Tomography">
+
+.. only:: html
+
+  .. image:: /cofi-examples/tools/sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_ert_thumb.png
+    :alt: PyGIMLi - Electrical Resistivity Tomography
+
+  :ref:`sphx_glr_cofi-examples_tools_sphinx_gallery_generated_pygimli_ert.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">PyGIMLi - Electrical Resistivity Tomography</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Polynomial Linear Regression">
+
+.. only:: html
+
+  .. image:: /cofi-examples/tools/sphinx_gallery/generated/images/thumb/sphx_glr_linear_regression_thumb.png
+    :alt: Polynomial Linear Regression
+
+  :ref:`sphx_glr_cofi-examples_tools_sphinx_gallery_generated_linear_regression.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Polynomial Linear Regression</div>
+    </div>
+
 
 .. raw:: html
 
@@ -51,51 +92,8 @@ Below is a gallery of examples.
    :hidden:
 
    /cofi-examples/tools/sphinx_gallery/generated/gravity_density
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="PyGIMLi - Electrical Resistivity Tomography">
-
-.. only:: html
-
- .. figure:: /cofi-examples/tools/sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_ert_thumb.png
-     :alt: PyGIMLi - Electrical Resistivity Tomography
-
-     :ref:`sphx_glr_cofi-examples_utils_sphinx_gallery_generated_pygimli_ert.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
    /cofi-examples/tools/sphinx_gallery/generated/pygimli_ert
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Polynomial Linear Regression">
-
-.. only:: html
-
- .. figure:: /cofi-examples/tools/sphinx_gallery/generated/images/thumb/sphx_glr_linear_regression_thumb.png
-     :alt: Polynomial Linear Regression
-
-     :ref:`sphx_glr_cofi-examples_utils_sphinx_gallery_generated_linear_regression.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
    /cofi-examples/tools/sphinx_gallery/generated/linear_regression
-.. raw:: html
-
-    <div class="sphx-glr-clear"></div>
 
 
 
