@@ -35,7 +35,7 @@ jobs:
 
       - name: Run script
         run: |
-          python utils/validation/test_all_notebooks_scripts.py
+          python tools/validation/test_all_notebooks_scripts.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2

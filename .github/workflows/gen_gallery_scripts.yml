@@ -35,7 +35,7 @@ jobs:
  
       - name: Run _ipynb_to_gallery.py
         run: |
-          python utils/sphinx_gallery/ipynb_to_gallery.py all
+          python tools/sphinx_gallery/ipynb_to_gallery.py all
           
       - name: Set git config
         continue-on-error: true
@@ -52,7 +52,7 @@ jobs:
       - name: Commit changes to scripts
         continue-on-error: true
         run: |
-          git add utils/sphinx_gallery/scripts/*
+          git add tools/sphinx_gallery/scripts/*
           git commit -m "chore: update scripts/"
           
       - name: Push back to repo

@@ -1,0 +1,56 @@
+=====================================================================
+Summary for inversion problem: Polynomial Regression
+=====================================================================
+Model shape: (4,)
+---------------------------------------------------------------------
+List of functions/properties set by you:
+['log_likelihood', 'log_prior', 'model_shape', 'walkers_starting_pos', 'blobs_dtype']
+---------------------------------------------------------------------
+List of functions/properties created based on what you have provided:
+['log_posterior', 'log_posterior_with_blobs']
+---------------------------------------------------------------------
+List of functions/properties not set by you:
+['objective', 'log_posterior', 'log_posterior_with_blobs', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_misfit', 'regularisation', 'forward', 'data', 'data_covariance', 'data_covariance_inv', 'initial_model', 'bounds', 'constraints']
+=============================
+Summary for inversion options
+=============================
+Solving method: None set
+Use `suggest_solving_methods()` to check available solving methods.
+-----------------------------
+Backend tool: `emcee` - an MIT licensed pure-Python implementation of Goodman & Weare’s Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+References: ['https://emcee.readthedocs.io/en/stable/user/sampler/#emcee.EnsembleSampler', 'https://emcee.readthedocs.io/en/stable/user/sampler/#emcee.EnsembleSampler.sample']
+Use `suggest_tools()` to check available backend tools.
+-----------------------------
+Solver-specific parameters: 
+nwalkers = 32
+nsteps = 5000
+Use `suggest_solver_params()` to check required/optional solver-specific parameters.
+============================
+Summary for inversion result
+============================
+SUCCESS
+----------------------------
+sampler: <emcee.ensemble.EnsembleSampler object>
+blob_names: ['log_likelihood', 'log_prior']
+autocorrelation time: [60.06623419 66.33363928 45.80483908 52.6256319 ]
+m0 = -5.717, (-0.423, +0.431)
+m1 = -5.108, (-0.287, +0.291)
+m2 = 1.818, (-0.217, +0.229)
+m3 = 0.973, (-0.079, +0.08)
+Posterior model covariance matrix
+ [[ 0.18990987  0.05884848 -0.08062154 -0.02514717]
+ [ 0.05884848  0.08758844 -0.03294044 -0.01812487]
+ [-0.08062154 -0.03294044  0.05025757  0.01649417]
+ [-0.02514717 -0.01812487  0.01649417  0.00657754]]
+
+Posterior estimate of model standard deviations in each parameter
+    m0  0.4357
+    m1  0.2959
+    m2  0.2242
+    m3  0.0811
+
+ Solution and 95% credible intervals 
+ m0  -5.717 [ -6.434,  -5.006]
+ m1  -5.108 [ -5.596,  -4.621]
+ m2   1.818 [  1.462,   2.183]
+ m3   0.973 [  0.844,   1.109]
