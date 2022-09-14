@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_cofi-examples_utils_sphinx_gallery_generated_gravity_density.py>`
+        Click :ref:`here <sphx_glr_download_cofi-examples_tools_sphinx_gallery_generated_gravity_density.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -33,7 +33,7 @@ If you are running this notebook locally, make sure you’ve followed
 `steps
 here <https://github.com/inlab-geo/cofi-examples#run-the-examples-with-cofi-locally>`__
 to set up the environment. (This
-`environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/environment.yml>`__
+`environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/envs/environment.yml>`__
 file specifies a list of packages required to run the notebooks)
 
 
@@ -231,8 +231,6 @@ pp.552-560
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     =====================================================================
@@ -241,13 +239,13 @@ pp.552-560
     Model shape: (1728,)
     ---------------------------------------------------------------------
     List of functions/properties set by you:
-    ['gradient', 'jacobian', 'data_misfit', 'regularisation', 'forward', 'data', 'initial_model', 'model_shape']
+    ['gradient', 'jacobian', 'regularisation', 'regularisation_factor', 'forward', 'data', 'initial_model', 'model_shape']
     ---------------------------------------------------------------------
     List of functions/properties created based on what you have provided:
-    ['objective', 'residual', 'jacobian_times_vector']
+    ['objective', 'residual', 'jacobian_times_vector', 'data_misfit']
     ---------------------------------------------------------------------
     List of functions/properties not set by you:
-    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_covariance', 'data_covariance_inv', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularisation_matrix', 'data_covariance', 'data_covariance_inv', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
 
 
 
@@ -275,8 +273,6 @@ pp.552-560
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -333,8 +329,6 @@ pp.552-560
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     ============================
@@ -342,7 +336,7 @@ pp.552-560
     ============================
     SUCCESS
     ----------------------------
-    cost: 0.003126096786196064
+    cost: 0.0031260967846219786
     fun: [0.00021396 0.00024856 0.00028794 0.00033178 0.00037902 0.00042766
      0.00047458 0.00051569 0.00054653 0.00056312 0.00056312 0.00054653
      0.00051569 0.00047458 0.00042766 0.00037902 0.00033178 0.00028794
@@ -425,14 +419,14 @@ pp.552-560
       -3.18717157e-02 -3.06185272e+01]]
     grad: [-3.9256728  -0.20363257 -0.20903043 ... -0.18722546 -0.26295396
      -1.38416382]
-    optimality: 3.925672796827703
+    optimality: 3.9256727958393567
     active_mask: [0. 0. 0. ... 0. 0. 0.]
     nfev: 16
     njev: 16
     status: 3
     message: `xtol` termination condition is satisfied.
-    model: [ 0.01535187  0.02008751  0.01629585 ...  0.00037005 -0.00419068
-     -0.00445243]
+    model: [ 0.01535233  0.02008624  0.01629606 ...  0.0003716  -0.00419137
+     -0.00445244]
 
 
 
@@ -463,12 +457,10 @@ Let’s see the density image from a vertical plane:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7fba872bc220>
+    <matplotlib.colorbar.Colorbar object at 0x7f85b7367550>
 
 
 
@@ -496,12 +488,10 @@ From a different angle:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7fba870c4b50>
+    <matplotlib.colorbar.Colorbar object at 0x7f85b5b39270>
 
 
 
@@ -529,14 +519,12 @@ Watermark
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    cofi 0.1.2.dev7
+    cofi 0.1.2.dev9
     numpy 1.21.6
-    scipy 1.8.1
-    matplotlib 3.5.2
+    scipy 1.9.1
+    matplotlib 3.5.3
     emcee 3.1.2
     arviz 0.12.1
 
@@ -546,28 +534,23 @@ Watermark
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  19.879 seconds)
+   **Total running time of the script:** ( 0 minutes  19.544 seconds)
 
 
-.. _sphx_glr_download_cofi-examples_utils_sphinx_gallery_generated_gravity_density.py:
+.. _sphx_glr_download_cofi-examples_tools_sphinx_gallery_generated_gravity_density.py:
+
+.. only:: html
+
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
-.. only :: html
+    .. container:: sphx-glr-download sphx-glr-download-python
 
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+      :download:`Download Python source code: gravity_density.py <gravity_density.py>`
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-  .. container:: sphx-glr-download sphx-glr-download-python
-
-     :download:`Download Python source code: gravity_density.py <gravity_density.py>`
-
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: gravity_density.ipynb <gravity_density.ipynb>`
+      :download:`Download Jupyter notebook: gravity_density.ipynb <gravity_density.ipynb>`
 
 
 .. only:: html

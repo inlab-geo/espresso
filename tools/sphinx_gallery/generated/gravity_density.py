@@ -16,7 +16,7 @@ Gravity Density Model
 #    `steps
 #    here <https://github.com/inlab-geo/cofi-examples#run-the-examples-with-cofi-locally>`__
 #    to set up the environment. (This
-#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/environment.yml>`__
+#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/envs/environment.yml>`__
 #    file specifies a list of packages required to run the notebooks)
 # 
 

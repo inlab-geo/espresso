@@ -34,6 +34,23 @@ Below is a gallery of examples.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="   &lt;!-- Please leave the cell below as it is --&gt;">
+
+.. only:: html
+
+  .. image:: /cofi-examples/tools/sphinx_gallery/generated/images/thumb/sphx_glr_xray_tomography_thumb.png
+    :alt: Xray Tomography
+
+  :ref:`sphx_glr_cofi-examples_tools_sphinx_gallery_generated_xray_tomography.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Xray Tomography</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Gravity Density Model">
 
 .. only:: html
@@ -51,18 +68,18 @@ Below is a gallery of examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="PyGIMLi - Electrical Resistivity Tomography">
+    <div class="sphx-glr-thumbcontainer" tooltip="PyGIMLi - ERT">
 
 .. only:: html
 
   .. image:: /cofi-examples/tools/sphinx_gallery/generated/images/thumb/sphx_glr_pygimli_ert_thumb.png
-    :alt: PyGIMLi - Electrical Resistivity Tomography
+    :alt: PyGIMLi - ERT
 
   :ref:`sphx_glr_cofi-examples_tools_sphinx_gallery_generated_pygimli_ert.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">PyGIMLi - Electrical Resistivity Tomography</div>
+      <div class="sphx-glr-thumbnail-title">PyGIMLi - ERT</div>
     </div>
 
 
@@ -91,6 +108,7 @@ Below is a gallery of examples.
 .. toctree::
    :hidden:
 
+   /cofi-examples/tools/sphinx_gallery/generated/xray_tomography
    /cofi-examples/tools/sphinx_gallery/generated/gravity_density
    /cofi-examples/tools/sphinx_gallery/generated/pygimli_ert
    /cofi-examples/tools/sphinx_gallery/generated/linear_regression

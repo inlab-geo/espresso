@@ -16,7 +16,7 @@ Polynomial Linear Regression
 #    `steps
 #    here <https://github.com/inlab-geo/cofi-examples#run-the-examples-with-cofi-locally>`__
 #    to set up the environment. (This
-#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/environment.yml>`__
+#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/envs/environment.yml>`__
 #    file specifies a list of packages required to run the notebooks)
 # 
 
@@ -72,7 +72,7 @@ Polynomial Linear Regression
 # 
 # 1. we begin by defining the ``BaseProblem``. This can be done through a
 #    series of set functions
-#    ``python  inv_problem = BaseProblem()  inv_problem.set_objective(some_function_here)  inv_problem.set_initial_model(a_starting_point)``
+#    ``python     inv_problem = BaseProblem()     inv_problem.set_objective(some_function_here)     inv_problem.set_initial_model(a_starting_point)``
 # 
 # 2. define ``InversionOptions``. Some useful methods include:
 # 
@@ -157,7 +157,6 @@ np.random.seed(42)
 #    linear regression problem and looks like the following:
 # 
 #    .. math:: \left(\begin{array}{ccc}1&x_1&x_1^2&x_1^3\\1&x_2&x_2^2&x_2^3\\\vdots&\vdots&\vdots\\1&x_N&x_N^2&x_N^3\end{array}\right)
-# 
 # -  :math:`\text{basis_func}` is the basis function that converts
 #    :math:`\textbf{x}` into :math:`\textbf{G}`
 # 
@@ -478,7 +477,7 @@ inv_result.summary()
 # 
 # Any linear problem :math:`\textbf{y} = \textbf{G}\textbf{m}` can also be
 # solved by minimising the squares of the residual of the linear
-# equations, e.g. \ :math:`\textbf{r}^T \textbf{r}` where
+# equations, e.g. :math:`\textbf{r}^T \textbf{r}` where
 # :math:`\textbf{r}=\textbf{y}-\textbf{G}\textbf{m}`.
 # 
 # So we first use a plain optimizer ``scipy.optimize.minimize`` to

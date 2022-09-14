@@ -1,14 +1,14 @@
 """
-PyGIMLi - Electrical Resistivity Tomography
-===========================================
+PyGIMLi - ERT
+=============
 
 """
 
 
 ######################################################################
-# Using the ERT solver implemented provided by
-# `PyGIMLi <https://www.pygimli.org/>`__, we use different ``cofi``
-# solvers to solve the corresponding inverse problem.
+# Using the ERT (Electrical Resistivity Tomography) solver implemented
+# provided by `PyGIMLi <https://www.pygimli.org/>`__, we use different
+# ``cofi`` solvers to solve the corresponding inverse problem.
 # 
 
 
@@ -35,7 +35,7 @@ PyGIMLi - Electrical Resistivity Tomography
 #    `steps
 #    here <https://github.com/inlab-geo/cofi-examples#run-the-examples-with-cofi-locally>`__
 #    to set up the environment. (This
-#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/environment.yml>`__
+#    `environment.yml <https://github.com/inlab-geo/cofi-examples/blob/main/envs/environment.yml>`__
 #    file specifies a list of packages required to run the notebooks)
 # 
 
@@ -53,15 +53,10 @@ PyGIMLi - Electrical Resistivity Tomography
 
 # !pip install -U cofi
 
-# %env MINICONDA_INSTALLER_SCRIPT=Miniconda3-py37_4.10.3-Linux-x86_64.sh
-# %env MINICONDA_PREFIX=/usr/local
-# !wget https://repo.continuum.io/miniconda/$MINICONDA_INSTALLER_SCRIPT
-# !chmod +x $MINICONDA_INSTALLER_SCRIPT
-# !./$MINICONDA_INSTALLER_SCRIPT -b -f -p $MINICONDA_PREFIX
-# !conda install -c gimli pygimli -y
-
-# import sys
-# _ = (sys.path.append("/usr/local/lib/python3.7/site-packages"))
+# !pip install -q condacolab
+# import condacolab
+# condacolab.install()
+# !mamba install -c gimli pygimli=1.3
 
 # !git clone https://github.com/inlab-geo/cofi-examples.git
 # %cd cofi-examples/notebooks/pygimli_ert
