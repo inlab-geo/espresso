@@ -1,5 +1,9 @@
+import numpy as np
+from scipy.stats import multivariate_normal
+
 from cofi_espresso import EspressoProblem, InvalidExampleError
-from .waveTracker import *
+from cofi_espresso.utils import absolute_path as path
+from . import waveTracker as wt
 
 
 class FmmTomography(EspressoProblem):
@@ -50,14 +54,20 @@ class FmmTomography(EspressoProblem):
 
         """you might want to set some useful example-specific parameters here
         """
-        # if example_number == 1:
-        #     self.some_attribute = some_value_0
-        #     self.another_attribute = another_value_0
-        # elif example_number == 2:
-        #     self.some_attribute = some_value_1
-        #     self.another_attribute = another_value_1
-        # else:
-        #     raise InvalidExampleError
+        if example_number == 1:
+            # read in data set
+            sourcedat=np.loadtxt(path('datasets/ttimes/sources_crossb_nwt_s10.dat'))
+            recdat = np.loadtxt(path('datasets/ttimes/receivers_crossb_nwt_r10.dat'))
+            ttdat = np.loadtxt(path('datasets/ttimes/ttimes_crossb_nwt_s10_r10.dat'))
+            recs = recdat.T[1:].T # set up receivers
+            srcs = sourcedat.T[1:].T # set up sources
+            nr,ns = np.shape(recs)[0],np.shape(srcs)[0] # number of receivers and sources
+            print(' New data set has:\n',np.shape(recs)[0],
+                ' receivers\n',np.shape(sourcedat)[0],
+                ' sources\n',np.shape(ttdat)[0],' travel times')
+            rays = (ttdat[:,1] + ttdat[:,0]*nr).astype(int) # find rays from travel time file
+        else:
+            raise InvalidExampleError
 
     @property
     def description(self):
@@ -114,3 +124,27 @@ class FmmTomography(EspressoProblem):
     
     def log_prior(self, model):
         raise NotImplementedError               # optional
+
+
+def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model
+    vc1 = 1700.                           # velocity of circle 1
+    vc2 = 2300.                           # velocity of circle 2
+    vb = 2000.                            # background velocity
+    dx = (extent[1]-extent[0])/nx                           # cell width
+    dy = (extent[3]-extent[2])/ny                           # cell height
+    xc = np.linspace(extent[0],extent[1],nx)    # cell centre
+    yc = np.linspace(extent[2],extent[3],ny)    # cell centre
+    X,Y = np.meshgrid(xc, yc,indexing='ij')   # cell centre mesh
+
+    # Multivariate Normal
+    c1,sig1 = np.array([7.0,22.]),6.0     # location and radius of centre of first circle
+    c2,sig2 = np.array([12.0,10.]),10.0    # location and radius of centre of first circle
+    rv1 = multivariate_normal(c1, [[sig1, 0], [0, sig1]])
+    rv2 = multivariate_normal(c2, [[sig2, 0], [0, sig2]])
+
+    # Probability Density
+    pos = np.empty(X.shape + (2,))
+    pos[:, :, 0] = X
+    pos[:, :, 1] = Y
+    gauss1,gauss2 = rv1.pdf(pos),rv2.pdf(pos)
+    return   2000.*np.ones([nx,ny])  + (vc1-vb)*gauss1/np.max(gauss1) + (vc2-vb)*gauss2/np.max(gauss2)
