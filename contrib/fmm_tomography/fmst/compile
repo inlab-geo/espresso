@@ -1,0 +1,33 @@
+##!/usr/bin/ksh
+#
+# Note, if ksh is not available, you can use
+# another shell like zsh
+#
+##################################################
+##################################################
+# This script will compile all executable programs
+# that are required by the FMM based tomographic
+# inversion routine FMST. Additional programs for
+# plotting, computing model roughness etc. are
+# also compiled. See accompanying documentation
+# for further details
+##################################################
+##################################################
+#
+# YOU MUST SPECIFY A FORTRAN 90 COMPILER!!!!
+# Compiler options can be included at this stage
+# if deemed necessary by the user.
+#
+##################################################
+F90=ifort
+F90=gfortran
+##################################################
+$F90 -o fm2dss src/fm2dss.f90
+echo " "
+echo "Compilation of fm2dss complete"
+##################################################
+#Compilation is now complete
+##################################################
+##################################################
+echo " "
+echo "Compilation complete"

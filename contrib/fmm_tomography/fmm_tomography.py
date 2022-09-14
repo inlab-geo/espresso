@@ -1,11 +1,11 @@
 from cofi_espresso import EspressoProblem, InvalidExampleError
+from .waveTracker import *
 
 
 class FmmTomography(EspressoProblem):
     """Forward simulation class
     """
 
-    # TODO fill in the following metadata.
     metadata = {
         "problem_title": "Fast Marching Wave Front Tracking",                # To be used in docs
         "problem_short_description": "The wave front tracker routines solves boundary"\
@@ -25,7 +25,7 @@ class FmmTomography(EspressoProblem):
             ),
             (
                 "Rawlinson, N. and Urvoy, M., 2006. Simultaneous inversion of active and passive source datasets for 3-D seismic structure with application to Tasmania, Geophys. Res. Lett., 33 L24313",
-                "doi:10.1029/2006GL028105"
+                "10.1029/2006GL028105"
             ),
             (
                 "de Kool, M., Rawlinson, N. and Sambridge, M. 2006. A practical grid based method for tracking multiple refraction and reflection phases in 3D heterogeneous media, Geophys. J. Int., 167, 253-270",
