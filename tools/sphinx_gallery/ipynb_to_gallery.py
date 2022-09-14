@@ -19,7 +19,7 @@ current_dir = Path(__file__).resolve().parent
 root_dir = current_dir.parent.parent
 NOTEBOOKS = "notebooks"
 NOTEBOOKS_DIR = str(root_dir / NOTEBOOKS)
-SCRIPTS_DIR = str(root_dir / "utils" / "sphinx_gallery" / "scripts")
+SCRIPTS_DIR = str(root_dir / "tools" / "sphinx_gallery" / "scripts")
 
 BADGE_BEGIN = "<!--<badge>-->"
 BADGE_END = "<!--</badge>-->"
