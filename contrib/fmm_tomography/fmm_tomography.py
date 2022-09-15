@@ -1,3 +1,4 @@
+import random
 import numpy as np
 from scipy.stats import multivariate_normal
 
@@ -66,6 +67,32 @@ class FmmTomography(EspressoProblem):
                 ' receivers\n',np.shape(sourcedat)[0],
                 ' sources\n',np.shape(ttdat)[0],' travel times')
             rays = (ttdat[:,1] + ttdat[:,0]*nr).astype(int) # find rays from travel time file
+
+            # Add Gaussian noise to data
+            print(' Range of travel times: ',np.min(ttdat.T[2]),np.max(ttdat.T[2]),'\n Mean travel time:',np.mean(ttdat.T[2]))
+            sigma =  0.00001                   # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals
+            random.seed(61254557)              # set random seed
+            ttdat[:,2]+=np.random.normal(0.0, sigma, len(ttdat.T[2]))
+
+            # true model
+            extent = [0.,20.,0.,30.]
+            mtrue = get_gauss_model(extent,32,48) # we get the true velocity model domain for comparison 
+
+            # starting model
+            nx,ny = mtrue.shape                   # set up grid
+            mb = 2000.*np.ones([nx,ny])           # reference velocity model in m/s
+
+            # User wavefront tracker to get True rays in True model
+            g=wt.gridModel(mtrue,extent=extent)   # set up grid model
+            fmm = g.wavefront_tracker(recs,srcs,verbose=True,paths=True,wdir=str(path(".")))
+            paths = fmm.paths
+            ttimes_true = fmm.ttimes
+
+            # assign properties
+            self._mtrue = mtrue
+            self._mstart = mb
+            self._data = ttdat
+
         else:
             raise InvalidExampleError
 
@@ -75,23 +102,25 @@ class FmmTomography(EspressoProblem):
 
     @property
     def model_size(self):
-        raise NotImplementedError               # TODO implement me
+        model_shape = self.good_model.shape
+        return model_shape[0] * model_shape[1]
 
     @property
     def data_size(self):
-        raise NotImplementedError               # TODO implement me
+        data_shape = self.data.shape
+        return data_shape[0] * data_shape[1]
 
     @property
     def good_model(self):
-        raise NotImplementedError               # TODO implement me
+        return self._mtrue
 
     @property
     def starting_model(self):
-        raise NotImplementedError               # TODO implement me
+        return self._mstart
     
     @property
     def data(self):
-        raise NotImplementedError               # TODO implement me
+        return self._data
 
     @property
     def covariance_matrix(self):                # optional

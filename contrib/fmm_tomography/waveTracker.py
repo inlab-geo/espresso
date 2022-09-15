@@ -1,3 +1,5 @@
+import os, stat
+from pathlib import Path
 import numpy as np
 import scipy.optimize as optim
 import tqdm
@@ -84,8 +86,13 @@ class gridModel(object):
     
         # run fmst wavefront tracker code from command line
     
-        command = "cd "+wdir+"; ./fm2dss"
-        out = subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True)
+        command = "./fm2dss"
+        out = subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
+        if out.returncode:
+            print("Fixing permission now...")
+            Path(wdir + "/fm2dss").chmod(0o774)
+            print("Execute permission given to fm2dss.")
+            out = subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
         if(verbose): print(' Message from fmm2dss:',out.stdout)
         if(out.returncode != 0):
             print(' The process returned with errorcode:',out.returncode)
