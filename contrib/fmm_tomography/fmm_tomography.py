@@ -26,7 +26,7 @@ class FmmTomography(EspressoProblem):
         "citations": [
             (
                 "Rawlinson, N., de Kool, M. and Sambridge, M., 2006. Seismic wavefront tracking in 3-D heterogeneous media: applications with multiple data classes, Explor. Geophys., 37, 322-330.",
-                None
+                ""
             ),
             (
                 "Rawlinson, N. and Urvoy, M., 2006. Simultaneous inversion of active and passive source datasets for 3-D seismic structure with application to Tasmania, Geophys. Res. Lett., 33 L24313",
@@ -34,7 +34,7 @@ class FmmTomography(EspressoProblem):
             ),
             (
                 "de Kool, M., Rawlinson, N. and Sambridge, M. 2006. A practical grid based method for tracking multiple refraction and reflection phases in 3D heterogeneous media, Geophys. J. Int., 167, 253-270",
-                None
+                ""
             )
         ], # Reference to publication(s) that describe this example. In most 
                                 # cases there will only be a single entry in this list.
@@ -53,8 +53,13 @@ class FmmTomography(EspressoProblem):
     def __init__(self, example_number=1):
         super().__init__(example_number)
 
-        """you might want to set some useful example-specific parameters here
-        """
+        current_dir = path(".")
+        self.tmp_files = ["fm2dss.in", "frechet.out", "gridc.vtx", "otimes.dat",
+                    "raypath.out", "receivers.dat", "rtravel.out", "sources.dat"]
+        self.tmp_paths = []
+        for name in self.tmp_files:
+            self.tmp_paths.append(current_dir / name)
+
         if example_number == 1:
             # read in data set
             sourcedat=np.loadtxt(path('datasets/ttimes/sources_crossb_nwt_s10.dat'))
@@ -66,7 +71,7 @@ class FmmTomography(EspressoProblem):
             print(' New data set has:\n',np.shape(recs)[0],
                 ' receivers\n',np.shape(sourcedat)[0],
                 ' sources\n',np.shape(ttdat)[0],' travel times')
-            rays = (ttdat[:,1] + ttdat[:,0]*nr).astype(int) # find rays from travel time file
+            # rays = (ttdat[:,1] + ttdat[:,0]*nr).astype(int) # find rays from travel time file
 
             # Add Gaussian noise to data
             print(' Range of travel times: ',np.min(ttdat.T[2]),np.max(ttdat.T[2]),'\n Mean travel time:',np.mean(ttdat.T[2]))
@@ -82,17 +87,14 @@ class FmmTomography(EspressoProblem):
             nx,ny = mtrue.shape                   # set up grid
             mb = 2000.*np.ones([nx,ny])           # reference velocity model in m/s
 
-            # User wavefront tracker to get True rays in True model
-            g=wt.gridModel(mtrue,extent=extent)   # set up grid model
-            fmm = g.wavefront_tracker(recs,srcs,verbose=True,paths=True,wdir=str(path(".")))
-            paths = fmm.paths
-            ttimes_true = fmm.ttimes
-
             # assign properties
+            self.exe_fm2dss = str(current_dir)
             self._mtrue = mtrue
             self._mstart = mb
             self._data = ttdat
-
+            self.extent = extent
+            self.receivers = recs
+            self.sources = srcs
         else:
             raise InvalidExampleError
 
@@ -102,25 +104,23 @@ class FmmTomography(EspressoProblem):
 
     @property
     def model_size(self):
-        model_shape = self.good_model.shape
-        return model_shape[0] * model_shape[1]
+        return self.good_model.shape[0]
 
     @property
     def data_size(self):
-        data_shape = self.data.shape
-        return data_shape[0] * data_shape[1]
+        return self.data.shape[0]
 
     @property
     def good_model(self):
-        return self._mtrue
+        return self._mtrue.flatten()
 
     @property
     def starting_model(self):
-        return self._mstart
+        return self._mstart.flatten()
     
     @property
     def data(self):
-        return self._data
+        return self._data[:,2].flatten()
 
     @property
     def covariance_matrix(self):                # optional
@@ -131,13 +131,26 @@ class FmmTomography(EspressoProblem):
         raise NotImplementedError               # optional
         
     def forward(self, model, with_jacobian=False):
+        model_reshaped = model.reshape(self._mstart.shape)
+        g = wt.gridModel(model_reshaped, extent=self.extent)
+        fmm = g.wavefront_tracker(
+            self.receivers, 
+            self.sources, 
+            verbose=True, 
+            # paths=True, 
+            frechet=True, 
+            wdir=self.exe_fm2dss
+        )
+        # paths = fmm.paths
+        ttimes = fmm.ttimes
+        A = fmm.frechet.toarray()
         if with_jacobian:
-            raise NotImplementedError           # optional
+            return np.array(ttimes).flatten(), A
         else:
-            raise NotImplementedError           # TODO implement me
+            return np.array(ttimes).flatten()
     
     def jacobian(self, model):
-        raise NotImplementedError               # optional
+        return self.forward(model, True)[1]
 
     def plot_model(self, model):
         raise NotImplementedError               # optional
@@ -153,6 +166,9 @@ class FmmTomography(EspressoProblem):
     
     def log_prior(self, model):
         raise NotImplementedError               # optional
+    
+    def clean_files(self):
+        print(self.tmp_paths)
 
 
 def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model

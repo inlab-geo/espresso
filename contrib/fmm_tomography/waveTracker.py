@@ -89,9 +89,12 @@ class gridModel(object):
         command = "./fm2dss"
         out = subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
         if out.returncode:
-            print("Fixing permission now...")
-            Path(wdir + "/fm2dss").chmod(0o774)
-            print("Execute permission given to fm2dss.")
+            print("Trying to fix now...")
+            try:
+                Path(wdir + "/fm2dss").chmod(0o774)
+                print("Execute permission given to fm2dss.")
+            except:
+                print("Failed to fix. Check error message above.")
             out = subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
         if(verbose): print(' Message from fmm2dss:',out.stdout)
         if(out.returncode != 0):
