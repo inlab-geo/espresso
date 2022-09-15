@@ -136,7 +136,7 @@ class FmmTomography(EspressoProblem):
         fmm = g.wavefront_tracker(
             self.receivers, 
             self.sources, 
-            verbose=True, 
+            # verbose=True, 
             # paths=True, 
             frechet=True, 
             wdir=self.exe_fm2dss
@@ -152,8 +152,21 @@ class FmmTomography(EspressoProblem):
     def jacobian(self, model):
         return self.forward(model, True)[1]
 
-    def plot_model(self, model):
-        raise NotImplementedError               # optional
+    def plot_model(self, model, paths=False):
+        if paths:
+            model_reshaped = model.reshape(self._mstart.shape)
+            g = wt.gridModel(model_reshaped, extent=self.extent)
+            fmm = g.wavefront_tracker(
+                self.receivers, 
+                self.sources, 
+                paths=True, 
+                wdir=self.exe_fm2dss
+            )
+            paths = fmm.paths
+        else:
+            paths = None
+        model = model.reshape(self._mstart.shape)
+        return wt.displayModel(model, paths=paths, extent=self.extent, cline="g", alpha=0.5)
     
     def plot_data(self, data, data2=None):
         raise NotImplementedError               # optional
@@ -167,9 +180,6 @@ class FmmTomography(EspressoProblem):
     def log_prior(self, model):
         raise NotImplementedError               # optional
     
-    def clean_files(self):
-        print(self.tmp_paths)
-
 
 def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model
     vc1 = 1700.                           # velocity of circle 1

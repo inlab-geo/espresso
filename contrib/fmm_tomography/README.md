@@ -45,6 +45,12 @@ $$\delta d_i = A_{ij}\delta s_j $$
 where $\delta d_i$ is the difference in travel time, of the ith path, between the observed time and the travel time in the reference model. Here $A_{ij}$ represents the path length in cell $j$ of the discretized model. The parameters $\delta s_j$ are slowness perturbations to the reference model.
 
 
+## Library usage
+
+All the methods comply to `cofi-espresso` standards. Additionally, you can display 
+paths together with the model when running `fmm_instance.plot_model(model, paths=True)`,
+where `fmm_instance` is an instance of class `FmmTomography`.
+
 <!-- ## Getting started
 
 To complete this contribution, here are some ideas on what to do next:

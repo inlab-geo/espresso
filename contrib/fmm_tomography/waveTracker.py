@@ -358,7 +358,7 @@ def read_fmst_wave(filename):
 def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,
                  figsize=(6,6),title=None,line=1.0,cline='k',alpha=1.0,wfront=None,cwfront='k',
                  diced=True,dicex=8,dicey=8,**wkwargs):
-    plt.figure(figsize=figsize)
+    fig = plt.figure(figsize=figsize)
     if cmap is None: cmap = plt.cm.RdBu
 
     # if diced option plot the actual B-spline interpolated velocity used by fmst program
@@ -387,7 +387,8 @@ def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,
     
     plt.colorbar()
 
-    plt.show()
+    # plt.show()
+    return fig
 
 def dicedgrid(v,extent=[0.,1.,0.,1.],dicex=8,dicey=8):    
     nx,ny = v.shape
