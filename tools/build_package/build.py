@@ -97,29 +97,36 @@ def install_pkg():
     return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
 
 def main():
-    print("🛠  Package building...")
+    print_with_emoji("🛠  Package building...", "\nPackage building...")
     #
-    print("\n🗂  Cleaning build folder...")
+    print_with_emoji("\n🗂  Cleaning build folder...", "\nCleaning build folder...")
     clean_build_folder()
     print("OK.")
     #
-    print("\n🗂  Moving Espresso core packaging files...")
+    print_with_emoji("\n🗂  Moving Espresso core packaging files...", "\nMoving Espresso core packaging files...")
     move_pkg_source()
     print("OK.")
     #
-    print("\n🗂  Moving package metadata...")
+    print_with_emoji("\n🗂  Moving package metadata...", "\nMoving package metadata...")
     move_pkg_metadata()
     print("OK.")
     #
-    print("\n🗂  Moving all contributions...")
+    print_with_emoji("\n🗂  Moving all contributions...", "\nMoving all contributions...")
     move_contrib_source()
     print("OK.")
     #
-    print("\n🗂  Building Python package: cofi-espresso...")
+    print_with_emoji("\n🗂  Building Python package: cofi-espresso...", "\nBuilding Python package: cofi-espresso...")
     exit_code = install_pkg()
-    if exit_code == 0: print("🍰 Espresso installed 🍰")
+    if exit_code == 0: 
+        print_with_emoji("🍰 Espresso installed 🍰", "Espresso installed")
     
     return exit_code
+
+def print_with_emoji(content, alt):
+    try:
+        print(content)
+    except:
+        print(alt)
 
 if __name__ == "__main__":
     main()
