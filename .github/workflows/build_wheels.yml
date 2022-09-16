@@ -72,8 +72,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          path: ./wheelhouse/*.whl
-        working-directory: _esp_build
+          path: _esp_build/wheelhouse/*.whl
 
       # - name: Build wheels
       #   uses: pypa/cibuildwheel@v2.3.1
