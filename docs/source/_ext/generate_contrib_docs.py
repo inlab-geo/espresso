@@ -38,7 +38,7 @@ def read_metadata(contrib_name, lines):
     # metadata - authors
     lines.append("\n:Author: " + ", ".join(class_metadata["author_names"]))
     # metadata - contact
-    lines.append(":Contact: " + class_metadata["contact_name"] + "(" + class_metadata["contact_email"] + ")")
+    lines.append(":Contact: " + class_metadata["contact_name"] + " (" + class_metadata["contact_email"] + ")")
     # metadata - citations
     if len(class_metadata["citations"]) > 0:
         lines.append(":Citation:")
@@ -55,7 +55,7 @@ def read_metadata(contrib_name, lines):
         lines.append(":Extra website:")
         if len(class_metadata["linked_sites"]) == 1:
             name, link = class_metadata["linked_sites"][0]
-            lines.append(f"  [{name}]({link})")
+            lines.append(f"  `{name} <{link}>`_")
         else:
             for (name, link) in class_metadata["linked_sites"]:
                 lines.append(f"  - [{name}]({link})")

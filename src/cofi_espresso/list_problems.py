@@ -18,14 +18,17 @@ def list_problems():
 from .xray_tomography import XrayTomography
 from .simple_regression import SimpleRegression
 from .gravity_density import GravityDensity
+from .fmm_tomography import FmmTomography
 
 _all_problem_names = [
 	'XrayTomography',
 	'SimpleRegression',
 	'GravityDensity',
+	'FmmTomography',
 ]
 _all_problems = [
 	XrayTomography,
 	SimpleRegression,
 	GravityDensity,
+	FmmTomography,
 ]
