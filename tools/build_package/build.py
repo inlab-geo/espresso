@@ -80,6 +80,8 @@ def move_contrib_source():
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY {contrib} DESTINATION .)\n")
+            if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
+                f.write(f"add_subdirectory({contrib})\n")
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_imp_funcs)

@@ -1,0 +1,12 @@
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+fm2dss
+fm2dss.in
+frechet.out
+gridc.vtx
+otimes.dat
+receivers.dat
+rtravel.out
+sources.dat

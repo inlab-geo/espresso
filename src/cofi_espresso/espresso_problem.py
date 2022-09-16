@@ -1,5 +1,4 @@
 from abc import abstractmethod, ABCMeta
-from collections import defaultdict
 
 
 def abstract_metadata_key(*names):
@@ -59,7 +58,6 @@ class EspressoProblem(metaclass=ABCMeta):
         when you've passed in an example number that isn't included in current problem
 
 
-
     .. rubric:: Metadata
     
     Problem-sepecific metadata include the following keys:
@@ -72,10 +70,15 @@ class EspressoProblem(metaclass=ABCMeta):
     - ``citations``
     - ``linked_sites``
 
-    And they can be accessed through the :attr:`metadata` dictionary:
+    And they can be accessed through the :code:`metadata` dictionary:
 
-    .. autosummary::
-        EspressoProblem.metadata
+    .. code-block:: pycon
+
+       >>> from cofi_espresso import <ProblemClass>
+       >>> <ProblemClass>.metadata["problem_title"]
+       This is a problem about...
+       >>> <ProblemClass>.metadata.keys()
+       dict_keys(['problem_title', 'problem_short_description', 'author_names', 'contact_name', 'contact_email', 'citations', 'linked_sites'])
 
     .. rubric:: Required attributes
     
