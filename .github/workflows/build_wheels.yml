@@ -54,7 +54,7 @@ jobs:
           CIBW_SKIP: pp* *-win32 *-manylinux_i686 *-musllinux_*
           CIBW_ARCHS_MACOS: x86_64 arm64
           CIBW_REPAIR_WHEEL_COMMAND: ""
-           Package the DLL dependencies in the wheel for windows (done by default for the other platforms).
+          # Package the DLL dependencies in the wheel for windows (done by default for the other platforms).
           # delvewheel cannot mangle the libraries, stripping does not work.
           CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
