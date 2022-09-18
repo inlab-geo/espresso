@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-2019, macos-latest]
 
     steps:
       - name: Symlink gfortran (macOS)
@@ -68,7 +68,7 @@ jobs:
           CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
           # Run the tests.
-          # CIBW_TEST_COMMAND: python -m pip install pytest; python tools/build_package/validate.py --post
+          # CIBW_TEST_COMMAND: python -m pip install pytest; python ../tools/build_package/validate.py --post
 
       - uses: actions/upload-artifact@v3
         with:
