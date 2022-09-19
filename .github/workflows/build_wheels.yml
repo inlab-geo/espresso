@@ -40,12 +40,12 @@ jobs:
         if: runner.os == 'Windows'
         uses: msys2/setup-msys2@v2
         with:
-        update: true
-        install: >-
-          mingw-w64-x86_64-cmake
-          mingw-w64-x86_64-ninja
-          mingw-w64-x86_64-gcc-fortran
-          mingw-w64-x86_64-hdf5
+          update: true
+          install: >-
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-gcc-fortran
+            mingw-w64-x86_64-hdf5
 
       - name: Show gfortran
         run: |
