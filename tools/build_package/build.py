@@ -129,4 +129,4 @@ def print_with_emoji(content, alt):
         print(alt)
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
