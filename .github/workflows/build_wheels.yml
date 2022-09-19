@@ -74,11 +74,18 @@ jobs:
       #   with:
       #     path: _esp_build/wheelhouse/*.whl
 
+      - name: Remove docs (prepare for new sources files)
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: docs
+      
+      - name: Remove docs (prepare for new sources files)
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: src
+
       - name: Move source files to root
-        run: |
-          rm -rf docs
-          rm -rf src
-          mv -f _esp_build/* .
+        run: mv -f _esp_build/* .
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.3.1
