@@ -47,6 +47,10 @@ jobs:
             mingw-w64-x86_64-gcc-fortran
             mingw-w64-x86_64-hdf5
 
+      - name: Use the correct gfortran (Windows)
+        if: runner.os == 'Windows'
+        run: echo "${{ runner.temp }}/msys/msys64/mingw64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
       - name: Show gfortran
         run: |
           gcc --version
