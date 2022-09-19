@@ -75,7 +75,10 @@ jobs:
       #     path: _esp_build/wheelhouse/*.whl
 
       - name: Move source files to root
-        run: mv -f _esp_build/* .
+        run: |
+          rm -rf docs
+          rm -rf src
+          mv -f _esp_build/* .
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.3.1
