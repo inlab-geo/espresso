@@ -8,7 +8,6 @@ find_package(PythonExtensions REQUIRED)
 find_package(Cython REQUIRED)
 find_package(NumPy REQUIRED)
 find_package(F2PY REQUIRED)
-enable_language(Fortran)
 
 # Add proper -fPIC and MINGW handling
 set(CMAKE_GENERATOR_WINDOWS "MinGW Makefiles")
@@ -30,6 +29,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES Clang)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${common}")
 endif ()
 
+enable_language(Fortran)
 
 if(SKBUILD)
   # Scikit-Build does not add your site-packages to the search path
