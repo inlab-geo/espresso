@@ -21,7 +21,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest]
+        # os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Symlink gfortran (macOS)
@@ -35,9 +36,9 @@ jobs:
           sudo ln -s /usr/local/Cellar/gcc@10/*/lib/gcc/10 /usr/local/gfortran/lib
           gfortran --version
       
-      # - name: Provide gfortran (Windows)
-      #   if: runner.os == 'Windows'
-      #   uses: msys2/setup-msys2@v2
+      - name: Provide gfortran (Windows)
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
 
       - name: Show gfortran
         run: |
