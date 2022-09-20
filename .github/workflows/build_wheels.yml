@@ -3,11 +3,12 @@ name: Build
 on:
   workflow_dispatch:
   push:
-    branches: main
-    paths:
-      - 'src/cofi_espresso/**'
-      - 'pyproject.toml'
-      - 'setup.py'
+    branches: ci_experiments      # TODO remove me
+    # branches: main
+    # paths:
+    #   - 'src/cofi_espresso/**'
+    #   - 'pyproject.toml'
+    #   - 'setup.py'
   pull_request:
     paths:
       - 'src/cofi_espresso/**'
@@ -21,7 +22,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-2019, macos-latest]
+        os: [windows-latest]    # TODO remove me
+        # os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Symlink gfortran (macOS)
@@ -35,9 +37,25 @@ jobs:
           sudo ln -s /usr/local/Cellar/gcc@10/*/lib/gcc/10 /usr/local/gfortran/lib
           gfortran --version
       
-      - name: Provide gfortran (Windows)
-        if: runner.os == 'Windows'
-        uses: msys2/setup-msys2@v2
+      # - name: Provide gfortran (Windows)
+      #   if: runner.os == 'Windows'
+      #   uses: msys2/setup-msys2@v2
+      #   with:
+      #     update: true
+      #     install: >-
+      #       mingw-w64-x86_64-cmake
+      #       mingw-w64-x86_64-ninja
+      #       mingw-w64-x86_64-gcc-fortran
+      #       mingw-w64-x86_64-hdf5
+
+      # - name: Use the correct gfortran (Windows)
+      #   if: runner.os == 'Windows'
+      #   run: echo "${{ runner.temp }}/msys/msys64/mingw64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Show gfortran
+        run: |
+          gcc --version
+          gfortran --version
 
       # - name: Tell distutils to use mingw (Windows)
       #   if: runner.os == 'Windows'
