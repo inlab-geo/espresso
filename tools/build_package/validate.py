@@ -281,7 +281,9 @@ def main():
             print("`--build` is enabled, so we will run `cmake --build .` for the " \
                 "contributions that contain `CMakeLists.txt` file.\n")
         subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
-        subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
+        exit_code = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
+        if exit_code:
+            sys.exit(exit_code)
     sys.exit(pytest.main([Path(__file__)]))
 
 if __name__ == "__main__":

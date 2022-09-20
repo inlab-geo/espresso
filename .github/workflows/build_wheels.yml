@@ -3,11 +3,12 @@ name: Build
 on:
   workflow_dispatch:
   push:
-    branches: main
-    paths:
-      - 'src/cofi_espresso/**'
-      - 'pyproject.toml'
-      - 'setup.py'
+    branches: ci_experiments      # TODO remove me
+    # branches: main
+    # paths:
+    #   - 'src/cofi_espresso/**'
+    #   - 'pyproject.toml'
+    #   - 'setup.py'
   pull_request:
     paths:
       - 'src/cofi_espresso/**'
@@ -21,7 +22,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-2019, macos-latest]
+        os: [windows-latest]    # TODO remove me
+        # os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Symlink gfortran (macOS)
@@ -35,14 +37,30 @@ jobs:
           sudo ln -s /usr/local/Cellar/gcc@10/*/lib/gcc/10 /usr/local/gfortran/lib
           gfortran --version
       
-      - name: Provide gfortran (Windows)
-        if: runner.os == 'Windows'
-        uses: msys2/setup-msys2@v2
+      # - name: Provide gfortran (Windows)
+      #   if: runner.os == 'Windows'
+      #   uses: msys2/setup-msys2@v2
+      #   with:
+      #     update: true
+      #     install: >-
+      #       mingw-w64-x86_64-cmake
+      #       mingw-w64-x86_64-ninja
+      #       mingw-w64-x86_64-gcc-fortran
+      #       mingw-w64-x86_64-hdf5
 
-      - name: Tell distutils to use mingw (Windows)
-        if: runner.os == 'Windows'
+      # - name: Use the correct gfortran (Windows)
+      #   if: runner.os == 'Windows'
+      #   run: echo "${{ runner.temp }}/msys/msys64/mingw64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Show gfortran
         run: |
-          echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
+          gcc --version
+          gfortran --version
+
+      # - name: Tell distutils to use mingw (Windows)
+      #   if: runner.os == 'Windows'
+      #   run: |
+      #     echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
 
       - uses: actions/checkout@v3
 
@@ -56,39 +74,9 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.10.0
 
-      # - name: Build wheels
-      #   run: python -m cibuildwheel --output-dir wheelhouse
-      #   working-directory: _esp_build
-      #   env:
-      #     CIBW_SKIP: pp* *-win32 *-manylinux_i686 *-musllinux_*
-      #     CIBW_ARCHS_MACOS: x86_64 arm64
-      #     CIBW_REPAIR_WHEEL_COMMAND: ""
-      #     # Package the DLL dependencies in the wheel for windows (done by default for the other platforms).
-      #     # delvewheel cannot mangle the libraries, stripping does not work.
-      #     CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
-      #     CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
-      #     # Run the tests.
-      #     # CIBW_TEST_COMMAND: python -m pip install pytest; python ../tools/build_package/validate.py --post
-
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     path: _esp_build/wheelhouse/*.whl
-
-      - name: Remove docs (prepare for new sources files)
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: docs
-      
-      - name: Remove docs (prepare for new sources files)
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: src
-
-      - name: Move source files to root
-        run: mv -f _esp_build/* .
-
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.3.1
+        run: python -m cibuildwheel --output-dir wheelhouse
+        working-directory: _esp_build
         env:
           CIBW_SKIP: pp* *-win32 *-manylinux_i686 *-musllinux_*
           CIBW_ARCHS_MACOS: x86_64 arm64
@@ -98,8 +86,38 @@ jobs:
           CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
           # Run the tests.
-          # CIBW_TEST_COMMAND: python -m pip install pytest; python tools/build_package/validate.py --post
+          # CIBW_TEST_COMMAND: python -m pip install pytest; python ../tools/build_package/validate.py --post
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           path: _esp_build/wheelhouse/*.whl
+
+      # - name: Remove docs (prepare for new sources files)
+      #   uses: JesseTG/rm@v1.0.3
+      #   with:
+      #     path: docs
+      
+      # - name: Remove docs (prepare for new sources files)
+      #   uses: JesseTG/rm@v1.0.3
+      #   with:
+      #     path: src
+
+      # - name: Move source files to root
+      #   run: mv -f _esp_build/* .     # this doesn't work on Windows
+
+      # - name: Build wheels
+      #   uses: pypa/cibuildwheel@v2.3.1
+      #   env:
+      #     CIBW_SKIP: pp* *-win32 *-manylinux_i686 *-musllinux_*
+      #     CIBW_ARCHS_MACOS: x86_64 arm64
+      #     CIBW_REPAIR_WHEEL_COMMAND: ""
+      #     # Package the DLL dependencies in the wheel for windows (done by default for the other platforms).
+      #     # delvewheel cannot mangle the libraries, stripping does not work.
+      #     CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
+      #     CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
+      #     # Run the tests.
+      #     # CIBW_TEST_COMMAND: python -m pip install pytest; python tools/build_package/validate.py --post
+
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     path: _esp_build/wheelhouse/*.whl
