@@ -20,9 +20,6 @@ jobs:
     if: github.repository_owner == 'inlab-geo'
     name: Build wheels on Windows
     runs-on: windows-latest
-    defaults:
-      run:
-        shell: msys2 {0}
 
     steps:
       - uses: actions/checkout@v3
