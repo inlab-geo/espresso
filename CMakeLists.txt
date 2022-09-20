@@ -10,7 +10,7 @@ find_package(NumPy REQUIRED)
 find_package(F2PY REQUIRED)
 
 # Add proper -fPIC and MINGW handling
-# set(CMAKE_GENERATOR_WINDOWS "MinGW Makefiles")
+set(CMAKE_GENERATOR_WINDOWS "MinGW Makefiles")
 # if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 #     if (NOT MINGW)
 #         set(common "-fPIC")
