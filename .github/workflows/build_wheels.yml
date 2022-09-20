@@ -37,16 +37,16 @@ jobs:
           sudo ln -s /usr/local/Cellar/gcc@10/*/lib/gcc/10 /usr/local/gfortran/lib
           gfortran --version
       
-      # - name: Provide gfortran (Windows)
-      #   if: runner.os == 'Windows'
-      #   uses: msys2/setup-msys2@v2
-      #   with:
-      #     update: true
-      #     install: >-
-      #       mingw-w64-x86_64-cmake
-      #       mingw-w64-x86_64-ninja
-      #       mingw-w64-x86_64-gcc-fortran
-      #       mingw-w64-x86_64-hdf5
+      - name: Provide gfortran (Windows)
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-gcc-fortran
+            mingw-w64-x86_64-hdf5
 
       # - name: Use the correct gfortran (Windows)
       #   if: runner.os == 'Windows'
@@ -54,6 +54,8 @@ jobs:
 
       - name: Show gfortran
         run: |
+          which gcc
+          which gfortran
           gcc --version
           gfortran --version
 
