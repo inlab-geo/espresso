@@ -25,34 +25,48 @@ jobs:
         shell: msys2 {0}
 
     steps:
-      - name: Provide gfortran (Windows)
-        uses: msys2/setup-msys2@v2
-        with:
-          update: true
-          install: >-
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-ninja
-            mingw-w64-x86_64-gcc-fortran
-            mingw-w64-x86_64-hdf5
-            mingw-w64-x86_64-python-pip
-            mingw-w64-x86_64-cmake
-
-      - name: Show gfortran (Windows)
-        run: |
-          which gcc
-          which gfortran
-          gcc --version
-          gfortran --version
-
       - uses: actions/checkout@v3
+      
+      - name: Install Cygwin
+        uses: egor-tensin/setup-cygwin@v3
+        with:
+          platform: x64
+          install-dir: 'C:\tools\cygwin'
+          packages: >-
+            python38-devel python38-zipp python38-importlib-metadata
+            python38-cython python38-pip python38-wheel python38-cffi
+            python38-pytz python38-setuptools python38-pytest
+            python38-hypothesis liblapack-devel
+            gcc-fortran gcc-g++ git dash
+      
+      - name: Set Windows PATH
+        uses: egor-tensin/cleanup-path@v1
+        with:
+          dirs: 'C:\tools\cygwin\bin;C:\tools\cygwin\lib\lapack'
+      
+      - name: Verify that bash is Cygwin bash
+        run: |
+          command bash
+          bash -c "uname -svrmo"
+      
+      - name: Update with Cygwin git
+        # fetch-depth=0 above should make this short.
+        run: |
+          dash -c "which git; /usr/bin/git config --system --add safe.directory /cygdrive/d/a/inlab-geo/espresso"
+          dash -c "which git; /usr/bin/git fetch --all -p"
+      
+      - name: Verify python version
+        # Make sure it's the Cygwin one, not a Windows one
+        run: |
+          dash -c "which python3.8; /usr/bin/python3.8 --version -V"
 
       - name: Generate package source and install 
         run: |
-          python -m pip install -r envs/requirements_test.txt
-          python tools/build_package/build.py
+          dash -c "python -m pip install -r envs/requirements_test.txt"
+          dash -c "python tools/build_package/build.py"
 
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
+        run: dash -c "python -m cibuildwheel --output-dir wheelhouse"
         working-directory: _esp_build
         env:
           CIBW_SKIP: pp* *-win32 *-manylinux_i686 *-musllinux_*
