@@ -18,7 +18,7 @@ on:
 jobs:
   build_wheels_windows:
     if: github.repository_owner == 'inlab-geo'
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on Windows
     runs-on: windows-latest
     defaults:
       run:
@@ -34,7 +34,7 @@ jobs:
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-gcc-fortran
             mingw-w64-x86_64-hdf5
-            ming2-w64-x86_64-python
+            mingw-w64-x86_64-python
             mingw-w64-x86_64-cmake
 
       - name: Show gfortran (Windows)
