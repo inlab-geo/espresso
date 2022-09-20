@@ -34,7 +34,7 @@ jobs:
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-gcc-fortran
             mingw-w64-x86_64-hdf5
-            mingw-w64-x86_64-python
+            mingw-w64-x86_64-python-pip
             mingw-w64-x86_64-cmake
 
       - name: Show gfortran (Windows)
