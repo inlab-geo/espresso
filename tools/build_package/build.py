@@ -59,7 +59,7 @@ def move_pkg_metadata():
 def move_contrib_source():
     move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}")
     contribs = []
-    init_file_imports = "\n"
+    init_file_imports = "\nimportlib = __import__('importlib')\n"
     init_file_all_nms = "\n_all_problem_names = [\n"
     init_file_all_cls = "\n_all_problems = [\n"
     init_file_del_files = "\ndel espresso_problem\ndel exceptions"
@@ -68,7 +68,8 @@ def move_contrib_source():
             contrib = os.path.basename(path)
             contrib_class = contrib.title().replace("_", "")
             contribs.append(contrib)
-            init_file_imports += f"from .{contrib} import {contrib_class}\n"
+            # init_file_imports += f"from .{contrib} import {contrib_class}\n"
+            init_file_imports += f"{contrib_class} = getattr(importlib.import_module('{PKG_NAME}.{contrib}'), '{contrib_class}')\n"
             init_file_all_nms += f"\t'{contrib_class}',\n"
             init_file_all_cls += f"\t{contrib_class},\n"
             init_file_del_files += f"\ndel {contrib}"
