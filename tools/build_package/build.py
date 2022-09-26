@@ -1,4 +1,5 @@
 """Build the Python package "cofi_espresso"
+
 1. Create clean folder "_esp_build"
 2. Move all files under "src/" into "_esp_build/src/"
 3. Move all files under "contrib/" into "_esp_build/src/cofi_espresso/"
@@ -6,6 +7,7 @@
 5. Add all contribution's class names into "_esp_build/src/cofi_espresso/__init__.py"
 6. Build the package with "pip install ."
 7. Test running the workflow again with installed package
+
 """
 
 import subprocess
@@ -40,13 +42,21 @@ def clean_build_folder():
     if dirpath.exists() and dirpath.is_dir():
         rmtree(dirpath)
 
-def move_folder_content(folder_path, dest_path):
-    copytree(
-        folder_path, 
-        dest_path, 
-        dirs_exist_ok=True, 
-        ignore=ignore_patterns('*.pyc', 'tmp*', '__pycache__')
-    )
+def move_folder_content(folder_path, dest_path, prefix=None):
+    if prefix is None:
+        copytree(
+            folder_path, 
+            dest_path, 
+            dirs_exist_ok=True, 
+            ignore=ignore_patterns('*.pyc', 'tmp*', '__pycache__')
+         )
+    else:
+        for f in os.listdir(folder_path):
+            if f.endswith(".pyc") or f.startswith("tmp") or f == "__pycache__":
+                continue
+            src = f"{folder_path}/{f}"
+            dst = f"{dest_path}/{prefix}{f}"
+            copytree(src, dst, dirs_exist_ok=True)
 
 def move_pkg_source():
     move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
@@ -57,22 +67,19 @@ def move_pkg_metadata():
         copy(f"{ROOT_DIR}/{f}", f"{BUILD_DIR}/{f}")
 
 def move_contrib_source():
-    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}")
+    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}", prefix="_")
     contribs = []
     init_file_imports = "\nimportlib = __import__('importlib')\n"
     init_file_all_nms = "\n_all_problem_names = [\n"
     init_file_all_cls = "\n_all_problems = [\n"
-    init_file_del_files = "\ndel espresso_problem\ndel exceptions"
     for path in Path(CONTRIB_SRC).iterdir():
         if path.is_dir():
             contrib = os.path.basename(path)
             contrib_class = contrib.title().replace("_", "")
             contribs.append(contrib)
-            # init_file_imports += f"from .{contrib} import {contrib_class}\n"
-            init_file_imports += f"{contrib_class} = getattr(importlib.import_module('{PKG_NAME}.{contrib}'), '{contrib_class}')\n"
+            init_file_imports += f"from ._{contrib} import {contrib_class}\n"
             init_file_all_nms += f"\t'{contrib_class}',\n"
             init_file_all_cls += f"\t{contrib_class},\n"
-            init_file_del_files += f"\ndel {contrib}"
     init_file_all_nms += "]"
     init_file_all_cls += "]"
     init_file_imp_funcs = "\nfrom .list_problems import list_problem_names, list_problems"
@@ -80,15 +87,14 @@ def move_contrib_source():
     init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
-            f.write(f"install(DIRECTORY {contrib} DESTINATION .)\n")
-            if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
-                f.write(f"add_subdirectory({contrib})\n")
+            f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
+            if Path(f"{CONTRIB_SRC}/_{contrib}/CMakeLists.txt").exists():
+                f.write(f"add_subdirectory(_{contrib})\n")
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_imp_funcs)
         f.write(init_file_add_all_nms)
         f.write(init_file_add_funcs)
-        f.write(init_file_del_files)
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_all_nms)
