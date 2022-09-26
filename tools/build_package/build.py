@@ -42,6 +42,15 @@ def clean_build_folder():
     if dirpath.exists() and dirpath.is_dir():
         rmtree(dirpath)
 
+def is_cache(file_name):
+    return file_name.endswith(".pyc") or \
+        file_name == "__pycache__" or \
+            file_name == "cmake_install.cmake" or \
+                file_name.endswith(".mod") or \
+                    file_name.endswith(".out") or \
+                        file_name == "CMakeFiles" or \
+                            file_name == "Makefile"
+
 def move_folder_content(folder_path, dest_path, prefix=None):
     if prefix is None:
         copytree(
@@ -52,11 +61,26 @@ def move_folder_content(folder_path, dest_path, prefix=None):
          )
     else:
         for f in os.listdir(folder_path):
-            if f.endswith(".pyc") or f.startswith("tmp") or f == "__pycache__":
+            if is_cache(f):
                 continue
             src = f"{folder_path}/{f}"
             dst = f"{dest_path}/{prefix}{f}"
-            copytree(src, dst, dirs_exist_ok=True)
+            copytree(src, dst, 
+                ignore=ignore_patterns(
+                    "*.pyc", "__pycache__", "tmp*", "CMakeFiles", "Makefile", "*.mod", "*.out"
+                ))
+            # add underscore prefix to file name
+            for ff in os.listdir(dst):
+                if ff == f"{f}.py":
+                    ff_origin = f"{dst}/{ff}"
+                    ff_rename = f"{dst}/{prefix}{ff}"
+                    os.rename(ff_origin, ff_rename)
+                if ff == "__init__.py" or ff == "CMakeLists.txt":
+                    with open(f"{dst}/{ff}", "r") as fff:
+                        lines = fff.readlines()
+                    with open(f"{dst}/{ff}", "w") as fff:
+                        for line in lines:
+                            fff.write(line.replace(f, f"_{f}"))
 
 def move_pkg_source():
     move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
@@ -69,7 +93,7 @@ def move_pkg_metadata():
 def move_contrib_source():
     move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}", prefix="_")
     contribs = []
-    init_file_imports = "\nimportlib = __import__('importlib')\n"
+    init_file_imports = "\n"
     init_file_all_nms = "\n_all_problem_names = [\n"
     init_file_all_cls = "\n_all_problems = [\n"
     for path in Path(CONTRIB_SRC).iterdir():
@@ -88,7 +112,7 @@ def move_contrib_source():
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
-            if Path(f"{CONTRIB_SRC}/_{contrib}/CMakeLists.txt").exists():
+            if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
                 f.write(f"add_subdirectory(_{contrib})\n")
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
