@@ -115,7 +115,9 @@ jobs:
           CIBW_ARCHS_MACOS: x86_64 arm64
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
           # Run the tests.
-          CIBW_TEST_COMMAND: python -m pip install pytest; python ../tools/build_package/validate.py --post
+          CIBW_TEST_COMMAND: >
+            python -m pip install pytest &&
+            python {project}/../tools/build_package/validate.py --post
 
       - uses: actions/upload-artifact@v3
         with:
