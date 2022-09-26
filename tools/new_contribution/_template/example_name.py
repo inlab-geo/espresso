@@ -1,4 +1,5 @@
-from cofi_espresso import EspressoProblem, InvalidExampleError
+from cofi_espresso import EspressoProblem
+from cofi_espresso.exceptions import InvalidExampleError
 
 
 class ExampleName(EspressoProblem):
