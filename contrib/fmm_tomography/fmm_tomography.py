@@ -2,7 +2,8 @@ import random
 import numpy as np
 from scipy.stats import multivariate_normal
 
-from cofi_espresso import EspressoProblem, InvalidExampleError
+from cofi_espresso import EspressoProblem
+from cofi_espresso.exceptions import InvalidExampleError
 from cofi_espresso.utils import absolute_path as path
 from . import waveTracker as wt
 

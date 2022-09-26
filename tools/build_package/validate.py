@@ -57,6 +57,8 @@ import subprocess
 import argparse
 import warnings
 
+from cofi_espresso.exceptions import InvalidExampleError
+
 
 # --> constants
 PKG_NAME = "cofi_espresso"
@@ -176,7 +178,6 @@ def test_contrib(pre_build, contrib, build_binary):
         parent_mod = importlib.import_module(PKG_NAME)
     assert contrib_name_class in parent_mod.__all__
     contrib_class = getattr(parent_mod, contrib_name_class)
-    exception_class = getattr(parent_mod, "InvalidExampleError")
     
     # 4 - Check metadata is present within class
     class_metadata = contrib_class.metadata
@@ -205,7 +206,7 @@ def test_contrib(pre_build, contrib, build_binary):
         #    model_size, data_size, good_model, starting_model, data, forward
         try:
             contrib_instance = contrib_class(i)
-        except exception_class:
+        except InvalidExampleError:
             # Assume that we've found all the examples
             n_examples = i-1
             assert n_examples > 0
