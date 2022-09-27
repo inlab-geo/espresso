@@ -107,6 +107,10 @@ class FmmTomography(EspressoProblem):
         return self.good_model.shape[0]
 
     @property
+    def model_shape(self):
+        return self._mtrue.shape
+
+    @property
     def data_size(self):
         return self.data.shape[0]
 
