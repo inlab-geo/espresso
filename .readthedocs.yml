@@ -11,7 +11,7 @@ build:
     python: "mambaforge-4.10"
   apt_packages:
     - gfortran
-    
+
 conda:
   environment: docs/environment.yml
 

@@ -15,20 +15,20 @@ def list_problems():
 # __all_problem_names__ = [ "ExampleName", ]
 # __all_problems__ = [ ExampleName, ]
 
-from .xray_tomography import XrayTomography
-from .simple_regression import SimpleRegression
-from .gravity_density import GravityDensity
 from .fmm_tomography import FmmTomography
+from .xray_tomography import XrayTomography
+from .gravity_density import GravityDensity
+from .simple_regression import SimpleRegression
 
 _all_problem_names = [
-	'XrayTomography',
-	'SimpleRegression',
-	'GravityDensity',
 	'FmmTomography',
+	'XrayTomography',
+	'GravityDensity',
+	'SimpleRegression',
 ]
 _all_problems = [
-	XrayTomography,
-	SimpleRegression,
-	GravityDensity,
 	FmmTomography,
+	XrayTomography,
+	GravityDensity,
+	SimpleRegression,
 ]

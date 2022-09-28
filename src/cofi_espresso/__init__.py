@@ -72,10 +72,10 @@ __all__ = [
 # __all__ += list_problem_names()
 # __all__ += ["list_problem_names", "list_problems"]
 
-from .xray_tomography import XrayTomography
-from .simple_regression import SimpleRegression
-from .gravity_density import GravityDensity
 from .fmm_tomography import FmmTomography
+from .xray_tomography import XrayTomography
+from .gravity_density import GravityDensity
+from .simple_regression import SimpleRegression
 
 from .list_problems import list_problem_names, list_problems
 __all__ += list_problem_names()
