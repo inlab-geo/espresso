@@ -6,11 +6,13 @@ on:
     branches: main
     paths:
       - 'src/cofi_espresso/**'
+      - 'contrib/**'
       - 'pyproject.toml'
       - 'setup.py'
   pull_request:
     paths:
       - 'src/cofi_espresso/**'
+      - 'contrib/**'
       - 'pyproject.toml'
       - 'setup.py'
 
