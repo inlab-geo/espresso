@@ -26,14 +26,20 @@ fmm_problem = BaseProblem()
 fmm_problem.set_initial_model(ref_start_slowness)
 
 # add regularisation: damping + smoothing
-damping_factor = 100.0
-smoothing_factor = 5e3
+damping_factor = 100
+flattening_factor = 1e4
+smoothing_factor = 0
 
 d2_dx2 = findiff.FinDiff(0, 1, 2)
 d2_dy2 = findiff.FinDiff(1, 1, 2)
-matx = d2_dx2.matrix(model_shape)
-maty = d2_dy2.matrix(model_shape)
-Dm = np.vstack((matx.toarray(), maty.toarray()))
+matx2 = d2_dx2.matrix(model_shape)
+maty2 = d2_dy2.matrix(model_shape)
+Dm2 = np.vstack((matx2.toarray(), maty2.toarray()))
+d_dx2 = findiff.FinDiff(0, 1, 1)
+d_dy2 = findiff.FinDiff(1, 1, 1)
+matx = d_dx2.matrix(model_shape)
+maty = d_dy2.matrix(model_shape)
+Dm1 = np.vstack((matx.toarray(), maty.toarray()))
 
 def damping_reg(slowness):
     slowness_diff = slowness - ref_start_slowness
@@ -42,26 +48,32 @@ def damping_grad(slowness):
     return damping_factor * (slowness - ref_start_slowness)
 def damping_hess():
     return damping_factor * np.eye((model_size))
-
+def flattening_reg(slowness):
+    weighted_slowness = Dm2 @ slowness
+    return flattening_factor * weighted_slowness.T @ weighted_slowness
+def flattening_grad(slowness):
+    return flattening_factor * Dm2.T @ Dm2 @ slowness
+def flattening_hess():
+    return flattening_factor * Dm2.T @ Dm2
 def smoothing_reg(slowness):
-    weighted_slowness = Dm @ slowness
+    weighted_slowness = Dm2 @ slowness
     return smoothing_factor * weighted_slowness.T @ weighted_slowness
 def smoothing_grad(slowness):
-    return smoothing_factor * Dm.T @ Dm @ slowness
+    return smoothing_factor * Dm2.T @ Dm2 @ slowness
 def smoothing_hess():
-    return smoothing_factor * Dm.T @ Dm
+    return smoothing_factor * Dm2.T @ Dm2
 
 def reg(slowness):
-    return damping_reg(slowness) + smoothing_reg(slowness)
+    return damping_reg(slowness) + flattening_reg(slowness) + smoothing_reg(slowness)
 def reg_grad(slowness):
-    return damping_grad(slowness) + smoothing_grad(slowness)
-reg_hess = damping_hess() + smoothing_hess()
+    return damping_grad(slowness) + flattening_grad(slowness) + smoothing_grad(slowness)
+reg_hess = damping_hess() + flattening_hess() + smoothing_hess()
 
 fmm_problem.set_regularisation(reg)
 
 # TODO above to be replaced by cofi.utils (below)
 # reg_damping = QuadraticReg(damping_factor, model_size, "damping")
-# reg_smoothing = QuadraticReg(smoothing_factor, model_size, "smoothing")
+# reg_smoothing = QuadraticReg(smoothing_factor, model_shape, "smoothing")
 # reg = reg_damping + reg_smoothing
 # fmm_problem.set_regularisation(reg)
 
@@ -84,14 +96,16 @@ fmm_problem.set_hessian(hessian)
 # Define CoFI InversionOptions
 inv_options = InversionOptions()
 inv_options.set_tool("scipy.optimize.minimize")
-inv_options.set_params(method="Newton-CG")
+method = "Newton-CG"
+inv_options.set_params(method=method)
 
 # Define CoFI Inversion and run
-inv = Inversion(fmm_problem, inv_options)
-inv_result = inv.run()
-fig1 = fmm.plot_model(1/inv_result.model)
-fig1.savefig("tmp1")
+# inv = Inversion(fmm_problem, inv_options)
+# inv_result = inv.run()
+# fig1 = fmm.plot_model(1/inv_result.model)
+# fig1.savefig(f"fmm_{int(damping_factor)}_{int(smoothing_factor)}_scipy_{method}")
 
+# Run with another approach - iterative Newton full-step updates
 num_iterations = 3
 m = fmm_problem.initial_model
 for i in range(num_iterations):
@@ -101,4 +115,8 @@ for i in range(num_iterations):
     step = -np.linalg.inv(hess).dot(grad)
     m += step
 fig2 = fmm.plot_model(1/m)
-fig2.savefig("tmp2")
+fig2.savefig(f"fmm_{int(damping_factor)}_{int(flattening_factor)}_{int(smoothing_factor)}_naive_newton")
+
+# Plot the true model
+fig3 = fmm.plot_model(fmm.good_model)
+fig3.savefig("fmm_true_model")
