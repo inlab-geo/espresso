@@ -8,6 +8,12 @@ from PIL import Image
 
 #--------------------------------------------------------------------------------------------
 
+# This library is a python interface to Nick Rawlinson's 2D Fast Marching Fortran package fm2dss.f90
+#
+# M. Sambridge 
+# July 2022
+#--------------------------------------------------------------------------------------------
+
 #  Definitions for waveTracker followed by those from Andrew Valentine's rayTracer.py package
 
 # routines to write data files for fmst
@@ -225,12 +231,13 @@ def write_gridc(v,extent,wdir): # write data for input velocity model file gridc
     nodemap=nodemap[:,::-1]
 
     # build velocity nodes
+    # additional boundary layer of velocities are duplicates of the nearest actual velocity value.
     vc = np.ones((nx+2,ny+2))
     vc[1:nx+1,1:ny+1] = v
-    vc[1:nx+1,0] = v[:,0]   # deal with boundary cushion
-    vc[1:nx+1,-1] = v[:,-1] # deal with boundary cushion
-    vc[0,1:ny+1] = v[0,:]   # deal with boundary cushion
-    vc[-1,1:ny+1] = v[-1,:] # deal with boundary cushion
+    vc[1:nx+1,0] = v[:,0]   # add velocities in the cushion boundary layer
+    vc[1:nx+1,-1] = v[:,-1] # add velocities in the cushion boundary layer
+    vc[0,1:ny+1] = v[0,:]   # add velocities in the cushion boundary layer
+    vc[-1,1:ny+1] = v[-1,:] # add velocities in the cushion boundary layer
     vc[0,0],vc[0,-1],vc[-1,0],vc[-1,-1] = v[0,0],v[0,-1],v[-1,0],v[-1,-1]
     vc=vc[:,::-1]
 
@@ -357,7 +364,7 @@ def read_fmst_wave(filename):
 
 def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,
                  figsize=(6,6),title=None,line=1.0,cline='k',alpha=1.0,wfront=None,cwfront='k',
-                 diced=True,dicex=8,dicey=8,**wkwargs):
+                 diced=True,dicex=8,dicey=8,cbarshrink=0.6,**wkwargs):
     fig = plt.figure(figsize=figsize)
     if cmap is None: cmap = plt.cm.RdBu
 
@@ -385,7 +392,7 @@ def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,
         X, Y = np.meshgrid(np.linspace(extent[0],extent[1],nx), np.linspace(extent[2],extent[3],ny))
         plt.contour(X, Y, wfront.T, **wkwargs)  # Negative contours default to dashed.
     
-    plt.colorbar()
+    if(wfront is None): plt.colorbar(shrink=cbarshrink)
 
     # plt.show()
     return fig
