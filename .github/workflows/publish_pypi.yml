@@ -71,10 +71,6 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git tag "v${{ steps.release_version.outputs.version }}-build"
           git push origin "v${{ steps.release_version.outputs.version }}-build"
-        # uses: rickstaa/action-create-tag@v1.3.0
-        # with:
-        #   tag: "v${{ steps.release_version.outputs.version }}-build"
-        #   force_push_tag: true
 
 
   ######################## SOURCE DISTRIBUTION #########################
@@ -107,48 +103,48 @@ jobs:
           path: dist/*.tar.gz
 
   ######################## BINARY DISTRIBUTION #########################
-  # build_wheels:
-  #   name: Build wheels on ${{ matrix.os }}
-  #   needs: gen_pkg_source
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  build_wheels_non_windows:
+    name: Build wheels on ${{ matrix.os }}
+    needs: gen_pkg_source
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
 
-  #   steps:
-  #     - name: Symlink gfortran for macOS
-  #       if: runner.os == 'macOS'
-  #       run: |
-  #         # make sure gfortran is available
-  #         # https://github.com/actions/virtual-environments/issues/2524
-  #         # https://github.com/cbg-ethz/dce/blob/master/.github/workflows/pkgdown.yaml
-  #         sudo ln -s /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
-  #         sudo mkdir /usr/local/gfortran
-  #         sudo ln -s /usr/local/Cellar/gcc@10/*/lib/gcc/10 /usr/local/gfortran/lib
-  #         gfortran --version
+    steps:
+      - name: Symlink gfortran for macOS
+        if: runner.os == 'macOS'
+        run: |
+          # make sure gfortran is available
+          # https://github.com/actions/virtual-environments/issues/2524
+          # https://github.com/cbg-ethz/dce/blob/master/.github/workflows/pkgdown.yaml
+          sudo ln -s /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
+          sudo mkdir /usr/local/gfortran
+          sudo ln -s /usr/local/Cellar/gcc@10/*/lib/gcc/10 /usr/local/gfortran/lib
+          gfortran --version
 
-  #     - name: Checkout repo
-  #       uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: esp_build
 
-  #     - name: Build wheels
-  #       uses: pypa/cibuildwheel@v2.3.1
-  #       env:
-  #         # CIBW_ARCHS_MACOS: x86_64 universal2
-  #         CIBW_SKIP: pp* *-win32 *-manylinux_i686 *-musllinux_*
-  #         CIBW_ARCHS_MACOS: x86_64 arm64
-  #         CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
-  #         CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: ""
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.3.1
+        env:
+          # CIBW_ARCHS_MACOS: x86_64 universal2
+          CIBW_SKIP: pp* *-win32 *-manylinux_i686 *-musllinux_*
+          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
 
-  #     - name: Upload artifact
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         path: wheelhouse/*.whl
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: wheelhouse/*.whl
 
   ######################## UPLOAD TO PYPI #########################
   publish_pypi:
     name: Upload source distribution and wheels to PyPI
-    # needs: [build_sdist, build_wheels]
-    needs: [build_sdist]
+    needs: [build_sdist, build_wheels_non_windows]
     runs-on: ubuntu-latest
 
     steps:
