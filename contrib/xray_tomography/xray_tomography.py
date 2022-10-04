@@ -41,7 +41,7 @@ class XrayTomography(EspressoProblem):
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)
         elif example_number == 3:
             self._paths, self._attns = load_data('data/example3.dat')
-            self._desc = "X-ray tomography with large gaps"
+            self._desc = "X-ray tomography with large gaps (CSIRO logo)"
             self._ngrid = 50
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)
@@ -73,7 +73,7 @@ class XrayTomography(EspressoProblem):
         return self._attns.copy()
 
     @property
-    def covariance_matrix(self):                # TODO implement me
+    def covariance_matrix(self):                # optional
         raise NotImplementedError
 
     @property

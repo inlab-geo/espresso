@@ -5,7 +5,7 @@
 ### Changed examples
 
 - `FmmTomography` (minor changes; all in slowness space)
-- `XrayTomography` (additional inlab-logo example; all in slowness space)
+- `XrayTomography` (additional inlab-logo example)
 
 
 ## v0.0.1.dev5 (21/09/2022)
