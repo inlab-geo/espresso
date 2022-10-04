@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.0.1.dev6 (04/10/2022)
+
+### Changed examples
+
+- `FmmTomography` (minor changes; all in slowness space)
+- `XrayTomography` (additional inlab-logo example)
+
+
 ## v0.0.1.dev5 (21/09/2022)
 
 ### New examples
