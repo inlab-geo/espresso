@@ -82,15 +82,19 @@ class FmmTomography(EspressoProblem):
             # true model
             extent = [0.,20.,0.,30.]
             mtrue = get_gauss_model(extent,32,48) # we get the true velocity model domain for comparison 
+            slowness_true = 1 / mtrue
 
             # starting model
             nx,ny = mtrue.shape                   # set up grid
             mb = 2000.*np.ones([nx,ny])           # reference velocity model in m/s
+            slowness_starting = 1 / mb
 
             # assign properties
             self.exe_fm2dss = str(current_dir)
             self._mtrue = mtrue
             self._mstart = mb
+            self._strue = slowness_true
+            self._sstart = slowness_starting
             self._data = ttdat
             self.extent = extent
             self.receivers = recs
@@ -108,7 +112,7 @@ class FmmTomography(EspressoProblem):
 
     @property
     def model_shape(self):
-        return self._mtrue.shape
+        return self._strue.shape
 
     @property
     def data_size(self):
@@ -116,11 +120,11 @@ class FmmTomography(EspressoProblem):
 
     @property
     def good_model(self):
-        return self._mtrue.flatten()
+        return self._strue.flatten() 
 
     @property
     def starting_model(self):
-        return self._mstart.flatten()
+        return self._sstart.flatten()
     
     @property
     def data(self):
@@ -134,9 +138,10 @@ class FmmTomography(EspressoProblem):
     def inverse_covariance_matrix(self):
         raise NotImplementedError               # optional
         
-    def forward(self, model, with_jacobian=False):
-        model_reshaped = model.reshape(self._mstart.shape)
-        g = wt.gridModel(model_reshaped, extent=self.extent)
+    def forward(self, model, with_jacobian=False): # accepting "slowness" though keyword is "model"
+        slowness_reshaped = model.reshape(self._mstart.shape)
+        velocity = 1 / slowness_reshaped
+        g = wt.gridModel(velocity, extent=self.extent)
         fmm = g.wavefront_tracker(
             self.receivers, 
             self.sources, 
@@ -153,13 +158,14 @@ class FmmTomography(EspressoProblem):
         else:
             return np.array(ttimes).flatten()
     
-    def jacobian(self, model):
+    def jacobian(self, model):      # accepting "slowness" though keyword is "model"
         return self.forward(model, True)[1]
 
-    def plot_model(self, model, paths=False):
+    def plot_model(self, model, paths=False): # accepting "slowness" though keyword is "model"
+        slowness_reshaped = model.reshape(self._mstart.shape)
+        velocity = 1 / slowness_reshaped
         if paths:
-            model_reshaped = model.reshape(self._mstart.shape)
-            g = wt.gridModel(model_reshaped, extent=self.extent)
+            g = wt.gridModel(velocity, extent=self.extent)
             fmm = g.wavefront_tracker(
                 self.receivers, 
                 self.sources, 
@@ -169,8 +175,7 @@ class FmmTomography(EspressoProblem):
             paths = fmm.paths
         else:
             paths = None
-        model = model.reshape(self._mstart.shape)
-        return wt.displayModel(model, paths=paths, extent=self.extent, cline="g", alpha=0.5)
+        return wt.displayModel(velocity, paths=paths, extent=self.extent, cline="g", alpha=0.5)
     
     def plot_data(self, data, data2=None):
         raise NotImplementedError               # optional
