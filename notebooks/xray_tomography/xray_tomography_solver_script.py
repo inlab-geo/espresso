@@ -11,11 +11,11 @@ xrt = XrayTomography()
 xrt_problem = BaseProblem()
 xrt_problem.set_data(xrt.data)
 xrt_problem.set_jacobian(xrt.jacobian(xrt.starting_model))
-sigma = 0.01
+sigma = 0.1
 lamda = 0.5
-data_cov = np.identity(xrt.data_size) * sigma
+data_cov_inv = np.identity(xrt.data_size) * (1/sigma**2)
 reg_matrix = np.identity(xrt.model_size)
-xrt_problem.set_data_covariance(data_cov)
+xrt_problem.set_data_covariance_inv(data_cov_inv)
 xrt_problem.set_regularization(2, lamda, reg_matrix)
 
 # define CoFI InversionOptions
