@@ -58,7 +58,7 @@ def gradient(model_slowness, esp_fmm, Cd_inv, Cp_inv):
     pred, jac = esp_fmm.forward(1/model_slowness, with_jacobian=True)
     residual = esp_fmm.data - pred
     model_diff = model_slowness - 1/esp_fmm.starting_model
-    return -jac.T @ Cd_inv @ residual - Cp_inv @ model_diff
+    return -jac.T @ Cd_inv @ residual + Cp_inv @ model_diff
 def hessian(model_slowness, esp_fmm, Cd_inv, Cp_inv):
     A = esp_fmm.jacobian(1/model_slowness)
     return A.T @ Cd_inv @ A + Cp_inv
@@ -74,7 +74,7 @@ fmm_problem.set_hessian(hessian, args=[fmm, Cdi, Cpi])
 inv_options = InversionOptions()
 inv_options.set_tool("scipy.optimize.minimize")
 method = "Newton-CG"
-inv_options.set_params(method=method)
+inv_options.set_params(method=method, options={"xtol":1e-12})
 
 # define CoFI Inversion and run
 inv = Inversion(fmm_problem, inv_options)
@@ -95,8 +95,8 @@ def run_naive_newton():
     fig2 = fmm.plot_model(1/m)
     fig2.savefig(f"fmm_gaussian_prior_naive_newton")
 
-run_naive_newton()
+# run_naive_newton()
 
 # Plot the true model
-fig3 = fmm.plot_model(fmm.good_model)
-fig3.savefig("fmm_true_model")
+# fig3 = fmm.plot_model(fmm.good_model)
+# fig3.savefig("fmm_true_model")

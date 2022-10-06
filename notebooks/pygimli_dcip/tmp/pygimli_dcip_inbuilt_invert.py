@@ -13,7 +13,7 @@ from pygimli_dcip_lib import (
     ert_manager,
     reg_matrix,
     get_data_misfit,
-    get_regularisation,
+    get_regularization,
 )
 
 if not os.path.exists("figs/rect_mesh"): os.makedirs("figs/rect_mesh")
@@ -77,7 +77,7 @@ ert.showERTData(data, vals=np.imag(r_complex), label=r"$Z''$~[$\Omega$]", ax=axe
 fig.tight_layout()
 fig.savefig("figs/inbuilt_solver_inferred_data")
 
-# print data misfit and regularisation term for inversion result
+# print data misfit and regularization term for inversion result
 Wm = reg_matrix(mgr.fop)
 print("data misfit:", get_data_misfit(inv, r_complex, mgr.fop))
-print("regularisation:", get_regularisation(inv, Wm, 20))
+print("regularization:", get_regularization(inv, Wm, 20))

@@ -58,7 +58,7 @@ def gradient(model_slowness, esp_fmm, Cd_inv, Cp_inv):
     pred, jac = esp_fmm.forward(1/model_slowness, with_jacobian=True)
     residual = esp_fmm.data - pred
     model_diff = model_slowness - 1/esp_fmm.starting_model
-    return -jac.T @ Cd_inv @ residual - Cp_inv @ model_diff
+    return -jac.T @ Cd_inv @ residual + Cp_inv @ model_diff
 def hessian(model_slowness, esp_fmm, Cd_inv, Cp_inv):
     A = esp_fmm.jacobian(1/model_slowness)
     return A.T @ Cd_inv @ A + Cp_inv
@@ -74,13 +74,13 @@ fmm_problem.set_hessian(hessian, args=[fmm, Cdi, Cpi])
 inv_options = InversionOptions()
 inv_options.set_tool("scipy.optimize.minimize")
 method = "Newton-CG"
-inv_options.set_params(method=method)
+inv_options.set_params(method=method, options={"xtol":1e-16})
 
 # # define CoFI Inversion and run
-# inv = Inversion(fmm_problem, inv_options)
-# inv_result = inv.run()
-# fig1 = fmm.plot_model(1/inv_result.model)
-# fig1.savefig(f"fmm_gaussian_prior_scipy_{method}")
+inv = Inversion(fmm_problem, inv_options)
+inv_result = inv.run()
+fig1 = fmm.plot_model(1/inv_result.model)
+fig1.savefig(f"fmm_gaussian_prior_scipy_{method}")
 
 # alternative approach
 def run_naive_newton():
@@ -112,4 +112,4 @@ for ii in range(50):
     x = np.random.normal(size=model_shape)
     s0 = s_ref + (Lp @ x).reshape(model_shape)
     m0 = 1 / s0
-    
+

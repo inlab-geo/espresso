@@ -1,5 +1,5 @@
 """Xray tomography problem solved with CoFI linear system solver,
-with data uncertainty and regularisation taken into account.
+with data uncertainty and regularization taken into account.
 """
 
 import numpy as np
@@ -16,7 +16,7 @@ lamda = 0.5
 data_cov = np.identity(xrt.data_size) * sigma
 reg_matrix = np.identity(xrt.model_size)
 xrt_problem.set_data_covariance(data_cov)
-xrt_problem.set_regularisation(2, lamda, reg_matrix)
+xrt_problem.set_regularization(2, lamda, reg_matrix)
 
 # define CoFI InversionOptions
 my_options = InversionOptions()
@@ -28,5 +28,5 @@ inv_result = inv.run()
 inv_result.summary()
 
 # plot inferred model
-fig = xrt.plot_model(inv_result.model)
+fig = xrt.plot_model(1/inv_result.model)
 fig.savefig("xray_tomography_inferred_model")

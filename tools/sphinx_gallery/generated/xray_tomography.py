@@ -97,7 +97,7 @@ reg_matrix = np.identity(xrt.model_size)
 #
 
 xrt_problem.set_data_covariance(data_cov)
-xrt_problem.set_regularisation(2, lamda, reg_matrix)
+xrt_problem.set_regularization(2, lamda, reg_matrix)
 
 ######################################################################
 #

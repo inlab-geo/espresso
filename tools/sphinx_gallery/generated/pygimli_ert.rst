@@ -5963,7 +5963,7 @@ rectangular meshes, with different inversion approaches.
 .. GENERATED FROM PYTHON SOURCE LINES 190-196
 
 With the inversion mesh created, we now define a starting model, forward
-operator and weighting matrix for regularisation using PyGIMLi.
+operator and weighting matrix for regularization using PyGIMLi.
 
 Recall that both our model and data will be in log space when we perform
 inversion.
@@ -5977,7 +5977,7 @@ inversion.
     # PyGIMLi's forward operator (ERTModelling)
     forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
 
-    # extract regularisation matrix
+    # extract regularization matrix
     Wm = reg_matrix(forward_oprt)
 
     # initialise a starting model for inversion
@@ -6027,7 +6027,7 @@ the details. These functions are:
 -  ``get_jacobian``
 -  ``get_residuals``
 -  ``get_data_misfit``
--  ``get_regularisation``
+-  ``get_regularization``
 -  ``get_gradient``
 -  ``get_hessian``
 
@@ -6054,7 +6054,7 @@ the problem in ``cofi`` by setting the problem information for a
     ert_problem.set_jacobian(get_jacobian, args=[forward_oprt])
     ert_problem.set_residual(get_residual, args=[log_data, forward_oprt])
     ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_cov_inv])
-    ert_problem.set_regularisation(get_regularisation, args=[Wm, lamda])
+    ert_problem.set_regularization(get_regularization, args=[Wm, lamda])
     ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
     ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
     ert_problem.set_initial_model(start_model_log)
@@ -6092,13 +6092,13 @@ Review what information is included in the ``BaseProblem`` object:
     Model shape: (831,)
     ----------------------------------------------------------------------------------------
     List of functions/properties set by you:
-    ['gradient', 'hessian', 'residual', 'jacobian', 'data_misfit', 'regularisation', 'regularisation_factor', 'forward', 'initial_model', 'model_shape']
+    ['gradient', 'hessian', 'residual', 'jacobian', 'data_misfit', 'regularization', 'regularization_factor', 'forward', 'initial_model', 'model_shape']
     ----------------------------------------------------------------------------------------
     List of functions/properties created based on what you have provided:
     ['objective', 'hessian_times_vector', 'jacobian_times_vector']
     ----------------------------------------------------------------------------------------
     List of functions/properties not set by you:
-    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'hessian_times_vector', 'jacobian_times_vector', 'regularisation_matrix', 'data', 'data_covariance', 'data_covariance_inv', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'hessian_times_vector', 'jacobian_times_vector', 'regularization_matrix', 'data', 'data_covariance', 'data_covariance_inv', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
 
 
 
@@ -6108,7 +6108,7 @@ Review what information is included in the ``BaseProblem`` object:
 2. Define the inversion options and run
 ---------------------------------------
 
-2.1 SciPy’s optimiser (`trust-exact <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustexact.html#optimize-minimize-trustexact>`__)
+2.1 SciPy’s optimizer (`trust-exact <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustexact.html#optimize-minimize-trustexact>`__)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -6129,7 +6129,7 @@ Review what information is included in the ``BaseProblem`` object:
 
     Based on what you've provided so far, here are possible solvers:
     {
-        "optimisation": [
+        "optimization": [
             "scipy.optimize.minimize",
             "scipy.optimize.least_squares"
         ],
@@ -6137,7 +6137,7 @@ Review what information is included in the ``BaseProblem`` object:
         "sampling": []
     }
 
-    {'optimisation': ['scipy.optimize.minimize', 'scipy.optimize.least_squares'], 'linear least square': [], 'sampling': []}
+    {'optimization': ['scipy.optimize.minimize', 'scipy.optimize.least_squares'], 'linear least square': [], 'sampling': []}
 
 
 
@@ -6183,7 +6183,7 @@ Review what’s been defined for the inversion we are about to run:
     Solving method: None set
     Use `suggest_solving_methods()` to check available solving methods.
     -----------------------------
-    Backend tool: `scipy.optimize.minimize` - SciPy's optimisers that minimises a scalar function with respect to one or more variables, check SciPy's documentation page for a list of methods
+    Backend tool: `scipy.optimize.minimize` - SciPy's optimizers that minimizes a scalar function with respect to one or more variables, check SciPy's documentation page for a list of methods
     References: ['https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html']
     Use `suggest_tools()` to check available backend tools.
     -----------------------------
@@ -7057,7 +7057,7 @@ Plot the results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 332-340
 
-2.2 A custom `Newton’s optimisation <https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization>`__ approach
+2.2 A custom `Newton’s optimization <https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization>`__ approach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now we switch to a Newton’s iterative approach written by ourselves, so
@@ -7083,7 +7083,7 @@ First of all, define our own solver.
             self._gradient = inv_problem.gradient
             self._hessian = inv_problem.hessian
             self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
-            self._reg = inv_problem.regularisation if inv_problem.regularisation_defined else None
+            self._reg = inv_problem.regularization if inv_problem.regularization_defined else None
             self._obj = inv_problem.objective if inv_problem.objective_defined else None
 
         def __call__(self):
@@ -7094,7 +7094,7 @@ First of all, define our own solver.
                     print(f"Iteration {i+1}")
                     print("model min and max:", np.min(current_model), np.max(current_model))
                     if self._misfit: print("data misfit:", self._misfit(current_model))
-                    if self._reg: print("regularisation:", self._reg(current_model))
+                    if self._reg: print("regularization:", self._reg(current_model))
                 term1 = self._hessian(current_model)
                 term2 = - self._gradient(current_model)
                 model_update = np.linalg.solve(term1, term2) * self._step
@@ -7145,752 +7145,752 @@ Now, make use of this custom solver and run inversion again:
     Iteration 1
     model min and max: 5.291310843489913 5.291310843489913
     data misfit: 229.71418345445022
-    regularisation: 0.0
+    regularization: 0.0
     --------------------------------------------------------------------------------
     Iteration 2
     model min and max: 5.275884701683011 5.304449604934316
     data misfit: 227.23411332788962
-    regularisation: 0.010102187048026049
+    regularization: 0.010102187048026049
     --------------------------------------------------------------------------------
     Iteration 3
     model min and max: 5.2620318859003845 5.31070644505735
     data misfit: 224.88018892913274
-    regularisation: 0.023828812726464612
+    regularization: 0.023828812726464612
     --------------------------------------------------------------------------------
     Iteration 4
     model min and max: 5.248398551565984 5.315148641785926
     data misfit: 222.5841638420562
-    regularisation: 0.038330740535048334
+    regularization: 0.038330740535048334
     --------------------------------------------------------------------------------
     Iteration 5
     model min and max: 5.235210460904495 5.318970381279088
     data misfit: 220.32501943579953
-    regularisation: 0.053461448718641856
+    regularization: 0.053461448718641856
     --------------------------------------------------------------------------------
     Iteration 6
     model min and max: 5.221988655748932 5.322505463478657
     data misfit: 218.09539040624733
-    regularisation: 0.0691373573785692
+    regularization: 0.0691373573785692
     --------------------------------------------------------------------------------
     Iteration 7
     model min and max: 5.208735295257334 5.32586064835145
     data misfit: 215.892125425656
-    regularisation: 0.08529292762616064
+    regularization: 0.08529292762616064
     --------------------------------------------------------------------------------
     Iteration 8
     model min and max: 5.195697353190762 5.329074034022268
     data misfit: 213.71361019906533
-    regularisation: 0.10188094041710279
+    regularization: 0.10188094041710279
     --------------------------------------------------------------------------------
     Iteration 9
     model min and max: 5.182852523974068 5.33216135580089
     data misfit: 211.5588753156785
-    regularisation: 0.11886698952389683
+    regularization: 0.11886698952389683
     --------------------------------------------------------------------------------
     Iteration 10
     model min and max: 5.170183680332118 5.33536850929097
     data misfit: 209.4272561757092
-    regularisation: 0.13622406025927106
+    regularization: 0.13622406025927106
     --------------------------------------------------------------------------------
     Iteration 11
     model min and max: 5.157677506123902 5.338687354754773
     data misfit: 207.3182453718031
-    regularisation: 0.15392888174420652
+    regularization: 0.15392888174420652
     --------------------------------------------------------------------------------
     Iteration 12
     model min and max: 5.145323421153254 5.341863067679526
     data misfit: 205.23142386946935
-    regularisation: 0.17195977704243895
+    regularization: 0.17195977704243895
     --------------------------------------------------------------------------------
     Iteration 13
     model min and max: 5.133112822085405 5.3449049218527565
     data misfit: 203.1664249261597
-    regularisation: 0.19029556215907284
+    regularization: 0.19029556215907284
     --------------------------------------------------------------------------------
     Iteration 14
     model min and max: 5.121038565645718 5.347822179945838
     data misfit: 201.12291605687238
-    regularisation: 0.2089150526031986
+    regularization: 0.2089150526031986
     --------------------------------------------------------------------------------
     Iteration 15
     model min and max: 5.10909461257341 5.350623899377025
     data misfit: 199.1005873204019
-    regularisation: 0.2277969365424006
+    regularization: 0.2277969365424006
     --------------------------------------------------------------------------------
     Iteration 16
     model min and max: 5.097275776223895 5.353318771430503
     data misfit: 197.09914546356381
-    regularisation: 0.24691982779330723
+    regularization: 0.24691982779330723
     --------------------------------------------------------------------------------
     Iteration 17
     model min and max: 5.085577543217796 5.355915037491472
     data misfit: 195.1183106780502
-    regularisation: 0.2662624014300964
+    regularization: 0.2662624014300964
     --------------------------------------------------------------------------------
     Iteration 18
     model min and max: 5.07399594255192 5.358420418116924
     data misfit: 193.15781346330175
-    regularisation: 0.28580356014476044
+    regularization: 0.28580356014476044
     --------------------------------------------------------------------------------
     Iteration 19
     model min and max: 5.06252744323272 5.360842098917997
     data misfit: 191.21739387575644
-    regularisation: 0.3055225971853309
+    regularization: 0.3055225971853309
     --------------------------------------------------------------------------------
     Iteration 20
     model min and max: 5.051168876563432 5.363186710295613
     data misfit: 189.29679965235673
-    regularisation: 0.32539933587862774
+    regularization: 0.32539933587862774
     --------------------------------------------------------------------------------
     Iteration 21
     model min and max: 5.0399173793360355 5.365460364162435
     data misfit: 187.3957862579242
-    regularisation: 0.3454142459679408
+    regularization: 0.3454142459679408
     --------------------------------------------------------------------------------
     Iteration 22
     model min and max: 5.0287703405847175 5.367668656122394
     data misfit: 185.514115785678
-    regularisation: 0.36554853574056845
+    regularization: 0.36554853574056845
     --------------------------------------------------------------------------------
     Iteration 23
     model min and max: 5.017725368281623 5.369816711223884
     data misfit: 183.65155678774858
-    regularisation: 0.3857842100856191
+    regularization: 0.3857842100856191
     --------------------------------------------------------------------------------
     Iteration 24
     model min and max: 5.006780251444898 5.3719092075532
     data misfit: 181.80788344019362
-    regularisation: 0.4061041302254711
+    regularization: 0.4061041302254711
     --------------------------------------------------------------------------------
     Iteration 25
     model min and max: 4.995932941294214 5.3739504168671015
     data misfit: 179.9828755687684
-    regularisation: 0.4264920217831599
+    regularization: 0.4264920217831599
     --------------------------------------------------------------------------------
     Iteration 26
     model min and max: 4.985181525464253 5.37594423395393
     data misfit: 178.17631801144034
-    regularisation: 0.44693249952337083
+    regularization: 0.44693249952337083
     --------------------------------------------------------------------------------
     Iteration 27
     model min and max: 4.974524211268962 5.377894212823674
     data misfit: 176.3880007794431
-    regularisation: 0.46741105465131716
+    regularization: 0.46741105465131716
     --------------------------------------------------------------------------------
     Iteration 28
     model min and max: 4.963959312536047 5.379803593414268
     data misfit: 174.61771808953412
-    regularisation: 0.48791404822156403
+    regularization: 0.48791404822156403
     --------------------------------------------------------------------------------
     Iteration 29
     model min and max: 4.953485236087821 5.381675329746602
     data misfit: 172.8652685564188
-    regularisation: 0.5084287005331889
+    regularization: 0.5084287005331889
     --------------------------------------------------------------------------------
     Iteration 30
     model min and max: 4.9431004710642625 5.3835121200409874
     data misfit: 171.13045503046692
-    regularisation: 0.5289430509056318
+    regularization: 0.5289430509056318
     --------------------------------------------------------------------------------
     Iteration 31
     model min and max: 4.932803581903714 5.385316428691894
     data misfit: 169.41308383642144
-    regularisation: 0.5494459457262563
+    regularization: 0.5494459457262563
     --------------------------------------------------------------------------------
     Iteration 32
     model min and max: 4.922593199750774 5.387090509276628
     data misfit: 167.71296524705306
-    regularisation: 0.569926996976173
+    regularization: 0.569926996976173
     --------------------------------------------------------------------------------
     Iteration 33
     model min and max: 4.912468014404332 5.388836423104149
     data misfit: 166.02991298112045
-    regularisation: 0.5903765548599784
+    regularization: 0.5903765548599784
     --------------------------------------------------------------------------------
     Iteration 34
     model min and max: 4.9024267715559615 5.390556051426513
     data misfit: 164.36374380365098
-    regularisation: 0.6107856710415762
+    regularization: 0.6107856710415762
     --------------------------------------------------------------------------------
     Iteration 35
     model min and max: 4.892468266762631 5.39225112849592
     data misfit: 162.71427750170972
-    regularisation: 0.6311460715485857
+    regularization: 0.6311460715485857
     --------------------------------------------------------------------------------
     Iteration 36
     model min and max: 4.882591341300628 5.393923238142714
     data misfit: 161.0813373059921
-    regularisation: 0.6514501102000984
+    regularization: 0.6514501102000984
     --------------------------------------------------------------------------------
     Iteration 37
     model min and max: 4.872794877802526 5.395573836385158
     data misfit: 159.46474886077266
-    regularisation: 0.6716907506293022
+    regularization: 0.6716907506293022
     --------------------------------------------------------------------------------
     Iteration 38
     model min and max: 4.863077799232248 5.397204260304681
     data misfit: 157.86434051758454
-    regularisation: 0.6918615228984566
+    regularization: 0.6918615228984566
     --------------------------------------------------------------------------------
     Iteration 39
     model min and max: 4.85343906298141 5.398815737638975
     data misfit: 156.27994362813175
-    regularisation: 0.7119564895261083
+    regularization: 0.7119564895261083
     --------------------------------------------------------------------------------
     Iteration 40
     model min and max: 4.8438776605400795 5.40040940494124
     data misfit: 154.7113914392031
-    regularisation: 0.7319702319952895
+    regularization: 0.7319702319952895
     --------------------------------------------------------------------------------
     Iteration 41
     model min and max: 4.834392614595513 5.401986306120106
     data misfit: 153.1585200053411
-    regularisation: 0.7518977962232621
+    regularization: 0.7518977962232621
     --------------------------------------------------------------------------------
     Iteration 42
     model min and max: 4.824982976985535 5.403547402018711
     data misfit: 151.62116734960452
-    regularisation: 0.7717346840167967
+    regularization: 0.7717346840167967
     --------------------------------------------------------------------------------
     Iteration 43
     model min and max: 4.815647827351698 5.405093589753105
     data misfit: 150.09917404040849
-    regularisation: 0.7914768181138698
+    regularization: 0.7914768181138698
     --------------------------------------------------------------------------------
     Iteration 44
     model min and max: 4.806386269092713 5.406625684916475
     data misfit: 148.59238263640933
-    regularisation: 0.8111205127408956
+    regularization: 0.8111205127408956
     --------------------------------------------------------------------------------
     Iteration 45
     model min and max: 4.797197431706666 5.408144449226057
     data misfit: 147.10063776580796
-    regularisation: 0.8306624530382476
+    regularization: 0.8306624530382476
     --------------------------------------------------------------------------------
     Iteration 46
     model min and max: 4.7880804663792915 5.409650589187263
     data misfit: 145.6237860243799
-    regularisation: 0.8500996723664146
+    regularization: 0.8500996723664146
     --------------------------------------------------------------------------------
     Iteration 47
     model min and max: 4.77903454660671 5.411144754334307
     data misfit: 144.1616760628408
-    regularisation: 0.8694295263523517
+    regularization: 0.8694295263523517
     --------------------------------------------------------------------------------
     Iteration 48
     model min and max: 4.7700588651707365 5.412627552210045
     data misfit: 142.71415837624176
-    regularisation: 0.8886496780312607
+    regularization: 0.8886496780312607
     --------------------------------------------------------------------------------
     Iteration 49
     model min and max: 4.761152634921881 5.414099547404581
     data misfit: 141.28108507204146
-    regularisation: 0.9077580699492444
+    regularization: 0.9077580699492444
     --------------------------------------------------------------------------------
     Iteration 50
     model min and max: 4.752315086329383 5.415561259852325
     data misfit: 139.86231043937474
-    regularisation: 0.9267529054781368
+    regularization: 0.9267529054781368
     --------------------------------------------------------------------------------
     Iteration 51
     model min and max: 4.74354546872529 5.417013174824993
     data misfit: 138.4576902451595
-    regularisation: 0.9456326378930012
+    regularization: 0.9456326378930012
     --------------------------------------------------------------------------------
     Iteration 52
     model min and max: 4.734843045651922 5.418455745993146
     data misfit: 137.0670820466871
-    regularisation: 0.9643959505526799
+    regularization: 0.9643959505526799
     --------------------------------------------------------------------------------
     Iteration 53
     model min and max: 4.726207099022949 5.4198893983999445
     data misfit: 135.69034512639965
-    regularisation: 0.9830417403566357
+    regularization: 0.9830417403566357
     --------------------------------------------------------------------------------
     Iteration 54
     model min and max: 4.717636923781039 5.421314518652884
     data misfit: 134.32734005793313
-    regularisation: 1.0015690966182436
+    regularization: 1.0015690966182436
     --------------------------------------------------------------------------------
     Iteration 55
     model min and max: 4.709131830086369 5.422731475878477
     data misfit: 132.9779295692208
-    regularisation: 1.0199772893834795
+    regularization: 1.0199772893834795
     --------------------------------------------------------------------------------
     Iteration 56
     model min and max: 4.7006911424328175 5.424140613265717
     data misfit: 131.64197733763353
-    regularisation: 1.0382657738388499
+    regularization: 1.0382657738388499
     --------------------------------------------------------------------------------
     Iteration 57
     model min and max: 4.6923141972531335 5.425542250597235
     data misfit: 130.3193490218099
-    regularisation: 1.0564341506473172
+    regularization: 1.0564341506473172
     --------------------------------------------------------------------------------
     Iteration 58
     model min and max: 4.684000345176762 5.426936687329514
     data misfit: 129.0099116150112
-    regularisation: 1.0744821685372818
+    regularization: 1.0744821685372818
     --------------------------------------------------------------------------------
     Iteration 59
     model min and max: 4.675748947098587 5.428324198055687
     data misfit: 127.71353343911387
-    regularisation: 1.092409712076677
+    regularization: 1.092409712076677
     --------------------------------------------------------------------------------
     Iteration 60
     model min and max: 4.667559377075904 5.4297050507151745
     data misfit: 126.43008461789586
-    regularisation: 1.110216789871049
+    regularization: 1.110216789871049
     --------------------------------------------------------------------------------
     Iteration 61
     model min and max: 4.659431019632033 5.4310794851985085
     data misfit: 125.15943610782304
-    regularisation: 1.127903525246321
+    regularization: 1.127903525246321
     --------------------------------------------------------------------------------
     Iteration 62
     model min and max: 4.651363270487314 5.432447733348063
     data misfit: 123.9014608855537
-    regularisation: 1.1454701438206374
+    regularization: 1.1454701438206374
     --------------------------------------------------------------------------------
     Iteration 63
     model min and max: 4.643355536126638 5.433810014737167
     data misfit: 122.6560328783673
-    regularisation: 1.162916974462692
+    regularization: 1.162916974462692
     --------------------------------------------------------------------------------
     Iteration 64
     model min and max: 4.635407231730809 5.435166525305077
     data misfit: 121.42302740113477
-    regularisation: 1.1802444273245853
+    regularization: 1.1802444273245853
     --------------------------------------------------------------------------------
     Iteration 65
     model min and max: 4.627517783787228 5.436517458870632
     data misfit: 120.20232132669616
-    regularisation: 1.1974529992948966
+    regularization: 1.1974529992948966
     --------------------------------------------------------------------------------
     Iteration 66
     model min and max: 4.619686626871677 5.437862988269122
     data misfit: 118.99379251676498
-    regularisation: 1.2145432558799831
+    regularization: 1.2145432558799831
     --------------------------------------------------------------------------------
     Iteration 67
     model min and max: 4.6119132058642895 5.439203285896846
     data misfit: 117.79732043902516
-    regularisation: 1.2315158348696715
+    regularization: 1.2315158348696715
     --------------------------------------------------------------------------------
     Iteration 68
     model min and max: 4.604196972835375 5.440538507740448
     data misfit: 116.61278550186493
-    regularisation: 1.2483714297336255
+    regularization: 1.2483714297336255
     --------------------------------------------------------------------------------
     Iteration 69
     model min and max: 4.596537389260083 5.441868798768565
     data misfit: 115.4400695986893
-    regularisation: 1.2651107953663394
+    regularization: 1.2651107953663394
     --------------------------------------------------------------------------------
     Iteration 70
     model min and max: 4.588933924906097 5.443194305166808
     data misfit: 114.27905560311517
-    regularisation: 1.2817347331344418
+    regularization: 1.2817347331344418
     --------------------------------------------------------------------------------
     Iteration 71
     model min and max: 4.581386057254284 5.444515152949196
     data misfit: 113.12962777685908
-    regularisation: 1.2982440852762438
+    regularization: 1.2982440852762438
     --------------------------------------------------------------------------------
     Iteration 72
     model min and max: 4.573893271415996 5.445831462117635
     data misfit: 111.99167167496597
-    regularisation: 1.31463974194478
+    regularization: 1.31463974194478
     --------------------------------------------------------------------------------
     Iteration 73
     model min and max: 4.566455060606405 5.447143355536106
     data misfit: 110.86507371042079
-    regularisation: 1.330922623761861
+    regularization: 1.330922623761861
     --------------------------------------------------------------------------------
     Iteration 74
     model min and max: 4.5590709248138035 5.4484509412635305
     data misfit: 109.74972168905651
-    regularisation: 1.3470936855280138
+    regularization: 1.3470936855280138
     --------------------------------------------------------------------------------
     Iteration 75
     model min and max: 4.551740370186277 5.449754315221761
     data misfit: 108.64550462298934
-    regularisation: 1.3631539059649196
+    regularization: 1.3631539059649196
     --------------------------------------------------------------------------------
     Iteration 76
     model min and max: 4.544462910908477 5.45105358354663
     data misfit: 107.552312402364
-    regularisation: 1.379104290937863
+    regularization: 1.379104290937863
     --------------------------------------------------------------------------------
     Iteration 77
     model min and max: 4.5372380680382784 5.452348833714409
     data misfit: 106.47003619955336
-    regularisation: 1.3949458653049807
+    regularization: 1.3949458653049807
     --------------------------------------------------------------------------------
     Iteration 78
     model min and max: 4.530065368466219 5.453640151818297
     data misfit: 105.39856824352779
-    regularisation: 1.4106796759053113
+    regularization: 1.4106796759053113
     --------------------------------------------------------------------------------
     Iteration 79
     model min and max: 4.5229443454238165 5.454927619238911
     data misfit: 104.33780180995203
-    regularisation: 1.426306778089325
+    regularization: 1.426306778089325
     --------------------------------------------------------------------------------
     Iteration 80
     model min and max: 4.515874537838111 5.456211310980035
     data misfit: 103.28763128559409
-    regularisation: 1.4418282400921838
+    regularization: 1.4418282400921838
     --------------------------------------------------------------------------------
     Iteration 81
     model min and max: 4.508855493270105 5.457491300843637
     data misfit: 102.24795227460832
-    regularisation: 1.4572451454502195
+    regularization: 1.4572451454502195
     --------------------------------------------------------------------------------
     Iteration 82
     model min and max: 4.501886761879149 5.4587676579672015
     data misfit: 101.21866112882478
-    regularisation: 1.472558581624507
+    regularization: 1.472558581624507
     --------------------------------------------------------------------------------
     Iteration 83
     model min and max: 4.4949679013180335 5.460040446670293
     data misfit: 100.19965538774181
-    regularisation: 1.487769641293717
+    regularization: 1.487769641293717
     --------------------------------------------------------------------------------
     Iteration 84
     model min and max: 4.4880984737028475 5.461309723124837
     data misfit: 99.19083378846311
-    regularisation: 1.5028794187975643
+    regularization: 1.5028794187975643
     --------------------------------------------------------------------------------
     Iteration 85
     model min and max: 4.481278048430333 5.462575547448293
     data misfit: 98.19209570727084
-    regularisation: 1.517889010059188
+    regularization: 1.517889010059188
     --------------------------------------------------------------------------------
     Iteration 86
     model min and max: 4.4745061989858055 5.4638379758106685
     data misfit: 97.20334176265881
-    regularisation: 1.532799520308866
+    regularization: 1.532799520308866
     --------------------------------------------------------------------------------
     Iteration 87
     model min and max: 4.467782504131264 5.465097054741926
     data misfit: 96.22447356239108
-    regularisation: 1.5476120398917095
+    regularization: 1.5476120398917095
     --------------------------------------------------------------------------------
     Iteration 88
     model min and max: 4.461106547429204 5.46635283216938
     data misfit: 95.25539353083107
-    regularisation: 1.5623276606929792
+    regularization: 1.5623276606929792
     --------------------------------------------------------------------------------
     Iteration 89
     model min and max: 4.454477917852421 5.467605355820479
     data misfit: 94.29600528769339
-    regularisation: 1.5769474770552052
+    regularization: 1.5769474770552052
     --------------------------------------------------------------------------------
     Iteration 90
     model min and max: 4.447896209597865 5.4688546670219536
     data misfit: 93.34621325777489
-    regularisation: 1.5914725697391183
+    regularization: 1.5914725697391183
     --------------------------------------------------------------------------------
     Iteration 91
     model min and max: 4.441361021254674 5.470100804742976
     data misfit: 92.40592294458668
-    regularisation: 1.605904013927516
+    regularization: 1.605904013927516
     --------------------------------------------------------------------------------
     Iteration 92
     model min and max: 4.434871956845264 5.471343807997078
     data misfit: 91.47504046287139
-    regularisation: 1.6202428834768088
+    regularization: 1.6202428834768088
     --------------------------------------------------------------------------------
     Iteration 93
     model min and max: 4.428428622778393 5.472583708975906
     data misfit: 90.55347314896551
-    regularisation: 1.6344902333574869
+    regularization: 1.6344902333574869
     --------------------------------------------------------------------------------
     Iteration 94
     model min and max: 4.422030632871221 5.473820544586452
     data misfit: 89.64112924285119
-    regularisation: 1.6486471176026667
+    regularization: 1.6486471176026667
     --------------------------------------------------------------------------------
     Iteration 95
     model min and max: 4.4156776037724 5.475054345652616
     data misfit: 88.73791789694776
-    regularisation: 1.662714583581907
+    regularization: 1.662714583581907
     --------------------------------------------------------------------------------
     Iteration 96
     model min and max: 4.409369156141635 5.476285137002533
     data misfit: 87.8437488099508
-    regularisation: 1.6766936565930384
+    regularization: 1.6766936565930384
     --------------------------------------------------------------------------------
     Iteration 97
     model min and max: 4.403104916155895 5.477512950292154
     data misfit: 86.95853313942787
-    regularisation: 1.6905853585585566
+    regularization: 1.6905853585585566
     --------------------------------------------------------------------------------
     Iteration 98
     model min and max: 4.396884513549245 5.478737814008985
     data misfit: 86.08218249025609
-    regularisation: 1.704390702269171
+    regularization: 1.704390702269171
     --------------------------------------------------------------------------------
     Iteration 99
     model min and max: 4.3907075809808545 5.479959743126913
     data misfit: 85.21460937810029
-    regularisation: 1.7181106804180069
+    regularization: 1.7181106804180069
     --------------------------------------------------------------------------------
     Iteration 100
     model min and max: 4.384573757293057 5.48117877292511
     data misfit: 84.35572743571626
-    regularisation: 1.7317462762750024
+    regularization: 1.7317462762750024
     --------------------------------------------------------------------------------
     Iteration 101
     model min and max: 4.378482683850396 5.482394915553219
     data misfit: 83.50545076867697
-    regularisation: 1.7452984675791934
+    regularization: 1.7452984675791934
     --------------------------------------------------------------------------------
     Iteration 102
     model min and max: 4.372434005712353 5.483608192046709
     data misfit: 82.66369488589048
-    regularisation: 1.75876820503069
+    regularization: 1.75876820503069
     --------------------------------------------------------------------------------
     Iteration 103
     model min and max: 4.3664273729814855 5.484818622807397
     data misfit: 81.83037531711092
-    regularisation: 1.7721564411180208
+    regularization: 1.7721564411180208
     --------------------------------------------------------------------------------
     Iteration 104
     model min and max: 4.360462438842726 5.486026226690229
     data misfit: 81.00540905874284
-    regularisation: 1.7854641025229174
+    regularization: 1.7854641025229174
     --------------------------------------------------------------------------------
     Iteration 105
     model min and max: 4.354538859621241 5.487231017745339
     data misfit: 80.18871373270579
-    regularisation: 1.7986921078669806
+    regularization: 1.7986921078669806
     --------------------------------------------------------------------------------
     Iteration 106
     model min and max: 4.348656295549017 5.488433010956565
     data misfit: 79.3802078191352
-    regularisation: 1.8118413588851832
+    regularization: 1.8118413588851832
     --------------------------------------------------------------------------------
     Iteration 107
     model min and max: 4.342814410670054 5.489632220254022
     data misfit: 78.5798104960511
-    regularisation: 1.8249127494818216
+    regularization: 1.8249127494818216
     --------------------------------------------------------------------------------
     Iteration 108
     model min and max: 4.33701287323028 5.490828661823763
     data misfit: 77.78744159022175
-    regularisation: 1.8379071543278005
+    regularization: 1.8379071543278005
     --------------------------------------------------------------------------------
     Iteration 109
     model min and max: 4.331251353227148 5.49202234222115
     data misfit: 77.0030221191503
-    regularisation: 1.850825434286914
+    regularization: 1.850825434286914
     --------------------------------------------------------------------------------
     Iteration 110
     model min and max: 4.325529525685314 5.493213276528182
     data misfit: 76.2264735868664
-    regularisation: 1.863668438718413
+    regularization: 1.863668438718413
     --------------------------------------------------------------------------------
     Iteration 111
     model min and max: 4.319847067333914 5.49440146977709
     data misfit: 75.45771830630939
-    regularisation: 1.8764369944171997
+    regularization: 1.8764369944171997
     --------------------------------------------------------------------------------
     Iteration 112
     model min and max: 4.314203660311581 5.495586942372767
     data misfit: 74.69667928818569
-    regularisation: 1.8891319271415212
+    regularization: 1.8891319271415212
     --------------------------------------------------------------------------------
     Iteration 113
     model min and max: 4.308598988197561 5.496769691860221
     data misfit: 73.94328042053587
-    regularisation: 1.9017540358207587
+    regularization: 1.9017540358207587
     --------------------------------------------------------------------------------
     Iteration 114
     model min and max: 4.3030327379242115 5.497949733301064
     data misfit: 73.19744644654905
-    regularisation: 1.9143041161512286
+    regularization: 1.9143041161512286
     --------------------------------------------------------------------------------
     Iteration 115
     model min and max: 4.297504599554081 5.49912706740908
     data misfit: 72.45910234955997
-    regularisation: 1.9267829424254037
+    regularization: 1.9267829424254037
     --------------------------------------------------------------------------------
     Iteration 116
     model min and max: 4.292014268015936 5.500301706226124
     data misfit: 71.72817455598872
-    regularisation: 1.9391912776783449
+    regularization: 1.9391912776783449
     --------------------------------------------------------------------------------
     Iteration 117
     model min and max: 4.2865614387821696 5.501473654637321
     data misfit: 71.00458935794444
-    regularisation: 1.9515298762952349
+    regularization: 1.9515298762952349
     --------------------------------------------------------------------------------
     Iteration 118
     model min and max: 4.281145811891621 5.502642916649686
     data misfit: 70.28827462611076
-    regularisation: 1.9637994606317326
+    regularization: 1.9637994606317326
     --------------------------------------------------------------------------------
     Iteration 119
     model min and max: 4.275767090356512 5.503809497127714
     data misfit: 69.57915840577007
-    regularisation: 1.9760007659520056
+    regularization: 1.9760007659520056
     --------------------------------------------------------------------------------
     Iteration 120
     model min and max: 4.270424978966895 5.504973399533853
     data misfit: 68.87716960268716
-    regularisation: 1.9881344921444868
+    regularization: 1.9881344921444868
     --------------------------------------------------------------------------------
     Iteration 121
     model min and max: 4.265119186558376 5.506134631533008
     data misfit: 68.18223767683703
-    regularisation: 2.0002013392545273
+    regularization: 2.0002013392545273
     --------------------------------------------------------------------------------
     Iteration 122
     model min and max: 4.259849423918202 5.507293193609607
     data misfit: 67.4942929906841
-    regularisation: 2.0122019888923734
+    regularization: 2.0122019888923734
     --------------------------------------------------------------------------------
     Iteration 123
     model min and max: 4.254615404356127 5.5084490876823855
     data misfit: 66.8132665385752
-    regularisation: 2.024137106213204
+    regularization: 2.024137106213204
     --------------------------------------------------------------------------------
     Iteration 124
     model min and max: 4.249416845887377 5.509602317776019
     data misfit: 66.1390898034181
-    regularisation: 2.0360073573657096
+    regularization: 2.0360073573657096
     --------------------------------------------------------------------------------
     Iteration 125
     model min and max: 4.244253467002245 5.510752883800075
     data misfit: 65.47169512494389
-    regularisation: 2.047813376152993
+    regularization: 2.047813376152993
     --------------------------------------------------------------------------------
     Iteration 126
     model min and max: 4.239124990316848 5.511900792580825
     data misfit: 64.81101541904546
-    regularisation: 2.0595558008936323
+    regularization: 2.0595558008936323
     --------------------------------------------------------------------------------
     Iteration 127
     model min and max: 4.234031140024699 5.5130460384937034
     data misfit: 64.15698425894404
-    regularisation: 2.0712352437019836
+    regularization: 2.0712352437019836
     --------------------------------------------------------------------------------
     Iteration 128
     model min and max: 4.228971644783325 5.514188629032376
     data misfit: 63.50953587446653
-    regularisation: 2.082852320328795
+    regularization: 2.082852320328795
     --------------------------------------------------------------------------------
     Iteration 129
     model min and max: 4.223946233377087 5.515328559914928
     data misfit: 62.86860523167743
-    regularisation: 2.094407619611503
+    regularization: 2.094407619611503
     --------------------------------------------------------------------------------
     Iteration 130
     model min and max: 4.218954638853576 5.516465832723229
     data misfit: 62.23412775581194
-    regularisation: 2.10590173274084
+    regularization: 2.10590173274084
     --------------------------------------------------------------------------------
     Iteration 131
     model min and max: 4.213996595741536 5.517600445796508
     data misfit: 61.60603968767027
-    regularisation: 2.1173352249886843
+    regularization: 2.1173352249886843
     --------------------------------------------------------------------------------
     Iteration 132
     model min and max: 4.209071841072054 5.518732401344061
     data misfit: 60.984277688308495
-    regularisation: 2.1287086581380996
+    regularization: 2.1287086581380996
     --------------------------------------------------------------------------------
     Iteration 133
     model min and max: 4.2041801151883345 5.519861698906596
     data misfit: 60.36877905447835
-    regularisation: 2.1400225904662125
+    regularization: 2.1400225904662125
     --------------------------------------------------------------------------------
     Iteration 134
     model min and max: 4.199321161009707 5.520988338701525
     data misfit: 59.75948186613626
-    regularisation: 2.151277555730057
+    regularization: 2.151277555730057
     --------------------------------------------------------------------------------
     Iteration 135
     model min and max: 4.194494723006788 5.522112320022277
     data misfit: 59.15632473765331
-    regularisation: 2.162474084274877
+    regularization: 2.162474084274877
     --------------------------------------------------------------------------------
     Iteration 136
     model min and max: 4.189700547809102 5.523233635574626
     data misfit: 58.55924679785758
-    regularisation: 2.173612694500653
+    regularization: 2.173612694500653
     --------------------------------------------------------------------------------
     Iteration 137
     model min and max: 4.184938385349534 5.5243522892883545
     data misfit: 57.96818782881774
-    regularisation: 2.1846938946160375
+    regularization: 2.1846938946160375
     --------------------------------------------------------------------------------
     Iteration 138
     model min and max: 4.180207986342461 5.525468278956832
     data misfit: 57.38308828504582
-    regularisation: 2.1957181812686106
+    regularization: 2.1957181812686106
     --------------------------------------------------------------------------------
     Iteration 139
     model min and max: 4.175509105039277 5.526581601570928
     data misfit: 56.803889056114414
-    regularisation: 2.206686048253892
+    regularization: 2.206686048253892
     --------------------------------------------------------------------------------
     Iteration 140
     model min and max: 4.170841498328598 5.527692259210846
     data misfit: 56.2305315680277
-    regularisation: 2.217597971919765
+    regularization: 2.217597971919765
     --------------------------------------------------------------------------------
     Iteration 141
     model min and max: 4.166204924193906 5.528800244754157
     data misfit: 55.66295791121654
-    regularisation: 2.228454425270307
+    regularization: 2.228454425270307
     --------------------------------------------------------------------------------
     Iteration 142
     model min and max: 4.16159914343025 5.529905557960987
     data misfit: 55.101110884688204
-    regularisation: 2.2392558660700157
+    regularization: 2.2392558660700157
     --------------------------------------------------------------------------------
     Iteration 143
     model min and max: 4.157023918134363 5.531008193297557
     data misfit: 54.544933614353795
-    regularisation: 2.2500027453117757
+    regularization: 2.2500027453117757
     --------------------------------------------------------------------------------
     Iteration 144
     model min and max: 4.152479013753846 5.53210815618091
     data misfit: 53.994369824418804
-    regularisation: 2.260695506429137
+    regularization: 2.260695506429137
     --------------------------------------------------------------------------------
     Iteration 145
     model min and max: 4.147964197677521 5.533205438004019
     data misfit: 53.4493638645512
-    regularisation: 2.2713345889712433
+    regularization: 2.2713345889712433
     --------------------------------------------------------------------------------
     Iteration 146
     model min and max: 4.143479238670628 5.534300038406984
     data misfit: 52.90986067373963
-    regularisation: 2.281920413624065
+    regularization: 2.281920413624065
     --------------------------------------------------------------------------------
     Iteration 147
     model min and max: 4.139023907322004 5.535391955003051
     data misfit: 52.37580550427695
-    regularisation: 2.2924533988425853
+    regularization: 2.2924533988425853
     --------------------------------------------------------------------------------
     Iteration 148
     model min and max: 4.134597977743087 5.536481183691215
     data misfit: 51.84714429588876
-    regularisation: 2.302933959165738
+    regularization: 2.302933959165738
     --------------------------------------------------------------------------------
     Iteration 149
     model min and max: 4.130201224731841 5.537567723196075
     data misfit: 51.323823633672
-    regularisation: 2.3133624918452815
+    regularization: 2.3133624918452815
     --------------------------------------------------------------------------------
     Iteration 150
     model min and max: 4.125833426160393 5.538651572062232
     data misfit: 50.805790300154634
-    regularisation: 2.3237393995934035
+    regularization: 2.3237393995934035
 
 
 

@@ -2,7 +2,7 @@
 
 This script runs:
 - Inversion on gravity density model, and
-- Scipy's optimisation with CoFI
+- Scipy's optimization with CoFI
 
 
 To run this script, refer to the following examples:
@@ -83,13 +83,13 @@ def main():
     grav_problem.set_jacobian(Jz)
 
     # Set regularization; reg is a function that takes the model as input
-    grav_problem.set_regularisation(reg_l1, epsilon, args=[W])
+    grav_problem.set_regularization(reg_l1, epsilon, args=[W])
 
     # Use default L2 misfit
     grav_problem.set_data_misfit("L2")
     grav_problem.set_initial_model(Starting_model3)
 
-    # Set gradient, in hope of helping optimisers converge better
+    # Set gradient, in hope of helping optimizers converge better
     def data_misfit_gradient(model):
         return 2* Jz.T @ (forward(model) - gz) / gz.shape[0]
     grav_problem.set_gradient(lambda m: data_misfit_gradient(m) + epsilon*reg_gradient_l1(m, W))

@@ -212,13 +212,13 @@ pp.552-560
     grav_problem.set_jacobian(Jz)
 
     # Set regularization; reg is a function that takes the model as input
-    grav_problem.set_regularisation(reg_l1, epsilon, args=[W])
+    grav_problem.set_regularization(reg_l1, epsilon, args=[W])
 
     # Use default L2 misfit
     grav_problem.set_data_misfit("L2")
     grav_problem.set_initial_model(Starting_model3)
 
-    # Set gradient, in hope of helping optimisers converge better
+    # Set gradient, in hope of helping optimizers converge better
     def data_misfit_gradient(model):
         return 2* Jz.T @ (forward(model) - gz) / gz.shape[0]
     grav_problem.set_gradient(lambda m: data_misfit_gradient(m) + epsilon*reg_gradient_l1(m, W))
@@ -239,13 +239,13 @@ pp.552-560
     Model shape: (1728,)
     ---------------------------------------------------------------------
     List of functions/properties set by you:
-    ['gradient', 'jacobian', 'regularisation', 'regularisation_factor', 'forward', 'data', 'initial_model', 'model_shape']
+    ['gradient', 'jacobian', 'regularization', 'regularization_factor', 'forward', 'data', 'initial_model', 'model_shape']
     ---------------------------------------------------------------------
     List of functions/properties created based on what you have provided:
     ['objective', 'residual', 'jacobian_times_vector', 'data_misfit']
     ---------------------------------------------------------------------
     List of functions/properties not set by you:
-    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularisation_matrix', 'data_covariance', 'data_covariance_inv', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularization_matrix', 'data_covariance', 'data_covariance_inv', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
 
 
 

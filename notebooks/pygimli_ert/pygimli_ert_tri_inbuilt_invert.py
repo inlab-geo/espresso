@@ -10,7 +10,7 @@ from pygimli_ert_lib import (
     ert_manager,
     reg_matrix,
     get_data_misfit,
-    get_regularisation,
+    get_regularization,
 )
 
 if not os.path.exists("figs/tri_mesh"): os.makedirs("figs/tri_mesh")
@@ -43,7 +43,7 @@ inv = mgr.invert(lam=20, verbose=True)
 
 Wm = reg_matrix(mgr.fop)
 print("data misfit:", get_data_misfit(np.log(inv), log_data, mgr.fop, data_cov_inv))
-print("regularisation:", get_regularisation(np.log(inv), Wm, 0.0005))
+print("regularization:", get_regularization(np.log(inv), Wm, 0.0005))
 
 # plot inferred model
 ax = pygimli.show(mgr.paraDomain, data=inv, label=r"$\Omega m$")

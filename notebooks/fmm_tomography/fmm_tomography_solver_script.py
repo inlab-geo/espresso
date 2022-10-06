@@ -25,7 +25,7 @@ ref_start_slowness = 1/ref_start_model
 fmm_problem = BaseProblem()
 fmm_problem.set_initial_model(ref_start_slowness)
 
-# add regularisation: damping + smoothing
+# add regularization: damping + smoothing
 damping_factor = 100
 flattening_factor = 1e4
 smoothing_factor = 0
@@ -69,13 +69,13 @@ def reg_grad(slowness):
     return damping_grad(slowness) + flattening_grad(slowness) + smoothing_grad(slowness)
 reg_hess = damping_hess() + flattening_hess() + smoothing_hess()
 
-fmm_problem.set_regularisation(reg)
+fmm_problem.set_regularization(reg)
 
 # TODO above to be replaced by cofi.utils (below)
 # reg_damping = QuadraticReg(damping_factor, model_size, "damping")
 # reg_smoothing = QuadraticReg(smoothing_factor, model_shape, "smoothing")
 # reg = reg_damping + reg_smoothing
-# fmm_problem.set_regularisation(reg)
+# fmm_problem.set_regularization(reg)
 
 sigma =  0.00001                   # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals
 def objective_func(slowness):

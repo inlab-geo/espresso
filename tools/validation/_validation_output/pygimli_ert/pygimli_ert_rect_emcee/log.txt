@@ -36,7 +36,7 @@ Summary for inversion problem: Electrical Resistivity Tomography defined through
 Model shape: (193,)
 ----------------------------------------------------------------------------------------
 List of functions/properties set by you:
-['log_likelihood', 'log_prior', 'gradient', 'hessian', 'residual', 'jacobian', 'data_misfit', 'regularisation', 'forward', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype']
+['log_likelihood', 'log_prior', 'gradient', 'hessian', 'residual', 'jacobian', 'data_misfit', 'regularization', 'forward', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype']
 ----------------------------------------------------------------------------------------
 List of functions/properties created based on what you have provided:
 ['objective', 'log_posterior', 'log_posterior_with_blobs', 'hessian_times_vector', 'jacobian_times_vector']
