@@ -142,7 +142,14 @@ we use ``cofi`` to run a linear system solver for this problem.
 
  .. code-block:: none
 
-    Evaluating paths:   0%|          | 0/3969 [00:00<?, ?it/s]    Evaluating paths:  18%|#8        | 731/3969 [00:00<00:00, 7307.52it/s]    Evaluating paths:  39%|###8      | 1542/3969 [00:00<00:00, 7774.64it/s]    Evaluating paths:  58%|#####8    | 2320/3969 [00:00<00:00, 7714.87it/s]    Evaluating paths:  78%|#######8  | 3113/3969 [00:00<00:00, 7796.93it/s]    Evaluating paths: 100%|#########9| 3958/3969 [00:00<00:00, 8029.29it/s]    Evaluating paths: 100%|##########| 3969/3969 [00:00<00:00, 7880.32it/s]
+
+    Evaluating paths:   0%|          | 0/3969 [00:00<?, ?it/s]
+    Evaluating paths:  18%|#8        | 731/3969 [00:00<00:00, 7307.52it/s]
+    Evaluating paths:  39%|###8      | 1542/3969 [00:00<00:00, 7774.64it/s]
+    Evaluating paths:  58%|#####8    | 2320/3969 [00:00<00:00, 7714.87it/s]
+    Evaluating paths:  78%|#######8  | 3113/3969 [00:00<00:00, 7796.93it/s]
+    Evaluating paths: 100%|#########9| 3958/3969 [00:00<00:00, 8029.29it/s]
+    Evaluating paths: 100%|##########| 3969/3969 [00:00<00:00, 7880.32it/s]
 
 
 
@@ -163,7 +170,7 @@ we use ``cofi`` to run a linear system solver for this problem.
 
 
 
-
+regularization
 .. GENERATED FROM PYTHON SOURCE LINES 98-102
 
 .. code-block:: default
@@ -198,7 +205,7 @@ Review what information is included in the ``BaseProblem`` object:
 .. rst-class:: sphx-glr-script-out
 
  .. code-block:: none
-
+regularizationregularizationregularization
     =====================================================================
     Summary for inversion problem: BaseProblem
     =====================================================================

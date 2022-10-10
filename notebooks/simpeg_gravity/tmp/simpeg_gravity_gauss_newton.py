@@ -171,7 +171,7 @@ model_map = maps.IdentityMap(nP=nC)  # model consists of a value for each active
 starting_model = background_density * np.ones(nC)
 
 
-############# Define forward operator / regularisation with SimPEG ####################
+############# Define forward operator / regularization with SimPEG ####################
 
 simulation = gravity.simulation.Simulation3DIntegral(
     survey=survey, mesh=mesh, rhoMap=model_map, actInd=ind_active,
@@ -200,15 +200,15 @@ def get_misfit(model, y_obs, simulation):
     phi = np.abs(np.dot(residual, residual))
     return phi
 
-def get_regularisation(model, Wm, lamda):
+def get_regularization(model, Wm, lamda):
     return lamda * (Wm @ model).T @ (Wm @ model)  
 
 def get_gradient(model, y_obs, simulation, Wm, lamda):
     J = get_jacobian(model, simulation)
     residual = get_residuals(model, y_obs, simulation) 
     data_misfit_grad = -residual @ J
-    regularisation_grad = lamda * Wm.T @ Wm @ model
-    return data_misfit_grad + regularisation_grad
+    regularization_grad = lamda * Wm.T @ Wm @ model
+    return data_misfit_grad + regularization_grad
 
 def get_hessian(model, simulation, Wm, lamda):
     J = get_jacobian(model, simulation)
@@ -229,7 +229,7 @@ class GaussNewton(BaseSolver):
         self._gradient = inv_problem.gradient
         self._hessian = inv_problem.hessian
         self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
-        self._reg = inv_problem.regularisation if inv_problem.regularisation_defined else None
+        self._reg = inv_problem.regularization if inv_problem.regularization_defined else None
         self._obj = inv_problem.objective if inv_problem.objective_defined else None
 
     def __call__(self):
@@ -257,7 +257,7 @@ grav_problem.set_forward(get_response, args=[simulation])
 grav_problem.set_jacobian(get_jacobian, args=[simulation])
 grav_problem.set_residual(get_residuals, args=[y_obs, simulation])
 grav_problem.set_data_misfit(get_misfit, args=[y_obs, simulation])
-grav_problem.set_regularisation(get_regularisation, args=[reg.W, lamda])
+grav_problem.set_regularization(get_regularization, args=[reg.W, lamda])
 grav_problem.set_gradient(get_gradient, args=[y_obs, simulation, reg.W, lamda])
 grav_problem.set_hessian(get_hessian, args=[simulation, reg.W, lamda])
 grav_problem.set_initial_model(starting_model)

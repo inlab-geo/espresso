@@ -20,7 +20,7 @@ from pygimli_dcip_lib import (
     get_residual,
     get_jacobian,
     get_data_misfit,
-    get_regularisation,
+    get_regularization,
     get_gradient,
     get_hessian,
 )
@@ -65,5 +65,5 @@ ax[0].figure.savefig("figs/tri_mesh/tri_scipy_opt_inv_mesh")
 # PyGIMLi's forward operator (ERTModelling)
 forward_oprt = ert_forward_operator(mgr, scheme, inv_mesh)
 
-# extract regularisation matrix
+# extract regularization matrix
 Wm = reg_matrix(forward_oprt)

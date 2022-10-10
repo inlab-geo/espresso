@@ -16,9 +16,9 @@ sample results.
     triangular mesh by PyGIMLi's inbuilt solver. This example doesn't use an inversion approached
     binded by CoFI, and is for reference only.
   - [pygimli_ert_tri_scipy_min.py](pygimli_ert_tri_scipy_min.py) runs inversion with a triangular
-    mesh by SciPy's optimisers.
+    mesh by SciPy's optimizers.
   - [pygimli_ert_tri_gauss_newton.py](pygimli_ert_tri_gauss_newton.py) runs inversion with a 
-    triangular mesh by a Gauss Newton's optimisation approach handwritten by us.
+    triangular mesh by a Gauss Newton's optimization approach handwritten by us.
   - [pygimli_ert_tri_gauss_newton_armijo_linesearch.py](pygimli_ert_tri_gauss_newton_armijo_linesearch.py)
     is an update to the above Gauss Newton example, with the addition of a line search functionality
     to increase the speed of convergence.

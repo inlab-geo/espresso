@@ -2,7 +2,7 @@
 
 This script runs:
 - ERT problem (triangular mesh) defined with PyGIMLi, and
-- Newton's optimisation method with CoFI
+- Newton's optimization method with CoFI
 
 
 To run this script, refer to the following examples:
@@ -44,7 +44,7 @@ _file_prefix = f"{_problem_name}_{_solver_name}"
 _figs_prefix = f"./{_file_prefix}"
 
 
-############# Define a custom solver (Newton's optimisation method) ###################
+############# Define a custom solver (Newton's optimization method) ###################
 
 class MyNewtonSolver(BaseSolver):
     def __init__(self, inv_problem, inv_options):
@@ -56,7 +56,7 @@ class MyNewtonSolver(BaseSolver):
         self._gradient = inv_problem.gradient
         self._hessian = inv_problem.hessian
         self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
-        self._reg = inv_problem.regularisation if inv_problem.regularisation_defined else None
+        self._reg = inv_problem.regularization if inv_problem.regularization_defined else None
         self._obj = inv_problem.objective if inv_problem.objective_defined else None
         
     def __call__(self):
@@ -141,7 +141,7 @@ def main():
     ert_problem.set_jacobian(get_jacobian, args=[forward_operator])
     ert_problem.set_residual(get_residuals, args=[y_obs, forward_operator])
     ert_problem.set_data_misfit(get_misfit, args=[y_obs, forward_operator, True])
-    ert_problem.set_regularisation(get_regularisation, lamda=lamda, args=[Wm, True])
+    ert_problem.set_regularization(get_regularization, lamda=lamda, args=[Wm, True])
     ert_problem.set_gradient(get_gradient, args=[y_obs, forward_operator, lamda, Wm])
     ert_problem.set_hessian(get_hessian, args=[y_obs, forward_operator, lamda, Wm])
     ert_problem.set_initial_model(model_0)

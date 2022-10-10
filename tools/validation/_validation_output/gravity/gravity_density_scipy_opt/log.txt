@@ -6,7 +6,7 @@ Summary for inversion problem: Gravity
 Model shape: (1728,)
 ---------------------------------------------------------------------
 List of functions/properties set by you:
-['gradient', 'jacobian', 'data_misfit', 'regularisation', 'forward', 'data', 'initial_model', 'model_shape']
+['gradient', 'jacobian', 'data_misfit', 'regularization', 'forward', 'data', 'initial_model', 'model_shape']
 ---------------------------------------------------------------------
 List of functions/properties created based on what you have provided:
 ['objective', 'residual', 'jacobian_times_vector']

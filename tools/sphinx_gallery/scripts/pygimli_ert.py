@@ -188,7 +188,7 @@ ax[0].set_title("Mesh used for inversion")
 
 ######################################################################
 # With the inversion mesh created, we now define a starting model, forward
-# operator and weighting matrix for regularisation using PyGIMLi.
+# operator and weighting matrix for regularization using PyGIMLi.
 # 
 # Recall that both our model and data will be in log space when we perform
 # inversion.
@@ -197,7 +197,7 @@ ax[0].set_title("Mesh used for inversion")
 # PyGIMLi's forward operator (ERTModelling)
 forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
 
-# extract regularisation matrix
+# extract regularization matrix
 Wm = reg_matrix(forward_oprt)
 
 # initialise a starting model for inversion
@@ -220,7 +220,7 @@ ax[0].set_title("Starting model")
 # -  ``get_jacobian``
 # -  ``get_residuals``
 # -  ``get_data_misfit``
-# -  ``get_regularisation``
+# -  ``get_regularization``
 # -  ``get_gradient``
 # -  ``get_hessian``
 # 
@@ -242,7 +242,7 @@ ert_problem.set_forward(get_response, args=[forward_oprt])
 ert_problem.set_jacobian(get_jacobian, args=[forward_oprt])
 ert_problem.set_residual(get_residual, args=[log_data, forward_oprt])
 ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_cov_inv])
-ert_problem.set_regularisation(get_regularisation, args=[Wm, lamda])
+ert_problem.set_regularization(get_regularization, args=[Wm, lamda])
 ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
 ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
 ert_problem.set_initial_model(start_model_log)
@@ -265,7 +265,7 @@ ert_problem.summary()
 # 2. Define the inversion options and run
 # ---------------------------------------
 # 
-# 2.1 SciPy’s optimiser (`trust-exact <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustexact.html#optimize-minimize-trustexact>`__)
+# 2.1 SciPy’s optimizer (`trust-exact <https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustexact.html#optimize-minimize-trustexact>`__)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 
@@ -329,7 +329,7 @@ ax[0].set_title("Synthetic data from inferred model")
 
 
 ######################################################################
-# 2.2 A custom `Newton’s optimisation <https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization>`__ approach
+# 2.2 A custom `Newton’s optimization <https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization>`__ approach
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Now we switch to a Newton’s iterative approach written by ourselves, so
@@ -350,7 +350,7 @@ class GaussNewton(BaseSolver):
         self._gradient = inv_problem.gradient
         self._hessian = inv_problem.hessian
         self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
-        self._reg = inv_problem.regularisation if inv_problem.regularisation_defined else None
+        self._reg = inv_problem.regularization if inv_problem.regularization_defined else None
         self._obj = inv_problem.objective if inv_problem.objective_defined else None
 
     def __call__(self):
@@ -361,7 +361,7 @@ class GaussNewton(BaseSolver):
                 print(f"Iteration {i+1}")
                 print("model min and max:", np.min(current_model), np.max(current_model))
                 if self._misfit: print("data misfit:", self._misfit(current_model))
-                if self._reg: print("regularisation:", self._reg(current_model))
+                if self._reg: print("regularization:", self._reg(current_model))
             term1 = self._hessian(current_model)
             term2 = - self._gradient(current_model)
             model_update = np.linalg.solve(term1, term2) * self._step

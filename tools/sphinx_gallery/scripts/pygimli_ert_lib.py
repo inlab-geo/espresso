@@ -80,7 +80,7 @@ def ert_forward_operator(ert_manager, scheme, inv_mesh):
     forward_operator.setMesh(inv_mesh, ignoreRegionManager=True)
     return forward_operator
 
-# regularisation matrix
+# regularization matrix
 def reg_matrix(forward_oprt):
     region_manager = forward_oprt.regionManager()
     region_manager.setConstraintType(2)
@@ -136,22 +136,22 @@ def get_data_misfit(model, log_data, forward_operator, data_cov_inv=None):
     data_cov_inv = np.eye(log_data.shape[0]) if data_cov_inv is None else data_cov_inv
     return np.abs(residual.T @ data_cov_inv @ residual)
 
-def get_regularisation(model, Wm, lamda):
+def get_regularization(model, Wm, lamda):
     model = np.exp(model)
     return lamda * (Wm @ model).T @ (Wm @ model)
 
 def get_objective(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None):
     data_misfit = get_data_misfit(model, log_data, forward_operator, data_cov_inv)
-    regularisation = get_regularisation(model, Wm, lamda)
-    obj = data_misfit + regularisation
+    regularization = get_regularization(model, Wm, lamda)
+    obj = data_misfit + regularization
     return obj
 
 def get_gradient(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None):
     jac, residual = get_jac_residual(model, log_data, forward_operator)
     data_cov_inv = np.eye(log_data.shape[0]) if data_cov_inv is None else data_cov_inv
     data_misfit_grad =  - residual.T @ data_cov_inv @ jac
-    regularisation_grad = lamda * Wm.T @ Wm @ np.exp(model)
-    return data_misfit_grad + regularisation_grad
+    regularization_grad = lamda * Wm.T @ Wm @ np.exp(model)
+    return data_misfit_grad + regularization_grad
 
 def get_hessian(model, log_data, forward_operator, Wm, lamda, data_cov_inv=None):
     jac = get_jacobian(model, forward_operator)

@@ -17,7 +17,7 @@ from pygimli_ert_lib import (
     get_residual,
     get_jacobian,
     get_data_misfit,
-    get_regularisation,
+    get_regularization,
     get_gradient,
     get_hessian,
 )
@@ -54,7 +54,7 @@ ax[0].figure.savefig("figs/rect_mesh/rect_scipy_opt_inv_mesh")
 # PyGIMLi's forward operator (ERTModelling)
 forward_oprt = ert_forward_operator(ert_manager, scheme, inv_mesh)
 
-# extract regularisation matrix
+# extract regularization matrix
 Wm = reg_matrix(forward_oprt)
 
 # initialise a starting model for inversion
@@ -64,7 +64,7 @@ ax[0].set_title("Starting model")
 ax[0].figure.savefig("figs/rect_mesh/rect_scipy_opt_model_start")
 
 
-############# Inverted by SciPy optimiser through CoFI ################################
+############# Inverted by SciPy optimizer through CoFI ################################
 
 # hyperparameters
 lamda = 0.0001
@@ -76,7 +76,7 @@ ert_problem.set_forward(get_response, args=[forward_oprt])
 ert_problem.set_jacobian(get_jacobian, args=[forward_oprt])
 ert_problem.set_residual(get_residual, args=[log_data, forward_oprt])
 ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_cov_inv])
-ert_problem.set_regularisation(get_regularisation, args=[Wm, lamda])
+ert_problem.set_regularization(get_regularization, args=[Wm, lamda])
 ert_problem.set_gradient(get_gradient, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
 ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, data_cov_inv])
 ert_problem.set_initial_model(start_model_log)

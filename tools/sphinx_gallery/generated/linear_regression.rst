@@ -94,7 +94,7 @@ So a common workflow includes 4 steps:
 2. define ``InversionOptions``. Some useful methods include:
 
    -  ``set_solving_method()`` and ``suggest_tools()``. Once you’ve set
-      a solving method (from “least squares” and “optimisation”, more
+      a solving method (from “least squares” and “optimization”, more
       will be supported), you can use ``suggest_tools()`` to see a list
       of backend tools to choose from.
 
@@ -307,7 +307,7 @@ object.
     ['jacobian_times_vector']
     ---------------------------------------------------------------------
     List of functions/properties not set by you:
-    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularisation', 'regularisation_matrix', 'regularisation_factor', 'forward', 'data_covariance', 'data_covariance_inv', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularization', 'regularization_matrix', 'regularization_factor', 'forward', 'data_covariance', 'data_covariance_inv', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
 
 
 
@@ -354,7 +354,7 @@ solver-specific parameters.
     Solving method: None set
     Use `suggest_solving_methods()` to check available solving methods.
     -----------------------------
-    Backend tool: `scipy.optimize.minimize (by default)` - SciPy's optimisers that minimises a scalar function with respect to one or more variables, check SciPy's documentation page for a list of methods
+    Backend tool: `scipy.optimize.minimize (by default)` - SciPy's optimizers that minimizes a scalar function with respect to one or more variables, check SciPy's documentation page for a list of methods
     References: ['https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html']
     Use `suggest_tools()` to check available backend tools.
     -----------------------------
@@ -388,7 +388,7 @@ categories of inversion approaches you’d like to use.
 
     Here's a complete list of inversion solvers supported by CoFI (grouped by methods):
     {
-        "optimisation": [
+        "optimization": [
             "scipy.optimize.minimize",
             "scipy.optimize.least_squares"
         ],
@@ -572,7 +572,7 @@ and is an engine to actually perform the inversion.
     List of functions/properties created based on what you have provided:
     ['jacobian_times_vector']
     List of functions/properties not set by you:
-    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularisation', 'regularisation_matrix', 'regularisation_factor', 'forward', 'data_covariance', 'data_covariance_inv', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularization', 'regularization_matrix', 'regularization_factor', 'forward', 'data_covariance', 'data_covariance_inv', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
 
 
 
@@ -711,7 +711,7 @@ any).
     List of functions/properties created based on what you have provided:
     ['jacobian_times_vector']
     List of functions/properties not set by you:
-    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularisation', 'regularisation_matrix', 'regularisation_factor', 'forward', 'data_covariance', 'data_covariance_inv', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+    ['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian_times_vector', 'data_misfit', 'regularization', 'regularization_matrix', 'regularization_factor', 'forward', 'data_covariance', 'data_covariance_inv', 'initial_model', 'model_shape', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
     List of functions/properties got used by the backend tool:
     ['data', 'jacobian']
 
@@ -852,11 +852,11 @@ We’ve seen how this linear regression problem is solved with a linear
 system solver. It’s time to see ``cofi``\ ’s capability to switch
 between different inversion approaches easily.
 
-7.1. Optimisation 
+7.1. optimization 
 ~~~~~~~~~~~~~~~~~~
 
 Any linear problem :math:`\textbf{y} = \textbf{G}\textbf{m}` can also be
-solved by minimising the squares of the residual of the linear
+solved by minimizing the squares of the residual of the linear
 equations, e.g. :math:`\textbf{r}^T \textbf{r}` where
 :math:`\textbf{r}=\textbf{y}-\textbf{G}\textbf{m}`.
 
@@ -869,7 +869,7 @@ additional information is required by the solver.
 
 There are several ways to provide the information needed to solve an
 inverse problem with CoFI. In the example below we provide functions to
-calculate the data and the optional regularisation. CoFI then generates
+calculate the data and the optional regularization. CoFI then generates
 the objective function for us based on the information provided. The
 alternative to this would be to directly provide objective function to
 CoFI.
@@ -884,7 +884,7 @@ CoFI.
     inv_problem.set_initial_model(np.ones(4))
     inv_problem.set_forward(forward_func)
     inv_problem.set_data_misfit("L2")
-    inv_problem.set_regularisation(2, 0.02)        # optional
+    inv_problem.set_regularization(2, 0.02)        # optional
 
     ######## Set a different tool
     inv_options_2 = InversionOptions()
@@ -943,7 +943,7 @@ CoFI.
     plt.figure(figsize=(12,8))
     plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
     plt.plot(_x_plot, _y_synth, color="seagreen", label="least squares solution")
-    plt.plot(_x_plot, _y_synth_2, color="cornflowerblue", label="optimisation solution")
+    plt.plot(_x_plot, _y_synth_2, color="cornflowerblue", label="optimization solution")
     plt.scatter(x, y_observed, color="lightcoral", label="original data")
     plt.xlabel("X")
     plt.ylabel("Y")
@@ -979,7 +979,7 @@ the true curve (orange).
 ~~~~~~~~~~~~~~
 
 We’ve seen the same regression problem solved with a linear system
-solver and an optimiser - how about sampling?
+solver and an optimizer - how about sampling?
 
 Background (if you’re relatively new to this)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

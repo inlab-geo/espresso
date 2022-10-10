@@ -77,7 +77,7 @@ Polynomial Linear Regression
 # 2. define ``InversionOptions``. Some useful methods include:
 # 
 #    -  ``set_solving_method()`` and ``suggest_tools()``. Once you’ve set
-#       a solving method (from “least squares” and “optimisation”, more
+#       a solving method (from “least squares” and “optimization”, more
 #       will be supported), you can use ``suggest_tools()`` to see a list
 #       of backend tools to choose from.
 # 
@@ -472,11 +472,11 @@ inv_result.summary()
 # system solver. It’s time to see ``cofi``\ ’s capability to switch
 # between different inversion approaches easily.
 # 
-# 7.1. Optimisation 
+# 7.1. optimization 
 # ~~~~~~~~~~~~~~~~~~
 # 
 # Any linear problem :math:`\textbf{y} = \textbf{G}\textbf{m}` can also be
-# solved by minimising the squares of the residual of the linear
+# solved by minimizing the squares of the residual of the linear
 # equations, e.g. :math:`\textbf{r}^T \textbf{r}` where
 # :math:`\textbf{r}=\textbf{y}-\textbf{G}\textbf{m}`.
 # 
@@ -489,7 +489,7 @@ inv_result.summary()
 # 
 # There are several ways to provide the information needed to solve an
 # inverse problem with CoFI. In the example below we provide functions to
-# calculate the data and the optional regularisation. CoFI then generates
+# calculate the data and the optional regularization. CoFI then generates
 # the objective function for us based on the information provided. The
 # alternative to this would be to directly provide objective function to
 # CoFI.
@@ -499,7 +499,7 @@ inv_result.summary()
 inv_problem.set_initial_model(np.ones(4))
 inv_problem.set_forward(forward_func)
 inv_problem.set_data_misfit("L2")
-inv_problem.set_regularisation(2, 0.02)        # optional
+inv_problem.set_regularization(2, 0.02)        # optional
 
 ######## Set a different tool
 inv_options_2 = InversionOptions()
@@ -525,7 +525,7 @@ _y_synth_2 = _G_plot @ inv_result_2.model
 plt.figure(figsize=(12,8))
 plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
 plt.plot(_x_plot, _y_synth, color="seagreen", label="least squares solution")
-plt.plot(_x_plot, _y_synth_2, color="cornflowerblue", label="optimisation solution")
+plt.plot(_x_plot, _y_synth_2, color="cornflowerblue", label="optimization solution")
 plt.scatter(x, y_observed, color="lightcoral", label="original data")
 plt.xlabel("X")
 plt.ylabel("Y")
@@ -546,7 +546,7 @@ plt.legend();
 # ~~~~~~~~~~~~~~
 # 
 # We’ve seen the same regression problem solved with a linear system
-# solver and an optimiser - how about sampling?
+# solver and an optimizer - how about sampling?
 # 
 # Background (if you’re relatively new to this)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
