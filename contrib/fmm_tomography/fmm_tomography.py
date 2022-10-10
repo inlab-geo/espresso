@@ -173,9 +173,9 @@ class FmmTomography(EspressoProblem):
                 wdir=self.exe_fm2dss
             )
             paths = fmm.paths
+            return wt.displayModel(velocity, paths=paths, extent=self.extent, cline="g", alpha=0.5), paths
         else:
-            paths = None
-        return wt.displayModel(velocity, paths=paths, extent=self.extent, cline="g", alpha=0.5)
+            return wt.displayModel(velocity, paths=None, extent=self.extent, cline="g", alpha=0.5) 
     
     def plot_data(self, data, data2=None):
         raise NotImplementedError               # optional
