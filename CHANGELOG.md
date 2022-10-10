@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.0.1.dev7 (10/10/2022)
+
+### Changed examples
+
+- `FmmTomography` (return "paths" when plotting the model and `paths=True`)
+
 ## v0.0.1.dev6 (04/10/2022)
 
 ### Changed examples
