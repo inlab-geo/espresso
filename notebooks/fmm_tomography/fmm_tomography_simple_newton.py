@@ -27,7 +27,7 @@ fmm_problem.set_initial_model(ref_start_slowness)
 # add regularization: damping + smoothing
 damping_factor = 100
 flattening_factor = 0
-smoothing_factor = 5e3
+smoothing_factor = 1e4
 reg_damping = QuadraticReg(damping_factor, model_size, "damping", ref_start_slowness)
 reg_flattening = QuadraticReg(flattening_factor, model_shape, "flattening")
 reg_smoothing = QuadraticReg(smoothing_factor, model_shape, "smoothing")
@@ -43,12 +43,12 @@ def objective_func(slowness):
     return  data_misfit + model_reg
 def gradient(slowness):
     ttimes, A = fmm.forward(slowness, with_jacobian=True)
-    data_misfit_grad = -A.T @ (fmm.data - ttimes) / sigma**2
+    data_misfit_grad = -2 * A.T @ (fmm.data - ttimes) / sigma**2
     model_reg_grad = reg.gradient(slowness)
     return  data_misfit_grad + model_reg_grad
 def hessian(slowness):
     A = fmm.jacobian(slowness)
-    data_misfit_hess = A.T @ A / sigma**2 
+    data_misfit_hess = 2 * A.T @ A / sigma**2 
     model_reg_hess = reg.hessian(slowness)
     return data_misfit_hess + model_reg_hess
 
@@ -58,28 +58,18 @@ fmm_problem.set_hessian(hessian)
 
 # Define CoFI InversionOptions
 inv_options = InversionOptions()
-inv_options.set_tool("scipy.optimize.minimize")
-method = "Newton-CG"
-inv_options.set_params(method=method, options={"xtol":1e-10, "disp":True})
+inv_options.set_tool("cofi.simple_newton")
+inv_options.set_params(max_iterations=5, verbose=True, step_length=1)
 
 # Define CoFI Inversion and run
-# inv = Inversion(fmm_problem, inv_options)
-# inv_result = inv.run()
-# fig1 = fmm.plot_model(inv_result.model)
-# fig1.savefig(f"figs/fmm_{int(damping_factor)}_{int(smoothing_factor)}_scipy_{method}")
+inv_options_newton = InversionOptions()
+inv_options_newton.set_tool("cofi.simple_newton")
+inv_options_newton.set_params(max_iterations=4, step_length=1)
+inv_newton = Inversion(fmm_problem, inv_options_newton)
+inv_result_newton = inv_newton.run()
+fig2 = fmm.plot_model(inv_result_newton.model)
+fig2.savefig(f"figs/fmm_{int(damping_factor)}_{int(smoothing_factor)}_simple_newton")
 
-# Run with another approach - iterative Newton full-step updates
-num_iterations = 5
-m = fmm_problem.initial_model
-for i in range(num_iterations):
-    print(fmm_problem.objective(m))
-    grad = fmm_problem.gradient(m)
-    hess = fmm_problem.hessian(m)
-    step = -np.linalg.inv(hess).dot(grad)
-    m += 0.5*step
-fig2 = fmm.plot_model(m)
-fig2.savefig(f"figs/fmm_{int(damping_factor)}_{int(flattening_factor)}_{int(smoothing_factor)}_simple_newton")
-
-# # Plot the true model
-# fig3 = fmm.plot_model(fmm.good_model)
-# fig3.savefig("figs/fmm_true_model")
+# Plot the true model
+fig3 = fmm.plot_model(fmm.good_model)
+fig3.savefig("figs/fmm_true_model")

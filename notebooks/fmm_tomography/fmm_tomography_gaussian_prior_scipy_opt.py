@@ -79,21 +79,6 @@ inv_result = inv.run()
 fig1 = fmm.plot_model(inv_result.model)
 fig1.savefig(f"figs/fmm_gaussian_prior_scipy_{method}")
 
-# alternative approach
-def run_naive_newton():
-    num_iterations = 3
-    m = fmm_problem.initial_model.copy()
-    for i in range(num_iterations):
-        print(fmm_problem.objective(m))
-        grad = fmm_problem.gradient(m)
-        hess = fmm_problem.hessian(m)
-        step = -np.linalg.inv(hess).dot(grad)
-        m += step
-    fig2 = fmm.plot_model(1/m)
-    fig2.savefig(f"figs/fmm_gaussian_prior_naive_newton")
-
-# run_naive_newton()
-
 # Plot the true model
-# fig3 = fmm.plot_model(fmm.good_model)
-# fig3.savefig("fmm_true_model")
+fig3 = fmm.plot_model(fmm.good_model)
+fig3.savefig("figs/fmm_true_model")
