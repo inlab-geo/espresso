@@ -161,10 +161,10 @@ class FmmTomography(EspressoProblem):
     def jacobian(self, model):      # accepting "slowness" though keyword is "model"
         return self.forward(model, True)[1]
 
-    def plot_model(self, model, paths=False): # accepting "slowness" though keyword is "model"
+    def plot_model(self, model, with_paths=False, return_paths=False): # accepting "slowness" though keyword is "model"
         slowness_reshaped = model.reshape(self._mstart.shape)
         velocity = 1 / slowness_reshaped
-        if paths:
+        if with_paths or return_paths:
             g = wt.gridModel(velocity, extent=self.extent)
             fmm = g.wavefront_tracker(
                 self.receivers, 
@@ -173,7 +173,11 @@ class FmmTomography(EspressoProblem):
                 wdir=self.exe_fm2dss
             )
             paths = fmm.paths
-            return wt.displayModel(velocity, paths=paths, extent=self.extent, cline="g", alpha=0.5), paths
+            if with_paths:
+                fig = wt.displayModel(velocity, paths=paths, extent=self.extent, cline="g", alpha=0.5)
+            else:
+                fig = wt.displayModel(velocity, paths=None, extent=self.extent, cline="g", alpha=0.5)
+            return (fig, paths) if return_paths else fig
         else:
             return wt.displayModel(velocity, paths=None, extent=self.extent, cline="g", alpha=0.5) 
     

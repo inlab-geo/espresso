@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.0.1.dev8 (10/10/2022)
+
+### Changed examples
+
+- `FmmTomography` (`plot_model(model, with_paths=False, return_paths=False`))
+
 ## v0.0.1.dev7 (10/10/2022)
 
 ### Changed examples
