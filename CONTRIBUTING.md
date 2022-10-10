@@ -42,7 +42,7 @@ Here is a general workflow in a contribution process:
    $ git clone https://github.com/<your-github-id>/cofi-examples.git
    ```
    replacing `<your-github-id>` with your actual id
-3. Run `python utils/generate_example/create_new_example.py <example-name>`, replacing `<example-name>` with
+3. Run `python tools/generate_example/create_new_example.py <example-name>`, replacing `<example-name>` with
    the problem you are going to describe and run inversion on.
 4. You will then notice that inside the folder `notebooks/<example-name>` there are 
    three template files. Please try not to change the file names, but if you won't 
@@ -51,7 +51,7 @@ Here is a general workflow in a contribution process:
 5. While experimenting with `cofi`, feel free to reference our 
    [documentation](https://cofi.readthedocs.io/en/latest/), particularly the
    [tutorials](https://cofi.readthedocs.io/en/latest/tutorial.html) and
-   [example gallery](https://cofi.readthedocs.io/en/latest/cofi-examples/utils/sphinx_gallery/generated/index.html)
+   [example gallery](https://cofi.readthedocs.io/en/latest/cofi-examples/tools/sphinx_gallery/generated/index.html)
 6. Once finished coding your notebook, commit and push your changes to your own fork
    ```console
    $ git add notebooks/<your-example-name>.ipynb notebooks/other-auxiliary-files.py
@@ -67,5 +67,5 @@ Here is a general workflow in a contribution process:
 8. That's it. We will be able to see your code contribution once you've
    submitted the pull request, and will review and merge as soon as we can. Once
    approved and merged, your example will be added to CoFI 
-   [example gallery](https://cofi.readthedocs.io/en/latest/cofi-examples/utils/sphinx_gallery/generated/index.html)
+   [example gallery](https://cofi.readthedocs.io/en/latest/cofi-examples/tools/sphinx_gallery/generated/index.html)
    automatically

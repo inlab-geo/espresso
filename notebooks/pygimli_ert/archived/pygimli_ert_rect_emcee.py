@@ -109,7 +109,7 @@ def main():
     ert_problem.set_jacobian(get_jacobian, args=[forward_operator])
     ert_problem.set_residual(get_residuals, args=[y_obs, forward_operator])
     ert_problem.set_data_misfit(get_misfit, args=[y_obs, forward_operator, True])
-    ert_problem.set_regularisation(get_regularisation, lamda=lamda, args=[Wm, True])
+    ert_problem.set_regularization(get_regularization, lamda=lamda, args=[Wm, True])
     ert_problem.set_gradient(get_gradient, args=[y_obs, forward_operator, lamda, Wm])
     ert_problem.set_hessian(get_hessian, args=[y_obs, forward_operator, lamda, Wm])
     ert_problem.set_initial_model(model_0)

@@ -1,0 +1,63 @@
+=====================================================================
+Summary for inversion problem: Polynomial Regression
+=====================================================================
+Model shape: (4,)
+---------------------------------------------------------------------
+List of functions/properties set by you:
+['forward', 'data', 'initial_model', 'model_shape']
+---------------------------------------------------------------------
+List of functions/properties created based on what you have provided:
+['residual']
+---------------------------------------------------------------------
+List of functions/properties not set by you:
+['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_misfit', 'regularization', 'data_covariance', 'data_covariance_inv', 'walkers_starting_pos', 'blobs_dtype', 'bounds', 'constraints']
+=============================
+Summary for inversion options
+=============================
+Solving method: None set
+Use `suggest_solving_methods()` to check available solving methods.
+-----------------------------
+Backend tool: `scipy.optimize.least_squares` - SciPy's non-linear least squares solver with bounds on variables, algorithms include 'trf' (default), 'dogbox', and 'lm'
+References: ['https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html']
+Use `suggest_tools()` to check available backend tools.
+-----------------------------
+Solver-specific parameters: None set
+Use `suggest_solver_params()` to check required/optional solver-specific parameters.
+============================
+Summary for inversion result
+============================
+SUCCESS
+----------------------------
+cost: 7.4807539394356395
+fun: [-0.13830065  0.71505684  0.59448922 -0.36425106 -0.4055355   0.99956005
+ -0.25854343  0.21832897 -0.86621611  0.02767385  0.44805115 -1.63133709
+  2.10143835 -1.31443775 -0.49775845  0.75960375 -0.87881472 -0.74082384
+  0.66790713  0.56390925]
+jac: [[ 1.00000000e+00  1.15306124e+00  1.32955016e+00  1.53305280e+00]
+ [ 1.00000000e+00 -7.14285706e-02  5.10202911e-03 -3.64422798e-04]
+ [ 1.00000000e+00 -1.78571430e+00  3.18877551e+00 -5.69424197e+00]
+ [ 1.00000000e+00  1.64285716e+00  2.69897960e+00  4.43403786e+00]
+ [ 1.00000000e+00 -2.64285717e+00  6.98469399e+00 -1.84595481e+01]
+ [ 1.00000000e+00 -1.05102040e+00  1.10464389e+00 -1.16100328e+00]
+ [ 1.00000000e+00  1.15306124e+00  1.32955016e+00  1.53305280e+00]
+ [ 1.00000000e+00 -1.29591836e+00  1.67940441e+00 -2.17637104e+00]
+ [ 1.00000000e+00 -8.06122456e-01  6.49833402e-01 -5.23845293e-01]
+ [ 1.00000000e+00 -2.27551019e+00  5.17794670e+00 -1.17824705e+01]
+ [ 1.00000000e+00 -2.27551019e+00  5.17794670e+00 -1.17824705e+01]
+ [ 1.00000000e+00 -6.83673471e-01  4.67409414e-01 -3.19555417e-01]
+ [ 1.00000000e+00  7.85714265e-01  6.17346894e-01  4.85058308e-01]
+ [ 1.00000000e+00  1.27551020e+00  1.62692628e+00  2.07516110e+00]
+ [ 1.00000000e+00 -6.83673471e-01  4.67409414e-01 -3.19555417e-01]
+ [ 1.00000000e+00 -3.25510200e+00  1.05956892e+01 -3.44900498e+01]
+ [ 1.00000000e+00 -9.28571429e-01  8.62244900e-01 -8.00655976e-01]
+ [ 1.00000000e+00 -3.37755103e+00  1.14078511e+01 -3.85305985e+01]
+ [ 1.00000000e+00 -6.83673471e-01  4.67409414e-01 -3.19555417e-01]
+ [ 1.00000000e+00  1.76530610e+00  3.11630575e+00  5.50123355e+00]]
+grad: [-2.25139444e-08  2.56312769e-08 -2.99009385e-07 -1.27296094e-08]
+optimality: 2.9900938525173615e-07
+active_mask: [0. 0. 0. 0.]
+nfev: 5
+njev: 5
+status: 3
+message: `xtol` termination condition is satisfied.
+model: [-5.7196436  -5.10903807  1.82553662  0.97472374]

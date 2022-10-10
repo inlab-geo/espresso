@@ -1,8 +1,8 @@
-"""Polynomial Linear regression solved by an least-squares optimiser
+"""Polynomial Linear regression solved by an least-squares optimizer
 
 This file sets up an example from setting up problem to running the inversion:
 - For the problem: polynomial linear regression,
-- Using the tool: non-linear least-squares optimiser (scipy.optimize.least_squares)
+- Using the tool: non-linear least-squares optimizer (scipy.optimize.least_squares)
 
 The function we are going to fit is: y = -6 - 5x + 2x^2 + x^3
 
@@ -102,7 +102,7 @@ def main(output_dir="."):
         _y_synth = _G_plot @ inv_result.model
         plt.figure(figsize=(12,8))
         plt.plot(_x_plot, _y_plot, color="darkorange", label="true model")
-        plt.plot(_x_plot, _y_synth, color="seagreen", label="least-squares optimisation solution")
+        plt.plot(_x_plot, _y_synth, color="seagreen", label="least-squares optimization solution")
         plt.scatter(x, y_observed, color="lightcoral", label="original data")
         plt.xlabel("X")
         plt.ylabel("Y")
@@ -117,7 +117,7 @@ def main(output_dir="."):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(
-        description="Polynomial Linear regression solved by an least-squares optimiser"
+        description="Polynomial Linear regression solved by an least-squares optimizer"
     )
     parser.add_argument("--output-dir", "-o", type=str, help="output folder for figures")
     parser.add_argument("--show-plot", dest="show_plot", action="store_true", default=None)

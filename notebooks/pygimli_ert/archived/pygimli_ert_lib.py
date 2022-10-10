@@ -81,7 +81,7 @@ def forward_oprt(scheme, imesh):
     forward_operator.setMesh(imesh, ignoreRegionManager=True)
     return forward_operator
 
-# for regularisation
+# for regularization
 def weighting_matrix(forward_operator, imesh):
     region_manager = forward_operator.regionManager()
     region_manager.setMesh(imesh) 
@@ -117,10 +117,10 @@ def get_misfit(model, y_obs, forward_operator, print_progress=False):
     if print_progress: print("data misfit:", phi)
     return phi
 
-def get_regularisation(model, Wm, print_progress=False):
+def get_regularization(model, Wm, print_progress=False):
     weighted_model = Wm @ model
     reg = weighted_model.T @ weighted_model
-    if print_progress: print("raw regularisation:", reg)
+    if print_progress: print("raw regularization:", reg)
     return reg
 
 def get_gradient(model, y_obs, forward_operator, lamda, Wm):
