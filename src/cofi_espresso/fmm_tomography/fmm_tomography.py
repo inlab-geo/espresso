@@ -76,7 +76,7 @@ class FmmTomography(EspressoProblem):
             # Add Gaussian noise to data
             print(' Range of travel times: ',np.min(ttdat.T[2]),np.max(ttdat.T[2]),'\n Mean travel time:',np.mean(ttdat.T[2]))
             sigma =  0.00001                   # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals
-            random.seed(61254557)              # set random seed
+            np.random.seed(61254557)              # set random seed
             ttdat[:,2]+=np.random.normal(0.0, sigma, len(ttdat.T[2]))
 
             # true model
@@ -137,18 +137,21 @@ class FmmTomography(EspressoProblem):
     @property
     def inverse_covariance_matrix(self):
         raise NotImplementedError               # optional
-        
-    def forward(self, model, with_jacobian=False): # accepting "slowness" though keyword is "model"
+
+    def forward(self, model, with_jacobian=False, **kwargs): # accepting "slowness" though keyword is "model"
         slowness_reshaped = model.reshape(self._mstart.shape)
         velocity = 1 / slowness_reshaped
         g = wt.gridModel(velocity, extent=self.extent)
+        if "wdir" in kwargs: kwargs.pop("wdir")
+        if "frechet" in kwargs: kwargs.pop("frechet")
         fmm = g.wavefront_tracker(
             self.receivers, 
             self.sources, 
             # verbose=True, 
             # paths=True, 
             frechet=True, 
-            wdir=self.exe_fm2dss
+            wdir=self.exe_fm2dss,
+            **kwargs,
         )
         # paths = fmm.paths
         ttimes = fmm.ttimes
@@ -158,28 +161,51 @@ class FmmTomography(EspressoProblem):
         else:
             return np.array(ttimes).flatten()
     
-    def jacobian(self, model):      # accepting "slowness" though keyword is "model"
-        return self.forward(model, True)[1]
+    def jacobian(self, model, **kwargs):      # accepting "slowness" though keyword is "model"
+        return self.forward(model, True, **kwargs)[1]
 
-    def plot_model(self, model, with_paths=False, return_paths=False): # accepting "slowness" though keyword is "model"
+    def plot_model(self, model, with_paths=False, return_paths=False, **kwargs): # accepting "slowness" though keyword is "model"
         slowness_reshaped = model.reshape(self._mstart.shape)
         velocity = 1 / slowness_reshaped
+        cline = kwargs.pop("cline", "g")
+        alpha = kwargs.pop("alpha", 0.5)
         if with_paths or return_paths:
             g = wt.gridModel(velocity, extent=self.extent)
             fmm = g.wavefront_tracker(
                 self.receivers, 
                 self.sources, 
                 paths=True, 
-                wdir=self.exe_fm2dss
+                wdir=self.exe_fm2dss,
             )
             paths = fmm.paths
             if with_paths:
-                fig = wt.displayModel(velocity, paths=paths, extent=self.extent, cline="g", alpha=0.5)
+                fig = wt.displayModel(
+                    velocity, 
+                    paths=paths, 
+                    extent=self.extent, 
+                    cline=cline, 
+                    alpha=alpha,
+                    **kwargs
+                )
             else:
-                fig = wt.displayModel(velocity, paths=None, extent=self.extent, cline="g", alpha=0.5)
+                fig = wt.displayModel(
+                    velocity, 
+                    paths=None, 
+                    extent=self.extent, 
+                    cline=cline, 
+                    alpha=alpha,
+                    **kwargs
+                )
             return (fig, paths) if return_paths else fig
         else:
-            return wt.displayModel(velocity, paths=None, extent=self.extent, cline="g", alpha=0.5) 
+            return wt.displayModel(
+                velocity, 
+                paths=None, 
+                extent=self.extent, 
+                cline=cline, 
+                alpha=alpha,
+                **kwargs
+            ) 
     
     def plot_data(self, data, data2=None):
         raise NotImplementedError               # optional
