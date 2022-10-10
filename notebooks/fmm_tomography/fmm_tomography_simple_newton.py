@@ -6,8 +6,6 @@ Last updated July 2022
 
 """
 
-import numpy as np
-
 from cofi import BaseProblem, InversionOptions, Inversion
 from cofi.utils import QuadraticReg
 from cofi_espresso import FmmTomography
