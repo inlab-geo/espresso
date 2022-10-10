@@ -99,7 +99,7 @@ class XrayTomography(EspressoProblem):
         m = model.reshape((self._ngrid,self._ngrid))
         fig = plt.figure()
         ax = fig.subplots(1,1)
-        im = ax.imshow(m.T,cmap=plt.cm.bone,extent=(0,1,0,1),origin='lower')
+        im = ax.imshow(m.T,cmap=plt.cm.Blues,extent=(0,1,0,1),origin='lower')
         # ax.set_xticks([])
         # ax.set_yticks([])
         plt.colorbar(im,ax=ax,label='Density')

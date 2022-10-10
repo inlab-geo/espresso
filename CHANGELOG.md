@@ -1,5 +1,15 @@
 # Change Log
 
+## v0.0.1.dev9 (10/10/2022)
+
+### Changed examples
+
+- `FmmTomography` 
+    - `kwargs` that can be passed down to waveTracker functions
+    - `np.random.seed` instead of `random.seed`
+- `XrayTomography`
+    - changed cmap to be blue
+
 ## v0.0.1.dev8 (10/10/2022)
 
 ### Changed examples
