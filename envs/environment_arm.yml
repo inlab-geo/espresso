@@ -12,3 +12,4 @@ dependencies:
     - cofi>=0.1.2.dev9
     - cofi-espresso>=0.0.1.dev4
     - ipywidgets>=7.7.0
+    - tqdm>=4.0
