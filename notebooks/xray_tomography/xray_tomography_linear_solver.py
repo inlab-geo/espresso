@@ -14,7 +14,6 @@ xrt_problem.set_data(xrt.data)
 xrt_problem.set_jacobian(xrt.jacobian(xrt.starting_model))
 sigma = 0.002
 lamda = 50
-print(sigma**2 * lamda)
 data_cov_inv = np.identity(xrt.data_size) * (1/sigma**2)
 reg_matrix = lamda * np.identity(xrt.model_size)
 xrt_problem.set_data_covariance_inv(data_cov_inv)
@@ -36,9 +35,3 @@ fig.savefig("xray_tomography_inferred_model")
 # plot true model
 fig_true = xrt.plot_model(xrt.good_model)
 fig_true.savefig("xray_tomography_true_model")
-
-def obj(m):
-    return sigma**2 * lamda * np.linalg.norm(m) + np.linalg.norm(xrt.forward(m)-xrt.data)
-
-print(obj(xrt.good_model))
-print(obj(inv_result.model))
