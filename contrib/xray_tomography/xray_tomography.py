@@ -32,7 +32,7 @@ class XrayTomography(EspressoProblem):
             self._desc = "A straightforward X-ray tomography setup with good data coverage (InLab logo)"
             self._ngrid = 50 
             self._start = np.ones((self._ngrid,self._ngrid))
-            self._true = pngToModel('data/inlab_logo.png',self._ngrid,self._ngrid,bg=-2.,sc=-1)
+            self._true = pngToModel('data/inlab_logo.png',self._ngrid,self._ngrid,2,0.5)
         elif example_number == 2:
             self._paths, self._attns = load_data('data/example2.dat')
             self._desc = "A straightforward X-ray tomography setup with good data coverage (CSIRO logo)"
@@ -95,11 +95,11 @@ class XrayTomography(EspressoProblem):
         attns,A = tracer(model.reshape((ngrid,ngrid)),self._paths)
         return A
 
-    def plot_model(self, model, paths=False):
+    def plot_model(self, model, paths=False, **kwargs):
         m = model.reshape((self._ngrid,self._ngrid))
         fig = plt.figure()
         ax = fig.subplots(1,1)
-        im = ax.imshow(m.T,cmap=plt.cm.Blues,extent=(0,1,0,1),origin='lower')
+        im = ax.imshow(m.T,cmap=plt.cm.Blues,extent=(0,1,0,1),origin='lower',**kwargs)
         # ax.set_xticks([])
         # ax.set_yticks([])
         plt.colorbar(im,ax=ax,label='Density')
@@ -214,14 +214,15 @@ def load_data(filename):
 
 def generateExampleDataset(img_filename, out_filename):
     noiseLevels=None #[0.005,0.01,0.015,0.02,0.025]
+    noiseLevels=[0.0001]
     # m = pngToModel(img_filename,1024,1024,1,1)
-    m = pngToModel(img_filename,1024,1024,bg=-2.,sc=-1)
+    m = pngToModel(img_filename,1024,1024,2,0.5)
     # srcs = np.array([[0,0],[0,0.2],[0.,0.4],[0,0.5],[0,0.6],[0.,0.65],[0.,0.7]]+[[0,x] for x in np.linspace(0.71,1.0,30)]+[[x,0] for x in np.linspace(0.3,0.6,30)])
     # recs = generateSurfacePoints(40,surface=[False,True,False,True])
     # recs = generateSurfacePoints(50,surface=[False,True,False,False])
     # srcs = generateSurfacePoints(50,surface=[False,False,True,False])
-    recs = generateSurfacePoints(30,surface=[False,True,False,True])
-    srcs = generateSurfacePoints(30,surface=[True,False,True,False])
+    recs = generateSurfacePoints(30,surface=[True,True,True,True])
+    srcs = generateSurfacePoints(20,surface=[True,True,True,True])
     paths = buildPaths(srcs,recs)
     Isrc = np.random.uniform(10,1,size=paths.shape[0])
     attns,A = tracer(m,paths)
