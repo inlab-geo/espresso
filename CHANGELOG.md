@@ -1,5 +1,14 @@
 # Change Log
 
+
+## v0.0.1.dev10 (11/10/2022)
+
+### Changed examples
+
+- `XrayTomography`
+    - allowed `kwargs` for plots
+    - more data points for first example
+
 ## v0.0.1.dev9 (10/10/2022)
 
 ### Changed examples
