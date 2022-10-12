@@ -1,4 +1,3 @@
-import random
 import numpy as np
 from scipy.stats import multivariate_normal
 
@@ -96,9 +95,10 @@ class FmmTomography(EspressoProblem):
             self._strue = slowness_true
             self._sstart = slowness_starting
             self._data = ttdat
-            self.extent = extent
-            self.receivers = recs
-            self.sources = srcs
+            self.params["extent"] = extent
+            self.params["receivers"] = recs
+            self.params["sources"] = srcs
+            self.params["model_shape"] = slowness_true.shape
         else:
             raise InvalidExampleError
 
@@ -109,10 +109,6 @@ class FmmTomography(EspressoProblem):
     @property
     def model_size(self):
         return self.good_model.shape[0]
-
-    @property
-    def model_shape(self):
-        return self._strue.shape
 
     @property
     def data_size(self):
