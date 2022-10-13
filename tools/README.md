@@ -16,40 +16,6 @@ python tools/generate_example/create_new_example.py <example-name>
 python tools/run_notebooks/run_notebooks.py all
 ```
 
-## Convert notebooks to scripts (for ***CoFI documentation***)
-
-This includes converting ``{{badge}}`` in each notebook into the actual badge,
-and converting the notebooks to Sphinx-Gallery compatible scripts.
-
-Both can be done automatically with GitHub actions 
-`.github/workflows/gen_gallery_scripts.yml`. So just merge into main branch or push 
-directly to main branch and wait for a while. 
-
-Alternatively, replace the badges yourself and run the following script:
-
-```console
-python tools/sphinx_gallery/ipynb_to_gallery.py all
-```
-
-Note that the GitHub action is "scheduled every day" instead of "triggered immediately".
-This is to avoid authentication issue when we merge pull requests from other 
-contributors.
-
-## Run all Sphinx-Gallery scripts (for ***CoFI documentation***)
-
-Some notebooks are computationally expensive so it's a better idea to run and store
-the cache locally. Otherwise readthedocs may time out.
-
-```console
-cd $COFI/docs
-make html
-cd cofi-examples
-git commit -am "chore: sphinx gallery cache"
-cd ..
-git commit -am "chore: update cofi-examples"
-```
-
-
 ## Run all example scripts (for validation)
 
 Note that "example scripts" here are different from the Sphinx-Gallery scripts above.

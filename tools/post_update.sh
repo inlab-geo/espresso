@@ -9,15 +9,12 @@ pwd
 # run all the notebooks
 python tools/run_notebooks/run_notebooks.py all
 
-# convert all notebooks to scripts 
-python tools/sphinx_gallery/ipynb_to_gallery.py all
-
 # run all sphinx-gallery scripts
 cd ..
 make html
 
 # commit all changes (cache)
 cd cofi-examples
-git commit -am "chore: sphinx gallery cache"
+git commit -am "chore: outputs cleanup"
 cd ..
-git commit -am "chore: update cofi-examples"
+git commit -am "chore: update cofi-examples and docs cache"
