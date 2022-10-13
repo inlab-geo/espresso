@@ -130,7 +130,7 @@ class GaussNewtonArmjioLineaSearch(BaseSolver):
 # hyperparameters
 lamda = 0.0005
 inv_verbose = True
-tau_tol = 1e-3
+tau_tol = 1e-2              # smaller tolerance is needed, try a smaller value
 update_tol = 1e-1
 
 # CoFI - define BaseProblem

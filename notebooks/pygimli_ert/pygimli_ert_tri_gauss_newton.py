@@ -104,7 +104,7 @@ class GaussNewton(BaseSolver):
 
 # hyperparameters
 lamda = 0.0005
-niter = 150
+niter = 10          # more iterations are needed, try with a bigger value
 inv_verbose = True
 step = 0.01
 

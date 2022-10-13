@@ -85,8 +85,8 @@ def main():
     # Set regularization; reg is a function that takes the model as input
     grav_problem.set_regularization(reg_l1, epsilon, args=[W])
 
-    # Use default L2 misfit
-    grav_problem.set_data_misfit("L2")
+    # Use default squared error misfit
+    grav_problem.set_data_misfit("least squares")
     grav_problem.set_initial_model(Starting_model3)
 
     # Set gradient, in hope of helping optimizers converge better

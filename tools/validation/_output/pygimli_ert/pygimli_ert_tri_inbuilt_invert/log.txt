@@ -13,6 +13,12 @@ No primary potential for secondary field calculation. Calculating analytically..
 Factorize (Cholmod) matrix ... 0.006
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.005
+Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.005
+Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
@@ -20,12 +26,6 @@ Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
 Forward: time: 0.158s
 Response: min = 98.7322 max = 218.789 mean = 173.9
@@ -70,18 +70,12 @@ Found non-Neumann domain
 FOP updating mesh dependencies ... 0 s
 min/max(dweight) = 4.43405/99.9078
 Calculating response for model: min = 198.604 max = 198.604
-Allocating memory for primary potential...... 0.005
+Allocating memory for primary potential...... 0.006
 
 No primary potential for secondary field calculation. Calculating analytically...
-Factorize (Cholmod) matrix ... 0.01
+Factorize (Cholmod) matrix ... 0.009
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.007
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
@@ -90,7 +84,13 @@ Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.007
 Factorize (Cholmod) matrix ... 0.008
-Forward: time: 0.298s
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Forward: time: 0.299s
 Response: min = 198.014 max = 198.862 mean = 198.537
 Reciprocity rms(modelReciprocity) 0%, max: 0%
 min/max(dweight) = 4.43405/99.9078
@@ -114,7 +114,10 @@ solve CGLSCDWWtrans with lambda = 20
 Calculating response for model: min = 16.7159 max = 254.513
 Using existing primary potentials.
 Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.009
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
@@ -126,11 +129,8 @@ Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.007
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Forward: time: 0.249s
+Factorize (Cholmod) matrix ... 0.009
+Forward: time: 0.252s
 Response: min = 83.6914 max = 231.018 mean = 170.418
 Reciprocity rms(modelReciprocity) 0.468397%, max: 0.819444%
 1: LS newModel: min = 16.7159; max = 254.513
@@ -148,17 +148,17 @@ Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.009
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.009
+Factorize (Cholmod) matrix ... 0.009
+Factorize (Cholmod) matrix ... 0.009
+Factorize (Cholmod) matrix ... 0.009
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Forward: time: 0.232s
+Forward: time: 0.249s
 Response: min = 98.1071 max = 225.802 mean = 174.426
 Reciprocity rms(modelReciprocity) 0.366623%, max: 0.629653%
 1: Model: min = 24.8374; max = 244.61
@@ -167,7 +167,7 @@ Reciprocity rms(modelReciprocity) 0.366623%, max: 0.629653%
 1: chi^2(data, Response, error, log) = 1.68985
 1: Phi = 1987.27+10.5415*20=2198.1
 calculating jacobian matrix (forced=1)...Using existing subpotentials for createJacobian.
-S(48/48-std::mt): 0.001:time: 0.239s
+S(48/48-std::mt): 0.001:time: 0.24s
 sens sum: median = 1.09301 min = 0.950011 max = 1.88805
 ... 0.243 s
 solve CGLSCDWWtrans with lambda = 20
@@ -175,7 +175,6 @@ Calculating response for model: min = 31.8131 max = 226.028
 Using existing primary potentials.
 Factorize (Cholmod) matrix ... 0.009
 Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
@@ -190,7 +189,8 @@ Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
-Forward: time: 0.238s
+Factorize (Cholmod) matrix ... 0.008
+Forward: time: 0.244s
 Response: min = 98.4533 max = 224.533 mean = 173.512
 Reciprocity rms(modelReciprocity) 0.368881%, max: 0.680548%
 Linesearch tau = 1
@@ -203,9 +203,27 @@ Calculating response for model: min = 31.8131 max = 226.028
 Using existing primary potentials.
 Factorize (Cholmod) matrix ... 0.009
 Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.009
+Factorize (Cholmod) matrix ... 0.009
+Factorize (Cholmod) matrix ... 0.009
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.007
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.008
+Forward: time: 0.247s
+Response: min = 98.4533 max = 224.533 mean = 173.512
+Reciprocity rms(modelReciprocity) 0.368881%, max: 0.680548%
+Calculating response for model: min = 31.8131 max = 226.028
+Using existing primary potentials.
+Factorize (Cholmod) matrix ... 0.009
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
@@ -218,36 +236,18 @@ Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.007
-Forward: time: 0.233s
-Response: min = 98.4533 max = 224.533 mean = 173.512
-Reciprocity rms(modelReciprocity) 0.368881%, max: 0.680548%
-Calculating response for model: min = 31.8131 max = 226.028
-Using existing primary potentials.
 Factorize (Cholmod) matrix ... 0.008
 Factorize (Cholmod) matrix ... 0.008
+Factorize (Cholmod) matrix ... 0.007
 Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Forward: time: 0.234s
+Forward: time: 0.241s
 Response: min = 98.4533 max = 224.533 mean = 173.512
 Reciprocity rms(modelReciprocity) 0.368881%, max: 0.680548%
 relativeError set to a value > 0.5 .. assuming this is a percentage Error level dividing them by 100
 Data error estimate (min:max)  0.010009229451098493 : 0.22552739004919173
-fop: <pygimli.physics.ert.ertModelling.ERTModelling object at 0x7f719b9438d0>
-Data transformation: <pgcore._pygimli_.RTransLogLU object at 0x7f719b94d760>
-Model transformation: <pgcore._pygimli_.RTransLog object at 0x7f719b9439c0>
+fop: <pygimli.physics.ert.ertModelling.ERTModelling object at 0x7f2a91f6b740>
+Data transformation: <pgcore._pygimli_.RTransLogLU object at 0x7f2a91f790d0>
+Model transformation: <pgcore._pygimli_.RTransLog object at 0x7f2a91f78fe0>
 min/max (data): 66.1/250
 min/max (error): 1%/22.55%
 min/max (start model): 199/199

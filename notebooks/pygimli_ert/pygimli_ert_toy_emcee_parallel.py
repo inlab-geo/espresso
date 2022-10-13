@@ -84,7 +84,7 @@ ert_problem.set_data_misfit(get_data_misfit, args=[log_data, forward_oprt, data_
 
 # for emcee - hyperparameters
 nwalkers = 512
-nsteps = 10000
+nsteps = 1              # TODO change this to much bigger number when actually running
 
 # for emcee - define log_likelihood
 def log_likelihood(model):
@@ -133,12 +133,12 @@ with Pool() as pool:
 sampler = inv_rect_emcee_res.sampler
 
 flat_samples = sampler.get_chain(discard=5, flat=True)
-indices = np.random.randint(len(flat_samples), size=10) # get a random selection from posterior ensemble
-for idx in indices:
-    ax=pygimli.show(
-        ert_manager.paraDomain,
-        data=(flat_samples[idx]),
-        label=r"$\Omega m$"
-    )
-    ax[0].set_title(f"Inferred model - sample {idx}")
-    ax[0].figure.savefig(f"figs/emcee_samples/{idx}")
+# indices = np.random.randint(len(flat_samples), size=10) # get a random selection from posterior ensemble
+# for idx in indices:
+#     ax=pygimli.show(
+#         ert_manager.paraDomain,
+#         data=(flat_samples[idx]),
+#         label=r"$\Omega m$"
+#     )
+#     ax[0].set_title(f"Inferred model - sample {idx}")
+#     ax[0].figure.savefig(f"figs/emcee_samples/{idx}")

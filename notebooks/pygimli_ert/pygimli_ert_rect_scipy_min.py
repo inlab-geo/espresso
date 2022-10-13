@@ -84,7 +84,7 @@ ert_problem.set_initial_model(start_model_log)
 # CoFI - define InversionOptions
 inv_options_scipy = InversionOptions()
 inv_options_scipy.set_tool("scipy.optimize.minimize")
-inv_options_scipy.set_params(method="trust-exact")     # L-BFGS-B Newton-CG
+inv_options_scipy.set_params(method="trust-exact", options={"maxiter":10})     # L-BFGS-B Newton-CG
 
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options_scipy)

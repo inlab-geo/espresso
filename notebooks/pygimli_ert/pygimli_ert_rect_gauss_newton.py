@@ -104,9 +104,9 @@ class GaussNewton(BaseSolver):
 
 # hyperparameters
 lamda = 0.0001
-niter = 150
+niter = 10          # more iterations are needed, try with a different number
 inv_verbose = True
-step = 0.005
+step = 0.001
 
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
