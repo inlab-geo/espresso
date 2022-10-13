@@ -16,5 +16,3 @@ make html
 # commit all changes (cache)
 cd cofi-examples
 git commit -am "chore: outputs cleanup"
-cd ..
-git commit -am "chore: update cofi-examples and docs cache"
