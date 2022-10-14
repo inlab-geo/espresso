@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.0.1.dev11 (14/10/2022)
+
+### Changed examples
+
+- `XrayTomography` compatibility for different PIL versions
 
 ## v0.0.1.dev10 (11/10/2022)
 
