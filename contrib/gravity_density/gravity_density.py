@@ -384,7 +384,7 @@ def _setup(num):
     m = loadtxt("data/gravmodel1.txt")
     # del tmp, tmp2
 
-    if num == 0:
+    if num == 1:
         lmx = 12
         lmy = 12
         lmz = 12
@@ -441,7 +441,7 @@ def _setup(num):
         del temp1, temp2
         return m, rec_coords, x_nodes, y_nodes, z_nodes, lmx, lmy, lmz, lrx, lry
 
-    elif num == 1:
+    elif num == 2:
 
         # Define number of model cells and recording locations
         lmx = 9
