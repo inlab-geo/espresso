@@ -115,7 +115,7 @@ class GravityDensity(EspressoProblem):
         lmy = self.lmy
         lmz = self.lmz
 
-        if self.example_number == 0:
+        if self.example_number == 1:
             fig = plt.figure()
             ax = fig.add_subplot(1, 1, 1)
             model2d = model.reshape(lmx, lmy, lmz)
@@ -128,7 +128,7 @@ class GravityDensity(EspressoProblem):
             ax.set_xlim([-30, 30])
             ax.set_ylim([-30, 30])
             return fig
-        elif self.example_number == 1:
+        elif self.example_number == 2:
             fig = plt.figure()
             ax = fig.add_subplot(1, 1, 1)
             ax.scatter(rec_coords[:, 0], rec_coords[:, 1], s=0.3, color="k")
@@ -154,7 +154,7 @@ class GravityDensity(EspressoProblem):
             max(rec_coords[:, 1])
             + (rec_coords[1, 1] - rec_coords[0, 1]) * 0.5
         )
-        if self.example_number == 0:
+        if self.example_number == 1:
             fig = plt.figure()
             ax = fig.add_subplot(1, 1, 1)
             ax.scatter(rec_coords[:, 1], rec_coords[:, 0], s=0.3, color="k")
@@ -166,7 +166,7 @@ class GravityDensity(EspressoProblem):
             ax.set_ylabel("x [m]")
             plt.colorbar(img, label="Gravity [mGal]")
             return fig
-        elif self.example_number == 1:
+        elif self.example_number == 2:
             fig = plt.figure()
             ax = fig.add_subplot(1, 1, 1)
             ax.plot(rec_coords[:, 0], data)
