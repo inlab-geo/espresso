@@ -107,8 +107,6 @@ class EspressoProblem(metaclass=ABCMeta):
         EspressoProblem.plot_model
         EspressoProblem.plot_data
         EspressoProblem.misfit
-        EspressoProblem.gradient
-        EspressoProblem.hessian
         EspressoProblem.log_likelihood
         EspressoProblem.log_prior
 
