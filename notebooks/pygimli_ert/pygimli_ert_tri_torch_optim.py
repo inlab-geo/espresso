@@ -64,7 +64,7 @@ ax[0].set_title("Starting model")
 ax[0].figure.savefig("figs/tri_mesh/tri_torch_optim_model_start")
 
 
-############# Inverted by SciPy optimizer through CoFI ################################
+############# Inverted by torch optimizer through CoFI ################################
 
 # hyperparameters
 lamda = 0.0005
@@ -82,12 +82,12 @@ ert_problem.set_hessian(get_hessian, args=[log_data, forward_oprt, Wm, lamda, da
 ert_problem.set_initial_model(start_model_log)
 
 # CoFI - define InversionOptions
-inv_options_scipy = InversionOptions()
-inv_options_scipy.set_tool("torch.optim")
-inv_options_scipy.set_params(algorithm="RAdam", lr=0.025, num_iterations=10)
+inv_options_torch = InversionOptions()
+inv_options_torch.set_tool("torch.optim")
+inv_options_torch.set_params(algorithm="RAdam", lr=0.025, num_iterations=10)
 
 # CoFI - define Inversion, run it
-inv = Inversion(ert_problem, inv_options_scipy)
+inv = Inversion(ert_problem, inv_options_torch)
 inv_result = inv.run()
 inv_result.summary()
 model = np.exp(inv_result.model)
