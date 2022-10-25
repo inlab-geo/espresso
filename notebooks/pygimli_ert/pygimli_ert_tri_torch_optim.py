@@ -84,7 +84,7 @@ ert_problem.set_initial_model(start_model_log)
 # CoFI - define InversionOptions
 inv_options_torch = InversionOptions()
 inv_options_torch.set_tool("torch.optim")
-inv_options_torch.set_params(algorithm="RAdam", lr=0.025, num_iterations=10)
+inv_options_torch.set_params(algorithm="LBFGS", num_iterations=2)
 
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options_torch)
