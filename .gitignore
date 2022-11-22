@@ -14,3 +14,6 @@
 # Custom testing files
 tools/validation/_output/
 debug.log
+
+# Temporary data files
+notebooks/pygimli_dcip/transform-2020-simpeg
