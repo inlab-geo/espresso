@@ -19,7 +19,8 @@ if __name__ == '__main__':
     if sys.argv[-1] == "all":
         all_notebooks = glob(f"{NOTEBOOKS_DIR}/*/*.ipynb")
     else:
-        all_notebooks = [sys.argv[-1]]
+        all_notebooks = sys.argv[2:]
+        all_notebooks = [file for file in all_notebooks if file.endswith(".ipynb")]
     # execute listed notebooks
     print("Executing notebooks...")
     for nb in all_notebooks:
