@@ -7,7 +7,7 @@ conda activate cofi_dev
 pwd
 
 # run all the examples
-python tools/run_examples/run_examples.py all
+python tools/run_notebooks/run_notebooks.py all
 
 # run all sphinx-gallery scripts
 cd ..
