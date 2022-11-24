@@ -44,17 +44,17 @@ Here is a general workflow in a contribution process:
    replacing `<your-github-id>` with your actual id
 3. Run `python tools/generate_example/create_new_example.py <example-name>`, replacing `<example-name>` with
    the problem you are going to describe and run inversion on.
-4. You will then notice that inside the folder `notebooks/<example-name>` there are 
+4. You will then notice that inside the folder `examples/<example-name>` there are 
    three template files. Please try not to change the file names, but if you won't 
    need to import data or extra library, feel free to delete them safely and leave only
    the `.ipynb` file in the folder.
 5. While experimenting with `cofi`, feel free to reference our 
    [documentation](https://cofi.readthedocs.io/en/latest/), particularly the
-   [tutorials](https://cofi.readthedocs.io/en/latest/tutorial.html) and
-   [example gallery](https://cofi.readthedocs.io/en/latest/cofi-examples/tools/sphinx_gallery/generated/index.html)
+   [tutorials](https://cofi.readthedocs.io/en/latest/tutorials/generated/index.html) and
+   [example gallery](https://cofi.readthedocs.io/en/latest/examples/generated/index.html)
 6. Once finished coding your notebook, commit and push your changes to your own fork
    ```console
-   $ git add notebooks/<your-example-name>.ipynb notebooks/other-auxiliary-files.py
+   $ git add examples/<your-example-name>.ipynb examples/other-auxiliary-files.py
    $ git commit -m "feat: a <topic> example created by <your name>"
    $ git push origin main
    ```

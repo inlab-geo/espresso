@@ -6,11 +6,11 @@ on:
   #   types:
   #     - ready_for_review
   #   paths:
-  #     - 'notebooks/**'
+  #     - 'examples/**'
   # push:
   #   branches: main
   #   paths:
-  #     - 'notebooks/**'
+  #     - 'examples/**'
 
 jobs:
   test:

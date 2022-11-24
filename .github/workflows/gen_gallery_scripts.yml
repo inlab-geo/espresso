@@ -5,7 +5,7 @@ on:
 #   push:
 #     branches: main
 #     paths:
-#       - 'notebooks/**'
+#       - 'examples/**'
 #  schedule:
 #    - cron: '54 13 * * *'
 
@@ -46,8 +46,8 @@ jobs:
       - name: Commit changes to notebooks
         continue-on-error: true
         run: |
-          git add notebooks/*
-          git commit -m "chore: added badges to colab in notebooks/"
+          git add examples/*
+          git commit -m "chore: added badges to colab in examples/"
 
       - name: Commit changes to scripts
         continue-on-error: true

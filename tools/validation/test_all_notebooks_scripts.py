@@ -1,4 +1,4 @@
-"""This script tests running all Python files under notebooks/ folder.
+"""This script tests running all Python files under examples/ folder.
 """
 
 
