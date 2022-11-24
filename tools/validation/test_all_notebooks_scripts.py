@@ -15,7 +15,7 @@ import numpy
 
 current_dir = Path(__file__).resolve().parent
 root_dir = current_dir.parent.parent
-NOTEBOOKS = "notebooks"
+NOTEBOOKS = "examples"
 NOTEBOOKS_DIR = str(root_dir / NOTEBOOKS)
 OUTPUT = "_output"
 OUTPUT_DIR = str(root_dir / "tools" / "validation" / OUTPUT)

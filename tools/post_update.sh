@@ -6,8 +6,8 @@ source $CONDA_BASE/etc/profile.d/conda.sh
 conda activate cofi_dev
 pwd
 
-# run all the notebooks
-python tools/run_notebooks/run_notebooks.py all
+# run all the examples
+python tools/run_examples/run_examples.py all
 
 # run all sphinx-gallery scripts
 cd ..

@@ -6,7 +6,7 @@ from pathlib import Path
 
 current_dir = Path(__file__).resolve().parent
 root_dir = current_dir.parent.parent
-NOTEBOOKS = "notebooks"
+NOTEBOOKS = "examples"
 NOTEBOOKS_DIR = str(root_dir / NOTEBOOKS)
 TEMPLATE_DIR = str(root_dir / "tools" / "generate_example" / "_template")
 
@@ -16,7 +16,7 @@ if __name__ == '__main__':
     if example_name.endswith(".py"):
         raise ValueError("please provide a valid example name as an argument")
     existing_examples = glob(NOTEBOOKS_DIR+"/*/")
-    existing_examples = [e for e in existing_examples if not e.startswith("notebooks/_")]
+    existing_examples = [e for e in existing_examples if not e.startswith("{NOTEBOOKS}/_")]
     existing_examples = [e.split("/")[-2] for e in existing_examples]
     print(existing_examples)
     if example_name in existing_examples:
