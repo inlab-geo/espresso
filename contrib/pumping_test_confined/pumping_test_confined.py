@@ -1,6 +1,11 @@
 import numpy as np
-from cofi_espresso import EspressoProblem, InvalidExampleError
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
+from os import chdir
+chdir('../../src')
+from cofi_espresso import EspressoProblem, InvalidExampleError
+chdir('../contrib/pumping_test_confined')
 
 class PumpingTestConfined(EspressoProblem):
     """Forward simulation class
@@ -30,7 +35,7 @@ class PumpingTestConfined(EspressoProblem):
         self._yp = np.array([0.20, 0.27, 0.30, 0.34, 0.37, 0.41, 0.45, 0.48, 
                              0.53, 0.57, 0.60, 0.63, 0.67, 0.72, 0.76, 0.81, 
                              0.85, 0.88, 0.93, 0.96, 1.00, 1.04, 1.07, 1.10, 1.12])
-        self._m = np.array([1.0, 1e-4])
+        self._m = np.array([3.,-4.])
         self._sigma = 0.1
 
     @property
@@ -68,7 +73,7 @@ class PumpingTestConfined(EspressoProblem):
     def forward(self, model):
         from scipy.special import expi
         Q,r = 31.0/1000.*86400., 61.0
-        result = np.array([Q/4./np.pi/10.**model[0]*-expi(r**2.*10.**model[1]/4./10.**model[0]/t) for t in data_x/1440.])
+        result = np.array([Q/4./np.pi/10.**model[0]*-expi(r**2.*10.**model[1]/4./10.**model[0]/t) for t in self._xp/1440.])
         result[result==-np.inf] = 0.
         result[result== np.inf] = 0.
         return result
@@ -83,16 +88,19 @@ class PumpingTestConfined(EspressoProblem):
         plt.errorbar(self._xp, self._yp, yerr=self._sigma, fmt='.', color="lightcoral", ecolor='lightgrey', ms=10)
         plt.xscale("log")
         plt.grid(True, which="both")
+        plt.show()
 
     def misfit(self, data, data2):              # optional
         raise NotImplementedError
 
     def log_likelihood(self, model):
-        y_synthetics = forward(model)
+        y_synthetics = self.forward(model)
         residual = self._yp - y_synthetics
-        return -0.5 * residual @ inverse_covariance_matrix(self) @ residual.T
+        return -0.5 * residual @ self.inverse_covariance_matrix @ residual.T
     
     def log_prior(self, model):
+        m_lower_bound = np.array([-1.0, -10.0])             # lower bound for uniform prior
+        m_upper_bound = np.array([ 4.0,   0.0])             # upper bound for uniform prior
         for i in range(len(m_lower_bound)):
             if model[i] < m_lower_bound[i] or model[i] > m_upper_bound[i]: return -np.inf
         return 0.0 # model lies within bounds -> return log(1)
