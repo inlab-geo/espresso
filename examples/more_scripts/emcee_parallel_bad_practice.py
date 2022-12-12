@@ -38,7 +38,7 @@ data = np.random.randn(5000, 200)
 # cofi BaseProblem setup
 inv_problem = cofi.BaseProblem()
 inv_problem.set_log_posterior(log_prob_data, args=[data])
-inv_problem.set_walkers_starting_pos(initial)
+inv_problem.set_model_shape(ndim)
 
 # serial experiment
 inv_options_serial = cofi.InversionOptions()
@@ -47,6 +47,7 @@ inv_options_serial.set_params(
     nwalkers=nwalkers,
     nsteps=nsteps,
     progress=True,
+    initial_state=initial,
 )
 inv_serial = cofi.Inversion(inv_problem, inv_options_serial)
 start = time.time()
@@ -64,6 +65,7 @@ with Pool() as pool:
         nsteps=nsteps,
         progress=True,
         pool=pool,
+        initial_state=initial,
     )
     inv_parallel = cofi.Inversion(inv_problem, inv_options_parallel)
     start = time.time()

@@ -105,14 +105,13 @@ walkers_start = start_model_log + 1e-3 * np.random.randn(nwalkers, start_model.s
 # CoFI - define them into cofi's BaseProblem object
 ert_problem.set_log_likelihood(log_likelihood)
 ert_problem.set_log_prior(log_prior)
-ert_problem.set_walkers_starting_pos(walkers_start)
 
 
 ############# Sampled by emcee ########################################################
 # CoFI - define inversion options
 inv_options_emcee = InversionOptions()
 inv_options_emcee.set_tool("emcee")
-inv_options_emcee.set_params(nwalkers=nwalkers, nsteps=nsteps, progress=True)
+inv_options_emcee.set_params(nwalkers=nwalkers, nsteps=nsteps, progress=True, initial_state=walkers_start)
 
 # emcee - set backend to store progress
 filename = "pygimli_ert_toy_emcee.h5"
