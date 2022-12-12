@@ -57,12 +57,12 @@ fmm_problem.set_hessian(hessian)
 # Define CoFI InversionOptions
 inv_options = InversionOptions()
 inv_options.set_tool("cofi.simple_newton")
-inv_options.set_params(max_iterations=5, verbose=True, step_length=1)
+inv_options.set_params(num_iterations=5, verbose=True, step_length=1)
 
 # Define CoFI Inversion and run
 inv_options_newton = InversionOptions()
 inv_options_newton.set_tool("cofi.simple_newton")
-inv_options_newton.set_params(max_iterations=4, step_length=1)
+inv_options_newton.set_params(num_iterations=4, step_length=1)
 inv_newton = Inversion(fmm_problem, inv_options_newton)
 inv_result_newton = inv_newton.run()
 fig2 = fmm.plot_model(inv_result_newton.model)
