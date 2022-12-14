@@ -98,7 +98,7 @@ def main(output_dir="."):
     inv_problem.name = "Polynomial Regression"
     inv_problem.set_log_prior(log_prior)
     inv_problem.set_log_likelihood(log_likelihood)
-    inv_problem.set_walkers_starting_pos(walkers_start)
+    inv_problem.set_model_shape(ndim)
     if show_summary:
         inv_problem.summary()
 
@@ -106,7 +106,7 @@ def main(output_dir="."):
     ############# 2. Define the inversion options #####################################
     inv_options = InversionOptions()
     inv_options.set_tool("emcee")
-    inv_options.set_params(nwalkers=nwalkers, nsteps=nsteps)
+    inv_options.set_params(nwalkers=nwalkers, nsteps=nsteps, initial_state=walkers_start)
     if show_summary:
         inv_options.summary()
 

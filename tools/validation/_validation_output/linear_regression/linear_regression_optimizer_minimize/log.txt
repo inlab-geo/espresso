@@ -1,0 +1,43 @@
+=====================================================================
+Summary for inversion problem: Polynomial Regression
+=====================================================================
+Model shape: (4,)
+---------------------------------------------------------------------
+List of functions/properties set by you:
+['regularization', 'regularization_factor', 'forward', 'data', 'initial_model', 'model_shape']
+---------------------------------------------------------------------
+List of functions/properties created based on what you have provided:
+['objective', 'residual', 'data_misfit']
+---------------------------------------------------------------------
+List of functions/properties that can be further set for the problem:
+( not all of these may be relevant to your inversion workflow )
+['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_misfit', 'regularization_matrix', 'data_covariance', 'data_covariance_inv', 'blobs_dtype', 'bounds', 'constraints']
+=============================
+Summary for inversion options
+=============================
+Solving method: None set
+Use `suggest_solving_methods()` to check available solving methods.
+-----------------------------
+Backend tool: `scipy.optimize.minimize` - SciPy's optimizers that minimizes a scalar function with respect to one or more variables, check SciPy's documentation page for a list of methods
+References: ['https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html']
+Use `suggest_tools()` to check available backend tools.
+-----------------------------
+Solver-specific parameters: None set
+Use `suggest_solver_params()` to check required/optional solver-specific parameters.
+============================
+Summary for inversion result
+============================
+SUCCESS
+----------------------------
+fun: 15.120354332359751
+jac: [-2.38418579e-07  3.57627869e-07 -8.34465027e-07 -1.19209290e-07]
+hess_inv: [[ 0.09513941  0.02907043 -0.04084281 -0.0127553 ]
+ [ 0.02907043  0.04336575 -0.01656594 -0.00906342]
+ [-0.04084281 -0.01656594  0.02592338  0.0085207 ]
+ [-0.0127553  -0.00906342  0.0085207   0.00338009]]
+nfev: 55
+njev: 11
+status: 0
+message: Optimization terminated successfully.
+nit: 8
+model: [-5.71767991 -5.1079628   1.8245948   0.97437582]
