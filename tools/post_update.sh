@@ -6,13 +6,8 @@ source $CONDA_BASE/etc/profile.d/conda.sh
 conda activate cofi_dev
 pwd
 
-# run all the examples
+# run all the examples and tutorials
 python tools/run_notebooks/run_notebooks.py all
 
-# run all sphinx-gallery scripts
-cd ..
-make html
-
-# commit all changes (cache)
-cd cofi-examples
-git commit -am "chore: outputs cleanup"
+# test all scripts under examples/
+python tools/validation/test_all_notebooks_scripts.py
