@@ -10,7 +10,8 @@ import numpy as np
 from scipy.constants import G
 import matplotlib.pyplot as plt
 
-from cofi_espresso import EspressoProblem, InvalidExampleError
+from cofi_espresso import EspressoProblem
+from cofi_espresso.exceptions import InvalidExampleError
 from cofi_espresso.utils import loadtxt
 
 

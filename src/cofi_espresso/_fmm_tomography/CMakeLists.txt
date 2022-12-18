@@ -8,7 +8,7 @@ if(SKBUILD)
     ${CMAKE_CURRENT_BINARY_DIR}/${fmm_generated} 
     ${CMAKE_CURRENT_BINARY_DIR}/globalp.mod
     ${CMAKE_CURRENT_BINARY_DIR}/traveltime.mod
-    DESTINATION fmm_tomography/)
+    DESTINATION _fmm_tomography/)
 else()
   message(STATUS "The project is NOT built using scikit-build")
   cmake_minimum_required(VERSION 3.11.0)

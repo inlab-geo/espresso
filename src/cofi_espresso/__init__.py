@@ -48,8 +48,7 @@ Additionally, Espresso's own exception classes:
 
 """
 
-from .espresso_problem import EspressoProblem
-from .exceptions import EspressoError, InvalidExampleError
+from ._espresso_problem import EspressoProblem
 
 
 try:
@@ -62,8 +61,6 @@ except ImportError:
 
 __all__ = [
     "EspressoProblem",
-    "EspressoError",
-    "InvalidExampleError",
 ]
 
 # from .example_name import ExampleName
@@ -72,10 +69,10 @@ __all__ = [
 # __all__ += list_problem_names()
 # __all__ += ["list_problem_names", "list_problems"]
 
-from .gravity_density import GravityDensity
-from .simple_regression import SimpleRegression
-from .xray_tomography import XrayTomography
-from .fmm_tomography import FmmTomography
+from ._fmm_tomography import FmmTomography
+from ._xray_tomography import XrayTomography
+from ._simple_regression import SimpleRegression
+from ._gravity_density import GravityDensity
 
 from .list_problems import list_problem_names, list_problems
 __all__ += list_problem_names()
