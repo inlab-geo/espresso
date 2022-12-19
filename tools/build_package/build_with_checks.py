@@ -8,7 +8,7 @@ def main():
     build_script = str(Path(__file__).resolve().parent / "build.py")
 
     # pre-build validate
-    exit_code = subprocess.call([sys.executable, validate_script, "--pre"])
+    exit_code = subprocess.call([sys.executable, validate_script, "--pre", "--binary"])
     if exit_code != ExitCode.OK:
         sys.exit(exit_code)
 

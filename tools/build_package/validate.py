@@ -57,6 +57,8 @@ import subprocess
 import argparse
 import warnings
 
+from cofi_espresso.exceptions import InvalidExampleError
+
 
 # --> constants
 PKG_NAME = "cofi_espresso"
@@ -83,6 +85,12 @@ parser.add_argument(
     help="Run tests after building the package " + 
         "(we assume you've built the package so won't build it for you; " + 
         "otherwise please use `python build.py` beforehand)")
+parser.add_argument(
+    "--build", "--binary", "-b", dest="build", action="store_true", default=False,
+    help="Whether to build binary or not (we will run `cmake --build .` " +
+        "under your contribution sub-folder if `--build` and `--pre` are " +
+        "both enabled, and when there's a `CMakeLists.txt` file inside " +
+        "the folder")
 args = parser.parse_args()
 
 def _pre_build():
@@ -91,6 +99,13 @@ def _pre_build():
 @pytest.fixture()
 def pre_build():
     return _pre_build()
+
+def _build_binary():
+    return args.build
+
+@pytest.fixture()
+def build_binary():
+    return _build_binary()
 
 
 # --> helper methods
@@ -126,13 +141,14 @@ def _2d_array_like(obj):
     return np.ndim(obj) == 2
 
 # --> main test (once for each contribution)
-def test_contrib(pre_build, contrib):
+def test_contrib(pre_build, contrib, build_binary):
     contrib_name, contrib_sub_folder = contrib
     contrib_name_capitalised = contrib_name.title().replace("_", " ")
     contrib_name_class = contrib_name_capitalised.replace(" ", "")
     _pre_post = "pre" if pre_build else "post"
     print(f"\n🔍 Performing {_pre_post}-build test on '{contrib_name}' at {contrib_sub_folder}...")
-    print("❗️ We assume you've built the package so won't build it for you, otherwise please use `python tools/build_package/build.py` beforehand")
+    if not pre_build:
+        print("❗️ We assume you've built the package so won't build it for you, otherwise please use `python tools/build_package/build.py` beforehand")
     names, paths = get_folder_content(contrib_sub_folder)
     
     # 1 - contribution folder name matches the main Python file name
@@ -146,6 +162,15 @@ def test_contrib(pre_build, contrib):
     
     # 3 - __all__ includes standard functions exposed to users
     if pre_build:
+        if build_binary and "CMakeLists.txt" in names:
+            build_dir = Path(CONTRIB_FOLDER) / contrib_name
+            build_dir.mkdir(exist_ok=True)
+            res1 = subprocess.call(["cmake", "."], cwd=build_dir)
+            if res1:
+                raise ChildProcessError("`cmake .` failed in example_sub_folder")
+            res2 = subprocess.call(["make"], cwd=build_dir)
+            if res2:
+                raise ChildProcessError("`make` failed in example_sub_folder")
         sys.path.insert(1, CONTRIB_FOLDER)
         parent_mod = __import__(contrib_name)
     else:
@@ -153,7 +178,6 @@ def test_contrib(pre_build, contrib):
         parent_mod = importlib.import_module(PKG_NAME)
     assert contrib_name_class in parent_mod.__all__
     contrib_class = getattr(parent_mod, contrib_name_class)
-    exception_class = getattr(parent_mod, "InvalidExampleError")
     
     # 4 - Check metadata is present within class
     class_metadata = contrib_class.metadata
@@ -182,7 +206,7 @@ def test_contrib(pre_build, contrib):
         #    model_size, data_size, good_model, starting_model, data, forward
         try:
             contrib_instance = contrib_class(i)
-        except exception_class:
+        except InvalidExampleError:
             # Assume that we've found all the examples
             n_examples = i-1
             assert n_examples > 0
@@ -253,9 +277,14 @@ def main():
     print("- " + "\n- ".join([c[0] for c in contribs]) + "\n")
     if not pre:
         print("❗️ We assume you've built the package so won't build it for you, otherwise please use `python tools/build_packge/build.py` beforehand")
-    if (pre):
+    if pre:
+        if _build_binary():
+            print("`--build` is enabled, so we will run `cmake --build .` for the " \
+                "contributions that contain `CMakeLists.txt` file.\n")
         subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
-        subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
+        exit_code = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
+        if exit_code:
+            sys.exit(exit_code)
     sys.exit(pytest.main([Path(__file__)]))
 
 if __name__ == "__main__":

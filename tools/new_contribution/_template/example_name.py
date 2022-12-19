@@ -1,4 +1,5 @@
-from cofi_espresso import EspressoProblem, InvalidExampleError
+from cofi_espresso import EspressoProblem
+from cofi_espresso.exceptions import InvalidExampleError
 
 
 class ExampleName(EspressoProblem):
@@ -18,7 +19,7 @@ class ExampleName(EspressoProblem):
         "citations": [("","")], # Reference to publication(s) that describe this example. In most 
                                 # cases there will only be a single entry in this list.
                                 # List of (citation, doi) pairs e.g. 
-                                # citations = [("Newton, I (1687). Philosophiae naturalis principia mathematica.", None)]
+                                # citations = [("Newton, I (1687). Philosophiae naturalis principia mathematica.", "")]
                                 # If there are no citations, use empty list `[]`
 
         "linked_sites": [("","")],  # List of (title, address) pairs for any websites that 

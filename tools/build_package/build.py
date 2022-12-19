@@ -42,13 +42,45 @@ def clean_build_folder():
     if dirpath.exists() and dirpath.is_dir():
         rmtree(dirpath)
 
-def move_folder_content(folder_path, dest_path):
-    copytree(
-        folder_path, 
-        dest_path, 
-        dirs_exist_ok=True, 
-        ignore=ignore_patterns('*.pyc', 'tmp*', '__pycache__')
-    )
+def is_cache(file_name):
+    return file_name.endswith(".pyc") or \
+        file_name == "__pycache__" or \
+            file_name == "cmake_install.cmake" or \
+                file_name.endswith(".mod") or \
+                    file_name.endswith(".out") or \
+                        file_name == "CMakeFiles" or \
+                            file_name == "Makefile"
+
+def move_folder_content(folder_path, dest_path, prefix=None):
+    if prefix is None:
+        copytree(
+            folder_path, 
+            dest_path, 
+            dirs_exist_ok=True, 
+            ignore=ignore_patterns('*.pyc', 'tmp*', '__pycache__')
+         )
+    else:
+        for f in os.listdir(folder_path):
+            if is_cache(f):
+                continue
+            src = f"{folder_path}/{f}"
+            dst = f"{dest_path}/{prefix}{f}"
+            copytree(src, dst, 
+                ignore=ignore_patterns(
+                    "*.pyc", "__pycache__", "tmp*", "CMakeFiles", "Makefile", "*.mod", "*.out"
+                ))
+            # add underscore prefix to file name
+            for ff in os.listdir(dst):
+                if ff == f"{f}.py":
+                    ff_origin = f"{dst}/{ff}"
+                    ff_rename = f"{dst}/{prefix}{ff}"
+                    os.rename(ff_origin, ff_rename)
+                if ff == "__init__.py" or ff == "CMakeLists.txt":
+                    with open(f"{dst}/{ff}", "r") as fff:
+                        lines = fff.readlines()
+                    with open(f"{dst}/{ff}", "w") as fff:
+                        for line in lines:
+                            fff.write(line.replace(f, f"_{f}"))
 
 def move_pkg_source():
     move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
@@ -59,7 +91,7 @@ def move_pkg_metadata():
         copy(f"{ROOT_DIR}/{f}", f"{BUILD_DIR}/{f}")
 
 def move_contrib_source():
-    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}")
+    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}", prefix="_")
     contribs = []
     init_file_imports = "\n"
     init_file_all_nms = "\n_all_problem_names = [\n"
@@ -69,7 +101,7 @@ def move_contrib_source():
             contrib = os.path.basename(path)
             contrib_class = contrib.title().replace("_", "")
             contribs.append(contrib)
-            init_file_imports += f"from .{contrib} import {contrib_class}\n"
+            init_file_imports += f"from ._{contrib} import {contrib_class}\n"
             init_file_all_nms += f"\t'{contrib_class}',\n"
             init_file_all_cls += f"\t{contrib_class},\n"
     init_file_all_nms += "]"
@@ -79,7 +111,9 @@ def move_contrib_source():
     init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
-            f.write(f"install(DIRECTORY {contrib} DESTINATION .)\n")
+            f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
+            if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
+                f.write(f"add_subdirectory(_{contrib})\n")
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_imp_funcs)
@@ -95,29 +129,36 @@ def install_pkg():
     return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
 
 def main():
-    print("🛠  Package building...")
+    print_with_emoji("🛠  Package building...", "\nPackage building...")
     #
-    print("\n🗂  Cleaning build folder...")
+    print_with_emoji("\n🗂  Cleaning build folder...", "\nCleaning build folder...")
     clean_build_folder()
     print("OK.")
     #
-    print("\n🗂  Moving Espresso core packaging files...")
+    print_with_emoji("\n🗂  Moving Espresso core packaging files...", "\nMoving Espresso core packaging files...")
     move_pkg_source()
     print("OK.")
     #
-    print("\n🗂  Moving package metadata...")
+    print_with_emoji("\n🗂  Moving package metadata...", "\nMoving package metadata...")
     move_pkg_metadata()
     print("OK.")
     #
-    print("\n🗂  Moving all contributions...")
+    print_with_emoji("\n🗂  Moving all contributions...", "\nMoving all contributions...")
     move_contrib_source()
     print("OK.")
     #
-    print("\n🗂  Building Python package: cofi-espresso...")
+    print_with_emoji("\n🗂  Building Python package: cofi-espresso...", "\nBuilding Python package: cofi-espresso...")
     exit_code = install_pkg()
-    if exit_code == 0: print("🍰 Espresso installed 🍰")
+    if exit_code == 0: 
+        print_with_emoji("🍰 Espresso installed 🍰", "Espresso installed")
     
     return exit_code
 
+def print_with_emoji(content, alt):
+    try:
+        print(content)
+    except:
+        print(alt)
+
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

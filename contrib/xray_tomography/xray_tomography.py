@@ -1,5 +1,6 @@
 import numpy as np
-from cofi_espresso import EspressoProblem, InvalidExampleError
+from cofi_espresso import EspressoProblem
+from cofi_espresso.exceptions import InvalidExampleError
 from cofi_espresso.utils import loadtxt, absolute_path
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -29,13 +30,19 @@ class XrayTomography(EspressoProblem):
         super().__init__(example_number)
         if example_number == 1:
             self._paths, self._attns = load_data('data/example1.dat')
-            self._desc = "A straightforward X-ray tomography setup with good data coverage"
+            self._desc = "A straightforward X-ray tomography setup with good data coverage (InLab logo)"
+            self._ngrid = 50 
+            self._start = np.ones((self._ngrid,self._ngrid))
+            self._true = pngToModel('data/inlab_logo.png',self._ngrid,self._ngrid,2,0.5)
+        elif example_number == 2:
+            self._paths, self._attns = load_data('data/example2.dat')
+            self._desc = "A straightforward X-ray tomography setup with good data coverage (CSIRO logo)"
             self._ngrid = 50 
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)
-        elif example_number == 2:
-            self._paths, self._attns = load_data('data/example2.dat')
-            self._desc = "X-ray tomography with large gaps"
+        elif example_number == 3:
+            self._paths, self._attns = load_data('data/example3.dat')
+            self._desc = "X-ray tomography with large gaps (CSIRO logo)"
             self._ngrid = 50
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)
@@ -67,7 +74,7 @@ class XrayTomography(EspressoProblem):
         return self._attns.copy()
 
     @property
-    def covariance_matrix(self):                # TODO implement me
+    def covariance_matrix(self):                # optional
         raise NotImplementedError
 
     @property
@@ -89,14 +96,17 @@ class XrayTomography(EspressoProblem):
         attns,A = tracer(model.reshape((ngrid,ngrid)),self._paths)
         return A
 
-    def plot_model(self, model):
+    def plot_model(self, model, paths=False, **kwargs):
         m = model.reshape((self._ngrid,self._ngrid))
         fig = plt.figure()
         ax = fig.subplots(1,1)
-        im = ax.imshow(m.T,cmap=plt.cm.bone,origin='lower')
-        ax.set_xticks([])
-        ax.set_yticks([])
+        im = ax.imshow(m.T,cmap=plt.cm.Blues,extent=(0,1,0,1),origin='lower',**kwargs)
+        # ax.set_xticks([])
+        # ax.set_yticks([])
         plt.colorbar(im,ax=ax,label='Density')
+        if paths:
+            for p in self._paths:
+                ax.plot([p[0],p[2]],[p[1],p[3]],'y',linewidth=0.05)
         return fig
     
     def plot_data(self, data, data2=None):
@@ -203,13 +213,17 @@ def load_data(filename):
     attns = -np.log(data[:,5]/data[:,2])
     return paths, attns
 
-def generateExampleDataset(filename):
+def generateExampleDataset(img_filename, out_filename):
     noiseLevels=None #[0.005,0.01,0.015,0.02,0.025]
-    m = pngToModel('csiro_logo.png',1024,1024,1,1)
-    srcs = np.array([[0,0],[0,0.2],[0.,0.4],[0,0.5],[0,0.6],[0.,0.65],[0.,0.7]]+[[0,x] for x in np.linspace(0.71,1.0,30)]+[[x,0] for x in np.linspace(0.3,0.6,30)])
-    recs = generateSurfacePoints(40,surface=[False,True,False,True])
-    #recs = generateSurfacePoints(50,surface=[False,True,False,False])
-    #srcs = generateSurfacePoints(50,surface=[False,False,True,False])
+    noiseLevels=[0.0001]
+    # m = pngToModel(img_filename,1024,1024,1,1)
+    m = pngToModel(img_filename,1024,1024,2,0.5)
+    # srcs = np.array([[0,0],[0,0.2],[0.,0.4],[0,0.5],[0,0.6],[0.,0.65],[0.,0.7]]+[[0,x] for x in np.linspace(0.71,1.0,30)]+[[x,0] for x in np.linspace(0.3,0.6,30)])
+    # recs = generateSurfacePoints(40,surface=[False,True,False,True])
+    # recs = generateSurfacePoints(50,surface=[False,True,False,False])
+    # srcs = generateSurfacePoints(50,surface=[False,False,True,False])
+    recs = generateSurfacePoints(30,surface=[True,True,True,True])
+    srcs = generateSurfacePoints(20,surface=[True,True,True,True])
     paths = buildPaths(srcs,recs)
     Isrc = np.random.uniform(10,1,size=paths.shape[0])
     attns,A = tracer(m,paths)
@@ -221,8 +235,7 @@ def generateExampleDataset(filename):
             Irec[i]+=np.random.normal(0,noise[i])
             if Irec[i]<=0: Irec[i] = 1.e-3
 
-
-    fp = open(filename,'w')
+    fp = open(out_filename,'w')
     fp.write("# Src-x Src-y Src-Int Rec-x Rec-y Rec-Int")
     if noiseLevels is None:
         fp.write("\n")
@@ -235,6 +248,29 @@ def generateExampleDataset(filename):
         else:
             fp.write(" %2.4f\n"%noise[i])
     fp.close()
+
+def buildPaths(srcs,recs):
+    if type(srcs) is type([]): srcs = np.array(srcs)
+    try:
+        nsrcs,nc = srcs.shape
+    except:
+        raise ValueError("Argument 'srcs' must be a 2-D nummpy array")
+    if nc!=2: raise ValueError("Argument 'srcs' should have shape (N x 2)")
+    if type(recs) is type([]): recs = np.array(recs)
+    try:
+        nrecs,nc = recs.shape
+    except:
+        raise ValueError("Argument 'recs' must be a 2-D nummpy array")
+    if nc!=2: raise ValueError("Argument 'recs' should have shape (N x 2)")
+    npaths = nsrcs*nrecs
+    paths = np.zeros([npaths,4])
+    ip=0
+    for isrc in range(nsrcs):
+        for irec in range(nrecs):
+            paths[ip,0:2] = srcs[isrc,:]
+            paths[ip,2:4] = recs[irec,:]
+            ip+=1
+    return paths
 
 def generateSurfacePoints(nPerSide,extent=(0,1,0,1),surface=[True,True,True,True],addCorners=True):
     out = []
@@ -261,5 +297,8 @@ def pngToModel(pngfile,nx,ny,bg=1.,sc=1.):
     png = Image.open(absolute_path(pngfile))
     png.load()
 
-    model = sc*(bg+np.asarray(png.convert('L').resize((nx,ny)).transpose(Image.Transpose.ROTATE_270))/255.)
+    try:
+        model = sc*(bg+np.asarray(png.convert('L').resize((nx,ny)).transpose(Image.Transpose.ROTATE_270))/255.)
+    except:
+        model = sc*(bg+np.asarray(png.convert('L').resize((nx,ny)).transpose(Image.ROTATE_270))/255.)        
     return model
