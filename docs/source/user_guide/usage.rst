@@ -5,7 +5,7 @@
 =====
 Usage
 =====
-Once you have installed Espresso, you can import and use individual test problems. Each test problem is an instance of :py:class:`cofi_espresso.EspressoProblem`, and provides acces to a forward solver, data, and other relevant information. For example, :ref:`the following code <gradient-descent>` shows how a simple gradient-descent algorithm applied to a generic Espresso test problem. 
+Once you have installed Espresso, you can import and use individual test problems. Each test problem is an instance of :py:class:`cofi_espresso.EspressoProblem`, and provides access to a forward solver, data, and other relevant information. For example, :ref:`the following code <gradient-descent>` shows how a simple gradient-descent algorithm applied to a generic Espresso test problem. 
 
 .. code-block:: python
     :linenos:

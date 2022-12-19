@@ -35,17 +35,6 @@ Check out documentation for submodule :mod:`cofi_espresso.utils` for details.
     
     cofi_espresso.utils
 
-EspressoError
--------------
-
-Additionally, Espresso's own exception classes:
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    EspressoError
-
 """
 
 from ._espresso_problem import EspressoProblem
