@@ -2,74 +2,33 @@
 
 <!-- Please write anything you'd like to explain about the forward problem here -->
 
-Welcome to your new Espresso example!
+In this example, we consider performing X-Ray Tomography (XRT) to image the interior 
+of a structure. We assume that the x-rays travel at the same speed regardless of the 
+medium through which they are passing, and so their paths are straight lines between 
+source and receiver. However, the medium causes the x-rays to attenuate: paths through 
+dense objects (such as bones!) arrive at the receiver with far less energy than they 
+had at the source. Thus, by analysing the attenuation along many different paths, we 
+can build up a picture of the interior of an object.
 
-## Pre-requisites
+Specifically, we will assume that the intensity at the receiver, $I_{rec}$, is 
+related to the intensity at the source, $I_{src}$ by 
+$I_{rec} = I_{src}\exp\left\{-\int_\mathrm{path} \mu(\mathbf{x})\,\mathrm{d}\mathbf{l}\right\}$
 
-Make sure you have Python>=3.6 installed in your system. 
+where $\mu(\mathbf{x})$ is a position-dependent attenuation coefficient. To obtain 
+a linear inverse problem, we rewrite this as 
+$-\log \frac{I_{rec}}{I_{src}}=\int_\mathrm{path} \mu(\mathbf{x})\,\mathrm{d}\mathbf{l}\,.$ 
 
-[`mamba`](https://mamba.readthedocs.io/en/latest/) is recommended, and we provide
-instructions that work for both `conda` and `mamba` below. Check contributor's guide in 
-[cofi-espresso documentation](https://cofi-espresso.readthedocs.io/en/latest/index.html) 
-for other options.
+We know that 
+$\int\left[f(x) + g(x)\right]\,\mathrm{d}x = \int f(x)\,\mathrm{d}x + \int g(x)\,\mathrm{d}x$ 
 
-1. Install required Python packages for contributing to `cofi-espresso`. Run the following
-   commands with the project root level as working directory:
-   ```console
-   $ conda env create -f envs/environment_contrib.yml
-   $ conda activate esp_contrib
-   ```
-2. Install `cofi-espresso` base package
-   ```console
-   $ pip install .
-   ```
+so we say that integration is a *linear* operation, and hence we can solve the XRT 
+problem with linear inverse theory.
 
-## Getting started
+We will assume that the object we are interested in is 2-dimensional, so that 
+$\mu(\boldsymbol{x}) = \mu(x,y)$. If we discretize this model, with $N_x$ cells in the 
+$x$-direction and $N_y$ cells in the $y$-direction, we can express $\mu(x,y)$ as an 
+$N_x \times N_y$ vector $\boldsymbol{\mu}$. This is related to the data by
+$d_i = A_{ij}\mu_j$
 
-To complete this contribution, here are some ideas on what to do next:
-
-- [ ] **Modify [README.md](README.md)**. Document anything you'd like to add for this problem
-  (in this README.md file). Some recommended parts include:
-   - What this test problem is about
-   - What you would recommend inversion practitioners to notice
-   - etc.
-- [ ] **Modify [LICENCE](LICENCE)**. The default one we've used is a 2-clauss BSD licence. 
-   Feel free to replace the content with a licence that suits you best.
-- [ ] **Write code in [xray_tomography.py](xray_tomography.py) (and [__init__.py](__init__.py) if
-   necessary)**. Some basic functions have been defined in the template - these are the
-   standard interface we'd like to enforce in Espresso. You'll see
-   clearly some functionalities that are required to implement and others that are
-   optional.
-- [ ] **Validate and build your contribution locally**. We have seperate scripts for 
-   validation and packaging.
-   ```console
-   $ python tools/build_package/validate.py         # to validate your contribution
-   $ python tools/build_package/build.py            # to install updated Espresso in your environment
-   $ python tools/build_package/validate_build.py   # to run both of above together
-   ```
-- [ ] **Delete / comment out these initial instructions**. They are for your own reference
-   so feel free to delete them or comment them out once you've finished the above
-   checklist.
-
-
-## How to test your code
-
-> **Note that you cannot test your code directly inside your example subfolder**, if you
-> have any relative import inside the contribution file. Check the following for details.
-
-***In order to test your code in that case***, use `contrib` as your working directory and 
-import your contribution in the following ways.
-
-(Python interactive mode)
-```python
-$ pwd                            # check you are in the right folder
-<path-to-espresso>/contrib
-$ python
->>> from xray_tomography import ExampleName   # import it this way
-```
-
-(Creating temporary Python file)
-```python
-# file contrib/tmp.py            # create tmp file in the right folder
-from xray_tomography import ExampleName       # import it this way
-```
+where $d_i = -\log {I^{(i)}_{rec}}/{I^{(i)}_{src}}$, and where $A_{ij}$ represents the 
+path length in cell $j$ of the discretized model.
