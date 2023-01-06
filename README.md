@@ -55,8 +55,8 @@ structure for each problem. For instance:
 from cofi_espresso import GravityDensity
 
 problem = GravityDensity(example_number=1)
-model = problem.good_model()
-data = problem.data()
+model = problem.good_model
+data = problem.data
 pred = problem.forward(model)
 fig_model = problem.plot_model(model)
 fig_data = problem.plot_data(data, pred)
@@ -77,7 +77,7 @@ print(problem.m)
 print(problem.rec_coords)
 ```
 
-Which additional values are set is highly probl-specific and we suggest to 
+Which additional values are set is highly problem-specific and we suggest to 
 consult the 
 [Espresso Documentation on the problems](https://cofi-espresso.readthedocs.io/en/latest/user_guide/contrib/index.html).
 
