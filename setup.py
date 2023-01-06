@@ -20,12 +20,12 @@ except ImportError:
 _ROOT = pathlib.Path(__file__).resolve().parent
 with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
     for line in f:
-        if line.startswith("__version__="):
+        if line.startswith("__version__ = "):
             _, _, version = line.partition("=")
             VERSION = version.strip(" \n'\"")
             break
-    else:
-        raise RuntimeError("unable to read the version from src/cofi_espresso/_version.py")
+        else:
+            raise RuntimeError("unable to read the version from src/cofi_espresso/_version.py")
 
 
 ########################## LONG DESCRIPTION ###########################################
