@@ -10,8 +10,15 @@ jobs:
     name: Generate package source
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Get tags
+        run: |
+          git fetch --tags origin
+          git describe
 
       - name: Install Python 3.9
         uses: actions/setup-python@v2
