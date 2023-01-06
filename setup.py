@@ -3,6 +3,7 @@ from io import StringIO
 import sys
 import pathlib
 from setuptools import find_namespace_packages
+import versioningit
 
 try:
     from skbuild import setup
@@ -18,14 +19,25 @@ except ImportError:
 
 ########################## VERSION ####################################################
 _ROOT = pathlib.Path(__file__).resolve().parent
+versioningit_config = {
+    "format": {
+        "distance": "{base_version}+{distance}.{vcs}{rev}",
+        "dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
+        "distance-dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
+    },
+    "write": {
+        "file": "src/cofi_espresso/_version.py"
+    }
+}
+versioningit.get_version(_ROOT, versioningit_config, True)
 with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
     for line in f:
         if line.startswith("__version__ = "):
             _, _, version = line.partition("=")
             VERSION = version.strip(" \n'\"")
             break
-        else:
-            raise RuntimeError("unable to read the version from src/cofi_espresso/_version.py")
+    else:
+        raise RuntimeError("unable to read the version from src/cofi_espresso/_version.py")
 
 
 ########################## LONG DESCRIPTION ###########################################
