@@ -3,6 +3,7 @@
 1. Create clean folder "_esp_build"
 2. Move all files under "src/" into "_esp_build/src/"
 3. Move all files under "contrib/" into "_esp_build/src/cofi_espresso/"
+4. Move all files under ".git/" into "_esp_build/.git/"
 4. Add all contribution's names into "_esp_build/src/cofi_espresso/CMakeLists.txt"
 5. Add all contribution's class names into "_esp_build/src/cofi_espresso/__init__.py"
 6. Build the package with "pip install ."
@@ -24,6 +25,7 @@ ROOT_DIR = str(root)
 BUILD_DIR = str(root / "_esp_build")
 PKG_SRC = str(root / "src")
 CONTRIB_SRC = str(root / "contrib")
+VCS_GIT = str(root / ".git")
 DOCS_SRC = str(root / "docs")
 META_FILES = [
     "README.md",
@@ -124,6 +126,9 @@ def move_contrib_source():
         f.write(init_file_all_nms)
         f.write(init_file_all_cls)
 
+def move_vcs_files():
+    move_folder_content(VCS_GIT, f"{BUILD_DIR}/.git")
+
 def install_pkg():
     subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
     return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
@@ -145,6 +150,10 @@ def main():
     #
     print_with_emoji("\n🗂  Moving all contributions...", "\nMoving all contributions...")
     move_contrib_source()
+    print("OK.")
+    # 
+    print_with_emoji("\n🗂  Moving git information...", "\nMoving git information...")
+    move_vcs_files()
     print("OK.")
     #
     print_with_emoji("\n🗂  Building Python package: cofi-espresso...", "\nBuilding Python package: cofi-espresso...")
