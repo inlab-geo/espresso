@@ -12,3 +12,4 @@ dependencies:
   - pytest
   - pip:
     - pyyaml
+    - versioningit==2.1.0
