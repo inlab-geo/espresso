@@ -23,7 +23,7 @@ Espresso Architecture
   - If you'd like to improve base class specification or :code:`cofi_espresso.utils`,
     this is the place to edit.
 
-  - If you'd like to bump the version, change file :code:`src/cofi_espresso/_version.py`.
+  - If you'd like to bump the version, change file :code:`src/cofi_espresso/version.py`.
 
 - Folder **tools/** has all the utility scripts to be used by contributors and 
   developers.

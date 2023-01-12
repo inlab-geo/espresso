@@ -57,8 +57,13 @@ import subprocess
 import argparse
 import warnings
 
-from cofi_espresso.exceptions import InvalidExampleError
-
+try:
+    from cofi_espresso.exceptions import InvalidExampleError
+except ModuleNotFoundError as e:
+    e.msg += "\n\nNote: To run pre-build validation, please firstly install " \
+             "`cofi_espresso` core module by running the following from the root" \
+             "level of the project\n  $ pip install ."
+    raise e
 
 # --> constants
 PKG_NAME = "cofi_espresso"

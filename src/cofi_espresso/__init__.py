@@ -40,12 +40,7 @@ Check out documentation for submodule :mod:`cofi_espresso.utils` for details.
 from ._espresso_problem import EspressoProblem
 
 
-try:
-    from . import _version
-
-    __version__ = _version.__version__
-except ImportError:
-    pass
+from ._version import __version__
 
 
 __all__ = [

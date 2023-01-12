@@ -5,7 +5,7 @@ on:
   push:
     branches: main
     paths:
-      - "src/cofi_espresso/_version.py"
+      - "src/cofi_espresso/version.py"
 
 jobs:
   # if_merged:
@@ -36,8 +36,8 @@ jobs:
       
       - name: Build with pre and post validation
         run: |
-          python tools/build_package/build_with_checks.py
           python -m pip install .
+          python tools/build_package/build_with_checks.py
 
       - name: Deploy to esp_build branch
         uses: s0/git-publish-subdir-action@develop
@@ -68,8 +68,8 @@ jobs:
         working-directory: src/cofi_espresso
         run: |
           set -e
-          python -c "import _version as v; print(v.__version__)"
-          echo ::set-output name=version::$(python -c "import _version as v; print(v.__version__)")
+          python -c "import version as v; print(v.__version__)"
+          echo ::set-output name=version::$(python -c "import version as v; print(v.__version__)")
 
       - name: Create release build tag
         run: |
@@ -162,8 +162,8 @@ jobs:
         working-directory: src/cofi_espresso
         run: |
           set -e
-          python -c "import _version as v; print(v.__version__)"
-          echo ::set-output name=version::$(python -c "import _version as v; print(v.__version__)")
+          python -c "import version as v; print(v.__version__)"
+          echo ::set-output name=version::$(python -c "import version as v; print(v.__version__)")
 
       - name: Create release tag
         uses: rickstaa/action-create-tag@v1.3.0
