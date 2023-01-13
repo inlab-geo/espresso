@@ -8,6 +8,7 @@ requires = [
   "cython>=0.29.27",
   "numpy>=1.18",
   "pybind11[global]>=2.9.1",
+  "versioningit",
 ]
 build-backend = "setuptools.build_meta"
 

@@ -3,6 +3,7 @@ from io import StringIO
 import sys
 import pathlib
 from setuptools import find_namespace_packages
+import versioningit
 
 try:
     from skbuild import setup
@@ -10,7 +11,7 @@ try:
 except ImportError:
     print(
         "Please update pip, you need pip 10 or greater,\n"
-        " or you need to install the PEP 518 requirements in pyproject.toml yourself",
+        " or you need to instal/home/jiawen/espresso/.github/workflowsl the PEP 518 requirements in pyproject.toml yourself",
         file=sys.stderr,
     )
     raise
@@ -18,9 +19,23 @@ except ImportError:
 
 ########################## VERSION ####################################################
 _ROOT = pathlib.Path(__file__).resolve().parent
+versioningit_config = {
+    "format": {
+        "distance": "{base_version}+{distance}.{vcs}{rev}",
+        "dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
+        "distance-dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
+    },
+    "write": {
+        "file": "src/cofi_espresso/_version.py"
+    }
+}
+try:            # generate _version.py when building the core package
+    versioningit.get_version(_ROOT, versioningit_config, True)
+except:
+    pass        # VCS not found, use existing version file
 with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
     for line in f:
-        if line.startswith("__version__="):
+        if line.startswith("__version__ = "):
             _, _, version = line.partition("=")
             VERSION = version.strip(" \n'\"")
             break
@@ -29,7 +44,6 @@ with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
 
 
 ########################## LONG DESCRIPTION ###########################################
-from pathlib import Path
 LONG_DESCRIPTION = (_ROOT / "README.md").read_text()
 CONTENT_TYPE = "text/markdown"
 

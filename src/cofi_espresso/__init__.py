@@ -40,12 +40,7 @@ Check out documentation for submodule :mod:`cofi_espresso.utils` for details.
 from ._espresso_problem import EspressoProblem
 
 
-try:
-    from . import _version
-
-    __version__ = _version.__version__
-except ImportError:
-    pass
+from ._version import __version__
 
 
 __all__ = [
@@ -58,10 +53,10 @@ __all__ = [
 # __all__ += list_problem_names()
 # __all__ += ["list_problem_names", "list_problems"]
 
-from ._fmm_tomography import FmmTomography
 from ._xray_tomography import XrayTomography
-from ._simple_regression import SimpleRegression
 from ._gravity_density import GravityDensity
+from ._fmm_tomography import FmmTomography
+from ._simple_regression import SimpleRegression
 
 from .list_problems import list_problem_names, list_problems
 __all__ += list_problem_names()
