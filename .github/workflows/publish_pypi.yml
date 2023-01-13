@@ -97,7 +97,7 @@ jobs:
 
       - name: Build and check sdist
         run: |
-          python setugip.py sdist
+          python setup.py sdist
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
