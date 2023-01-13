@@ -29,7 +29,10 @@ versioningit_config = {
         "file": "src/cofi_espresso/_version.py"
     }
 }
-versioningit.get_version(_ROOT, versioningit_config, True)
+try:            # generate _version.py when building the core package
+    versioningit.get_version(_ROOT, versioningit_config, True)
+except:
+    pass        # VCS not found, use existing version file
 with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
     for line in f:
         if line.startswith("__version__ = "):
@@ -41,7 +44,6 @@ with open(str(_ROOT / "src" / "cofi_espresso" / "_version.py")) as f:
 
 
 ########################## LONG DESCRIPTION ###########################################
-from pathlib import Path
 LONG_DESCRIPTION = (_ROOT / "README.md").read_text()
 CONTENT_TYPE = "text/markdown"
 

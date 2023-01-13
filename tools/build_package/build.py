@@ -16,6 +16,7 @@ import sys
 import os
 from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
+import versioningit
 
 
 PKG_NAME = "cofi_espresso"
@@ -84,6 +85,20 @@ def move_folder_content(folder_path, dest_path, prefix=None):
                         for line in lines:
                             fff.write(line.replace(f, f"_{f}"))
 
+def gen_version_file():
+    _ROOT = Path(__file__).resolve().parent
+    versioningit_config = {
+        "format": {
+            "distance": "{base_version}+{distance}.{vcs}{rev}",
+            "dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
+            "distance-dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
+        },
+        "write": {
+            "file": "../../src/cofi_espresso/_version.py"
+        }
+    }
+    versioningit.get_version(_ROOT, versioningit_config, True)
+
 def move_pkg_source():
     move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
 
@@ -126,48 +141,47 @@ def move_contrib_source():
         f.write(init_file_all_nms)
         f.write(init_file_all_cls)
 
-def move_vcs_files():
-    move_folder_content(VCS_GIT, f"{BUILD_DIR}/.git")
+# def move_vcs_files():
+#     move_folder_content(VCS_GIT, f"{BUILD_DIR}/.git")
 
 def install_pkg():
     subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
     return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
 
 def main():
-    print_with_emoji("🛠  Package building...", "\nPackage building...")
+    println_with_emoji("Package building...", "🛠")
     #
-    print_with_emoji("\n🗂  Cleaning build folder...", "\nCleaning build folder...")
+    println_with_emoji("Cleaning build folder...", "🗂")
     clean_build_folder()
     print("OK.")
     #
-    print_with_emoji("\n🗂  Moving Espresso core packaging files...", "\nMoving Espresso core packaging files...")
+    println_with_emoji("Generating version file...", "🗂")
+    gen_version_file()
+    print("OK.")
+    #
+    println_with_emoji("Moving Espresso core packaging files...", "🗂")
     move_pkg_source()
     print("OK.")
     #
-    print_with_emoji("\n🗂  Moving package metadata...", "\nMoving package metadata...")
+    println_with_emoji("Moving package metadata...", "🗂")
     move_pkg_metadata()
     print("OK.")
     #
-    print_with_emoji("\n🗂  Moving all contributions...", "\nMoving all contributions...")
+    println_with_emoji("Moving all contributions...", "🗂")
     move_contrib_source()
     print("OK.")
-    # 
-    print_with_emoji("\n🗂  Moving git information...", "\nMoving git information...")
-    move_vcs_files()
-    print("OK.")
     #
-    print_with_emoji("\n🗂  Building Python package: cofi-espresso...", "\nBuilding Python package: cofi-espresso...")
+    println_with_emoji("Building Python package: cofi-espresso...", "🗂")
     exit_code = install_pkg()
     if exit_code == 0: 
-        print_with_emoji("🍰 Espresso installed 🍰", "Espresso installed")
-    
+        println_with_emoji("Espresso installed!", "🍰")
     return exit_code
 
-def print_with_emoji(content, alt):
+def println_with_emoji(content, emoji):
     try:
-        print(content)
+        print(f"\n{emoji}  {content}")
     except:
-        print(alt)
+        print(f"\n{content}")
 
 if __name__ == "__main__":
     sys.exit(main())
