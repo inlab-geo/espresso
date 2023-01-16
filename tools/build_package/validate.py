@@ -42,8 +42,8 @@
 7. LICENCE file is not empty
 
 
-NOTE: To use this script, run `python validate.py pre` for pre build validation, 
-    and run `python validate.py post` for post build validation.
+NOTE: 
+usage: validate.py [-h] [--contrib CONTRIBS] [--all] [--pre] [--post] [--build]
 
 """
 
