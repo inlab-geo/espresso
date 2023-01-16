@@ -34,6 +34,7 @@ META_FILES = [
     ".readthedocs.yml",
     ".gitignore",
     "CHANGELOG.md",
+    "MANIFEST.in",
 ]
 
 # ------------------------ helpers ------------------------

@@ -57,6 +57,9 @@ dynamic = ["version"]
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.dat", "*.csv", "*.png"]
+
 [tool.black]
 line-length = 88
 target_version = ['py38']
