@@ -58,7 +58,14 @@ dynamic = ["version"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-"*" = ["*.txt", "*.dat", "*.csv", "*.png"]
+"*" = [
+    "*.txt",
+    "*.dat",
+    "*.csv",
+    "*.png",
+    "LICENCE",
+    "*.f90",
+]
 
 [tool.black]
 line-length = 88
@@ -80,9 +87,9 @@ exclude = '''
 '''
 
 [tool.versioningit.format]
-distance = "{base_version}+{distance}.{vcs}{rev}"
-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
-distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
+distance = "{base_version}+{distance}.{vcs}{rev}.core"
+dirty = "{base_version}+{distance}.{vcs}{rev}.dirty.core"
+distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty.core"
 
 [tool.versioningit.write]
 file = "src/cofi_espresso/_version.py"
