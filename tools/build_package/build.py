@@ -34,7 +34,6 @@ META_FILES = [
     ".readthedocs.yml",
     ".gitignore",
     "CHANGELOG.md",
-    "MANIFEST.in",
 ]
 
 # ------------------------ helpers ------------------------
@@ -130,7 +129,7 @@ def move_contrib_source():
         f.write(init_file_all_cls)
 
 # 5
-def gen_version_file():
+def write_version():
     # get version
     versioningit_config = {
         "format": {
@@ -181,7 +180,7 @@ def main():
     print("OK.")
     # 5
     println_with_emoji("Generating version file...", "🗂")
-    gen_version_file()
+    write_version()
     print("OK.")
     # 6
     println_with_emoji("Building Python package: cofi-espresso...", "🗂")
