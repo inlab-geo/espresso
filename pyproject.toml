@@ -100,4 +100,4 @@ distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty.core"
 file = "src/cofi_espresso/_version.py"
 
 [tool.versioningit]
-default-version = '0.0.1.dev12+8.g02a387d'
+default-version = '0.0.2.dev0'
