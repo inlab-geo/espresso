@@ -93,19 +93,19 @@ class gridModel(object):
         write_otimes([[True]*len(recs)]*len(srcs),wdir) # write out rays to be calculated
     
         # run fmst wavefront tracker code from command line
-        # TODO see if the executable is there, otherwise do preparation for the executable
-        compile_fm2dss()
-
-        command = "./fm2dss.o"
-        out = subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
-        if out.returncode:
+        # see if the executable is there, otherwise do preparation for the executable
+        out = run_fm2dss(wdir)
+        if out.returncode:      # re-compile if there's an error
+            compile_fm2dss()
+            out = run_fm2dss(wdir)
+        if out.returncode:      # add permission if there's a further error
             print("Trying to fix now...")
             try:
                 Path(wdir + "/fm2dss.o").chmod(0o774)
                 print("Execute permission given to fm2dss.o.")
             except:
                 print("Failed to fix. Check error message above.")
-            out = subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
+            out = run_fm2dss(wdir)
         if(verbose): print(' Message from fmm2dss:',out.stdout)
         if(out.returncode != 0):
             print(' The process returned with errorcode:',out.returncode)
@@ -457,10 +457,9 @@ def generateSurfacePoints(nPerSide,extent=(0,1,0,1),surface=[True,True,True,True
             out+=[[extent[1],extent[3]]]
     return np.array(out)
 
-def ensure_fm2dss():
-    # TODO try to run the executable
-    # TODO try to compile
-    pass
+def run_fm2dss(wdir):
+    command = "./fm2dss.o"
+    return subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
 
 def compile_fm2dss():
     # https://github.com/inlab-geo/espresso/blob/main/tools/build_package/validate.py#L170
