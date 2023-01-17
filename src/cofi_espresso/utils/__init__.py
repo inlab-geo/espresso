@@ -12,8 +12,10 @@ results.
 """
 
 from .data_loader import loadtxt, absolute_path
+from .file_handler import silent_remove
 
 __all__ = [
     "loadtxt",
     "absolute_path",
+    "silent_remove",
 ]
