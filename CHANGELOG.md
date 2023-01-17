@@ -1,5 +1,17 @@
 # Change Log
 
+## v0.0.2.dev0 (17/01/2023)
+
+### Infrastructure
+
+- [#88](https://github.com/inlab-geo/espresso/issues/88) Rewrite Espresso installation process; delay compilation until it's needed and not found
+
+## v0.0.1.dev12 (13/01/2023)
+
+### Infrastructure
+
+- [#91](https://github.com/inlab-geo/espresso/issues/91) Use `versioningit`
+
 ## v0.0.1.dev11 (14/10/2022)
 
 ### Changed examples
