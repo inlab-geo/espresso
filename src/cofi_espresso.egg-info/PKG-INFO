@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: cofi-espresso
-Version: 0.0.2.dev0
+Version: 0.0.2.dev0+1.g6d97b75
 Summary: Earth Science PRoblems for the Evaluation of Strategies, Solvers and Optimizers
 Author: InLab, Espresso development team
 Keywords: inversion,inference,python package,geoscience,geophysics

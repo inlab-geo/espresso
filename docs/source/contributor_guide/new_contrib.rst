@@ -62,6 +62,9 @@ Get your own copy of Espresso
 
     cd <path-to-espresso>
     git clone <url-you-copied-in-step-6>
+    cd espresso
+    git remote add upstream https://github.com/inlab-geo/espresso
+    git fetch upstream
 
    .. admonition:: Instructions for first-time GitHub users
       :class: dropdown, attention
