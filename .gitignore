@@ -8,10 +8,12 @@ build
 
 # Compiled source #
 ###################
-*.a
-*.o
-*.so
-*.mod
+# --- note: we need some dummy files to let pip keep track of
+# https://stackoverflow.com/questions/59597791/how-to-have-pip-uninstall-remove-files-created-after-installation
+# *.a
+# *.o
+# *.so
+# *.mod
 
 # Doc generated files #
 #######################

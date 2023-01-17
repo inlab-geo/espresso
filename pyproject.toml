@@ -59,12 +59,17 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "*" = [
+    # data files
     "*.txt",
     "*.dat",
     "*.csv",
     "*.png",
+    # metadata
     "LICENCE",
+    # source to be compiled
     "*.f90",
+    # dummy files
+    "*.o",
 ]
 
 [tool.black]
