@@ -150,10 +150,10 @@ def write_version():
     file_content += "\n[tool.versioningit]"
     file_content += f"\ndefault-version = '{version}'\n"
     # change versioningit configs (for build from branch "esp_build")
-    file_content.replace(".core", "")
+    file_content = file_content.replace(".core", "")
     file_content += "\n[tool.versioningit.tag2version]"
     file_content += "\nrmprefix = 'v'"
-    file_content += "\nrmsuffix = '-build'"
+    file_content += "\nrmsuffix = '-build'\n"
     # --> write pyproject.toml
     with open(f"{BUILD_DIR}/pyproject.toml", "w") as f:
         f.write(file_content)
