@@ -66,6 +66,7 @@ where = ["src"]
     "*.png",
     # metadata
     "LICENCE",
+    "README.md",
     # source to be compiled
     "*.f90",
     # dummy files
@@ -100,7 +101,7 @@ distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
 file = "src/cofi_espresso/_version.py"
 
 [tool.versioningit]
-default-version = '0.0.2.dev0+12.gf464cbe'
+default-version = '0.0.2.dev0+13.g6d28ca2'
 
 [tool.versioningit.tag2version]
 rmprefix = 'v'
