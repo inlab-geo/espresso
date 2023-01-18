@@ -142,10 +142,21 @@ def write_version():
         }
     }
     version = versioningit.get_version(root, versioningit_config, True)
-    # write version to pyproject.toml
-    with open(f"{BUILD_DIR}/pyproject.toml", "a") as f:
-        f.write(f"\n[tool.versioningit]")
-        f.write(f"\ndefault-version = '{version}'\n")
+    # --> read pyproject.toml
+    with open(f"{BUILD_DIR}/pyproject.toml", "r") as f:
+        file_content = f.read()
+    # --> process pyproject.toml
+    # write version to pyproject.toml (for local build)
+    file_content += "\n[tool.versioningit]"
+    file_content += f"\ndefault-version = '{version}'\n"
+    # change versioningit configs (for build from branch "esp_build")
+    file_content.replace(".core", "")
+    file_content += "\n[tool.versioningit.tag2version]"
+    file_content += "\nrmprefix = 'v'"
+    file_content += "\nrmsuffix = '-build'"
+    # --> write pyproject.toml
+    with open(f"{BUILD_DIR}/pyproject.toml", "w") as f:
+        f.write(file_content)
 
 # 6
 def install_pkg():
