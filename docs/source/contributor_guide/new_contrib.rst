@@ -181,12 +181,47 @@ Submit your changes
    pull request" button. Follow the prompts and fill in necessary message you'd like us
    to know.
 
-   ..    TODO insert a screenshot here
+   .. figure:: ../_static/contrib_pr1.png
+    :align: center
 
 #. Once your pull request is submitted, some automatic checks will be triggered. Rest 
    assured - we will review your contribution, comment if necessary, and proceed to merge
    your contribution into our main repository when everything's ready.
 
-   ..    TODO insert a screenshot here
-
 #. Thanks again, for your contribution to open source 🌟 
+
+
+.. _appendix_build_steps:
+
+Appendix I: installation steps
+------------------------------
+
+To install your development version locally, run the following in your terminal:
+
+.. code-block:: console
+
+   $ python tools/build_package/build.py
+
+
+The following table describes what happens when we package Espresso:
+
+.. list-table:: How Espresso is packaged
+   :widths: 25 25 50
+   :header-rows: 1
+
+   * - Step
+     - What's done
+     - How it's done
+   * - 1
+     - Clean ``_esp_build/``
+     - ``shutil.rmtree``
+   * - 2
+     -
+     - Row 2, column 3
+
+
+.. _appendix_validation_steps:
+
+Appendix II: validation steps
+-----------------------------
+
