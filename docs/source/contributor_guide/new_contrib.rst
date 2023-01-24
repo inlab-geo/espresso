@@ -12,9 +12,17 @@ There are generally three steps involved in submiting your code:
 - **Edit** - :ref:`add in your own Espresso problem <add_contrib>`
 - **Upload** - :ref:`submit your changes to our main repository <submit_changes>`
 
-In the following paragraphs, we are going to show you how to complete each of the steps
-above. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
+In the following paragraphs, we list out detailed steps on how to contribute a new 
+example. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
 
+In case you prefer an alternative guide, we've also prepared a demo video below. If 
+your browser fails to load the video, head to 
+`this link <https://dl.dropbox.com/s/j1xdl0q7zj039cl/%28with%20clicks%29%20how-to-contribute-an-example-in-espresso.mp4?dl=0>`_ 
+to watch it.
+
+.. raw:: html
+
+    <iframe width="560" height="315" src="https://www.dropbox.com/s/j1xdl0q7zj039cl/%28with%20clicks%29%20how-to-contribute-an-example-in-espresso.mp4?dl=0&raw=1" frameborder="0" allowfullscreen></iframe>
 
 .. _get_own_copy:
 
