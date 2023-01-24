@@ -144,7 +144,9 @@ def test_contrib(pre_build, contrib):
     names, paths = get_folder_content(contrib_sub_folder)
     
     # 1 - contribution folder name matches the main Python file name
-    assert f"{contrib_name}.py" in names
+    assert f"{contrib_name}.py" in names, \
+        "the contribution folder name should match the main Python file name, " \
+            f"so you should have this file: contrib/{contrib_name}/{contrib_name}.py"
 
     # 2 - files exist: README.md, LICENCE, metadata.yml, __init__.py
     required_files = ["README.md", "LICENCE", "__init__.py"]
@@ -159,26 +161,79 @@ def test_contrib(pre_build, contrib):
     else:
         importlib = __import__('importlib')
         parent_mod = importlib.import_module(PKG_NAME)
-    assert contrib_name_class in parent_mod.__all__
+    _class_not_in_init_all_msg = f"make sure you include " \
+        f"`__all__ = ['{contrib_name_class}']` in the file " \
+            f"contrib/{contrib_name}/__init__.py"
+    try:
+        _init_all = parent_mod.__all__
+    except:
+        raise AssertionError(_class_not_in_init_all_msg)
+    else:
+        assert contrib_name_class in _init_all, _class_not_in_init_all_msg
     contrib_class = getattr(parent_mod, contrib_name_class)
     
     # 4 - Check metadata is present within class
     class_metadata = contrib_class.metadata
-    assert type(class_metadata["problem_title"]) is str and len(class_metadata["problem_title"])>0
-    assert type(class_metadata["problem_short_description"]) is str # Allow empty field
-    assert type(class_metadata["author_names"]) is list
-    assert len(class_metadata["author_names"])>0
-    for author in class_metadata["author_names"]: assert type(author) is str and len(author)>0
-    assert type(class_metadata["contact_name"]) is str and len(class_metadata["contact_name"])>0
-    assert type(class_metadata["contact_email"]) is str and "@" in class_metadata["contact_email"]
-    assert type(class_metadata["citations"]) is list
+    # problem_title
+    assert type(class_metadata["problem_title"]) is str and \
+        len(class_metadata["problem_title"])>0, \
+            f"check class attribute `{contrib_name_class}.metadata['problem_title']`" \
+                " is present and is a non-empty string"
+    # problem_short_description
+    assert type(class_metadata["problem_short_description"]) is str, \
+        f"check class attribute " \
+            f"`{contrib_name_class}.metadata['problem_short_description']`" \
+                " is present and is a string"        # Allow empty field
+    # author_names
+    assert type(class_metadata["author_names"]) is list, \
+        f"check class attribute " \
+            f"`{contrib_name_class}.metadata['author_names']`" \
+                " is present and is a list"
+    assert len(class_metadata["author_names"])>0, \
+        f"check class attribute " \
+            f"`{contrib_name_class}.metadata['author_names']` is not empty"
+    for author in class_metadata["author_names"]: 
+        assert type(author) is str and len(author)>0, \
+            f"check elements of class attribute " \
+                f"`{contrib_name_class}.metadata['author_names`] are non-empty strings"
+    # contact_name
+    assert type(class_metadata["contact_name"]) is str and \
+        len(class_metadata["contact_name"])>0, "check class attribute " \
+            f"`{contrib_name_class}.metadata['contact_name']`" \
+                " is present and is a non-empty string"
+    # contact_email
+    assert type(class_metadata["contact_email"]) is str and \
+        "@" in class_metadata["contact_email"], "check class attribute " \
+            f"`{contrib_name_class}.metadata['contact_email']`" \
+                " is present and is a valid email address string"
+    # citations
+    assert type(class_metadata["citations"]) is list, \
+        f"check class attribute " \
+            f"`{contrib_name_class}.metadata['citations']`" \
+                " is present and is a list"
     for citation in class_metadata["citations"]: 
-        assert type(citation) is tuple and len(citation)==2
-        for field in citation: assert type(field) is str
-    assert type(class_metadata["linked_sites"]) is list
+        assert type(citation) is tuple and len(citation)==2, \
+            f"check elements of class attribute " \
+                f"`{contrib_name_class}.metadata['citations`] are 2-element tuples"
+        for field in citation: 
+            assert type(field) is str, \
+                f"check elements of class attribute " \
+                    f"`{contrib_name_class}.metadata['citations`] have tuples of " \
+                        "strings"
+    # linked_sites
+    assert type(class_metadata["linked_sites"]) is list, \
+        f"check class attribute " \
+            f"`{contrib_name_class}.metadata['linked_sites']`" \
+                " is present and is a list"
     for site in class_metadata["linked_sites"]:
-        assert type(site) is tuple and len(site)==2
-        for field in site: assert type(field) is str
+        assert type(site) is tuple and len(site)==2, \
+            f"check elements of class attribute " \
+                f"`{contrib_name_class}.metadata['linked_sites`] are 2-element tuples"
+        for field in site: 
+            assert type(field) is str, \
+                f"check elements of class attribute " \
+                    f"`{contrib_name_class}.metadata['linked_sites`] have tuples of " \
+                        "strings"
 
     # We don't know how many examples there. We start at 1 and work up until it breaks.
     i = 0
@@ -192,63 +247,131 @@ def test_contrib(pre_build, contrib):
         except InvalidExampleError:
             # Assume that we've found all the examples
             n_examples = i-1
-            assert n_examples > 0
+            assert n_examples > 0, "ensure there are at least one examples"
             break
+        _contrib_instance_str = f"{contrib_name_class}({i})"
         _nmodel = contrib_instance.model_size
         _ndata = contrib_instance.data_size
         _model = contrib_instance.good_model
         _null_model = contrib_instance.starting_model
         _data = contrib_instance.data
-        # _cov = contrib_instance.covariance_matrix
         _synthetics = contrib_instance.forward(_model)
-        assert _flat_array_like(_model) and np.shape(_model) == (_nmodel,)
-        assert _flat_array_like(_null_model) and np.shape(_null_model) == (_nmodel,)
-        assert _flat_array_like(_data) and np.shape(_data) ==  (_ndata,)
-        # assert _2d_array_like(_cov) and np.shape(_cov) == (_ndata, _ndata)
-        assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,)
+        # good_model
+        assert _flat_array_like(_model) and np.shape(_model) == (_nmodel,), \
+            f"ensure `{_contrib_instance_str}.good_model` is a flat array and has " \
+                f"shape ({_contrib_instance_str}.model_size,), i.e. ({_nmodel},)"
+        # starting_model
+        assert _flat_array_like(_null_model) and np.shape(_null_model) == (_nmodel,), \
+            f"ensure `{_contrib_instance_str}.starting_model` is a flat array and " \
+                f"has shape ({_contrib_instance_str}.model_size,), i.e. ({_nmodel},)"
+        # data
+        assert _flat_array_like(_data) and np.shape(_data) ==  (_ndata,), \
+            f"ensure `{_contrib_instance_str}.data` is a flat array and " \
+                f"has shape ({_contrib_instance_str}.data_size,), i.e. ({_ndata},)"
+        # forward
+        assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,), \
+            f"ensure `{_contrib_instance_str}.forward(model)` returns a flat array " \
+                f"and it has shape ({_contrib_instance_str}.data_size,), i.e. " \
+                    f"({_ndata},)"
 
         # 6 - optional functions have correct signatures:
         #    description, covariance_matrix, inverse_covariance_matrix, jacobian, 
         #    plot_model, plot_data, misfit, log_likelihood, log_prior
+        # description
         try: _description = contrib_instance.description
         except NotImplementedError: pass
-        else: assert type(_description) is str
+        else: 
+            assert type(_description) is str, \
+                f"ensure `{_contrib_instance_str}.description` is a string"
         _cov = None
         _inv_cov = None
+        # covariance_matrix
         try: _cov = contrib_instance.covariance_matrix
         except NotImplementedError: pass
-        else: assert _2d_array_like(_cov) and np.shape(_cov) == (_ndata, _ndata)
+        else: 
+            assert _2d_array_like(_cov) and np.shape(_cov) == (_ndata, _ndata), \
+                f"ensure `{_contrib_instance_str}.covariance_matrix` is a 2D square " \
+                    f"array and has length `{_contrib_instance_str}.data_size`, " \
+                        f"i.e. has shape ({_ndata}, {_ndata})"
+        # inverse_covariance_matrix
         try: _inv_cov = contrib_instance.inverse_covariance_matrix
         except NotImplementedError: pass
-        else: assert _2d_array_like(_inv_cov) and np.shape(_inv_cov) == (_ndata, _ndata)
-        if _cov is not None and _inv_cov is not None: np.allclose(np.dot(_cov, _inv_cov), np.eye(_ndata))
+        else: 
+            assert _2d_array_like(_inv_cov) and \
+                np.shape(_inv_cov) == (_ndata, _ndata), \
+                    f"ensure `{_contrib_instance_str}.inverse_covariance_matrix` is " \
+                        f"a 2D square array and has length " \
+                            f"`{_contrib_instance_str}.data_size`, " \
+                                f"i.e. has shape ({_ndata}, {_ndata})"
+        if _cov is not None and _inv_cov is not None: 
+            assert np.allclose(np.dot(_cov, _inv_cov), np.eye(_ndata)), \
+                f"ensure `{_contrib_instance_str}.covariance_matrix` and " \
+                    f"`{_contrib_instance_str}.inverse_covariance_matrix` are inverse" \
+                        " of each other"
+        # forward(with_jacobian=True)
         try: _synthetics, _jacobian = contrib_instance.forward(_model, with_jacobian=True)
         except NotImplementedError: pass # Note that we've already tested the case `with_jacobian=False`
         else:
-            assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,)
-            assert _2d_array_like(_jacobian) and np.shape(_jacobian) == (_ndata, _nmodel)
+            assert _flat_array_like(_synthetics) and \
+                np.shape(_synthetics) == (_ndata,), \
+                    f"ensure `{_contrib_instance_str}.forward(model, True)` returns " \
+                        f"firstly a flat array and it has shape " \
+                            f"({_contrib_instance_str}.data_size,), i.e. ({_ndata},)"
+            assert _2d_array_like(_jacobian) and \
+                np.shape(_jacobian) == (_ndata, _nmodel), \
+                    f"ensure `{_contrib_instance_str}.forward(model, True)` returns " \
+                        f"secondly a 2D array and it has shape ({_ndata}, {_nmodel})" \
+                            f", i.e. ({_contrib_instance_str}.data_size, " \
+                                f"{_contrib_instance_str}.model_size)"
+        # jacobian
         try: _jacobian = contrib_instance.jacobian(_model)
         except NotImplementedError: pass
-        else: assert _2d_array_like(_jacobian) and np.shape(_jacobian) == (_ndata, _nmodel)
+        else: 
+            assert _2d_array_like(_jacobian) and \
+                np.shape(_jacobian) == (_ndata, _nmodel), \
+                    f"ensure `{_contrib_instance_str}.jacobian(model)` returns " \
+                        f"a 2D array and it has shape ({_ndata}, {_nmodel}), " \
+                            f"i.e. ({_contrib_instance_str}.data_size, " \
+                                f"{_contrib_instance_str}.model_size)"
+        # plot_model
         try: _fig_model = contrib_instance.plot_model(_model)
         except NotImplementedError: pass
-        else: assert isinstance(_fig_model, Figure)
+        else: 
+            assert isinstance(_fig_model, Figure), \
+                f"ensure `{_contrib_instance_str}.plot_model(model)` returns an " \
+                    "instance of matplotlib.figure.Figure"
+        # plot_data
         try: _fig_data = contrib_instance.plot_data(_data)
         except NotImplementedError: pass
-        else: assert isinstance(_fig_data, Figure)
+        else: 
+            assert isinstance(_fig_data, Figure), \
+                f"ensure `{_contrib_instance_str}.plot_data(model)` returns an " \
+                    "instance of matplotlib.figure.Figure"
+        # misfit
         try: _misfit = contrib_instance.misfit(_data,_data)
         except NotImplementedError: pass 
-        else: assert type(_misfit) is float and _misfit==0.
+        else: 
+            assert type(_misfit) is float and _misfit==0., \
+                f"ensure `{_contrib_instance_str}.misfit(data, data)` returns a " \
+                    f"float number and is 0. when inputs are the same"
+        # log_likelihood
         try: _log_likelihood = contrib_instance.log_likelihood(_data,_data)
         except NotImplementedError: pass
-        else: assert type(_log_likelihood) is float
+        else: 
+            assert type(_log_likelihood) is float, \
+                f"ensure `{_contrib_instance_str}.log_likelihood(data, data)` " \
+                    "returns a float number"
+        # log_prior
         try: _log_prior = contrib_instance.log_prior(_model)
         except NotImplementedError: pass
-        else: assert type(_log_prior) is float
+        else: 
+            assert type(_log_prior) is float, \
+                f"ensure `{_contrib_instance_str}.log_prior(data, data)` returns a " \
+                    f"float number"
 
     # 7 - LICENCE file not empty
     assert os.stat(f"{contrib_sub_folder}/LICENCE").st_size != 0, \
-        "LICENCE file shouldn't be empty"
+        "ensure the LICENCE file is not empty"
 
     print(f"✔️ Passed")
 
