@@ -135,8 +135,7 @@ def _2d_array_like(obj):
 # --> main test (once for each contribution)
 def test_contrib(pre_build, contrib):
     contrib_name, contrib_sub_folder = contrib
-    contrib_name_capitalised = contrib_name.title().replace("_", " ")
-    contrib_name_class = contrib_name_capitalised.replace(" ", "")
+    contrib_name_class = contrib_name.title().replace("_", "")
     _pre_post = "pre" if pre_build else "post"
     print(f"\n🔍 Performing {_pre_post}-build test on '{contrib_name}' at {contrib_sub_folder}...")
     if not pre_build:
@@ -249,6 +248,28 @@ def test_contrib(pre_build, contrib):
             n_examples = i-1
             assert n_examples > 0, "ensure there are at least one examples"
             break
+        
+        # (
+        #     _prob_instance_i_str,
+        #     _nmodel,
+        #     _ndata,
+        #     _model,
+        #     _null_model,
+        #     _data,
+        #     _synth1,
+        #     _jac1,
+        #     _synth2,
+        #     _jac2,
+        #     _fig_model,
+        #     _fig_data,
+        #     _misfit,
+        #     _log_likelihood,
+        #     _log_prior,
+        #     _description,
+        #     _cov,
+        #     _inv_cov,
+        # ) = all_outputs
+
         _contrib_instance_str = f"{contrib_name_class}({i})"
         _nmodel = contrib_instance.model_size
         _ndata = contrib_instance.data_size
