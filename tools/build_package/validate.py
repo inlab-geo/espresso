@@ -174,14 +174,17 @@ def test_contrib(pre_build, contrib):
     
     # 4 - Check metadata is present within class
     class_metadata = contrib_class.metadata
+    # problem_title
     assert type(class_metadata["problem_title"]) is str and \
         len(class_metadata["problem_title"])>0, \
             f"check class attribute `{contrib_name_class}.metadata['problem_title']`" \
                 " is present and is a non-empty string"
+    # problem_short_description
     assert type(class_metadata["problem_short_description"]) is str, \
         f"check class attribute " \
             f"`{contrib_name_class}.metadata['problem_short_description']`" \
                 " is present and is a string"        # Allow empty field
+    # author_names
     assert type(class_metadata["author_names"]) is list, \
         f"check class attribute " \
             f"`{contrib_name_class}.metadata['author_names']`" \
@@ -193,14 +196,17 @@ def test_contrib(pre_build, contrib):
         assert type(author) is str and len(author)>0, \
             f"check elements of class attribute " \
                 f"`{contrib_name_class}.metadata['author_names`] are non-empty strings"
+    # contact_name
     assert type(class_metadata["contact_name"]) is str and \
         len(class_metadata["contact_name"])>0, "check class attribute " \
             f"`{contrib_name_class}.metadata['contact_name']`" \
                 " is present and is a non-empty string"
+    # contact_email
     assert type(class_metadata["contact_email"]) is str and \
         "@" in class_metadata["contact_email"], "check class attribute " \
             f"`{contrib_name_class}.metadata['contact_email']`" \
                 " is present and is a valid email address string"
+    # citations
     assert type(class_metadata["citations"]) is list, \
         f"check class attribute " \
             f"`{contrib_name_class}.metadata['citations']`" \
@@ -214,6 +220,7 @@ def test_contrib(pre_build, contrib):
                 f"check elements of class attribute " \
                     f"`{contrib_name_class}.metadata['citations`] have tuples of " \
                         "strings"
+    # linked_sites
     assert type(class_metadata["linked_sites"]) is list, \
         f"check class attribute " \
             f"`{contrib_name_class}.metadata['linked_sites']`" \
@@ -248,17 +255,20 @@ def test_contrib(pre_build, contrib):
         _model = contrib_instance.good_model
         _null_model = contrib_instance.starting_model
         _data = contrib_instance.data
-        # _cov = contrib_instance.covariance_matrix
         _synthetics = contrib_instance.forward(_model)
+        # good_model
         assert _flat_array_like(_model) and np.shape(_model) == (_nmodel,), \
             f"ensure `{_contrib_instance_str}.good_model` is a flat array and has " \
                 f"shape ({_contrib_instance_str}.model_size,), i.e. ({_nmodel},)"
+        # starting_model
         assert _flat_array_like(_null_model) and np.shape(_null_model) == (_nmodel,), \
             f"ensure `{_contrib_instance_str}.starting_model` is a flat array and " \
                 f"has shape ({_contrib_instance_str}.model_size,), i.e. ({_nmodel},)"
+        # data
         assert _flat_array_like(_data) and np.shape(_data) ==  (_ndata,), \
             f"ensure `{_contrib_instance_str}.data` is a flat array and " \
                 f"has shape ({_contrib_instance_str}.data_size,), i.e. ({_ndata},)"
+        # forward
         assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,), \
             f"ensure `{_contrib_instance_str}.forward(model)` returns a flat array " \
                 f"and it has shape ({_contrib_instance_str}.data_size,), i.e. " \
@@ -267,6 +277,7 @@ def test_contrib(pre_build, contrib):
         # 6 - optional functions have correct signatures:
         #    description, covariance_matrix, inverse_covariance_matrix, jacobian, 
         #    plot_model, plot_data, misfit, log_likelihood, log_prior
+        # description
         try: _description = contrib_instance.description
         except NotImplementedError: pass
         else: 
@@ -274,6 +285,7 @@ def test_contrib(pre_build, contrib):
                 f"ensure `{_contrib_instance_str}.description` is a string"
         _cov = None
         _inv_cov = None
+        # covariance_matrix
         try: _cov = contrib_instance.covariance_matrix
         except NotImplementedError: pass
         else: 
@@ -281,6 +293,7 @@ def test_contrib(pre_build, contrib):
                 f"ensure `{_contrib_instance_str}.covariance_matrix` is a 2D square " \
                     f"array and has length `{_contrib_instance_str}.data_size`, " \
                         f"i.e. has shape ({_ndata}, {_ndata})"
+        # inverse_covariance_matrix
         try: _inv_cov = contrib_instance.inverse_covariance_matrix
         except NotImplementedError: pass
         else: 
@@ -295,6 +308,7 @@ def test_contrib(pre_build, contrib):
                 f"ensure `{_contrib_instance_str}.covariance_matrix` and " \
                     f"`{_contrib_instance_str}.inverse_covariance_matrix` are inverse" \
                         " of each other"
+        # forward(with_jacobian=True)
         try: _synthetics, _jacobian = contrib_instance.forward(_model, with_jacobian=True)
         except NotImplementedError: pass # Note that we've already tested the case `with_jacobian=False`
         else:
@@ -309,6 +323,7 @@ def test_contrib(pre_build, contrib):
                         f"secondly a 2D array and it has shape ({_ndata}, {_nmodel})" \
                             f", i.e. ({_contrib_instance_str}.data_size, " \
                                 f"{_contrib_instance_str}.model_size)"
+        # jacobian
         try: _jacobian = contrib_instance.jacobian(_model)
         except NotImplementedError: pass
         else: 
@@ -318,30 +333,35 @@ def test_contrib(pre_build, contrib):
                         f"a 2D array and it has shape ({_ndata}, {_nmodel}), " \
                             f"i.e. ({_contrib_instance_str}.data_size, " \
                                 f"{_contrib_instance_str}.model_size)"
+        # plot_model
         try: _fig_model = contrib_instance.plot_model(_model)
         except NotImplementedError: pass
         else: 
             assert isinstance(_fig_model, Figure), \
                 f"ensure `{_contrib_instance_str}.plot_model(model)` returns an " \
                     "instance of matplotlib.figure.Figure"
+        # plot_data
         try: _fig_data = contrib_instance.plot_data(_data)
         except NotImplementedError: pass
         else: 
             assert isinstance(_fig_data, Figure), \
                 f"ensure `{_contrib_instance_str}.plot_data(model)` returns an " \
                     "instance of matplotlib.figure.Figure"
+        # misfit
         try: _misfit = contrib_instance.misfit(_data,_data)
         except NotImplementedError: pass 
         else: 
             assert type(_misfit) is float and _misfit==0., \
                 f"ensure `{_contrib_instance_str}.misfit(data, data)` returns a " \
                     f"float number and is 0. when inputs are the same"
+        # log_likelihood
         try: _log_likelihood = contrib_instance.log_likelihood(_data,_data)
         except NotImplementedError: pass
         else: 
             assert type(_log_likelihood) is float, \
                 f"ensure `{_contrib_instance_str}.log_likelihood(data, data)` " \
                     "returns a float number"
+        # log_prior
         try: _log_prior = contrib_instance.log_prior(_model)
         except NotImplementedError: pass
         else: 
