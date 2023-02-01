@@ -48,9 +48,8 @@ class Magnetotelluric1D(EspressoProblem):
             dobs, derr = z2rhophy(freqs, Z, dZ=Zerr)
 
             # define a starting 1D model 
-            # the mesh contains many cells to produce a smooth model
-            nLayers = 2
-            starting_model = np.ones((nLayers+1)) * 2 # 100 ohm.m starting model (log10 scale) 
+            nLayers = 3
+            starting_model = np.ones((nLayers)) * 2 # 100 ohm.m starting model (log10 scale) 
 
             self._desc = "1 MT sounding over a 3 layers Earth model"
             self._mtrue = true_model
@@ -67,9 +66,9 @@ class Magnetotelluric1D(EspressoProblem):
             # true model
             # layer electrical resitivity in log10 ohm.m to ensures positive resistivities
             nLayers, min_thickness, vertical_growth= 50, 5, 1.15
-            thicknesses = [min_thickness * vertical_growth**i for i in range(nLayers)]
+            thicknesses = [min_thickness * vertical_growth**i for i in range(nLayers-1)]
             true_depths = np.cumsum(thicknesses)
-            true_model = np.ones(nLayers+1)*3
+            true_model = np.ones((nLayers))*3
             true_model[:10] = 2
             true_model[10:17] = 1
             
@@ -88,9 +87,9 @@ class Magnetotelluric1D(EspressoProblem):
             # define a starting 1D mesh and model 
             # the mesh contains many cells to produce a smooth model
             nLayers, min_thickness, vertical_growth= 50, 5, 1.15
-            thicknesses = [min_thickness * vertical_growth**i for i in range(nLayers)]
+            thicknesses = [min_thickness * vertical_growth**i for i in range(nLayers-1)]
             starting_depths = true_depths
-            starting_model = np.ones((len(starting_depths)+1)) * 2 # 100 ohm.m starting model (log10 scale) 
+            starting_model = np.ones((nLayers)) * 2 # 100 ohm.m starting model (log10 scale) 
 
             self._desc = "1 MT sounding over a 3 layers Earth model, smooth inversion"
             self._mtrue = true_model
@@ -174,10 +173,11 @@ class Magnetotelluric1D(EspressoProblem):
 
     def plot_model(self, model, depths = None, max_depth = -1000, res_bounds = [0,4], title = None):
         nLayers = len(model) 
-        if depths is not None:
-            depths = np.r_[-depths,-100000]
-        else:
+        if depths is None:
             depths = np.r_[-self._dptrue,-100000]
+        else:
+            depths = np.r_[-depths,-100000]
+
         fig = plt.figure(1,figsize=(4,4))
         ax = fig.add_subplot(1, 1, 1)
         px = np.zeros([2*nLayers,2])
@@ -198,7 +198,10 @@ class Magnetotelluric1D(EspressoProblem):
         log10_rho = data[:nf]
         phase = data[nf:]
         fig, axs = plt.subplots(2,1,sharex = True,figsize = (4,4), num = 2)
-        if Cm is not None:
+        if Cm is None:
+            axs[0].plot(np.log10(1/self._freqs), log10_rho,'k.')
+            axs[1].plot(np.log10(1/self._freqs), phase,'k.')
+        else:
             d_log10_rho = (np.diag(Cm)**0.5)[:nf]
             d_phase = (np.diag(Cm)**0.5)[nf:]
             axs[0].errorbar(np.log10(1/self._freqs), log10_rho, yerr = d_log10_rho, 
@@ -207,9 +210,6 @@ class Magnetotelluric1D(EspressoProblem):
             axs[1].errorbar(np.log10(1/self._freqs), phase, yerr = d_phase, 
                             fmt='wo',elinewidth=0.6,markersize=4 ,ecolor='k',
                             capsize=2,capthick=0.6,mec='k',mew=0.5, alpha=0.9)
-        else:
-            axs[0].plot(np.log10(1/self._freqs), log10_rho,'k.')
-            axs[1].plot(np.log10(1/self._freqs), phase,'k.')
         if data2 is not None:
             log10_rho2 = data2[:nf]
             phase2 = data2[nf:]
@@ -252,6 +252,8 @@ def forward_1D_MT(model, depths, freqs, return_G = False, return_Z = False):
     # Pedersen, J., Hermance, J.F. Least squares inversion of one-dimensional 
     #       magnetotelluric data: An assessment of procedures employed 
     #       by Brown University. Surv Geophys 8, 187–231 (1986).
+
+    # adapted from https://empymod.emsig.xyz/en/stable/gallery/fdomain/magnetotelluric.html
     
     w = 2*np.pi*freqs # angular frequencies
     model_lin = 10**model # electrical resistivities in linear scale
@@ -313,13 +315,15 @@ def z2rhophy(freqs,Z,dZ=None):
     phase = np.degrees(np.arctan2(Z.imag,Z.real))
     
     # calculate errors of apparent resistivity and phases
-    if dZ is not None:
+    if dZ is None:
+        return np.r_[np.log10(rho_app), phase], np.r_[np.zeros(Z.shape[0]*2)]
+    else:
         drho_app = 2*rho_app*dZ / abs(Z)
         dphase = np.degrees(0.5 * (drho_app/rho_app))
         log10_drho_app = (1/np.log(10)) * (drho_app/rho_app)
         return np.r_[np.log10(rho_app), phase], np.r_[log10_drho_app, dphase]
-    else:
-        return np.r_[np.log10(rho_app), phase], np.r_[np.zeros(Z.shape[0]*2)]
+
+
 
 
 def add_noise(Z, percentage = 5, seed = 1234):

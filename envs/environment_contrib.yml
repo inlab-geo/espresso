@@ -1,4 +1,4 @@
-name: esp_contrb
+name: cofi
 channels:
   - conda-forge
   - defaults
