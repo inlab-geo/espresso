@@ -1,3 +1,10 @@
+"""Run all problems and associated examples in espresso
+
+This script assumes you have cofi-espresso installed via:
+$ python tools/build_package/build.py
+
+"""
+
 import sys
 import os
 import warnings
@@ -127,10 +134,10 @@ def run_problems(pre_build, problems_specified = None):
         yield prob_class, prob_class_str, run_problem(prob_class, prob_class_str)
 
 def main():
-    for prob_class, prob_class_str, whatever in run_problems(True):
+    for prob_class, prob_class_str, prob_out_gen in run_problems(True):
         print(prob_class)
-        for supposed_to_be in whatever:
-            print(supposed_to_be[0])
+        for prob_out_i in prob_out_gen:
+            print(prob_out_i[0])
 
 if __name__ == "__main__":
     main()
