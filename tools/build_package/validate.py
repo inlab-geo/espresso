@@ -56,6 +56,7 @@ from matplotlib.figure import Figure
 import subprocess
 import argparse
 import warnings
+from run_examples import run_problem
 
 try:
     from cofi_espresso.exceptions import InvalidExampleError
@@ -135,12 +136,11 @@ def _2d_array_like(obj):
 # --> main test (once for each contribution)
 def test_contrib(pre_build, contrib):
     contrib_name, contrib_sub_folder = contrib
-    contrib_name_capitalised = contrib_name.title().replace("_", " ")
-    contrib_name_class = contrib_name_capitalised.replace(" ", "")
+    contrib_name_class = contrib_name.title().replace("_", "")
     _pre_post = "pre" if pre_build else "post"
     print(f"\n🔍 Performing {_pre_post}-build test on '{contrib_name}' at {contrib_sub_folder}...")
     if not pre_build:
-        print("❗️ We assume you've built the package so won't build it for you, otherwise please use `python tools/build_package/build.py` beforehand")
+        print("\n❗️ We assume you've built the package so won't build it for you, otherwise please use `python tools/build_package/build.py` beforehand")
     names, paths = get_folder_content(contrib_sub_folder)
     
     # 1 - contribution folder name matches the main Python file name
@@ -235,27 +235,31 @@ def test_contrib(pre_build, contrib):
                     f"`{contrib_name_class}.metadata['linked_sites`] have tuples of " \
                         "strings"
 
-    # We don't know how many examples there. We start at 1 and work up until it breaks.
-    i = 0
-    while True:
-        i+=1 # Example numbering starts at 1
-        if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
-        # 5 - functions/properties are defined:
-        #    model_size, data_size, good_model, starting_model, data, forward
-        try:
-            contrib_instance = contrib_class(i)
-        except InvalidExampleError:
-            # Assume that we've found all the examples
-            n_examples = i-1
-            assert n_examples > 0, "ensure there are at least one examples"
-            break
-        _contrib_instance_str = f"{contrib_name_class}({i})"
-        _nmodel = contrib_instance.model_size
-        _ndata = contrib_instance.data_size
-        _model = contrib_instance.good_model
-        _null_model = contrib_instance.starting_model
-        _data = contrib_instance.data
-        _synthetics = contrib_instance.forward(_model)
+    # run the problem, collect results
+    examples_out = run_problem(contrib_class, contrib_name_class)
+
+    # go through each example
+    for i, output in examples_out:
+        (
+            _contrib_instance_str,
+            _nmodel,
+            _ndata,
+            _model,
+            _null_model,
+            _data,
+            _synth1,
+            _jac1,
+            _synth2,
+            _jac2,
+            _fig_model,
+            _fig_data,
+            _misfit,
+            _log_likelihood,
+            _log_prior,
+            _description,
+            _cov,
+            _inv_cov,
+        ) = output
         # good_model
         assert _flat_array_like(_model) and np.shape(_model) == (_nmodel,), \
             f"ensure `{_contrib_instance_str}.good_model` is a flat array and has " \
@@ -269,7 +273,7 @@ def test_contrib(pre_build, contrib):
             f"ensure `{_contrib_instance_str}.data` is a flat array and " \
                 f"has shape ({_contrib_instance_str}.data_size,), i.e. ({_ndata},)"
         # forward
-        assert _flat_array_like(_synthetics) and np.shape(_synthetics) == (_ndata,), \
+        assert _flat_array_like(_synth1) and np.shape(_synth1) == (_ndata,), \
             f"ensure `{_contrib_instance_str}.forward(model)` returns a flat array " \
                 f"and it has shape ({_contrib_instance_str}.data_size,), i.e. " \
                     f"({_ndata},)"
@@ -278,25 +282,17 @@ def test_contrib(pre_build, contrib):
         #    description, covariance_matrix, inverse_covariance_matrix, jacobian, 
         #    plot_model, plot_data, misfit, log_likelihood, log_prior
         # description
-        try: _description = contrib_instance.description
-        except NotImplementedError: pass
-        else: 
+        if _description is not None:
             assert type(_description) is str, \
                 f"ensure `{_contrib_instance_str}.description` is a string"
-        _cov = None
-        _inv_cov = None
         # covariance_matrix
-        try: _cov = contrib_instance.covariance_matrix
-        except NotImplementedError: pass
-        else: 
+        if _cov is not None:
             assert _2d_array_like(_cov) and np.shape(_cov) == (_ndata, _ndata), \
                 f"ensure `{_contrib_instance_str}.covariance_matrix` is a 2D square " \
                     f"array and has length `{_contrib_instance_str}.data_size`, " \
                         f"i.e. has shape ({_ndata}, {_ndata})"
         # inverse_covariance_matrix
-        try: _inv_cov = contrib_instance.inverse_covariance_matrix
-        except NotImplementedError: pass
-        else: 
+        if _inv_cov is not None:
             assert _2d_array_like(_inv_cov) and \
                 np.shape(_inv_cov) == (_ndata, _ndata), \
                     f"ensure `{_contrib_instance_str}.inverse_covariance_matrix` is " \
@@ -309,62 +305,48 @@ def test_contrib(pre_build, contrib):
                     f"`{_contrib_instance_str}.inverse_covariance_matrix` are inverse" \
                         " of each other"
         # forward(with_jacobian=True)
-        try: _synthetics, _jacobian = contrib_instance.forward(_model, with_jacobian=True)
-        except NotImplementedError: pass # Note that we've already tested the case `with_jacobian=False`
-        else:
-            assert _flat_array_like(_synthetics) and \
-                np.shape(_synthetics) == (_ndata,), \
+        if _synth2 is not None and _jac2 is not None:
+            assert _flat_array_like(_synth2) and \
+                np.shape(_synth2) == (_ndata,), \
                     f"ensure `{_contrib_instance_str}.forward(model, True)` returns " \
                         f"firstly a flat array and it has shape " \
                             f"({_contrib_instance_str}.data_size,), i.e. ({_ndata},)"
-            assert _2d_array_like(_jacobian) and \
-                np.shape(_jacobian) == (_ndata, _nmodel), \
+            assert _2d_array_like(_jac2) and \
+                np.shape(_jac2) == (_ndata, _nmodel), \
                     f"ensure `{_contrib_instance_str}.forward(model, True)` returns " \
                         f"secondly a 2D array and it has shape ({_ndata}, {_nmodel})" \
                             f", i.e. ({_contrib_instance_str}.data_size, " \
                                 f"{_contrib_instance_str}.model_size)"
         # jacobian
-        try: _jacobian = contrib_instance.jacobian(_model)
-        except NotImplementedError: pass
-        else: 
-            assert _2d_array_like(_jacobian) and \
-                np.shape(_jacobian) == (_ndata, _nmodel), \
+        if _jac1 is not None:
+            assert _2d_array_like(_jac1) and \
+                np.shape(_jac1) == (_ndata, _nmodel), \
                     f"ensure `{_contrib_instance_str}.jacobian(model)` returns " \
                         f"a 2D array and it has shape ({_ndata}, {_nmodel}), " \
                             f"i.e. ({_contrib_instance_str}.data_size, " \
                                 f"{_contrib_instance_str}.model_size)"
         # plot_model
-        try: _fig_model = contrib_instance.plot_model(_model)
-        except NotImplementedError: pass
-        else: 
+        if _fig_model is not None:
             assert isinstance(_fig_model, Figure), \
                 f"ensure `{_contrib_instance_str}.plot_model(model)` returns an " \
                     "instance of matplotlib.figure.Figure"
         # plot_data
-        try: _fig_data = contrib_instance.plot_data(_data)
-        except NotImplementedError: pass
-        else: 
+        if _fig_data is not None:
             assert isinstance(_fig_data, Figure), \
                 f"ensure `{_contrib_instance_str}.plot_data(model)` returns an " \
                     "instance of matplotlib.figure.Figure"
         # misfit
-        try: _misfit = contrib_instance.misfit(_data,_data)
-        except NotImplementedError: pass 
-        else: 
+        if _misfit is not None:
             assert type(_misfit) is float and _misfit==0., \
                 f"ensure `{_contrib_instance_str}.misfit(data, data)` returns a " \
                     f"float number and is 0. when inputs are the same"
         # log_likelihood
-        try: _log_likelihood = contrib_instance.log_likelihood(_data,_data)
-        except NotImplementedError: pass
-        else: 
+        if _log_likelihood is not None:
             assert type(_log_likelihood) is float, \
                 f"ensure `{_contrib_instance_str}.log_likelihood(data, data)` " \
                     "returns a float number"
         # log_prior
-        try: _log_prior = contrib_instance.log_prior(_model)
-        except NotImplementedError: pass
-        else: 
+        if _log_prior is not None:
             assert type(_log_prior) is float, \
                 f"ensure `{_contrib_instance_str}.log_prior(data, data)` returns a " \
                     f"float number"
@@ -388,7 +370,14 @@ def main():
         exit_code = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
         if exit_code:
             sys.exit(exit_code)
-    sys.exit(pytest.main([Path(__file__)]))
+    exit_code = pytest.main([Path(__file__)])
+    if pre:
+        sys.exit(exit_code)
+    else:
+        if exit_code != pytest.ExitCode.OK:
+            sys.exit(exit_code)
+        sys.exit(pytest.main([Path(__file__).parent / "check_requires.py"]))
+
 
 if __name__ == "__main__":
     main()

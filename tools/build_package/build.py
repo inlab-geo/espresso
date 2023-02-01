@@ -51,7 +51,7 @@ def move_folder_content(folder_path, dest_path, prefix=None):
         copytree(
             folder_path, 
             dest_path, 
-            dirs_exist_ok=True, 
+            # dirs_exist_ok=True, 
             ignore=ignore_patterns('*.pyc', 'tmp*', '__pycache__')
          )
     else:
