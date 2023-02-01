@@ -109,7 +109,7 @@ def run_problem(problem_class, problem_class_str):
     while True:
         if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
         try:
-            yield run_example(problem_class, problem_class_str, i)
+            yield i, run_example(problem_class, problem_class_str, i)
         except cofi_espresso.exceptions.InvalidExampleError:
             assert i-1 > 0, "ensure there are at least one examples"
             break
@@ -124,10 +124,10 @@ def run_problems(pre_build, problems_specified = None):
             parent_module = problem_module_pre_build(prob_name)
         prob_class_str = problem_name_to_class(prob_name)
         prob_class = getattr(parent_module, prob_class_str)
-        yield prob_class, run_problem(prob_class, prob_class_str)
+        yield prob_class, prob_class_str, run_problem(prob_class, prob_class_str)
 
 def main():
-    for prob_class, whatever in run_problems(True):
+    for prob_class, prob_class_str, whatever in run_problems(True):
         print(prob_class)
         for supposed_to_be in whatever:
             print(supposed_to_be[0])
