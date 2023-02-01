@@ -370,7 +370,14 @@ def main():
         exit_code = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
         if exit_code:
             sys.exit(exit_code)
-    sys.exit(pytest.main([Path(__file__)]))
+    exit_code = pytest.main([Path(__file__)])
+    if pre:
+        sys.exit(exit_code)
+    else:
+        if exit_code != pytest.ExitCode.OK:
+            sys.exit(exit_code)
+        sys.exit(pytest.main([Path(__file__).parent / "check_requires.py"]))
+
 
 if __name__ == "__main__":
     main()

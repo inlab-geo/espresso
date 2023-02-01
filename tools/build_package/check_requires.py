@@ -10,6 +10,18 @@ import pytest
 from stdlib_list import stdlib_list
 
 
+known_dependencies = [
+    "numpy",
+    "scipy",
+    "scipy.stats",
+    "scipy.sparse",
+    "scipy.interpolate",
+    "scipy.constants",
+    "matplotlib",
+    "matplotlib.pyplot",
+    "tqdm",
+]
+
 def strip_pkg(modules):
     res = set()
     for mod in modules:
@@ -22,17 +34,6 @@ def get_inbuilt_pkg():
     return strip_pkg(stdlib_list("3.7"))
 
 def get_known_depended_pkg():
-    known_dependencies = [
-        "numpy",
-        "scipy",
-        "scipy.stats",
-        "scipy.sparse",
-        "scipy.interpolate",
-        "scipy.constants",
-        "matplotlib",
-        "matplotlib.pyplot",
-        "tqdm",
-    ]
     for pkg in known_dependencies:
         __import__(pkg)
     return strip_pkg(set(sys.modules.keys()))
