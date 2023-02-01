@@ -42,8 +42,8 @@
 7. LICENCE file is not empty
 
 
-NOTE: To use this script, run `python validate.py pre` for pre build validation, 
-    and run `python validate.py post` for post build validation.
+NOTE: 
+usage: validate.py [-h] [--contrib CONTRIBS] [--all] [--pre] [--post] [--build]
 
 """
 
@@ -57,8 +57,13 @@ import subprocess
 import argparse
 import warnings
 
-from cofi_espresso.exceptions import InvalidExampleError
-
+try:
+    from cofi_espresso.exceptions import InvalidExampleError
+except ModuleNotFoundError as e:
+    e.msg += "\n\nNote: To run pre-build validation, please firstly install " \
+             "`cofi_espresso` core module by running the following from the root" \
+             "level of the project\n  $ pip install ."
+    raise e
 
 # --> constants
 PKG_NAME = "cofi_espresso"
@@ -85,12 +90,6 @@ parser.add_argument(
     help="Run tests after building the package " + 
         "(we assume you've built the package so won't build it for you; " + 
         "otherwise please use `python build.py` beforehand)")
-parser.add_argument(
-    "--build", "--binary", "-b", dest="build", action="store_true", default=False,
-    help="Whether to build binary or not (we will run `cmake --build .` " +
-        "under your contribution sub-folder if `--build` and `--pre` are " +
-        "both enabled, and when there's a `CMakeLists.txt` file inside " +
-        "the folder")
 args = parser.parse_args()
 
 def _pre_build():
@@ -99,13 +98,6 @@ def _pre_build():
 @pytest.fixture()
 def pre_build():
     return _pre_build()
-
-def _build_binary():
-    return args.build
-
-@pytest.fixture()
-def build_binary():
-    return _build_binary()
 
 
 # --> helper methods
@@ -141,7 +133,7 @@ def _2d_array_like(obj):
     return np.ndim(obj) == 2
 
 # --> main test (once for each contribution)
-def test_contrib(pre_build, contrib, build_binary):
+def test_contrib(pre_build, contrib):
     contrib_name, contrib_sub_folder = contrib
     contrib_name_capitalised = contrib_name.title().replace("_", " ")
     contrib_name_class = contrib_name_capitalised.replace(" ", "")
@@ -162,15 +154,6 @@ def test_contrib(pre_build, contrib, build_binary):
     
     # 3 - __all__ includes standard functions exposed to users
     if pre_build:
-        if build_binary and "CMakeLists.txt" in names:
-            build_dir = Path(CONTRIB_FOLDER) / contrib_name
-            build_dir.mkdir(exist_ok=True)
-            res1 = subprocess.call(["cmake", "."], cwd=build_dir)
-            if res1:
-                raise ChildProcessError("`cmake .` failed in example_sub_folder")
-            res2 = subprocess.call(["make"], cwd=build_dir)
-            if res2:
-                raise ChildProcessError("`make` failed in example_sub_folder")
         sys.path.insert(1, CONTRIB_FOLDER)
         parent_mod = __import__(contrib_name)
     else:
@@ -278,9 +261,6 @@ def main():
     if not pre:
         print("❗️ We assume you've built the package so won't build it for you, otherwise please use `python tools/build_packge/build.py` beforehand")
     if pre:
-        if _build_binary():
-            print("`--build` is enabled, so we will run `cmake --build .` for the " \
-                "contributions that contain `CMakeLists.txt` file.\n")
         subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
         exit_code = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=ROOT)
         if exit_code:

@@ -17,3 +17,4 @@ pypandoc
 myst-nb
 sphinxcontrib-mermaid
 sphinx-copybutton
+versioningit==2.1.0

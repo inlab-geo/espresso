@@ -10,8 +10,7 @@ BASE_PATH = esp.__path__[0]
 DEST_PATH = Path(__file__).resolve().parent.parent / "user_guide" / "contrib" / "generated"
 
 def contribs():
-    names = [nm for nm in dir(esp) 
-                if not nm.startswith("_") and nm[0].islower() and nm != "utils"]
+    names = [cls.__module__.split(".")[-1] for cls in esp.list_problems()]
     all_contribs = [
         (contrib, Path(f"{BASE_PATH}/{contrib}"), Path(f"{DEST_PATH}/{contrib}")) 
             for contrib in names]

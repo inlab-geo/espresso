@@ -10,6 +10,7 @@ Espresso requires Python 3.6+, and the following dependencies:
 - numpy>=1.18
 - scipy>=1.0.0
 - matplotlib>=3.1
+- tqdm>=4.0
 
 
 Virtual environment setup

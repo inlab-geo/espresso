@@ -1,19 +1,27 @@
 # Espresso
 
 [![PyPI version](https://img.shields.io/pypi/v/cofi-espresso?logo=pypi&style=flat-square&color=bde0fe)](https://pypi.org/project/cofi-espresso/)
-[![build](https://img.shields.io/github/workflow/status/inlab-geo/espresso/Build?logo=githubactions&style=flat-square&color=ccd5ae)](https://github.com/inlab-geo/espresso/actions/workflows/build_wheels.yml)
+[![build](https://img.shields.io/github/actions/workflow/status/inlab-geo/espresso/build_wheels.yml?branch=main&logo=githubactions&style=flat-square&color=ccd5ae)](https://github.com/inlab-geo/espresso/actions/workflows/build_wheels.yml)
 [![Documentation Status](https://img.shields.io/readthedocs/cofi-espresso?logo=readthedocs&style=flat-square&color=faedcd)](https://cofi-espresso.readthedocs.io/en/latest/?badge=latest)
 [![Slack](https://img.shields.io/badge/Slack-inlab-4A154B?logo=slack&style=flat-square&color=cdb4db)](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg)
 
 ## Introduction
 
 **E**arth **S**cience **PR**oblems for the **E**valuation of **S**trategies, 
-**S**olvers and **O**ptimizers (Espresso) is a collection of clearly defined forward 
-codes that simulate a wide range of geophysical processes. The goal of Espresso is to 
-bring together people developing physical simulations with those who need them. 
-Espresso's simple and consistent code structure enables users to access a wide range 
-of different forward code and contributers to share their solutions with a wider 
-audience. For more information, please visit our documentation (coming soon).
+**S**olvers and **O**ptimizers (Espresso) is a collection of datasets, and 
+associated simulation codes, spanning a wide range of geoscience problems. 
+Together they form a suite of real-world test problems that can be used to 
+support the development, evaluation and benchmarking of a wide range of tools
+and algorithms for inference, inversion and optimisation. All problems are 
+designed to share a common interface, so that changing from one test problem
+to another requires changing one line of code. 
+
+The Espresso project is a community effort - if you think it sounds useful,
+please consider contributing an example or two from your own research. The project
+is currently being coordinated by InLab, with support from the CoFI development
+team.
+
+For more information, please visit our documentation (coming soon).
 
 
 ## Installation
@@ -47,8 +55,8 @@ structure for each problem. For instance:
 from cofi_espresso import GravityDensity
 
 problem = GravityDensity(example_number=1)
-model = problem.good_model()
-data = problem.data()
+model = problem.good_model
+data = problem.data
 pred = problem.forward(model)
 fig_model = problem.plot_model(model)
 fig_data = problem.plot_data(data, pred)
@@ -69,7 +77,7 @@ print(problem.m)
 print(problem.rec_coords)
 ```
 
-Which additional values are set is highly probl-specific and we suggest to 
+Which additional values are set is highly problem-specific and we suggest to 
 consult the 
 [Espresso Documentation on the problems](https://cofi-espresso.readthedocs.io/en/latest/user_guide/contrib/index.html).
 
