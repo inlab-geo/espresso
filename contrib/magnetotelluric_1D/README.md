@@ -4,12 +4,20 @@
 
 The magnetotelluric (MT) method is a passive electromagnetic method that uses the fluctuations of the natural electromagnetic field to determine the distribution of the electrical conductivity in the subsurface. When the electric and magnetic fields are measured simultaneously on the surface, their complex ratio (the impedance) can be used to describe the penetration of the EM fields in the Earth, which is dependent on their frequencies and the electrical conductivity of the subsurface. 
 
-The impedance $Z$ is a 4x4 tensor which relates electric ($E$) and magnetic ($H$) fields in the x and y directions in Cartesian coordinates (x, y):
+The impedance $Z$ is a 4x4 tensor which relates electric ( $E$ ) and magnetic ( $H$ ) fields in the x and y directions in Cartesian coordinates (x, y):
 
 $$
-\begin{bmatrix} E_{x} \\ E_{y} \end{bmatrix} = 
-\begin{bmatrix} Z_{xx}  & Z_{xy}  \\  Z_{yx} & Z_{yy}  \end{bmatrix} \cdot
-\begin{bmatrix}  H_{x} \\ H_{y} \end{bmatrix}
+\begin{pmatrix}
+E_{x}\\ E_{y}
+\end{pmatrix} = 
+\begin{pmatrix}
+Z_{xx}  & Z_{xy}\\
+Z_{yx} & Z_{yy}  
+\end{pmatrix} \cdot
+\begin{pmatrix}
+H_{x}\\
+H_{y} 
+\end{pmatrix}
 $$
 
 
@@ -17,7 +25,10 @@ In these examples, we assume that the Earth is 1-D, that there is no lateral var
 
 $$
 Z = 
-\begin{bmatrix} 0  & Z_{1D}  \\  -Z_{1D} & 0  \end{bmatrix} 
+\begin{pmatrix}
+ 0  & Z_{1D}\\
+-Z_{1D} & 0
+\end{pmatrix} 
 $$
 
 Therefore, the response of a 1D layered Earth is $Z_{1D}$, and is defined as a function of frequency. In 1-D, determining $Z$ given the electrical conductivity values of the Earth (the forward model) is done using a recursive approach (Wait, 1954). 
