@@ -206,21 +206,22 @@ class Magnetotelluric1D(EspressoProblem):
             d_phase = (np.diag(Cm)**0.5)[nf:]
             axs[0].errorbar(np.log10(1/self._freqs), log10_rho, yerr = d_log10_rho, 
                             fmt='wo',elinewidth=0.6,markersize=4 ,ecolor='k',
-                            capsize=2,capthick=0.6,mec='k',mew=0.5, alpha=0.9)
+                            capsize=2,capthick=0.6,mec='k',mew=0.5, alpha=0.9, zorder = 1, label = 'Obs')
             axs[1].errorbar(np.log10(1/self._freqs), phase, yerr = d_phase, 
                             fmt='wo',elinewidth=0.6,markersize=4 ,ecolor='k',
-                            capsize=2,capthick=0.6,mec='k',mew=0.5, alpha=0.9)
+                            capsize=2,capthick=0.6,mec='k',mew=0.5, alpha=0.9, zorder = 1)
         if data2 is not None:
             log10_rho2 = data2[:nf]
             phase2 = data2[nf:]
-            axs[0].plot(np.log10(1/self._freqs), log10_rho2,'k-')
-            axs[1].plot(np.log10(1/self._freqs), phase2,'k-')
+            axs[0].plot(np.log10(1/self._freqs), log10_rho2, 'k-', lw = 1, zorder = 2, label = 'Resp')
+            axs[1].plot(np.log10(1/self._freqs), phase2, 'k-', lw = 1, zorder = 2)
         axs[0].set_ylabel('Log$_{10}$ $\\rho_{app}$ ($\Omega$m)')
         axs[1].set_yticks([0,45,90])
         axs[1].set_ylabel('Phase (deg.)')
         axs[1].set_xlabel('Log$_{10}$ Period (s)')
         axs[0].grid(lw=0.2)
         axs[1].grid(lw=0.2)
+        axs[0].legend()
         plt.tight_layout()
         #plt.show()
         return fig
