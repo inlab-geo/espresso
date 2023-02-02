@@ -1,142 +1,67 @@
 # Magnetotelluric 1D
 
-<!-- Please write anything you'd like to explain about the forward problem here -->
+## Theoretical background
 
-Welcome to your new Espresso example!
+The magnetotelluric (MT) method is a passive electromagnetic method that uses the fluctuations of the natural electromagnetic field to determine the distribution of the electrical conductivity in the subsurface. When the electric and magnetic fields are measured simultaneously on the surface, their complex ratio (the impedance) can be used to describe the penetration of the EM fields in the Earth, which is dependent on their frequencies and the electrical conductivity of the subsurface. 
 
-## Pre-requisites
+The impedance $Z$ is a 4x4 tensor which relates electric ($E$) and magnetic ($H$) fields in the x and y directions in Cartesian coordinates (x, y):
 
-Make sure you have Python>=3.6 and [required packages](../../envs/environment_contrib.yml) 
-installed in your system. 
-
-<details>
-
-[`mamba`](https://mamba.readthedocs.io/en/latest/) is recommended, and we provide
-instructions that work for both `conda` and `mamba` below. Check contributor's guide in 
-[cofi-espresso documentation](https://cofi-espresso.readthedocs.io/en/latest/index.html) 
-for other options.
-
-1. Install required Python packages for contributing to `cofi-espresso`. Run the following
-   commands with the project root level as working directory:
-   ```console
-   $ conda env create -f envs/environment_contrib.yml
-   $ conda activate esp_contrib
-   ```
-2. Install `cofi-espresso` base package
-   ```console
-   $ pip install .
-   ```
-
-</details>
-
-## Getting started
-
-To complete this contribution, here are some ideas on what to do next:
-
-- [ ] **Modify [README.md](README.md)**. Document anything you'd like to add for this problem
-  (in this README.md file). Some recommended parts include:
-   - What this test problem is about
-   - What you would recommend inversion practitioners to notice
-   - etc.
-- [ ] **Modify [LICENCE](LICENCE)**. The default one we've used is a 2-clauss BSD licence. 
-   Feel free to replace the content with a licence that suits you best.
-- [ ] **Write code in [magnetotelluric_1D.py](magnetotelluric_1D.py) (and [\_\_init\_\_.py](__init__.py) if
-   necessary)**. Some basic functions have been defined in the template - these are the
-   standard interface we'd like to enforce in Espresso. You'll see
-   clearly some functionalities that are required to implement and others that are
-   optional.
-   - If you would like to load data from files, please use our 
-     [utility functions](https://cofi-espresso.readthedocs.io/en/latest/user_guide/api/generated/cofi_espresso.utils.html) 
-     to get absoluate path before calling your load function.
-- [ ] **Validate and build your contribution locally**. We have seperate scripts for 
-   validation and packaging. Check 
-   [how to test building your contribution](README.md#how-to-test-building-your-contribution-with-cofi-espresso) 
-   for details.
-- [ ] **Delete / comment out these initial instructions**. They are for your own reference
-   so feel free to delete them or comment them out once you've finished the above
-   checklist.
+$$
+\begin{bmatrix} E_{x} \\ E_{y} \end{bmatrix} = 
+\begin{bmatrix} Z_{xx}  & Z_{xy}  \\  Z_{yx} & Z_{yy}  \end{bmatrix} \cdot
+\begin{bmatrix}  H_{x} \\ H_{y} \end{bmatrix}
+$$
 
 
-## How to unit test your code
+In these examples, we assume that the Earth is 1-D, that there is no lateral variations of the electrical conductivity in the x and y directions, only in the z direction. In that case the impedance tensor simplifies to:
 
-When developing your contribution, it's sometimes useful for yourself to try running
-your code. Normally, creating a temporary test file or running Python interactively
-within the contribution subfolder is sufficient. 
+$$
+Z = 
+\begin{bmatrix} 0  & Z_{1D}  \\  -Z_{1D} & 0  \end{bmatrix} 
+$$
 
-<details>
-   <summary>Some instructions when you have relative import in the 
-files</summary>
+Therefore, the response of a 1D layered Earth is $Z_{1D}$, and is defined as a function of frequency. In 1-D, determining $Z$ given the electrical conductivity values of the Earth (the forward model) is done using a recursive approach (Wait, 1954). 
 
-> **Note that you cannot test your code directly inside your example subfolder**, if you
-> have any relative import (e.g. `from .lib import *`) inside the contribution file. 
-> Check the following for details.
+Because of its practicality to visually interpret and analyse the data, it is common to represent the complex impedance tensor by its magnitude (the apparent resistivity) and its phase, defined by:
 
-***In order to test your code in that case***, use `contrib` as your working directory and 
-import your contribution in the following ways.
+$$
+\rho_{app} = \frac{1}{5f} |Z|^2
+$$
 
-(Python interactive mode)
-```python
-$ pwd                            # check you are in the right folder
-<path-to-espresso>/contrib
-$ python
->>> from magnetotelluric_1D import Magnetotelluric1D   # import it this way
-```
+$$
+\Phi = tan^{-1} \frac{\Im(Z)}{\Re(Z)}
+$$
 
-(Creating temporary Python file)
-```python
-# file contrib/tmp.py            # create tmp file in the right folder
-from magnetotelluric_1D import Magnetotelluric1D       # import it this way
-```
+with $f$ the frequency defined in Hz, the apparent resistivity $\rho_{app}$ defined in $\Omega m$ and the phase in degrees. 
 
-</details>
+Details regarding the MT method can be found in Simpson and Bahr (2005) and Chave and Jones (2012).
 
-## How to test building your contribution with `cofi-espresso`
+As mentioned earlier, the penetration of the EM fields depends on the frequency and the electrical conductivity of the Earth. Lower frequencies will penetrate deeper into the Earth, and conductive material will attenuate faster the EM fields. Therefore, depending on the frequency range available (and the composition of the Earth), the MT method can be used to map the distribution of the electrical conductivity into the Earth from tens of meters to hundreds of kilometres. Programs such as AusLAMP (for example Robertson et al., 2016) aims at imaging the Australia lithosphere and upper mantle using long period MT data, while Audio MT (AMT) and Broad Band MT (BBMT) data are used to image the upper crust (for example Simpson et al., 2021 or Jiang et al., 2022). 
 
-1. To **validate your contribution** when almost finished, run the following (replacing `<magnetotelluric_1D>` with your problem name, e.g. `simple_regression`)
+#### References:
 
-   ```console
-   $ python tools/build_package/validate.py -c <magnetotelluric_1D1>
-   ```
+*Chave, A. D., & Jones, A. G. (Eds.). (2012). The magnetotelluric method: Theory and practice. Cambridge University Press.*
 
-   Or the following for more than one contributions (replacing `<magnetotelluric_1D_1>` and `<magnetotelluric_1D_2>` with your problem names)
+*Jiang, W., Duan, J., Doublier, M., Clark, A., Schofield, A., Brodie, R. C., & Goodwin, J. (2022). Application of multiscale magnetotelluric data to mineral exploration: An example from the east Tennant region, Northern Australia. Geophysical Journal International, 229(3), 1628-1645.*
 
-   ```console
-   $ python tools/build_package/validate.py -c <magnetotelluric_1D_1> -c <magnetotelluric_1D_2>
-   ```
+*Pedersen, J., & Hermance, J. F. (1986). Least squares inversion of one-dimensional magnetotelluric data: An assessment of procedures employed by Brown University. Surveys in Geophysics, 8(2), 187-231.*
 
-   Or the following for all existing contributions
+*Robertson, K., Heinson, G., & Thiel, S. (2016). Lithospheric reworking at the Proterozoic–Phanerozoic transition of Australia imaged using AusLAMP Magnetotelluric data. Earth and Planetary Science Letters, 452, 27-35.*
 
-   ```console
-   $ python tools/build_package/validate.py --all
-   ```
+*Simpson, F., & Bahr, K. (2005). Practical magnetotellurics. Cambridge University Press.*
 
-2. To **build your contribution into cofi-espresso**, run
+*Simpson, J., Brown, D.D., Soeffky, P., Kyi, D., Mann, S., Khrapov, A., Duan, J., and Greenwood, M., (2021). Cloncurry Extension Magnetotelluric Survey. GSQ Technical Notes
+2021/03.*
 
-   ```console
-   $ python tools/build_package/build.py
-   ```
+*Wait, J. R. (1954). On the relation between telluric currents and the earth's magnetic field. Geophysics, 19(2), 281-289.*
 
-3. To **validate your built contribution** after running the build script above, run the following ()
+## Examples
 
-   ```console
-   $ python tools/build_package/validate.py --post -c <magnetotelluric_1D1>
-   ```
+Two examples of inversion of MT data are presented here:
+- __Synthetic AMT data__: inversions of a synthetic 5 layers Earth model using smoothed and constrained regularizations. 
+- __Field AMT/BBMT data__: inversion of field AMT/BBMT data from the Coompana Province, South Australia.
 
-   Or the following for more than one contributions (replacing `<magnetotelluric_1D_1>` and `<magnetotelluric_1D_2>` with your problem names)
 
-   ```console
-   $ python tools/build_package/validate.py --post -c <magnetotelluric_1D_1> -c <magnetotelluric_1D_2>
-   ```
+## Usage
 
-   Or the following for all existing contributions
 
-   ```console
-   $ python tools/build_package/validate.py --post --all
-   ```
-
-4. To do **pre-build validation**, **build**, **post-build validation** (1-3 above) all together at once,
-run
-
-   ```console
-   $ python tools/build_package/build_with_checks.py
-   ```
