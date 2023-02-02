@@ -8,10 +8,11 @@ The impedance $Z$ is a 4x4 tensor which relates electric ( $E$ ) and magnetic ( 
 
 $$
 \begin{pmatrix}
-E_{x}\\ E_{y}
+E_{x}\\ 
+E_{y}
 \end{pmatrix} = 
 \begin{pmatrix}
-Z_{xx}  & Z_{xy}\\
+Z_{xx} & Z_{xy}\\
 Z_{yx} & Z_{yy}  
 \end{pmatrix} \cdot
 \begin{pmatrix}
