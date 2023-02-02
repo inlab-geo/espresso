@@ -12,9 +12,17 @@ There are generally three steps involved in submiting your code:
 - **Edit** - :ref:`add in your own Espresso problem <add_contrib>`
 - **Upload** - :ref:`submit your changes to our main repository <submit_changes>`
 
-In the following paragraphs, we are going to show you how to complete each of the steps
-above. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
+In the following paragraphs, we list out detailed steps on how to contribute a new 
+example. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
 
+In case you prefer an alternative guide, we've also prepared a demo video below. If 
+your browser fails to load the video, head to 
+`this link <https://dl.dropbox.com/s/j1xdl0q7zj039cl/%28with%20clicks%29%20how-to-contribute-an-example-in-espresso.mp4?dl=0>`_ 
+to watch it.
+
+.. raw:: html
+
+    <iframe width="560" height="315" src="https://www.dropbox.com/s/j1xdl0q7zj039cl/%28with%20clicks%29%20how-to-contribute-an-example-in-espresso.mp4?dl=0&raw=1" frameborder="0" allowfullscreen></iframe>
 
 .. _get_own_copy:
 
@@ -62,6 +70,9 @@ Get your own copy of Espresso
 
     cd <path-to-espresso>
     git clone <url-you-copied-in-step-6>
+    cd espresso
+    git remote add upstream https://github.com/inlab-geo/espresso
+    git fetch upstream
 
    .. admonition:: Instructions for first-time GitHub users
       :class: dropdown, attention
@@ -178,12 +189,123 @@ Submit your changes
    pull request" button. Follow the prompts and fill in necessary message you'd like us
    to know.
 
-   ..    TODO insert a screenshot here
+   .. figure:: ../_static/contrib_pr1.png
+    :align: center
 
 #. Once your pull request is submitted, some automatic checks will be triggered. Rest 
    assured - we will review your contribution, comment if necessary, and proceed to merge
    your contribution into our main repository when everything's ready.
 
-   ..    TODO insert a screenshot here
-
 #. Thanks again, for your contribution to open source 🌟 
+
+
+.. _appendix_build_steps:
+
+Appendix I: installation steps
+------------------------------
+
+To install your development version locally, run the following in your terminal:
+
+.. code-block:: console
+
+   $ python tools/build_package/build.py
+
+
+The following table describes what happens when we package Espresso:
+
+.. list-table:: How Espresso is packaged
+   :widths: 10 45 45
+   :header-rows: 1
+
+   * - Step
+     - What's done
+     - How it's done
+   * - 1
+     - Clean ``_esp_build/``
+     - ``shutil.rmtree``
+   * - 2
+     - Move meta data files to ``_esp_build/``
+     - ``shutil.copy``
+   * - 3
+     - Move ``src/`` content to ``_esp_build/src/cofi_espresso``
+     - ``shutil.copytree``
+   * - 4
+     - Move ``contrib/`` content to ``_esp_build/src/cofi_espresso/`` + ``_esp_build/src/cofi_espresso/__init__.py`` + ``_esp_build/src/cofi_espresso/list_problems.py``
+     - ``shutil.copytree``, a series of file opening and string manipulation
+   * - 5
+     - Write dynamic version and extra versioningit configs into ``_esp_build/pyproject.toml``
+     - ``versioningit``
+   * - 6
+     - Install package from ``_esp_build/``
+     - ``pip install _esp_build``
+
+
+.. _appendix_validation_steps:
+
+Appendix II: validation steps
+-----------------------------
+
+To test whether your new contribution aligns with the Espresso standard, run 
+the following in your terminal:
+
+.. code-block:: console
+
+   $ python tools/build_package/validate.py -c <contrib-name>
+
+You can run the validation script before (``--pre`` flag on) and/or after (``--post`` 
+flag on) you install your development version of Espresso. A better workflow is to run 
+both:
+
+.. code-block:: console
+
+   $ python tools/build_package/validate.py --pre -c <contrib-name>
+   $ python tools/build_package/build.py
+   $ python tools/build_package/validate.py --post -c <contrib-name>
+
+
+Or the following for a complete check on all examples (including yours), both before
+and after Espresso installed:
+
+.. code-block:: console
+
+   $ python tools/build_package/build_with_checks.py
+
+
+Anyway, run the following for a detailed usage of this script:
+
+.. code-block:: console
+
+   $ python tools/build_package/validate.py --help
+
+
+The following table describes what happens when we validate a certain version
+of Espresso:
+
+.. list-table:: How an Espresso contribution is validated
+   :widths: 10 45 45
+   :header-rows: 1
+
+   * - Step
+     - What's done
+     - How it's done
+   * - 1
+     - Check the contribution folder name matches the main Python file name (``contrib/<contrib_name>/<contrib_name>.py``)
+     - ``assert f"{contrib_name}.py" in file_names``
+   * - 2
+     - Check ``README.md``, ``LICENCE`` and ``__init__.py`` exist
+     - ``assert required_file in file_names``
+   * - 3
+     - Check the class name is listed in ``__all__`` in file ``__init__.py``
+     - ``assert contrib_name_class in parent_module.__all__``
+   * - 4
+     - Check the contribution provides access to the required metadata
+     - Pull out the ``metadata`` field of the contribution class and check those attributes are of correct types
+   * - 5
+     - Check required methods / properties are implemented and a complete workflow can run for each example number
+     - Run from ``example_number=1`` up until an exception is raised or reached 100. For each example, try to get ``model_size``, ``data_size``, ``good_model`` (flat array like, length = ``model_size``), ``starting_model`` (flat array like, length = ``model_size``), ``data`` (flat array like, length = ``data_size``); Run ``forward(model)`` (output to be flat array like, length = ``data_size``). Where "flat array like" is checked via ``np.ndim(obj) == 1``
+   * - 6
+     - Check optional methods / properties, if implemented, have the correct type signatures
+     - For each example, check that the outputs of ``forward(model, with_jacobian=True)``, ``jacobian(model)`` (if implemented) have flat array like synthetics and 2D array like jacobian; Check ``description`` (if exists) is string; Check ``covariance_matrix`` and ``inverse_covariance_matrix`` are in shape ``(data_size, data_size)`` and one is the inverse of the other (if implemented); Check ``plot_model`` and ``plot_data`` (if implemented) return an instance of ``matplotlib.figure.Figure``; Check ``misfit``, ``log_likelihood`` and ``log_prior`` (if implemented) return float
+   * - 7
+     - Check ``LICENCE`` file is not empty
+     - ``assert os.stat("LICENCE").st_size != 0``

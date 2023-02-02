@@ -4,3 +4,5 @@ numpy
 matplotlib
 scipy
 cibuildwheel==2.10.0
+versioningit==2.1.0
+stdlib_list==0.8.0
