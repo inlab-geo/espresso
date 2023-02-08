@@ -12,6 +12,9 @@ There are generally three steps involved in submiting your code:
 - **Edit** - :ref:`add in your own Espresso problem <add_contrib>`
 - **Upload** - :ref:`submit your changes to our main repository <submit_changes>`
 
+It's important to note that after you've uploaded your contribution, you can still edit 
+it with the same "pull request" workflow.
+
 In the following paragraphs, we list out detailed steps on how to contribute a new 
 example. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
 
@@ -195,6 +198,10 @@ Submit your changes
 #. Once your pull request is submitted, some automatic checks will be triggered. Rest 
    assured - we will review your contribution, comment if necessary, and proceed to merge
    your contribution into our main repository when everything's ready.
+
+#. After your contribution is merged to the main branch, you can request another change
+   with the same workflow anytime you want. Just keep your own fork, edit, commit and 
+   push to your own fork, and raise a pull request from there.
 
 #. Thanks again, for your contribution to open source 🌟 
 

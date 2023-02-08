@@ -92,6 +92,14 @@ from example_name import ExampleName       # import it this way
 
 ## How to test building your contribution with `cofi-espresso`
 
+The **recommended way** is this:
+
+```console
+$ python tools/build_package/build_with_checks.py
+```
+
+Read on if you are looking for further details:
+
 1. To **validate your contribution** when almost finished, run the following (replacing `<example_name>` with your problem name, e.g. `simple_regression`)
 
    ```console
