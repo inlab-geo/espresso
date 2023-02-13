@@ -1,9 +1,14 @@
 import subprocess
 import pathlib
+import shutil
+import numpy as np
+import matplotlib.pyplot as plt
 
 from cofi_espresso import EspressoProblem
 from cofi_espresso.exceptions import InvalidExampleError
 
+
+LIB_DIR = pathlib.Path(__file__).resolve().parent / "lib"
 
 class ReceiverFunction(EspressoProblem):
     """Forward simulation class
@@ -39,15 +44,22 @@ class ReceiverFunction(EspressoProblem):
         """you might want to set some useful example-specific parameters here
         """
 
-        
-        # if example_number == 1:
-        #     self.some_attribute = some_value_0
-        #     self.another_attribute = another_value_0
-        # elif example_number == 2:
-        #     self.some_attribute = some_value_1
-        #     self.another_attribute = another_value_1
-        # else:
-        #     raise InvalidExampleError
+        try:
+            from lib import rf
+        except:
+            build_clean()
+            build_fortran_source()
+            from lib import rf
+        self.rf = rf
+
+        if example_number == 1:
+            self._good_model = np.array([[1,4.0,1.7],
+                                    [3.5,4.3,1.7],
+                                    [8.0,4.2,2.0],
+                                    [20, 6,1.7],
+                                    [45,6.2,1.7]])
+        else:
+            raise InvalidExampleError
 
     @property
     def description(self):
@@ -63,7 +75,7 @@ class ReceiverFunction(EspressoProblem):
 
     @property
     def good_model(self):
-        raise NotImplementedError               # TODO implement me
+        return self._good_model
 
     @property
     def starting_model(self):
@@ -81,20 +93,37 @@ class ReceiverFunction(EspressoProblem):
     def inverse_covariance_matrix(self):
         raise NotImplementedError               # optional
         
-    def forward(self, model, with_jacobian=False):
+    def forward(self, model, with_jacobian=False, *args, **kwargs):
         if with_jacobian:
             raise NotImplementedError           # optional
         else:
-            raise NotImplementedError           # TODO implement me
+            t, rfunc = self.rf.rfcalc(model, *args, **kwargs)
+            data_synth = np.vstack((t, rfunc)).T
+            return data_synth
     
     def jacobian(self, model):
         raise NotImplementedError               # optional
 
     def plot_model(self, model):
-        raise NotImplementedError               # optional
+        px = np.zeros([2*len(model),2])
+        px[0::2,0],px[1::2,0],px[1::2,1],px[2::2,1] = model[:,1],model[:,1],model[:,0],model[:-1,0]
+        fig, ax = plt.subplots(1, 1, figsize=(4,6))
+        ax.set_xlabel('Vs (km/s)')
+        ax.set_ylabel('Depth (km)')
+        ax.invert_yaxis()
+        ax.plot(px[:,0],px[:,1],'b-')
+        return fig
     
-    def plot_data(self, data, data2=None):
-        raise NotImplementedError               # optional
+    def plot_data(self, data, data2=None, label=None, label2=None):
+        fig, ax = plt.subplots(1, 1)
+        ax.plot(data[:,0],data[:,1],label=label)
+        if data2 is not None:
+            ax.plot(data2[:,0],data2[:,1],'r-',label=label2)
+        ax.set_xlabel('Time/s')
+        ax.set_ylabel('Amplitude')
+        ax.grid(True)
+        ax.legend()
+        return fig
 
     def misfit(self, data, data2):
         raise NotImplementedError               # optional
@@ -107,6 +136,18 @@ class ReceiverFunction(EspressoProblem):
 
 
 def build_fortran_source():
-    wdir = pathlib.Path(__file__).resolve().parent / "lib"
-    subprocess.run(["cmake", "-S", ".", "-B", "build"], cwd=wdir)
-    subprocess.run(["cmake", "--build", "build"], cwd=wdir)
+    subprocess.run(["cmake", "-S", ".", "-B", "build"], cwd=LIB_DIR)
+    subprocess.run(["cmake", "--build", "build"], cwd=LIB_DIR)
+    subprocess.run(["cmake", "--build", "build"], cwd=LIB_DIR)
+
+def build_clean():
+    shutil.rmtree(LIB_DIR / "build", ignore_errors=True)
+
+
+if __name__ == "__main__":
+    try:
+        from lib import rf
+    except Exception as e:
+        build_clean()
+        build_fortran_source()
+
