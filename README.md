@@ -31,7 +31,7 @@ $ pip install cofi-espresso
 ```
 
 Check Espresso documentation - 
-[installation page](https://cofi-espresso.readthedocs.io/en/latest/installation.html) 
+[installation page](https://cofi-espresso.readthedocs.io/en/latest/user_guide/installation.html) 
 for details on dependencies and setting up with virtual environments.
 
 ## Basic usage

@@ -16,7 +16,7 @@ Espresso requires Python 3.6+, and the following dependencies:
 Virtual environment setup
 -------------------------
 
-It's optional, but recommended to use a virtual environment.
+It's **strongly recommended** to use a virtual environment.
 
 .. tabbed:: venv
 
