@@ -33,7 +33,7 @@ cmake_print_variables(Python_NumPy_INCLUDE_DIRS)
 
 # Common variables
 set(f2py_module_name "rfc")
-set(fortran_src_file "${CMAKE_SOURCE_DIR}/RF.F90")
+set(fortran_src_file "${CMAKE_SOURCE_DIR}/RF.f90")
 file(GLOB_RECURSE fortran_src_file_subs "${CMAKE_SOURCE_DIR}/RFsubs/*.f*")
 set(f2py_module_c "${f2py_module_name}module.c")
 

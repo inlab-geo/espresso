@@ -69,6 +69,8 @@ where = ["src"]
     "README.md",
     # source to be compiled
     "*.f90",
+    "*.f",
+    "*.inc",
     # dummy files
     "*.o",
 ]

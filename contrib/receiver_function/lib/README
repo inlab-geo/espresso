@@ -9,7 +9,7 @@ e.g. gfortran *.f *.f90 -c
 
 with subroutines in RFsubs already compiled with gfortran
 
-f2py -m rfc -c RF.F90 RFsubs/*.f*
+f2py -m rfc -c RF.f90 RFsubs/*.f*
 
 
 then
