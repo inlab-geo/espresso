@@ -35,6 +35,8 @@ def run_autogen(_):
     )
 
 def setup(app):
+    # This function is automatically called by sphinx-build at the start of the
+    # build process.
     app.connect("builder-inited", run_autogen)
 
 
@@ -146,5 +148,6 @@ myst_enable_extensions = [
 # -- Cutomised variables ------------------------------------------------------
 rst_epilog = """
 .. _repository: https://github.com/inlab-geo/espresso
+.. _newissue: https://github.com/inlab-geo/espresso/issues/new/choose
 .. _Slack: https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg
 """

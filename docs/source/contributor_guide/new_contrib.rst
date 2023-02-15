@@ -1,6 +1,6 @@
-====================
-New Espresso problem
-====================
+===============================
+Creating a new Espresso problem
+===============================
 
 👋 Everyone is welcomed to contribute with their own forward code. We aim to reduce the
 barrier of contributing so don't worry if you are not familiar with those technical

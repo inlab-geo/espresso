@@ -5,113 +5,110 @@
 
 .. title:: Home
 
-====================================
-Welcome to Espresso's documentation!
-====================================
-Espresso (**E**\ arth **S**\ cience **PR**\ oblems for the **E**\ valuation of **S**\ trategies, 
-**S**\ olvers and **O**\ ptimizers) is a collection of datasets, and 
-associated simulation codes, spanning a wide range of geoscience problems. 
-Together they form a suite of real-world test problems that can be used to 
-support the development, evaluation and benchmarking of a wide range of tools
-and algorithms for inference, inversion and optimisation. All problems are 
-designed to share a common interface, so that changing from one test problem
-to another requires changing one line of code. 
+====================
+Welcome to Espresso!
+====================
 
-
-
-.. panels::
-    :header: text-center text-large
-    :card: border-1 m-1 text-center
-
-
-    **Introduction to Espresso**
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    🐣 New to Espresso?
-
-    .. link-button:: user_guide/introduction
-        :type: ref
-        :text: User Guide
-        :classes: btn-outline-primary btn-block stretched-link
-
-    ---
-
-    **Contribute a new problem**
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    🍻 Forward codes are always welcomed
-
-    .. link-button:: contributor_guide/ways
-        :type: ref
-        :text: Contributor Guide
-        :classes: btn-outline-primary btn-block stretched-link
-
-    ---
-
-
-    **Improve the core Espresso package**
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    🛠 Let's build a better Espresso together
-
-    .. link-button:: developer_notes/develop
-        :type: ref
-        :text: Developer notes
-        :classes: btn-outline-primary btn-block stretched-link
-
-    ---
-
-    **Get involved!**
-    ^^^^^^^^^^^^^^
-
-    💬 Join our Slack workspace
-
-    .. link-button:: https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg
-        :type: url
-        :text: Join the conversation
-        :classes: btn-outline-primary btn-block stretched-link
-
-
-The Espresso project is a community effort - if you think it sounds useful,
-please consider contributing an example or two from your own research. The project
-is currently being coordinated by `InLab <http://www.inlab.edu.au/>`_, with support from the CoFI development
-team.
-
-
-
-
-Table of contents
------------------
+.. The following defines the structure of the document. It is hidden so it doesn't
+   render into the html, but it cannot be removed!
+   We assume that each 'index.rst' document defines its own toctree that can be incorporated.
 
 .. toctree::
-    :caption: User Guide
+    :hidden: 
     :maxdepth: 1
 
-    user_guide/introduction.rst
-    user_guide/installation.rst
-    user_guide/usage.rst
-    user_guide/contrib/index.rst
-    user_guide/api/index.rst
-    user_guide/faq.rst
+    user_guide/index.rst
 
 .. toctree::
-    :caption: Contributor Guide
+    :hidden:
     :maxdepth: 1
 
-    contributor_guide/ways.rst
-    contributor_guide/new_contrib.rst
+    contributor_guide/index.rst
 
 .. toctree::
-    :caption: Developer Notes
+    :hidden:
     :maxdepth: 1
 
-    developer_notes/develop.rst
-    developer_notes/changelog.md
-    developer_notes/licence.rst
+    developer_guide/index.rst
 
-.. Indices and tables
-.. ==================
 
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
+.. toctree::
+    :hidden:
+    
+    GitHub repository <https://github.com/inlab-geo/espresso/>
+    Issue tracker <https://github.com/inlab-geo/espresso/issues/>
+
+
+You've just come up with a new optimisation algorithm, inversion strategy, or machine learning-based inference framework. Now you want to see how it performs on a real-world problem... 
+
+Espresso (**E**\ arth **s**\ cience **pr**\ oblems for the **e**\ valuation of **s**\ trategies, **s**\ olvers and **o**\ ptimizers) aims to make this as easy as possible. It provides access to a range of exemplars via a standardized Python interface, including domain-expert--curated datasets and corresponding simulation codes. Swapping from one test problem to the next is just one line of code.
+
+Here's a simple illustration:
+
+.. code-block:: python
+    :linenos:
+    :class: toggle
+
+    import numpy as np
+
+    # Select the test problem to be used -- change this line to any 
+    # other test problem and everything else should still work!
+    from cofi_espresso import SimpleRegression as test_problem 
+
+    # Create an instance of the test problem class
+    tp = test_problem()
+
+    # The test problem provides...
+    # ... an initial (null) model vector
+    model = tp.starting_model
+    # ... the ability to compute simulated data for an arbitrary
+    # model vector, and the corresponding jacobian (i.e. derivatives 
+    # of data wrt model parameters)
+    predictions, G = tp.forward(model, with_jacobian = True)
+    # ... a data vector, which matches the output from `tp.forward()`
+    residuals = tp.data - predictions 
+    # ... and much more!
+
+    # Compute a Gauss-Newton model update
+    model += np.linalg.solve(G.T.dot(G), G.T.dot(residuals))
+    
+    # Compare our result to the answer suggested by Espresso
+    print("Our result:", model)
+    print("Espresso:", tp.good_model)
+
+    # And let's visualise both to see where the differences are:
+    my_fig = tp.plot_model(model)
+    espresso_fig = tp.plot_model(tp.good_model)
+    data_fig = tp.plot_model(tp.data, tp.forward(model))
+
+If this looks interesting, you can:
+
+- Read the :doc:`user_guide/index` for more information about what Espresso provides and how to use it;
+- Contribute your own example problems by following the instructions in the :doc:`contributor_guide/index`;
+- Learn about the infrastructure behind Espresso by looking at the :doc:`developer_guide/index`;
+- Explore the source code on `GitHub <https://github.com/inlab-geo/espresso/>`_;
+- Report a bug or suggest a feature using the `Issue Tracker <https://github.com/inlab-geo/espresso/issues/>`_;
+- Join the conversation on `Slack <https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg>`_.
+
+Espresso is an open-source community effort, currently supported and coordinated by `InLab <http://www.inlab.edu.au/>`_.
+
+
+.. Espresso (**E**\ arth **S**\ cience **PR**\ oblems for the **E**\ valuation of **S**\ trategies,
+.. **S**\ olvers and **O**\ ptimizers) is:
+
+.. - A collection of:
+
+..   - geoscience simulation codes (or 'forward models'), with 
+..   - associated datasets;
+
+.. - Designed for researchers, educators and students working in areas such as inference, inversion, optimisation or machine learning. It aims to:
+
+..   - Provide real-world test problems to support algorithm development;
+..   - Enable benchmarking and comparison of techniques across a range of application areas;
+..   - Support teaching by providing a variety of examples that can be incorporated into lectures, demonstrations and practical exercises.
+
+.. - Accessible via a standardised interface. Testing your algorithm on a new problem means changing just one line of code, and does not require any domain knowledge.
+
+.. - An open-source community effort, currently coordinated by `InLab <http://www.inlab.edu.au/>`_, with support from the CoFI development team.
+
+
