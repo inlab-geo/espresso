@@ -61,55 +61,56 @@ def problem_module_post_build():
     importlib = __import__("importlib")
     return importlib.import_module(PKG_NAME)
 
+
+# For each of the below methods / properties,
+# 1. Try to get / access 
+# 2. If not implemented, assign None to `output_name_for_testing_purpose`
+# 3. If implemeneted but got error, assign the error to `output_name_for_testing_purpose`
+# 4. If implemeneted and no error, assign the output to `output_name_for_testing_purpose`
+
+prob_methods = [
+    # (output_name_for_testing_purpose, how_to_get_it)
+    ("synth1", lambda p: p.forward(p.good_model)),
+    ("jac1", lambda p: p.jacobian(p.good_model)),
+    ("synth2", lambda p: p.forward(p.good_model, True)[0]),
+    ("jac2", lambda p: p.forward(p.good_model, True)[1]),
+    ("fig_model", lambda p: p.plot_model(p.good_model)),
+    ("fig_data", lambda p: p.plot_data(p.data)),
+    ("misfit", lambda p: p.plot_data(p.data, p.data)),
+    ("log_likelihood", lambda p: p.log_likelihood(p.data, p.data)),
+    ("log_prior", lambda p: p.log_prior(p.good_model)),
+]
+prob_properties = [
+    # (output_name_for_testing_purpose, how_to_access_it)
+    ("nmodel", "model_size"),
+    ("ndata", "data_size"),
+    ("model", "good_model"),
+    ("null_model", "starting_model"),
+    ("data", "data"),
+    ("description", "description"),
+    ("cov", "covariance_matrix"),
+    ("inv_cov", "inverse_covariance_matrix"),
+]
+
 def run_example(problem_class, problem_class_str, i):
+    all_outputs = dict()
     prob_instance_i = problem_class(i)
-    _prob_instance_i_str = f"{problem_class_str}({i})"
-    _nmodel = prob_instance_i.model_size
-    _ndata = prob_instance_i.data_size
-    _model = prob_instance_i.good_model
-    _null_model = prob_instance_i.starting_model
-    _data = prob_instance_i.data
-    _synth1 = prob_instance_i.forward(_model)
-    try: _jac1 = prob_instance_i.jacobian(_model)
-    except NotImplementedError: _jac1 = None
-    try: _synth2, _jac2 = prob_instance_i.forward(_model, True)
-    except NotImplementedError: _synth2, _jac2 = None, None
-    try: _fig_model = prob_instance_i.plot_model(_model)
-    except NotImplementedError: _fig_model = None
-    try: _fig_data = prob_instance_i.plot_data(_data)
-    except NotImplementedError: _fig_data = None
-    try: _misfit = prob_instance_i.misfit(_data, _data)
-    except NotImplementedError: _misfit = None
-    try: _log_likelihood = prob_instance_i.log_likelihood(_data, _data)
-    except NotImplementedError: _log_likelihood = None
-    try: _log_prior = prob_instance_i.log_prior(_model)
-    except NotImplementedError: _log_prior = None
-    try: _description = prob_instance_i.description
-    except NotImplementedError: _description = None
-    try: _cov = prob_instance_i.covariance_matrix
-    except NotImplementedError: _cov = None
-    try: _inv_cov = prob_instance_i.inverse_covariance_matrix
-    except NotImplementedError: _inv_cov = None
-    return (
-        _prob_instance_i_str,
-        _nmodel,
-        _ndata,
-        _model,
-        _null_model,
-        _data,
-        _synth1,
-        _jac1,
-        _synth2,
-        _jac2,
-        _fig_model,
-        _fig_data,
-        _misfit,
-        _log_likelihood,
-        _log_prior,
-        _description,
-        _cov,
-        _inv_cov,
-    )
+    all_outputs["prob_instance_str"] = f"{problem_class_str}({i})"
+    for (output_name, prop) in prob_properties:
+        try:
+            all_outputs[output_name] = getattr(prob_instance_i, prop)
+        except NotImplementedError:
+            all_outputs[output_name] = None
+        except Exception as e:
+            all_outputs[output_name] = e
+    for (output_name, how_to_get) in prob_methods:
+        try:
+            all_outputs[output_name] = how_to_get(prob_instance_i)
+        except NotImplementedError:
+            all_outputs[output_name] = None
+        except Exception as e:
+            all_outputs[output_name] = e
+    return all_outputs
 
 def run_problem(problem_class, problem_class_str):
     i = 1
@@ -136,8 +137,8 @@ def run_problems(pre_build, problems_specified = None):
 def main():
     for prob_class, prob_class_str, prob_out_gen in run_problems(True):
         print(prob_class)
-        for prob_out_i in prob_out_gen:
-            print(prob_out_i[0])
+        for i, prob_out_i in prob_out_gen:
+            print(prob_out_i.keys())
 
 if __name__ == "__main__":
     main()
