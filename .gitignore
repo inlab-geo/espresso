@@ -17,7 +17,7 @@ build
 
 # Doc generated files #
 #######################
-docs/build
+docs/_build
 docs/source/user_guide/contrib/generated
 docs/source/user_guide/contrib/index.rst
 docs/source/user_guide/api/generated
