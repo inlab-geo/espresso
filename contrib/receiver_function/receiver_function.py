@@ -178,9 +178,17 @@ class ReceiverFunction(EspressoProblem):
         return logLike.item()
 
     def log_prior(self, model):
-        all_inside_0_60 = all([m_p < 60.0 and m_p > 0. for m_p in model])
-        if all_inside_0_60:
-            return np.log(1/60).item()
+        if self.example_number == 1:
+            depths_in_0_60 = all([m_p < 60.0 and m_p > 0. for m_p in model])
+            if depths_in_0_60: return np.log(1/60).item()
+        elif self.example_number == 2:
+            veloc_in_4_6 = all([m_p < 60.0 and m_p > 0. for m_p in model])
+            if veloc_in_4_6: return np.log(1/2).item()
+        elif self.example_number == 3:
+            depths_in_0_60 = all([m_p < 60 and m_p > 0 for m_p in model[[0,2,4,6,8]]])
+            veloc_in_4_6 = all([m_p < 60 and m_p > 0 for m_p in model[[1,3,5,7,9]]])
+            if depths_in_0_60 and veloc_in_4_6:
+                return np.log(1/60).item()
         return float("-inf")
 
 
