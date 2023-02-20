@@ -17,7 +17,17 @@ class ReceiverFunction(EspressoProblem):
     # TODO fill in the following metadata.
     metadata = {
         "problem_title": "Receiver function",                # To be used in docs
-        "problem_short_description": "",    # 1-3 sentences
+        "problem_short_description": \
+            """
+            'Receiver functions' are a class of seismic data used to study 
+            discontinuities (layering) in the Earth's crust. At each discontinuity, 
+            P-to-S conversions occur, introducing complexity in the waveform. By 
+            deconvolving horizontal- and vertical-channel waveforms from earthquakes 
+            at teleseismic distances, we can isolate information about these 
+            conversions, and hence learn about the crustal structure. This deconvolved 
+            signal is the receiver function, and has a highly non-linear dependence on 
+            the local crustal properties.
+            """,    # 1-3 sentences
 
         "author_names": ["Malcolm Sambridge"],    # List of names e.g. author_names = ["Sally Smith", "Mark Brown"]
 
@@ -51,36 +61,41 @@ class ReceiverFunction(EspressoProblem):
         self.rf = rf
 
         # example initialisation
+        self._ref_model_setup = np.array([[1,4.0,1.7],
+                                        [3.5,4.3,1.7],
+                                        [8.0,4.2,2.0],
+                                        [20, 6,1.7],
+                                        [45,6.2,1.7]])
+        self._t, self._data = self.rf.rfcalc(self._ref_model_setup, sn=0.5)
         if example_number == 1:
-            self._true_model_setup = np.array([[1,4.0,1.7],
-                                    [3.5,4.3,1.7],
-                                    [8.0,4.2,2.0],
-                                    [20, 6,1.7],
-                                    [45,6.2,1.7]])
+            self._description = "Inverting depths of the 2nd and 3rd interfaces"
             self._good_model = np.array([8., 20.])
-            self._t, self._data = self.rf.rfcalc(self._true_model_setup, sn=0.5)
+            self._null_model = np.array([10., 30.])
             self._interfaces = [2, 3]      # 1st and 2nd interfaces for inversion
+            self._nmodel = len(self._interfaces)
+        elif example_number == 2:
+            self._description = "Inverting velocities of 5 layers"
+            self._good_model = np.array([4., 4.3, 4.2, 6., 6.2])
+            self._null_model = np.ones(5) * 4.5
+            self._nmodel = self._ref_model_setup.shape[0]
+        elif example_number == 3:
+            self._description = "Inverting depths and velocities of 5 layers"
+            self._good_model = self._ref_model_setup[:,:2].flatten()
+            _null_depths = np.array([10,20,30,40,50])
+            _null_velocities = np.ones(5) * 4.5
+            _null_model = np.vstack((_null_depths, _null_velocities))
+            self._null_model = _null_model.T.flatten()
+            self._nmodel = len(self._null_model)
         else:
             raise InvalidExampleError
 
     @property
     def description(self):
-        return (
-            """
-            'Receiver functions' are a class of seismic data used to study 
-            discontinuities (layering) in the Earth's crust. At each discontinuity, 
-            P-to-S conversions occur, introducing complexity in the waveform. By 
-            deconvolving horizontal- and vertical-channel waveforms from earthquakes 
-            at teleseismic distances, we can isolate information about these 
-            conversions, and hence learn about the crustal structure. This deconvolved 
-            signal is the receiver function, and has a highly non-linear dependence on 
-            the local crustal properties.
-            """
-        )
+        return self._description
 
     @property
     def model_size(self):
-        return len(self._interfaces)
+        return self._nmodel
 
     @property
     def data_size(self):
@@ -92,7 +107,7 @@ class ReceiverFunction(EspressoProblem):
 
     @property
     def starting_model(self):
-        return np.ones(2)
+        return self._null_model
 
     @property
     def data(self):
@@ -108,12 +123,21 @@ class ReceiverFunction(EspressoProblem):
     def inverse_covariance_matrix(self):
         raise NotImplementedError               # optional
 
+    def _model_setup(self, model):
+        model_setup = np.copy(self._ref_model_setup)
+        if self.example_number == 1:
+            model_setup[self._interfaces,0] = model
+        elif self.example_number == 2:
+            model_setup[:,1] = model
+        elif self.example_number == 3:
+            model_setup[:,:2] = model.reshape(model_setup[:,:2].shape)
+        return model_setup
+
     def forward(self, model, with_jacobian=False, *args, **kwargs):
         if with_jacobian:
             raise NotImplementedError           # optional
         else:
-            model_setup = np.copy(self._true_model_setup)
-            model_setup[self._interfaces,0] = model
+            model_setup = self._model_setup(model)
             _, rfunc = self.rf.rfcalc(model_setup, *args, **kwargs)
             return rfunc
 
@@ -121,8 +145,7 @@ class ReceiverFunction(EspressoProblem):
         raise NotImplementedError               # optional
 
     def plot_model(self, model):
-        model_setup = np.copy(self._true_model_setup)
-        model_setup[self._interfaces,0] = model
+        model_setup = self._model_setup(model)
         px = np.zeros([2*len(model_setup),2])
         px[0::2,0] = model_setup[:,1]
         px[1::2,0] = model_setup[:,1]
