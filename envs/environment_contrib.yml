@@ -1,4 +1,4 @@
-name: esp_contrb
+name: esp_contrib
 channels:
   - conda-forge
   - defaults
@@ -8,7 +8,9 @@ dependencies:
   - scipy>=1.0.0
   - black
   - matplotlib
-  - scikit-build
   - pytest
+  - pip
   - pip:
     - pyyaml
+    - versioningit==2.1.0
+    - stdlib_list==0.8.0

@@ -8,14 +8,16 @@ build
 
 # Compiled source #
 ###################
-*.a
-*.o
-*.so
-*.mod
+# --- note: we need some dummy files to let pip keep track of
+# https://stackoverflow.com/questions/59597791/how-to-have-pip-uninstall-remove-files-created-after-installation
+# *.a
+# *.o
+# *.so
+# *.mod
 
 # Doc generated files #
 #######################
-docs/build
+docs/_build
 docs/source/user_guide/contrib/generated
 docs/source/user_guide/contrib/index.rst
 docs/source/user_guide/api/generated
@@ -39,6 +41,7 @@ pip-wheel-metadata
 wheelhouse
 .tox
 # MANIFEST
+src/cofi_espresso/_version.py
 
 # pytest cache #
 ################

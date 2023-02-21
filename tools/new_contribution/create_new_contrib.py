@@ -41,8 +41,7 @@ def main():
         raise RuntimeError("No example name detected.\n\nUsage: python create_new_contrib.py EXAMPLE_NAME\n\n")
     example_name = sys.argv[-1]
     existing_examples = glob(CONTRIB_FOLDER+"/*/")
-    existing_examples = [e for e in existing_examples]
-    existing_examples = [e.split("/")[1] for e in existing_examples]
+    existing_examples = [e.split("/")[-2] for e in existing_examples]
     if example_name in existing_examples:
         raise ValueError(
             "The example name provided already exists, please choose another name"

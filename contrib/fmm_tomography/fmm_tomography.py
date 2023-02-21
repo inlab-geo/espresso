@@ -1,9 +1,10 @@
-import random
+import subprocess
 import numpy as np
 from scipy.stats import multivariate_normal
 
-from cofi_espresso import EspressoProblem, InvalidExampleError
-from cofi_espresso.utils import absolute_path as path
+from cofi_espresso import EspressoProblem
+from cofi_espresso.exceptions import InvalidExampleError
+from cofi_espresso.utils import absolute_path as path, silent_remove
 from . import waveTracker as wt
 
 
@@ -55,7 +56,8 @@ class FmmTomography(EspressoProblem):
 
         current_dir = path(".")
         self.tmp_files = ["fm2dss.in", "frechet.out", "gridc.vtx", "otimes.dat",
-                    "raypath.out", "receivers.dat", "rtravel.out", "sources.dat"]
+                    "raypath.out", "receivers.dat", "rtravel.out", "sources.dat",
+                    "globalp.mod", "traveltime.mod"]
         self.tmp_paths = []
         for name in self.tmp_files:
             self.tmp_paths.append(current_dir / name)
@@ -96,9 +98,10 @@ class FmmTomography(EspressoProblem):
             self._strue = slowness_true
             self._sstart = slowness_starting
             self._data = ttdat
-            self.extent = extent
-            self.receivers = recs
-            self.sources = srcs
+            self.params["extent"] = extent
+            self.params["receivers"] = recs
+            self.params["sources"] = srcs
+            self.params["model_shape"] = slowness_true.shape
         else:
             raise InvalidExampleError
 
@@ -109,10 +112,6 @@ class FmmTomography(EspressoProblem):
     @property
     def model_size(self):
         return self.good_model.shape[0]
-
-    @property
-    def model_shape(self):
-        return self._strue.shape
 
     @property
     def data_size(self):
@@ -156,6 +155,7 @@ class FmmTomography(EspressoProblem):
         # paths = fmm.paths
         ttimes = fmm.ttimes
         A = fmm.frechet.toarray()
+        self.clean_tmp_files()
         if with_jacobian:
             return np.array(ttimes).flatten(), A
         else:
@@ -218,6 +218,10 @@ class FmmTomography(EspressoProblem):
     
     def log_prior(self, model):
         raise NotImplementedError               # optional
+
+    def clean_tmp_files(self):
+        for file_path in self.tmp_paths:
+            silent_remove(file_path)
     
 
 def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model
