@@ -95,7 +95,7 @@ class PumpingTestConfined(EspressoProblem):
 
     def log_likelihood(self, model):
         y_synthetics = self.forward(model)
-        residual = self._yp - y_synthetics
+        residual = self.data - y_synthetics
         return -0.5 * residual @ self.inverse_covariance_matrix @ residual.T
     
     def log_prior(self, model):
