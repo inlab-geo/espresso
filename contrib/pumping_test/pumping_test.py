@@ -1,10 +1,10 @@
+
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 from os import chdir
 chdir('../../src')
-from cofi_espresso import EspressoProblem, InvalidExampleError
+from cofi_espresso import EspressoProblem
 chdir('../contrib/pumping_test_confined')
 
 class PumpingTestConfined(EspressoProblem):
