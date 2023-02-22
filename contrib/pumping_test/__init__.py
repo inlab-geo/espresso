@@ -5,6 +5,6 @@ Code inside this file will be executed when this submodule is imported.
 For contributors: feel free to add your initialisation code here if needed.
 """
 
-from .pumping_test_confined import *
+from .pumping_test import *
 
-__all__ = [ "pumping_test_confined" ]
+__all__ = [ "pumping_test" ]
