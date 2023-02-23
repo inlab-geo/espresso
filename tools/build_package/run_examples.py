@@ -24,16 +24,16 @@ PKG_NAME = "cofi_espresso"
 ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
 CONTRIB_FOLDER = ROOT + "/contrib"
 
-def problem_name_to_class(problem_name):   # e.g. "xray_tomography" -> "XrayTomography"
+def _problem_name_to_class(problem_name):   # e.g. "xray_tomography" -> "XrayTomography"
     return problem_name.title().replace("_", "")
 
-def get_folder_content(folder_name):
+def _get_folder_content(folder_name):
     names = [name for name in os.listdir(folder_name)]
     paths = [f"{folder_name}/{name}" for name in names]
     return names, paths
 
-def problems_to_run(problems_specified: typing.Optional[list] = None):
-    all_problems = get_folder_content(CONTRIB_FOLDER)
+def _problems_to_run(problems_specified: typing.Optional[list] = None):
+    all_problems = _get_folder_content(CONTRIB_FOLDER)
     all_problems_zipped = list(zip(*all_problems))
     if problems_specified is None:
         return all_problems_zipped
@@ -49,18 +49,18 @@ def problems_to_run(problems_specified: typing.Optional[list] = None):
             )
         return problems
 
-# two cases:
-# 1. run the examples from contrib/ (pre-build)
-# 2. run the examples from a built espresso package (post-build)
-
-def problem_module_pre_build(problem_name: str):
-    sys.path.insert(1, CONTRIB_FOLDER)
-    return __import__(problem_name)
-
-def problem_module_post_build():
-    importlib = __import__("importlib")
-    return importlib.import_module(PKG_NAME)
-
+def _problem_module(pre_build, problem_name):
+    """get the parent module of a problem class
+    two different cases:
+    1. run the examples from contrib/ (pre-build)
+    2. run the examples from a built espresso package (post-build)
+    """
+    if pre_build:
+        sys.path.insert(1, CONTRIB_FOLDER)
+        return __import__(problem_name)
+    else:
+        importlib = __import__("importlib")
+        return importlib.import_module(PKG_NAME)
 
 # For each of the below methods / properties,
 # 1. Try to get / access 
@@ -92,17 +92,7 @@ prob_properties = [
     ("inv_cov", "inverse_covariance_matrix"),
 ]
 
-def run_example(problem_class, problem_class_str, i):
-    all_outputs = dict()
-    prob_instance_i = problem_class(i)
-    all_outputs["prob_instance_str"] = f"{problem_class_str}({i})"
-    for (output_name, prop) in prob_properties:
-        try:
-            all_outputs[output_name] = getattr(prob_instance_i, prop)
-        except NotImplementedError:
-            all_outputs[output_name] = None
-        except Exception as e:
-            all_outputs[output_name] = e
+def collect_methods_outputs(prob_instance_i, all_outputs):
     for (output_name, how_to_get) in prob_methods:
         try:
             all_outputs[output_name] = how_to_get(prob_instance_i)
@@ -110,34 +100,56 @@ def run_example(problem_class, problem_class_str, i):
             all_outputs[output_name] = None
         except Exception as e:
             all_outputs[output_name] = e
+
+def collect_properties(prob_instance_i, all_outputs):
+    for (output_name, prop) in prob_properties:
+        try:
+            all_outputs[output_name] = getattr(prob_instance_i, prop)
+        except NotImplementedError:
+            all_outputs[output_name] = None
+        except Exception as e:
+            all_outputs[output_name] = e
+
+def run_example(problem_class, problem_class_str, i) -> dict:
+    # prepare
+    all_outputs = dict()
+    prob_instance_i = problem_class(i)
+    all_outputs["prob_instance_str"] = f"{problem_class_str}({i})"
+    all_outputs["i"] = i
+    # collect results
+    collect_methods_outputs(prob_instance_i, all_outputs)
+    collect_properties(prob_instance_i, all_outputs)
     return all_outputs
 
-def run_problem(problem_class, problem_class_str):
+def run_problem(problem_class, problem_class_str) -> typing.Iterator[dict]:
     i = 1
     while True:
         if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
         try:
-            yield i, run_example(problem_class, problem_class_str, i)
+            yield run_example(problem_class, problem_class_str, i)
         except cofi_espresso.exceptions.InvalidExampleError:
-            assert i-1 > 0, "ensure there are at least one examples"
-            break
+            if i == 1: raise ValueError("Ensure there are at least one examples")
+            return
         i += 1
 
-def run_problems(pre_build, problems_specified = None):
-    problems = problems_to_run(problems_specified)
-    if not pre_build:
-        parent_module = problem_module_post_build()
+def run_problems(problems, pre_build):
     for (prob_name, prob_path) in problems:
-        if pre_build:
-            parent_module = problem_module_pre_build(prob_name)
-        prob_class_str = problem_name_to_class(prob_name)
+        parent_module = _problem_module(pre_build, prob_name)
+        prob_class_str = _problem_name_to_class(prob_name)
         prob_class = getattr(parent_module, prob_class_str)
-        yield prob_class, prob_class_str, run_problem(prob_class, prob_class_str)
+        yield {
+            "problem class": prob_class, 
+            "problem class str": prob_class_str, 
+            "problem path": prob_path, 
+            "problem results generator": run_problem(prob_class, prob_class_str),
+        }
 
 def main():
-    for prob_class, prob_class_str, prob_out_gen in run_problems(True):
-        print(prob_class)
-        for i, prob_out_i in prob_out_gen:
+    problems = _problems_to_run(problems_specified=None)
+    results = run_problems(problems, pre_build=True)
+    for prob in results:
+        print(prob["problem class"])
+        for prob_out_i in prob["problem results generator"]:
             print(prob_out_i.keys())
 
 if __name__ == "__main__":
