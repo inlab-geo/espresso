@@ -10,7 +10,7 @@ from cofi_espresso.exceptions import InvalidExampleError
 
 class SinusoidalTest(EspressoProblem):
     """Forward simulation class
-    """
+    """ 
 
     metadata = {
         "problem_title": "Aquifer sinusoidal hydraulic test",
