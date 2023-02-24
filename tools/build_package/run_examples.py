@@ -13,6 +13,7 @@ import typing
 
 try:
     import cofi_espresso
+    from cofi_espresso.exceptions import InvalidExampleError
 except ModuleNotFoundError as e:
     e.msg += "\n\nNote: To run pre-build validation, please firstly install " \
              "`cofi_espresso` core module by running the following from the root" \
@@ -27,13 +28,13 @@ CONTRIB_FOLDER = ROOT + "/contrib"
 def _problem_name_to_class(problem_name):   # e.g. "xray_tomography" -> "XrayTomography"
     return problem_name.title().replace("_", "")
 
-def _get_folder_content(folder_name):
+def get_folder_content(folder_name):
     names = [name for name in os.listdir(folder_name)]
     paths = [f"{folder_name}/{name}" for name in names]
     return names, paths
 
-def _problems_to_run(problems_specified: typing.Optional[list] = None):
-    all_problems = _get_folder_content(CONTRIB_FOLDER)
+def problems_to_run(problems_specified: typing.Optional[list] = None):
+    all_problems = get_folder_content(CONTRIB_FOLDER)
     all_problems_zipped = list(zip(*all_problems))
     if problems_specified is None:
         return all_problems_zipped
@@ -76,7 +77,7 @@ prob_methods = [
     ("jac2", lambda p: p.forward(p.good_model, True)[1]),
     ("fig_model", lambda p: p.plot_model(p.good_model)),
     ("fig_data", lambda p: p.plot_data(p.data)),
-    ("misfit", lambda p: p.plot_data(p.data, p.data)),
+    ("misfit", lambda p: p.misfit(p.data, p.data)),
     ("log_likelihood", lambda p: p.log_likelihood(p.data, p.data)),
     ("log_prior", lambda p: p.log_prior(p.good_model)),
 ]
@@ -122,22 +123,28 @@ def run_example(problem_class, problem_class_str, i) -> dict:
     return all_outputs
 
 def run_problem(problem_class, problem_class_str) -> typing.Iterator[dict]:
+    if isinstance(problem_class, Exception): return []
     i = 1
     while True:
         if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
         try:
-            yield run_example(problem_class, problem_class_str, i)
-        except cofi_espresso.exceptions.InvalidExampleError:
+            example_res = run_example(problem_class, problem_class_str, i)
+        except InvalidExampleError:
             if i == 1: raise ValueError("Ensure there are at least one examples")
             return
         i += 1
+        yield example_res
 
 def run_problems(problems, pre_build):
     for (prob_name, prob_path) in problems:
         parent_module = _problem_module(pre_build, prob_name)
         prob_class_str = _problem_name_to_class(prob_name)
-        prob_class = getattr(parent_module, prob_class_str)
+        try:
+            prob_class = getattr(parent_module, prob_class_str)
+        except Exception as e:
+            prob_class = e
         yield {
+            "parent module": parent_module,
             "problem class": prob_class, 
             "problem class str": prob_class_str, 
             "problem path": prob_path, 
@@ -145,11 +152,11 @@ def run_problems(problems, pre_build):
         }
 
 def main():
-    problems = _problems_to_run(problems_specified=None)
+    problems = problems_to_run(problems_specified=None)
     results = run_problems(problems, pre_build=True)
-    for prob in results:
-        print(prob["problem class"])
-        for prob_out_i in prob["problem results generator"]:
+    for res in results:
+        print(res["problem class"])
+        for prob_out_i in res["problem results generator"]:
             print(prob_out_i.keys())
 
 if __name__ == "__main__":
