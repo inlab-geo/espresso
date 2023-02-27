@@ -35,7 +35,7 @@ class SlugTest(EspressoProblem):
         if self.example_number == 1:
             self._xp = xp1.copy()
             self._yp = yp1.copy()
-            self._m = np.ones(4)
+            self._m = np.array([0.1, 0.1, 1e-3, 1.])
             #self._basis = ''
             self._desc = "Cooper-Bredehoeft-Papadopulos (1967) confined "\
                          "aquifer slug test solution"
@@ -43,7 +43,7 @@ class SlugTest(EspressoProblem):
         elif self.example_number == 2:
             self._xp = xp2.copy()
             self._yp = yp2.copy()
-            self._m = np.ones(4)
+            self._m = np.array([0.1, 0.1, 0.01, 0.003, 10., 1.])
             #self._basis = ''
             self._desc = "Hvorslev (1951) confined aquifer slug test "\
                          "solution"
