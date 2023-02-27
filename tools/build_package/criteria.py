@@ -277,11 +277,11 @@ def criteria_for_example(all_results):
         if isinstance(obj, Exception):
             raise obj
         if obj is None and required:
-            raise TypeError(f"{obj_str} is required but you haven't implemented it")
+            raise NotImplementedError(f"{obj_str} is required but you haven't implemented it")
         if obj is not None:
             for check_func in to_check:
                 check_func(all_results, obj, obj_str)
-    
+
 
 def main():
     problems = run_examples.problems_to_run(problems_specified=["testtest"])
