@@ -4,6 +4,9 @@
    - tested by test_examples.py
 2. If post-build, checking all required packages are specified
    - tested by check_requires.py
+
+Usage: 
+python validate.py [-h] [--contrib CONTRIBS] [--all] [--pre] [--post]
 """
 
 import sys

@@ -166,9 +166,9 @@ def run_problems(problems, pre_build):
                 "problem results generator": run_problem(prob_class, prob_class_str),
             }
 
-def main():
+def main(problems_specified=None):
     _you_want_to_print_something = False
-    problems = problems_to_run(problems_specified=None)
+    problems = problems_to_run(problems_specified)
     results = run_problems(problems, pre_build=True)
     for res in results:
         if _you_want_to_print_something: print(res["problem class"])

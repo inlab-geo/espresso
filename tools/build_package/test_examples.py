@@ -3,7 +3,6 @@
 2. criteria specified in: criteria.py
 """
 
-import argparse
 import pathlib
 import pytest
 

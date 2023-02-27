@@ -10,6 +10,8 @@ import pathlib
 import pytest
 from stdlib_list import stdlib_list
 
+import validate
+
 
 known_dependencies = [
     "numpy",
@@ -23,7 +25,20 @@ known_dependencies = [
     "tqdm",
 ]
 
-def strip_pkg(modules):
+args = validate.args
+
+def _pre_build():
+    return args.pre or (not args.pre and not args.post)
+
+def _all_contribs():
+    pre = _pre_build()
+    problems = run_examples.problems_to_run(args.contribs)
+    print("🥃 Running " + ("pre-" if pre else "post-") + "build tests for the following contributions:")
+    print("- " + "\n- ".join([c[0] for c in problems]) + "\n")
+    results = run_examples.run_problems(problems, pre_build=pre)
+    return results
+
+def _strip_pkg(modules):
     res = set()
     for mod in modules:
         pkg = mod.split(".")[0]
@@ -31,27 +46,27 @@ def strip_pkg(modules):
             res.add(pkg)
     return res
 
-def get_inbuilt_pkg():
-    return strip_pkg(stdlib_list("3.7"))
+def _get_inbuilt_pkg():
+    return _strip_pkg(stdlib_list("3.7"))
 
-def get_known_depended_pkg():
+def _get_known_depended_pkg():
     for pkg in known_dependencies:
         __import__(pkg)
-    return strip_pkg(set(sys.modules.keys()))
+    return _strip_pkg(set(sys.modules.keys()))
 
-def get_imported_pkg():
+def _get_imported_pkg():
     import run_examples
-    run_examples.main()
-    return strip_pkg(set(sys.modules.keys()))
+    run_examples.main(args.contribs)
+    return _strip_pkg(set(sys.modules.keys()))
 
-def get_requirements():
-    inbuilt = get_inbuilt_pkg()
-    known_depended = get_known_depended_pkg()
-    all_imported = get_imported_pkg()
+def _get_requirements():
+    inbuilt = _get_inbuilt_pkg()
+    known_depended = _get_known_depended_pkg()
+    all_imported = _get_imported_pkg()
     return inbuilt, known_depended, all_imported
 
 def get_extra_requirements():
-    inbuilt, known_depended, all_imported = get_requirements()
+    inbuilt, known_depended, all_imported = _get_requirements()
     to_exclude = {"cofi_espresso", "run_examples"}
     new_dependencies = all_imported - known_depended - inbuilt
     not_listed = new_dependencies - to_exclude
