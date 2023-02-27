@@ -7,4 +7,4 @@ For contributors: feel free to add your initialisation code here if needed.
 
 from .sinusoidal_test import *
 
-__all__ = [ "sinusoidal_test" ]
+__all__ = [ "SinusoidalTest" ]

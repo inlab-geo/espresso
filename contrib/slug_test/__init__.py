@@ -7,4 +7,4 @@ For contributors: feel free to add your initialisation code here if needed.
 
 from .slug_test import *
 
-__all__ = [ "slug_test" ]
+__all__ = [ "SlugTest" ]

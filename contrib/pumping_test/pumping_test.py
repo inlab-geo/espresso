@@ -35,29 +35,34 @@ class PumpingTest(EspressoProblem):
         self._xp = xp.copy()
         if self.example_number == 1:
             self._yp = yp1.copy()
-            self._m = np.array([10., 432., 1., 1e-4])
+            self._m_fixed = np.array([10., 432.])
+            self._m = np.array([1., 1e-4])
             self._desc = "Theis (1935) confined aquifer pumping test solution"
             self._sigma = 0.1
         elif self.example_number == 2:
             self._yp = yp2.copy()
-            self._m = np.array([10., 432., 0.1, 10., 1e-5, 1e-3, 1.6])
+            self._m_fixed = np.array([10., 432.])
+            self._m = np.array([0.1, 10., 1e-5, 1e-3, 1.6])
             self._desc = "Hantush and Jacob (1955) leaky aquifer pumping "\
                          "test solution excluding aquitard storage"
             self._sigma = 0.1
         elif self.example_number == 3:
             self._yp = yp3.copy()
-            self._m = np.array([10., 432., 0.1, 10., 1e-5, 1e-3, 1.6, 1e-10])
+            self._m_fixed = np.array([10., 432.])
+            self._m = np.array([0.1, 10., 1e-5, 1e-3, 1.6, 1e-10])
             self._desc = "Hantush (1960) leaky aquifer pumping test solution "\
                          "including aquitard storage"
             self._sigma = 0.1
         elif self.example_number == 4:
             self._yp = yp4.copy()
-            self._m = np.array([10., 432., 0.1, 10., 1e-5, 2.])
+            self._m_fixed = np.array([10., 432.])
+            self._m = np.array([0.1, 10., 1e-5, 2.])
             self._desc = "Barker (1988) fractured rock aquifer pumping test "\
                          "solution"
             self._sigma = 0.1
         #elif self.example_number == 5:
         #    self._yp = yp5.copy()
+        #    self._m_fixed = np.array([10., 432.])
         #    self._m = np.ones(2)
         #    self._desc = "Neuman (1974) unconfined aquifer pumping test "\
         #                 "solution"
@@ -91,24 +96,27 @@ class PumpingTest(EspressoProblem):
 
     @property
     def covariance_matrix(self):
-        return self._sigma**2 * np.eye(self.data_size)
+        return self._sigma**2.*np.eye(self.data_size)
 
     @property
     def inverse_covariance_matrix(self):
-        return 1./self._sigma**2 * np.eye(self.data_size)
+        return 1./self._sigma**2.*np.eye(self.data_size)
         
-    def forward(self, model):
+    def forward(self, model, with_jacobian=False):
+        if with_jacobian:
+            raise NotImplementedError
         if self.example_number == 1:
             from mpmath import pi, sqrt, besselk, invertlaplace
             times = self._xp
-            r, Q, T, S = self._m
+            r, Q = self._m_fixed
+            T, S = model
             fp = lambda p: Q/(2.*pi*T*p)*besselk(0, r*sqrt(p*S/T))
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
                              for t in times])
         elif self.example_number == 2:
             from mpmath import pi, sqrt, besselk, invertlaplace
             times = self._xp
-            r, Q, K, b, Ss, Kp, bp = self._m
+            r, Q, K, b, Ss, Kp, bp = model
             fp = lambda p: Q/(2.*pi*K*b*p)*besselk(0, r*sqrt(p*Ss/K+1./
                                                             (K*b*bp/Kp))) 
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
@@ -116,7 +124,8 @@ class PumpingTest(EspressoProblem):
         elif self.example_number == 3:
             from mpmath import pi, sqrt, coth, besselk, invertlaplace
             times = self._xp
-            r, Q, K, b, Ss, Kp, bp, Ssp = self._m
+            r, Q = self._m_fixed
+            K, b, Ss, Kp, bp, Ssp = model
             fp = lambda p: Q/(2.*pi*K*b*p)*besselk(0, r*sqrt(p*Ss/K+1./
                            (K*b*bp/Kp)*sqrt(p*Ssp/(Ss*b)*(K*b*bp/Kp))*
                            coth(sqrt(p*Ssp/(Ss*b)*(K*b*bp/Kp)))))
@@ -125,7 +134,8 @@ class PumpingTest(EspressoProblem):
         elif self.example_number == 4:
             from mpmath import pi, sqrt, gamma, besselk, invertlaplace
             times = self._xp
-            r, Q, K, b, Ss, n = self._m
+            r, Q = self._m_fixed
+            K, b, Ss, n = model
             fp = lambda p: (Q*r**(1.-n/2.)*besselk(1.-n/2., r*sqrt(p*Ss/K))/
                            (p*K*b**(3.-n)*(2.*pi**(n/2.)/gamma(n/2.))*
                            (r*sqrt(p*Ss/K))**(1.-n/2.)*2.**(-(1.-n/2.))*
@@ -144,8 +154,8 @@ class PumpingTest(EspressoProblem):
     def plot_model(self, model):
         raise NotImplementedError               # optional
     
-    def plot_data(self):
-        plt.errorbar(self._xp, self._yp, yerr=self._sigma, fmt='.', 
+    def plot_data(self, data):
+        plt.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
         plt.xscale("log")
         plt.grid(True, which="both")
@@ -154,10 +164,9 @@ class PumpingTest(EspressoProblem):
     def misfit(self, data, data2):              # optional
         raise NotImplementedError
 
-    def log_likelihood(self, model):
-        y_synthetics = self.forward(model)
-        residual = self.data - y_synthetics
-        return -0.5 * residual @ self.inverse_covariance_matrix @ residual.T
+    def log_likelihood(self, data, data2): 
+        residual = data - data2
+        return (-0.5*residual@self.inverse_covariance_matrix@residual.T).item()
     
     def log_prior(self, model):
         raise NotImplementedError

@@ -35,16 +35,16 @@ class SlugTest(EspressoProblem):
         if self.example_number == 1:
             self._xp = xp1.copy()
             self._yp = yp1.copy()
-            self._m = np.array([0.1, 0.1, 1e-3, 1.])
-            #self._basis = ''
+            self._m_fixed = np.array([0.1, 1.])
+            self._m = np.array([0.1, 1e-3])
             self._desc = "Cooper-Bredehoeft-Papadopulos (1967) confined "\
                          "aquifer slug test solution"
             self._sigma = 0.1
         elif self.example_number == 2:
             self._xp = xp2.copy()
             self._yp = yp2.copy()
-            self._m = np.array([0.1, 0.1, 0.01, 0.003, 10., 1.])
-            #self._basis = ''
+            self._m_fixed = np.array([0.1, 10., 1.])
+            self._m = np.array([0.01, 0.003])
             self._desc = "Hvorslev (1951) confined aquifer slug test "\
                          "solution"
             self._sigma = 0.1
@@ -77,27 +77,33 @@ class SlugTest(EspressoProblem):
 
     @property
     def covariance_matrix(self):
-        return self._sigma**2 * np.eye(self.data_size)
+        return self._sigma**2.*np.eye(self.data_size)
 
     @property
     def inverse_covariance_matrix(self):
-        return 1./self._sigma**2 * np.eye(self.data_size)
+        return 1./self._sigma**2.*np.eye(self.data_size)
         
-    def forward(self, model):
+    def forward(self, model, with_jacobian=False):
+        if with_jacobian:
+            raise NotImplementedError
         if self.example_number == 1:
             from mpmath import sqrt, besselk, invertlaplace
-            times = self.xp1
-            rw, rc, T, S, H0 = self.m
-            fp = lambda p: (H0*rw*S*besselk(0, rw*sqrt(p*S/T))/((T*sqrt(p*S/T))*
-                           (rw*sqrt(p*S/T)*besselk(0, rw*sqrt(p*S/T))+2*(rw**2.)*S/
-                           (rc**2.)*besselk(1, rw*sqrt(p*S/T)))))
+            times = self._xp1
+            rw, H0 = self._m_fixed
+            T, S = model
+            fp = lambda p: (H0*rw*S*besselk(0, rw*sqrt(p*S/T))/
+                           ((T*sqrt(p*S/T))*(rw*sqrt(p*S/T)*
+                            besselk(0, rw*sqrt(p*S/T))+2*(rw**2.)*S/(rw**2.)*
+                            besselk(1, rw*sqrt(p*S/T)))))
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
                              for t in times])
         elif self.example_number == 2:
             from mpmath import sqrt, asinh, besselk, invertlaplace
-            times = self.xp2
-            rw, Kr, Kz, L, H0 = self.m
-            fp = lambda p: H0/(p+(2.*Kr*L)/(rw**2.*asinh(L/(2.*rw*sqrt(Kz/Kr)))))
+            times = self._xp2
+            rw, L, H0 = self._m_fixed
+            Kr, Kz = model
+            fp = lambda p: H0/(p+(2.*Kr*L)/(rw**2.*asinh(L/(2.*rw*
+                           sqrt(Kz/Kr)))))
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
                              for t in times])
         else:
@@ -110,8 +116,8 @@ class SlugTest(EspressoProblem):
     def plot_model(self, model):
         raise NotImplementedError               # optional
     
-    def plot_data(self):
-        plt.errorbar(self._xp, self._yp, yerr=self._sigma, fmt='.', 
+    def plot_data(self, data):
+        plt.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
         plt.xscale("log")
         plt.grid(True, which="both")
@@ -120,10 +126,9 @@ class SlugTest(EspressoProblem):
     def misfit(self, data, data2):              # optional
         raise NotImplementedError
 
-    def log_likelihood(self, model):
-        y_synthetics = self.forward(model)
-        residual = self.data - y_synthetics
-        return -0.5 * residual @ self.inverse_covariance_matrix @ residual.T
+    def log_likelihood(self, data, data2): 
+        residual = data - data2
+        return (-0.5*residual@self.inverse_covariance_matrix@residual.T).item()
     
     def log_prior(self, model):
         raise NotImplementedError

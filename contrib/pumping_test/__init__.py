@@ -7,4 +7,4 @@ For contributors: feel free to add your initialisation code here if needed.
 
 from .pumping_test import *
 
-__all__ = [ "pumping_test" ]
+__all__ = [ "PumpingTest" ]

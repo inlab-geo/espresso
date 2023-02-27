@@ -84,13 +84,15 @@ class SinusoidalTest(EspressoProblem):
 
     @property
     def covariance_matrix(self):
-        return self._sigma**2 * np.eye(self.data_size)
+        return self._sigma**2.*np.eye(self.data_size)
 
     @property
     def inverse_covariance_matrix(self):
-        return 1./self._sigma**2 * np.eye(self.data_size)
+        return 1./self._sigma**2.*np.eye(self.data_size)
         
-    def forward(self, model):
+    def forward(self, model, with_jacobian=False):
+        if with_jacobian:
+            raise NotImplementedError
         if self.example_number == 1:
             from mpmath import pi, sqrt, exp, besselk
             times = self.xp1
@@ -124,8 +126,8 @@ class SinusoidalTest(EspressoProblem):
     def plot_model(self, model):
         raise NotImplementedError               # optional
     
-    def plot_data(self):
-        plt.errorbar(self._xp, self._yp, yerr=self._sigma, fmt='.', 
+    def plot_data(self, data):
+        plt.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
         plt.xscale("log")
         plt.grid(True, which="both")
@@ -134,10 +136,9 @@ class SinusoidalTest(EspressoProblem):
     def misfit(self, data, data2):              # optional
         raise NotImplementedError
 
-    def log_likelihood(self, model):
-        y_synthetics = self.forward(model)
-        residual = self.data - y_synthetics
-        return -0.5 * residual @ self.inverse_covariance_matrix @ residual.T
+    def log_likelihood(self, data, data2): 
+        residual = data - data2
+        return (-0.5*residual@self.inverse_covariance_matrix@residual.T).item()
     
     def log_prior(self, model):
         raise NotImplementedError
