@@ -6,6 +6,7 @@ $ python tools/build_package/build.py
 """
 
 import sys
+import pathlib
 import pytest
 from stdlib_list import stdlib_list
 
@@ -39,8 +40,8 @@ def get_known_depended_pkg():
     return strip_pkg(set(sys.modules.keys()))
 
 def get_imported_pkg():
-    from run_examples import run_problems
-    run_problems(True)
+    import run_examples
+    run_examples.main()
     return strip_pkg(set(sys.modules.keys()))
 
 def get_requirements():
@@ -63,4 +64,4 @@ def test_requires():
     print("√ Passed requirements test.")
 
 if __name__ == "__main__":
-    test_requires()
+    pytest.main([pathlib.Path(__file__)])

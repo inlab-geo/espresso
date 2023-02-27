@@ -50,18 +50,32 @@ def problems_to_run(problems_specified: typing.Optional[list] = None):
             )
         return problems
 
-def _problem_module(pre_build, problem_name):
+class _ProblemModule:
     """get the parent module of a problem class
     two different cases:
     1. run the examples from contrib/ (pre-build)
     2. run the examples from a built espresso package (post-build)
     """
-    if pre_build:
-        sys.path.insert(1, CONTRIB_FOLDER)
-        return __import__(problem_name)
-    else:
-        importlib = __import__("importlib")
-        return importlib.import_module(PKG_NAME)
+    def __init__(self, pre_build, problem_name):
+        self._pre_build = pre_build
+        self._problem_name = problem_name
+
+    def __enter__(self):
+        if self._pre_build:
+            sys.path.insert(1, CONTRIB_FOLDER)
+            return __import__(self._problem_name)
+        else:
+            return __import__(PKG_NAME)
+        
+    def __exit__(self, exc_type, exc_value, traceback):
+        # print(sys.modules)
+        _to_del = set()
+        for key in sys.modules.keys():
+            if self._problem_name in key:
+                _to_del.add(key)
+        for m in _to_del:
+            del sys.modules[m]
+
 
 # For each of the below methods / properties,
 # 1. Try to get / access 
@@ -137,27 +151,29 @@ def run_problem(problem_class, problem_class_str) -> typing.Iterator[dict]:
 
 def run_problems(problems, pre_build):
     for (prob_name, prob_path) in problems:
-        parent_module = _problem_module(pre_build, prob_name)
-        prob_class_str = _problem_name_to_class(prob_name)
-        try:
-            prob_class = getattr(parent_module, prob_class_str)
-        except Exception as e:
-            prob_class = e
-        yield {
-            "parent module": parent_module,
-            "problem class": prob_class, 
-            "problem class str": prob_class_str, 
-            "problem path": prob_path, 
-            "problem results generator": run_problem(prob_class, prob_class_str),
-        }
+        with _ProblemModule(pre_build, prob_name) as parent_module:
+        # parent_module = _problem_module(pre_build, prob_name)
+            prob_class_str = _problem_name_to_class(prob_name)
+            try:
+                prob_class = getattr(parent_module, prob_class_str)
+            except Exception as e:
+                prob_class = e
+            yield {
+                "parent module": parent_module,
+                "problem class": prob_class, 
+                "problem class str": prob_class_str, 
+                "problem path": prob_path, 
+                "problem results generator": run_problem(prob_class, prob_class_str),
+            }
 
 def main():
+    _you_want_to_print_something = False
     problems = problems_to_run(problems_specified=None)
     results = run_problems(problems, pre_build=True)
     for res in results:
-        print(res["problem class"])
+        if _you_want_to_print_something: print(res["problem class"])
         for prob_out_i in res["problem results generator"]:
-            print(prob_out_i.keys())
+            if _you_want_to_print_something: print(prob_out_i.keys())
 
 if __name__ == "__main__":
     main()
