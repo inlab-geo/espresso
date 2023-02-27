@@ -69,7 +69,7 @@ class SlugTest(EspressoProblem):
 
     @property
     def starting_model(self):
-        return np.zeros_like(self._m)
+        return np.ones_like(self._m)
     
     @property
     def data(self):
