@@ -98,14 +98,15 @@ class SinusoidalTest(EspressoProblem):
             times = self.xp1
             r, Q0, T, S, w = self.m
             return np.array([float(np.real(Q0*exp(1j*w*t)/(2.*pi*T)*
-                             besselk(0, r*sqrt(1j*w*S/T)))) for t in times])
+                             besselk(0, r*sqrt(1j*w*S/T)))) if t!=0. else 0. 
+                             for t in times])
         elif self.example_number == 2:
             from mpmath import pi, sqrt, besselk
             times = self.xp2
             r, Q0, K, b, Ss, Kp, bp, w = self.m
             return np.array([float(np.real(Q0*exp(1j*w*t)/(2.*pi*K*b)*
                              besselk(0, r*sqrt(1j*w*Ss/K+Kp*b/(K*bp))))) 
-                             for t in times])
+                             if t!=0. else 0. for t in times])
         elif self.example_number == 3:
             from mpmath import pi, sqrt, gamma, besselk
             times = self.xp3
@@ -115,7 +116,7 @@ class SinusoidalTest(EspressoProblem):
                             (1.+Ss*((rw*sqrt(Ss/K))*besselk(1.-n/2.-1., 
                             rw*sqrt(Ss/K))/besselk(1.-n/2., rw*sqrt(Ss/K))+
                             K*b**(3.-n)*(2.*pi**(n/2.)/gamma(n/2.))))))) 
-                            for t in times])
+                            if t!=0. else 0. for t in times])
         else:
             raise InvalidExampleError
            

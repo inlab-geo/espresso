@@ -96,7 +96,7 @@ class SlugTest(EspressoProblem):
                             besselk(0, rw*sqrt(p*S/T))+2*(rw**2.)*S/(rw**2.)*
                             besselk(1, rw*sqrt(p*S/T)))))
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
-                             for t in times])
+                             if t!=0. else H0 for t in times])
         elif self.example_number == 2:
             from mpmath import sqrt, asinh, besselk, invertlaplace
             times = self._xp2
@@ -105,7 +105,7 @@ class SlugTest(EspressoProblem):
             fp = lambda p: H0/(p+(2.*Kr*L)/(rw**2.*asinh(L/(2.*rw*
                            sqrt(Kz/Kr)))))
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
-                             for t in times])
+                             if t!=0. else H0 for t in times])
         else:
             raise InvalidExampleError
            

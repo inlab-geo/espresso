@@ -112,15 +112,16 @@ class PumpingTest(EspressoProblem):
             T, S = model
             fp = lambda p: Q/(2.*pi*T*p)*besselk(0, r*sqrt(p*S/T))
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
-                             for t in times])
+                             if t!=0. else 0. for t in times])
         elif self.example_number == 2:
             from mpmath import pi, sqrt, besselk, invertlaplace
             times = self._xp
-            r, Q, K, b, Ss, Kp, bp = model
+            r, Q = self._m_fixed
+            K, b, Ss, Kp, bp = model
             fp = lambda p: Q/(2.*pi*K*b*p)*besselk(0, r*sqrt(p*Ss/K+1./
                                                             (K*b*bp/Kp))) 
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
-                             for t in times])
+                             if t!=0. else 0. for t in times])
         elif self.example_number == 3:
             from mpmath import pi, sqrt, coth, besselk, invertlaplace
             times = self._xp
@@ -130,7 +131,7 @@ class PumpingTest(EspressoProblem):
                            (K*b*bp/Kp)*sqrt(p*Ssp/(Ss*b)*(K*b*bp/Kp))*
                            coth(sqrt(p*Ssp/(Ss*b)*(K*b*bp/Kp)))))
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
-                             for t in times])
+                             if t!=0. else 0. for t in times])
         elif self.example_number == 4:
             from mpmath import pi, sqrt, gamma, besselk, invertlaplace
             times = self._xp
@@ -141,7 +142,7 @@ class PumpingTest(EspressoProblem):
                            (r*sqrt(p*Ss/K))**(1.-n/2.)*2.**(-(1.-n/2.))*
                            gamma(1.-(1.-n/2.))))
             return np.array([float(invertlaplace(fp, t, method='dehoog')) 
-                             for t in times])
+                             if t!=0. else 0. for t in times])
         #elif self.example_number == 5:
         #    pass
         else:
