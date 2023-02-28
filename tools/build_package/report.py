@@ -1,5 +1,44 @@
 """Generate API compliance report 
 
+Usage:
+- To generate raw report, raw_compliance_report(problems_to_check=None, pre_build=True)
+- To generate report, compliance_report(problems_to_check=None, pre_build=True)
+- To print report, print_compliance_report(report)
+
+A typical raw report looks like:
+{
+    'FmmTomography': {
+        'metadata': True, 
+        'attributes': {
+            'required': {
+                'model_size': [True], 
+                'data_size': [True], 
+                'good_model': [True], 
+                'starting_model': [True], 
+                'data': [True], 
+                'forward': [True]
+            }, 
+            'optional': {
+                'description': [None], 
+                'covariance_matrix': [None], 
+                'inverse_covariance_matrix': [None], 
+                'jacobian': [True], 
+                'forward': [True, True], 
+                'plot_model': [True], 
+                'plot_data': [None], 
+                'misfit': [None], 
+                'log_likelihood': [None], 
+                'log_prior': [None]
+            }, 
+            'additional': {
+                'exe_fm2dss', 
+                'clean_tmp_files', 
+                'tmp_paths', 
+                'tmp_files'
+            }
+        }
+    }
+}
 """
 
 import run_examples
@@ -54,7 +93,7 @@ def _collect_additional_attr(all_results, report):
     _additional_attr = {a for a in p_dir if a not in _standard_attr}
     report["additional"].update(_additional_attr)
 
-def raw_api_compliance_report(problems_to_check=None, pre_build=True):
+def raw_compliance_report(problems_to_check=None, pre_build=True):
     report = dict()
     problems = run_examples.problems_to_run(problems_specified=problems_to_check)
     results = run_examples.run_problems(problems, pre_build=pre_build)
@@ -81,3 +120,128 @@ def raw_api_compliance_report(problems_to_check=None, pre_build=True):
                 _collect_additional_attr(prob_out_i, _report_for_problem["attributes"])
         report[res["problem class str"]] = _report_for_problem
     return report
+
+def _analyse_report_dict(sub_report):
+    _new_report = dict()
+    _new_count = {
+        "implemented": 0,
+        "not_implemented": 0,
+        "error": 0,
+        "total": 0,
+    }
+    for item_name, item_report in sub_report.items():
+        _done = [r for r in item_report if r == True]
+        _has_error = [r for r in item_report if isinstance(r, Exception)]
+        if len(_done) == len(item_report):
+            _new_count["implemented"] += 1
+            _new_report[item_name] = "OK"
+        elif len(_has_error) > 0:
+            _new_count["error"] += 1
+            _new_report[item_name] = str(_has_error[0])
+        else:
+            _new_count["not_implemented"] += 1
+            _new_report[item_name] = "Not implemented"
+        _new_count["total"] += 1
+    return _new_report, _new_count
+
+def _analyse_compliance(new_report):
+    _metadata_ok = new_report["metadata"] == "OK"
+    _required_count = new_report["required_count"]
+    _required_ok = _required_count["implemented"] == _required_count["total"]
+    _optional_ok = new_report["optional_count"]["error"] == 0
+    return _metadata_ok and _required_ok and _optional_ok
+
+def compliance_report(problems_to_check=None, pre_build=True):
+    raw_report = raw_compliance_report(problems_to_check, pre_build)
+    new_report = dict()
+    for prob_name, prob_report in raw_report.items():
+        _new_report = dict()
+        # metadata
+        _metadata = prob_report["metadata"]
+        _new_report["metadata"] = "OK" if _metadata == True else _metadata
+        # required
+        _res = _analyse_report_dict(prob_report["attributes"]["required"])
+        _new_report["required"] = _res[0]
+        _new_report["required_count"] = _res[1]
+        # optional
+        _res = _analyse_report_dict(prob_report["attributes"]["optional"])
+        _new_report["optional"] = _res[0]
+        _new_report["optional_count"] = _res[1]
+        # additional
+        _new_report["additional"] = prob_report["attributes"]["additional"]
+        _new_report["additional_count"] = len(_new_report["additional"])
+        # sum up
+        _new_report["api_compliance"] = _analyse_compliance(_new_report)
+        new_report[prob_name] = _new_report
+    return new_report
+
+# from SO: https://stackoverflow.com/questions/287871/how-do-i-print-colored-text-to-the-terminal
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def cformat(style, content):
+    return f"{style}{content}{bcolors.ENDC}"
+
+def pprint_compliance_report(report):
+    # title
+    _title = "ESPRESSO Machine - API Compliance Report"
+    print("-" * len(_title))
+    print(cformat(bcolors.HEADER, _title))
+    print("-" * len(_title))
+    for prob, r in report.items():
+        print()
+        #### problem name
+        print(cformat(bcolors.OKCYAN, cformat(bcolors.BOLD, prob)))
+        #### metadata
+        _metadata = cformat(bcolors.UNDERLINE, "Metadata") + ": "
+        if r["metadata"] == "OK":
+            _metadata += cformat(bcolors.OKGREEN, "OK")
+        else:
+            _metadata += cformat(bcolors.FAIL, r["metadata"])
+        print(_metadata)
+        #### required
+        _required_title = cformat(bcolors.UNDERLINE, "Required attributes") + ": "
+        _required_count = r["required_count"]
+        _required_title += (
+            f"{_required_count['implemented']}/{_required_count['implemented']} "
+            f"implemented, {_required_count['error']} errors, "
+            f"{_required_count['not_implemented']} not implemented yet"
+        )
+        print(_required_title)
+        for attr_name, attr_res in r["required"].items():
+            if attr_res == "OK": attr_res_str = cformat(bcolors.OKGREEN, "OK")
+            else: attr_res_str = cformat(bcolors.FAIL, attr_res)
+            print(f"\t.{attr_name}\t- {attr_res_str}")
+        #### optional
+        _optional_title = cformat(bcolors.UNDERLINE, "Optional attributes") + ": "
+        _optional_count = r["optional_count"]
+        _optional_title += (
+            f"{_optional_count['implemented']}/{_optional_count['total']} "
+            f"implemented, {_optional_count['error']} errors, "
+            f"{_optional_count['not_implemented']} not implemented yet"
+        )
+        print(_optional_title)
+        for attr_name, attr_res in r["optional"].items():
+            if attr_res == "OK": attr_res_str = cformat(bcolors.OKGREEN, "OK")
+            else: attr_res_str = cformat(bcolors.WARNING, attr_res)
+            print(f"\t.{attr_name}\t- {attr_res_str}")
+        #### additional
+        _additional_title = cformat(bcolors.UNDERLINE, "Additional attributes") + ": "
+        _additional_title += f"{r['additional_count']} detected"
+        print(_additional_title)
+        for attr_name in r["additional"]:
+            print(f"\t.{attr_name}")
+        #### sum up
+        _api_compliance = r["api_compliance"]
+        if _api_compliance:
+            print(cformat(bcolors.OKCYAN, f"\n{prob} is API-compliance. Cheers!"))
+        else:
+            print(cformat(bcolors.FAIL, f"\n{prob} is not API-compliant."))
