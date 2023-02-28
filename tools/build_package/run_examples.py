@@ -130,6 +130,7 @@ def run_example(problem_class, problem_class_str, i) -> dict:
     all_outputs = dict()
     prob_instance_i = problem_class(i)
     all_outputs["prob_instance_str"] = f"{problem_class_str}({i})"
+    all_outputs["prob_instance"] = prob_instance_i
     all_outputs["i"] = i
     # collect results
     collect_methods_outputs(prob_instance_i, all_outputs)
