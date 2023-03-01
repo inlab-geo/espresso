@@ -11,6 +11,6 @@ for a fully confined aquifer. These are:
 
 2. Hvorslev (1951) solution
 
-These solutions assume full aquifer penetration by the production well. All 
+These solutions assume full aquifer penetration by the tested well. All 
 solutions are calculated in the Laplace domain and are inverted to the time 
 domain numerically using the De Hoog et al. (1982) algorithm.
