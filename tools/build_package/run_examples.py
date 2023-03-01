@@ -13,6 +13,7 @@ import typing
 
 try:
     import cofi_espresso
+    from cofi_espresso.exceptions import InvalidExampleError
 except ModuleNotFoundError as e:
     e.msg += "\n\nNote: To run pre-build validation, please firstly install " \
              "`cofi_espresso` core module by running the following from the root" \
@@ -24,7 +25,7 @@ PKG_NAME = "cofi_espresso"
 ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
 CONTRIB_FOLDER = ROOT + "/contrib"
 
-def problem_name_to_class(problem_name):   # e.g. "xray_tomography" -> "XrayTomography"
+def _problem_name_to_class(problem_name):   # e.g. "xray_tomography" -> "XrayTomography"
     return problem_name.title().replace("_", "")
 
 def get_folder_content(folder_name):
@@ -49,95 +50,145 @@ def problems_to_run(problems_specified: typing.Optional[list] = None):
             )
         return problems
 
-# two cases:
-# 1. run the examples from contrib/ (pre-build)
-# 2. run the examples from a built espresso package (post-build)
+class _ProblemModule:
+    """get the parent module of a problem class
+    two different cases:
+    1. run the examples from contrib/ (pre-build)
+    2. run the examples from a built espresso package (post-build)
+    """
+    def __init__(self, pre_build, problem_name):
+        self._pre_build = pre_build
+        self._problem_name = problem_name
 
-def problem_module_pre_build(problem_name: str):
-    sys.path.insert(1, CONTRIB_FOLDER)
-    return __import__(problem_name)
+    def __enter__(self):
+        if self._pre_build:
+            sys.path.insert(1, CONTRIB_FOLDER)
+            return __import__(self._problem_name)
+        else:
+            return __import__(PKG_NAME)
+        
+    def __exit__(self, exc_type, exc_value, traceback):
+        # print(sys.modules)
+        _to_del = set()
+        for key in sys.modules.keys():
+            if self._problem_name in key:
+                _to_del.add(key)
+        for m in _to_del:
+            del sys.modules[m]
 
-def problem_module_post_build():
-    importlib = __import__("importlib")
-    return importlib.import_module(PKG_NAME)
 
-def run_example(problem_class, problem_class_str, i):
-    prob_instance_i = problem_class(i)
-    _prob_instance_i_str = f"{problem_class_str}({i})"
-    _nmodel = prob_instance_i.model_size
-    _ndata = prob_instance_i.data_size
-    _model = prob_instance_i.good_model
-    _null_model = prob_instance_i.starting_model
-    _data = prob_instance_i.data
-    _synth1 = prob_instance_i.forward(_model)
-    try: _jac1 = prob_instance_i.jacobian(_model)
-    except NotImplementedError: _jac1 = None
-    try: _synth2, _jac2 = prob_instance_i.forward(_model, True)
-    except NotImplementedError: _synth2, _jac2 = None, None
-    try: _fig_model = prob_instance_i.plot_model(_model)
-    except NotImplementedError: _fig_model = None
-    try: _fig_data = prob_instance_i.plot_data(_data)
-    except NotImplementedError: _fig_data = None
-    try: _misfit = prob_instance_i.misfit(_data, _data)
-    except NotImplementedError: _misfit = None
-    try: _log_likelihood = prob_instance_i.log_likelihood(_data, _data)
-    except NotImplementedError: _log_likelihood = None
-    try: _log_prior = prob_instance_i.log_prior(_model)
-    except NotImplementedError: _log_prior = None
-    try: _description = prob_instance_i.description
-    except NotImplementedError: _description = None
-    try: _cov = prob_instance_i.covariance_matrix
-    except NotImplementedError: _cov = None
-    try: _inv_cov = prob_instance_i.inverse_covariance_matrix
-    except NotImplementedError: _inv_cov = None
-    return (
-        _prob_instance_i_str,
-        _nmodel,
-        _ndata,
-        _model,
-        _null_model,
-        _data,
-        _synth1,
-        _jac1,
-        _synth2,
-        _jac2,
-        _fig_model,
-        _fig_data,
-        _misfit,
-        _log_likelihood,
-        _log_prior,
-        _description,
-        _cov,
-        _inv_cov,
-    )
+# For each of the below methods / properties,
+# 1. Try to get / access 
+# 2. If not implemented, assign None to `output_name_for_testing_purpose`
+# 3. If implemeneted but got error, assign the error to `output_name_for_testing_purpose`
+# 4. If implemeneted and no error, assign the output to `output_name_for_testing_purpose`
 
-def run_problem(problem_class, problem_class_str):
+prob_methods = [
+    # (output_name_for_testing_purpose, how_to_get_it)
+    ("synth1", lambda p: p.forward(p.good_model)),
+    ("jac1", lambda p: p.jacobian(p.good_model)),
+    ("synth2", lambda p: p.forward(p.good_model, True)[0]),
+    ("jac2", lambda p: p.forward(p.good_model, True)[1]),
+    ("fig_model", lambda p: p.plot_model(p.good_model)),
+    ("fig_data", lambda p: p.plot_data(p.data)),
+    ("misfit", lambda p: p.misfit(p.data, p.data)),
+    ("log_likelihood", lambda p: p.log_likelihood(p.data, p.data)),
+    ("log_prior", lambda p: p.log_prior(p.good_model)),
+]
+prob_properties = [
+    # (output_name_for_testing_purpose, how_to_access_it)
+    ("nmodel", "model_size"),
+    ("ndata", "data_size"),
+    ("model", "good_model"),
+    ("null_model", "starting_model"),
+    ("data", "data"),
+    ("description", "description"),
+    ("cov", "covariance_matrix"),
+    ("inv_cov", "inverse_covariance_matrix"),
+]
+
+def collect_methods_outputs(prob_instance_i, all_outputs):
+    for (output_name, how_to_get) in prob_methods:
+        try:
+            all_outputs[output_name] = how_to_get(prob_instance_i)
+        except NotImplementedError:
+            all_outputs[output_name] = None
+        except Exception as e:
+            all_outputs[output_name] = e
+
+def collect_properties(prob_instance_i, all_outputs):
+    for (output_name, prop) in prob_properties:
+        try:
+            all_outputs[output_name] = getattr(prob_instance_i, prop)
+        except NotImplementedError:
+            all_outputs[output_name] = None
+        except Exception as e:
+            all_outputs[output_name] = e
+
+def run_example(problem_class, problem_class_str, i) -> dict:
+    # prepare
+    all_outputs = dict()
+    try:
+        prob_instance_i = problem_class(i)
+    except Exception as e:
+        if not isinstance(e, InvalidExampleError):
+            prob_instance_i = e
+        else:
+            raise e
+    else:  # collect results
+        collect_methods_outputs(prob_instance_i, all_outputs)
+        collect_properties(prob_instance_i, all_outputs)
+    all_outputs["prob_instance_str"] = f"{problem_class_str}({i})"
+    all_outputs["prob_instance"] = prob_instance_i
+    all_outputs["i"] = i
+    return all_outputs
+
+def run_problem(problem_class, problem_class_str) -> typing.Iterator[dict]:
+    if isinstance(problem_class, Exception): return []
     i = 1
     while True:
         if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
         try:
-            yield i, run_example(problem_class, problem_class_str, i)
-        except cofi_espresso.exceptions.InvalidExampleError:
-            assert i-1 > 0, "ensure there are at least one examples"
-            break
+            example_res = run_example(problem_class, problem_class_str, i)
+        except InvalidExampleError:
+            if i == 1: raise ValueError("Ensure there are at least one examples")
+            return
         i += 1
+        yield example_res
 
-def run_problems(pre_build, problems_specified = None):
-    problems = problems_to_run(problems_specified)
-    if not pre_build:
-        parent_module = problem_module_post_build()
+def run_problems(problems, pre_build):
     for (prob_name, prob_path) in problems:
-        if pre_build:
-            parent_module = problem_module_pre_build(prob_name)
-        prob_class_str = problem_name_to_class(prob_name)
-        prob_class = getattr(parent_module, prob_class_str)
-        yield prob_class, prob_class_str, run_problem(prob_class, prob_class_str)
+        prob_class_str = _problem_name_to_class(prob_name)
+        try:
+            with _ProblemModule(pre_build, prob_name) as parent_module:
+                try:
+                    prob_class = getattr(parent_module, prob_class_str)
+                except Exception as e:
+                    prob_class = e
+                yield {
+                    "parent module": parent_module,
+                    "problem class": prob_class, 
+                    "problem class str": prob_class_str, 
+                    "problem path": prob_path, 
+                    "problem results generator": run_problem(prob_class, prob_class_str),
+                }
+        except Exception as e:
+            yield {
+                "parent module": e,
+                "problem class str": prob_class_str,
+                "problem path": prob_path,
+                "problem results generator": [],
+            }
 
-def main():
-    for prob_class, prob_class_str, prob_out_gen in run_problems(True):
-        print(prob_class)
-        for prob_out_i in prob_out_gen:
-            print(prob_out_i[0])
+
+def main(problems_specified=None):
+    _you_want_to_print_something = False
+    problems = problems_to_run(problems_specified)
+    results = run_problems(problems, pre_build=True)
+    for res in results:
+        if _you_want_to_print_something: print(res["problem class"])
+        for prob_out_i in res["problem results generator"]:
+            if _you_want_to_print_something: print(prob_out_i.keys())
 
 if __name__ == "__main__":
     main()

@@ -8,6 +8,7 @@ def abstract_metadata_key(*names):
 
     def _func(cls, *names):
         """ Function that extends the __init_subclass__ method of a class."""
+        cls.__abstract_metadata_keys__ = names
         for name in names:
             setattr(cls, name, NotImplemented)
         orig_init_subclass = cls.__init_subclass__
@@ -19,7 +20,7 @@ def abstract_metadata_key(*names):
                 orig_init_subclass(**kwargs)
             if getattr(cls, "metadata", NotImplemented) is NotImplemented:
                 raise NotImplementedError(
-                    "please define the metadata as a dicttionary field in problem class"
+                    "please define the metadata as a dictionary field in problem class"
                 )
             for name in names:
                 # if getattr(cls, name, NotImplemented) is NotImplemented:
@@ -59,7 +60,7 @@ class EspressoProblem(metaclass=ABCMeta):
 
 
     .. rubric:: Metadata
-    
+
     Problem-sepecific metadata include the following keys:
 
     - ``problem_title``
