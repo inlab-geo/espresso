@@ -101,7 +101,7 @@ distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
 file = "src/cofi_espresso/_version.py"
 
 [tool.versioningit]
-default-version = '0.0.2.dev0+31.gf8c388c'
+default-version = '0.0.2.dev0+47.g037f7d7'
 
 [tool.versioningit.tag2version]
 rmprefix = 'v'

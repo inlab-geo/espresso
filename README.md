@@ -1,9 +1,8 @@
 # Espresso
 
-[![PyPI version](https://img.shields.io/pypi/v/cofi-espresso?logo=pypi&style=flat-square&color=bde0fe)](https://pypi.org/project/cofi-espresso/)
-[![build](https://img.shields.io/github/actions/workflow/status/inlab-geo/espresso/build_wheels.yml?branch=main&logo=githubactions&style=flat-square&color=ccd5ae)](https://github.com/inlab-geo/espresso/actions/workflows/build_wheels.yml)
-[![Documentation Status](https://img.shields.io/readthedocs/cofi-espresso?logo=readthedocs&style=flat-square&color=faedcd)](https://cofi-espresso.readthedocs.io/en/latest/?badge=latest)
-[![Slack](https://img.shields.io/badge/Slack-inlab-4A154B?logo=slack&style=flat-square&color=cdb4db)](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg)
+[![PyPI version](https://img.shields.io/pypi/v/cofi-espresso?logo=pypi&style=flat-square&color=bde0fe&labelColor=f8f9fa)](https://pypi.org/project/cofi-espresso/)
+[![Documentation Status](https://img.shields.io/readthedocs/cofi-espresso?logo=readthedocs&style=flat-square&color=fed9b7&labelColor=f8f9fa&logoColor=eaac8b)](https://cofi-espresso.readthedocs.io/en/latest/?badge=latest)
+[![Slack](https://img.shields.io/badge/Slack-InLab_community-4A154B?logo=slack&style=flat-square&color=cdb4db&labelColor=f8f9fa&logoColor=9c89b8)](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg)
 
 ## Introduction
 
@@ -84,7 +83,7 @@ consult the
 
 ## Contributing
 
-Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
+Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/index.html).
 
 
 ## Licence
