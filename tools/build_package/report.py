@@ -4,41 +4,6 @@ Usage:
 - To generate raw report, raw_compliance_report(problems_to_check=None, pre_build=True)
 - To generate report, compliance_report(problems_to_check=None, pre_build=True)
 - To print report, print_compliance_report(report)
-
-A typical raw report looks like:
-{
-    'FmmTomography': {
-        'metadata': True, 
-        'attributes': {
-            'required': {
-                'model_size': [True], 
-                'data_size': [True], 
-                'good_model': [True], 
-                'starting_model': [True], 
-                'data': [True], 
-                'forward': [True]
-            }, 
-            'optional': {
-                'description': [None], 
-                'covariance_matrix': [None], 
-                'inverse_covariance_matrix': [None], 
-                'jacobian': [True], 
-                'forward': [True, True], 
-                'plot_model': [True], 
-                'plot_data': [None], 
-                'misfit': [None], 
-                'log_likelihood': [None], 
-                'log_prior': [None]
-            }, 
-            'additional': {
-                'exe_fm2dss', 
-                'clean_tmp_files', 
-                'tmp_paths', 
-                'tmp_files'
-            }
-        }
-    }
-}
 """
 
 import run_examples
@@ -59,13 +24,19 @@ def _init_attr_report():
     return _report
 
 def _collect_compliance_info(all_results, report):
+    _has_init_error = isinstance(all_results["prob_instance"], Exception)
+    if _has_init_error:
+        _init_error = all_results["prob_instance"]
     for attr_check in criteria.attributes_to_check:
         attr_key, attr_str, required, to_check = attr_check
-        obj = all_results[attr_key]
-        obj_str = f"{all_results['prob_instance_str']}.{attr_str}"
         _report_key = "required" if required else "optional"
         _attr_key_name = attr_str.split("(")[0]
         _to_update = report[_report_key][_attr_key_name]
+        if _has_init_error:
+            _to_update.append(_init_error)
+            continue
+        obj = all_results[attr_key]
+        obj_str = f"{all_results['prob_instance_str']}.{attr_str}"
         if isinstance(obj, Exception) or obj is None:
             _to_update.append(obj)
         else:
@@ -88,36 +59,61 @@ def _example_standard(example_instance, report):
 
 def _collect_additional_attr(all_results, report):
     p = all_results["prob_instance"]
+    if isinstance(p, Exception):
+        return
     p_dir = [attr for attr in dir(p) if not attr.startswith("_")]
     _standard_attr = _example_standard(p, report)
     _additional_attr = {a for a in p_dir if a not in _standard_attr}
     report["additional"].update(_additional_attr)
 
 def raw_compliance_report(problems_to_check=None, pre_build=True):
+    """Run all problems and generate a raw compliance report
+    
+    A typical raw report looks like:
+    {
+        'FmmTomography': {
+            'metadata': True, 
+            'attributes': {
+                'required': {
+                    'model_size': [True], 'data_size': [True], 'good_model': [True], 'starting_model': [True], 'data': [True], 'forward': [True]
+                }, 
+                'optional': {
+                    'description': [None], 'covariance_matrix': [None], 'inverse_covariance_matrix': [None], 'jacobian': [True], 'forward': [True, True], 'plot_model': [True], 'plot_data': [None], 'misfit': [None], 'log_likelihood': [None], 'log_prior': [None]
+                }, 
+                'additional': {
+                    'exe_fm2dss', 'clean_tmp_files', 'tmp_paths', 'tmp_files'
+                }
+            }
+        }
+    }
+    """
     report = dict()
     problems = run_examples.problems_to_run(problems_specified=problems_to_check)
     results = run_examples.run_problems(problems, pre_build=pre_build)
     for res in results:
         _report_for_problem = dict()
         # problem level report
-        try:
-            criteria.criteria_for_problem(
-                res["problem class"],
-                res["problem class str"],
-                res["problem path"],
-                res["parent module"], 
-            )
-        except Exception as e:
-            _report_for_problem["metadata"] = e
+        if isinstance(res["parent module"], Exception):
+            _report_for_problem["metadata"] = res["parent module"]
         else:
-            _report_for_problem["metadata"] = True
-            # example level report
-            _report_for_problem["attributes"] = _init_attr_report()
-            for prob_out_i in res["problem results generator"]:
-                # required / optional attributes
-                _collect_compliance_info(prob_out_i, _report_for_problem["attributes"])
-                # additional attributes
-                _collect_additional_attr(prob_out_i, _report_for_problem["attributes"])
+            try:
+                criteria.criteria_for_problem(
+                    res["problem class"],
+                    res["problem class str"],
+                    res["problem path"],
+                    res["parent module"], 
+                )
+            except Exception as e:
+                _report_for_problem["metadata"] = e
+            else:
+                _report_for_problem["metadata"] = True
+                # example level report
+                _report_for_problem["attributes"] = _init_attr_report()
+                for prob_out_i in res["problem results generator"]:
+                    # required / optional attributes
+                    _collect_compliance_info(prob_out_i, _report_for_problem["attributes"])
+                    # additional attributes
+                    _collect_additional_attr(prob_out_i, _report_for_problem["attributes"])
         report[res["problem class str"]] = _report_for_problem
     return report
 
@@ -137,7 +133,7 @@ def _analyse_report_dict(sub_report):
             _new_report[item_name] = "OK"
         elif len(_has_error) > 0:
             _new_count["error"] += 1
-            _new_report[item_name] = str(_has_error[0])
+            _new_report[item_name] = _has_error[0]
         else:
             _new_count["not_implemented"] += 1
             _new_report[item_name] = "Not implemented"
@@ -152,6 +148,22 @@ def _analyse_compliance(new_report):
     return _metadata_ok and _required_ok and _optional_ok
 
 def compliance_report(problems_to_check=None, pre_build=True):
+    """Generate a readable compliance report based on running raw report
+    
+    A typical compliance report looks like:
+    {
+        'FmmTomography': {
+            'metadata': 'OK', 
+            'required': {'model_size': 'OK', 'data_size': 'OK', 'good_model': 'OK', 'starting_model': 'OK', 'data': 'OK', 'forward': 'OK'}, 
+            'required_count': {'implemented': 6, 'not_implemented': 0, 'error': 0, 'total': 6}, 
+            'optional': {'description': 'Not implemented', 'covariance_matrix': 'Not implemented', 'inverse_covariance_matrix': 'Not implemented', 'jacobian': 'OK', 'forward': 'OK', 'plot_model': 'OK', 'plot_data': 'Not implemented', 'misfit': 'Not implemented', 'log_likelihood': 'Not implemented', 'log_prior': 'Not implemented'}, 
+            'optional_count': {'implemented': 3, 'not_implemented': 7, 'error': 0, 'total': 10}, 
+            'additional': {'clean_tmp_files', 'tmp_paths', 'exe_fm2dss', 'tmp_files'}, 
+            'additional_count': 4, 
+            'api_compliance': True,
+        }
+    }
+    """
     raw_report = raw_compliance_report(problems_to_check, pre_build)
     new_report = dict()
     for prob_name, prob_report in raw_report.items():
@@ -159,6 +171,11 @@ def compliance_report(problems_to_check=None, pre_build=True):
         # metadata
         _metadata = prob_report["metadata"]
         _new_report["metadata"] = "OK" if _metadata == True else _metadata
+        # check possibility to continue
+        if "attributes" not in prob_report:
+            _new_report["api_compliance"] = _metadata
+            new_report[prob_name] = _new_report
+            continue
         # required
         _res = _analyse_report_dict(prob_report["attributes"]["required"])
         _new_report["required"] = _res[0]
@@ -191,6 +208,43 @@ def cformat(style, content):
     return f"{style}{content}{bcolors.ENDC}"
 
 def pprint_compliance_report(report):
+    """Pretty print a compliance report (i.e. output of compliance_report())
+    
+    The console output typically looks like:
+    ```
+    ----------------------------------------
+    ESPRESSO Machine - API Compliance Report
+    ----------------------------------------
+
+    FmmTomography
+    Metadata: OK
+    Required attributes: 6/6 implemented, 0 errors, 0 not implemented yet
+            .model_size     - OK
+            .data_size      - OK
+            .good_model     - OK
+            .starting_model - OK
+            .data   - OK
+            .forward        - OK
+    Optional attributes: 3/10 implemented, 0 errors, 7 not implemented yet
+            .description    - Not implemented
+            .covariance_matrix      - Not implemented
+            .inverse_covariance_matrix      - Not implemented
+            .jacobian       - OK
+            .forward        - OK
+            .plot_model     - OK
+            .plot_data      - Not implemented
+            .misfit - Not implemented
+            .log_likelihood - Not implemented
+            .log_prior      - Not implemented
+    Additional attributes: 4 detected
+            .clean_tmp_files
+            .tmp_paths
+            .exe_fm2dss
+            .tmp_files
+
+    FmmTomography is API-compliance. Cheers!
+    ```
+    """
     # title
     _title = "ESPRESSO Machine - API Compliance Report"
     print("-" * len(_title))
@@ -207,6 +261,9 @@ def pprint_compliance_report(report):
         else:
             _metadata += cformat(bcolors.FAIL, r["metadata"])
         print(_metadata)
+        #### check possibility to continue
+        if "required" not in r:
+            continue
         #### required
         _required_title = cformat(bcolors.UNDERLINE, "Required attributes") + ": "
         _required_count = r["required_count"]
@@ -218,7 +275,7 @@ def pprint_compliance_report(report):
         print(_required_title)
         for attr_name, attr_res in r["required"].items():
             if attr_res == "OK": attr_res_str = cformat(bcolors.OKGREEN, "OK")
-            else: attr_res_str = cformat(bcolors.FAIL, attr_res)
+            else: attr_res_str = cformat(bcolors.FAIL, attr_res.__repr__())
             print(f"\t.{attr_name}\t- {attr_res_str}")
         #### optional
         _optional_title = cformat(bcolors.UNDERLINE, "Optional attributes") + ": "
@@ -231,7 +288,10 @@ def pprint_compliance_report(report):
         print(_optional_title)
         for attr_name, attr_res in r["optional"].items():
             if attr_res == "OK": attr_res_str = cformat(bcolors.OKGREEN, "OK")
-            else: attr_res_str = cformat(bcolors.WARNING, attr_res)
+            elif isinstance(attr_res, Exception): 
+                attr_res_str = cformat(bcolors.FAIL, attr_res.__repr__())
+            else:
+                attr_res_str = cformat(bcolors.WARNING, attr_res)
             print(f"\t.{attr_name}\t- {attr_res_str}")
         #### additional
         _additional_title = cformat(bcolors.UNDERLINE, "Additional attributes") + ": "

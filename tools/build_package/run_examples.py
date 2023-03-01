@@ -128,13 +128,19 @@ def collect_properties(prob_instance_i, all_outputs):
 def run_example(problem_class, problem_class_str, i) -> dict:
     # prepare
     all_outputs = dict()
-    prob_instance_i = problem_class(i)
+    try:
+        prob_instance_i = problem_class(i)
+    except Exception as e:
+        if not isinstance(e, InvalidExampleError):
+            prob_instance_i = e
+        else:
+            raise e
+    else:  # collect results
+        collect_methods_outputs(prob_instance_i, all_outputs)
+        collect_properties(prob_instance_i, all_outputs)
     all_outputs["prob_instance_str"] = f"{problem_class_str}({i})"
     all_outputs["prob_instance"] = prob_instance_i
     all_outputs["i"] = i
-    # collect results
-    collect_methods_outputs(prob_instance_i, all_outputs)
-    collect_properties(prob_instance_i, all_outputs)
     return all_outputs
 
 def run_problem(problem_class, problem_class_str) -> typing.Iterator[dict]:
@@ -152,20 +158,28 @@ def run_problem(problem_class, problem_class_str) -> typing.Iterator[dict]:
 
 def run_problems(problems, pre_build):
     for (prob_name, prob_path) in problems:
-        with _ProblemModule(pre_build, prob_name) as parent_module:
-        # parent_module = _problem_module(pre_build, prob_name)
-            prob_class_str = _problem_name_to_class(prob_name)
-            try:
-                prob_class = getattr(parent_module, prob_class_str)
-            except Exception as e:
-                prob_class = e
+        prob_class_str = _problem_name_to_class(prob_name)
+        try:
+            with _ProblemModule(pre_build, prob_name) as parent_module:
+                try:
+                    prob_class = getattr(parent_module, prob_class_str)
+                except Exception as e:
+                    prob_class = e
+                yield {
+                    "parent module": parent_module,
+                    "problem class": prob_class, 
+                    "problem class str": prob_class_str, 
+                    "problem path": prob_path, 
+                    "problem results generator": run_problem(prob_class, prob_class_str),
+                }
+        except Exception as e:
             yield {
-                "parent module": parent_module,
-                "problem class": prob_class, 
-                "problem class str": prob_class_str, 
-                "problem path": prob_path, 
-                "problem results generator": run_problem(prob_class, prob_class_str),
+                "parent module": e,
+                "problem class str": prob_class_str,
+                "problem path": prob_path,
+                "problem results generator": [],
             }
+
 
 def main(problems_specified=None):
     _you_want_to_print_something = False
