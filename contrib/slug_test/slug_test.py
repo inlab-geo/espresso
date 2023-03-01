@@ -88,7 +88,7 @@ class SlugTest(EspressoProblem):
             raise NotImplementedError
         if self.example_number == 1:
             from mpmath import sqrt, besselk, invertlaplace
-            times = self._xp1
+            times = self._xp
             rw, H0 = self._m_fixed
             T, S = model
             fp = lambda p: (H0*rw*S*besselk(0, rw*sqrt(p*S/T))/
@@ -99,7 +99,7 @@ class SlugTest(EspressoProblem):
                              if t!=0. else H0 for t in times])
         elif self.example_number == 2:
             from mpmath import sqrt, asinh, besselk, invertlaplace
-            times = self._xp2
+            times = self._xp
             rw, L, H0 = self._m_fixed
             Kr, Kz = model
             fp = lambda p: H0/(p+(2.*Kr*L)/(rw**2.*asinh(L/(2.*rw*
@@ -114,14 +114,20 @@ class SlugTest(EspressoProblem):
         raise NotImplementedError               # optional
 
     def plot_model(self, model):
-        raise NotImplementedError               # optional
+        plt.errorbar(self._xp, self.forward(model), yerr=self._sigma, fmt='.', 
+                     color="lightcoral", ecolor='lightgrey', ms=10)
+        plt.xscale("log")
+        plt.grid(True, which="both")
+        plt.xlabel('Time elapsed')
+        plt.ylabel('Displacement')
     
     def plot_data(self, data):
         plt.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
         plt.xscale("log")
         plt.grid(True, which="both")
-        plt.show()
+        plt.xlabel('Time elapsed')
+        plt.ylabel('Displacement')
 
     def misfit(self, data, data2):              # optional
         raise NotImplementedError

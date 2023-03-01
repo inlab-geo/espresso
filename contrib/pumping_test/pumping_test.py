@@ -153,14 +153,20 @@ class PumpingTest(EspressoProblem):
         raise NotImplementedError               # optional
 
     def plot_model(self, model):
-        raise NotImplementedError               # optional
+        plt.errorbar(self._xp, self.forward(model), yerr=self._sigma, fmt='.', 
+                     color="lightcoral", ecolor='lightgrey', ms=10)
+        plt.xscale("log")
+        plt.grid(True, which="both")
+        plt.xlabel('Time elapsed')
+        plt.ylabel('Drawdown')
     
     def plot_data(self, data):
         plt.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
         plt.xscale("log")
         plt.grid(True, which="both")
-        plt.show()
+        plt.xlabel('Time elapsed')
+        plt.ylabel('Drawdown')
 
     def misfit(self, data, data2):              # optional
         raise NotImplementedError
