@@ -51,6 +51,7 @@ dependencies = [
     "scipy>=1.0.0",
     "matplotlib>=3.1",
     "tqdm>=4.0",
+    "mpmath >= 1.2.0",
 ]
 dynamic = ["version"]
 
@@ -101,7 +102,7 @@ distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
 file = "src/cofi_espresso/_version.py"
 
 [tool.versioningit]
-default-version = '0.0.2.dev0+47.g037f7d7'
+default-version = '0.1.0.dev0'
 
 [tool.versioningit.tag2version]
 rmprefix = 'v'
