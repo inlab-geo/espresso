@@ -1,7 +1,7 @@
 """Run all problems and associated examples in espresso
 
 This script assumes you have cofi-espresso installed via:
-$ python tools/build_package/build.py
+$ python espresso_machine/build_package/build.py
 
 """
 

@@ -22,14 +22,14 @@ for other options.
    $ conda env create -f envs/environment_contrib.yml
    $ conda activate esp_contrib
    ```
-2. Install `cofi-espresso` base package
+2. Install `cofi-espresso` core package
    ```console
    $ pip install .
    ```
 
 </details>
 
-## Getting started
+## Checklist
 
 To complete this contribution, here are some ideas on what to do next:
 
@@ -95,7 +95,7 @@ from example_name import ExampleName       # import it this way
 The **recommended way** is this:
 
 ```console
-$ python tools/build_package/build_with_checks.py
+$ python espresso_machine/build_package/build.py --validate
 ```
 
 Read on if you are looking for further details:
@@ -103,48 +103,48 @@ Read on if you are looking for further details:
 1. To **validate your contribution** when almost finished, run the following (replacing `<example_name>` with your problem name, e.g. `simple_regression`)
 
    ```console
-   $ python tools/build_package/validate.py -c <example_name1>
+   $ python espresso_machine/build_package/validate.py -c <example_name1>
    ```
 
    Or the following for more than one contributions (replacing `<example_name_1>` and `<example_name_2>` with your problem names)
 
    ```console
-   $ python tools/build_package/validate.py -c <example_name_1> -c <example_name_2>
+   $ python espresso_machine/build_package/validate.py -c <example_name_1> -c <example_name_2>
    ```
 
    Or the following for all existing contributions
 
    ```console
-   $ python tools/build_package/validate.py --all
+   $ python espresso_machine/build_package/validate.py --all
    ```
 
 2. To **build your contribution into cofi-espresso**, run
 
    ```console
-   $ python tools/build_package/build.py
+   $ python espresso_machine/build_package/build.py
    ```
 
 3. To **validate your built contribution** after running the build script above, run the following ()
 
    ```console
-   $ python tools/build_package/validate.py --post -c <example_name1>
+   $ python espresso_machine/build_package/validate.py --post -c <example_name1>
    ```
 
    Or the following for more than one contributions (replacing `<example_name_1>` and `<example_name_2>` with your problem names)
 
    ```console
-   $ python tools/build_package/validate.py --post -c <example_name_1> -c <example_name_2>
+   $ python espresso_machine/build_package/validate.py --post -c <example_name_1> -c <example_name_2>
    ```
 
    Or the following for all existing contributions
 
    ```console
-   $ python tools/build_package/validate.py --post --all
+   $ python espresso_machine/build_package/validate.py --post --all
    ```
 
 4. To do **pre-build validation**, **build**, **post-build validation** (1-3 above) all together at once,
 run
 
    ```console
-   $ python tools/build_package/build_with_checks.py
+   $ python espresso_machine/build_package/build.py --validate
    ```

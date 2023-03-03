@@ -14,28 +14,14 @@ our [Contributor Guide](https://cofi-espresso.readthedocs.io/en/latest/contribut
 python new_contribution/create_new_contrb.py <example_name>
 ```
 
-## Validate a new Espresso contribution (pre building)
-
-```console
-python build_package/validate.py [--pre] [--contrib <example_name>] [--all]
-```
-
 ## Build Espresso with all contributions
 
 ```console
-python build_package/build.py
+python build_package/build.py --validate
 ```
 
-## Validate a new Espresso contribution (post building)
+## Validate a new Espresso contribution (pre/post building)
 
 ```console
-python build_package/validate.py --post [--contrib <example_name>] [--all]
-```
-
-## Build Espresso with pre/post validation
-
-(combination of the three operations above)
-
-```console
-python build_package/build_with_checks.py
+python build_package/validate.py [--contrib CONTRIBS] [--all] [--pre] [--post]
 ```

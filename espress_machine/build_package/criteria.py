@@ -1,7 +1,7 @@
 """Helper functions to analyse the base class `EspressoProblem`
 
 This script assumes you have cofi-espresso installed via:
-    $ python tools/build_package/build.py
+    $ python espresso_machine/build_package/build.py
 Or the core package via:
     $ pip install .
 

@@ -52,7 +52,7 @@ jobs:
       - name: Generate package source with contributions
         run: |
           python -m pip install -r envs/requirements_test.txt
-          python tools/build_package/build.py
+          python espresso_machine/build_package/build.py
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
@@ -64,7 +64,7 @@ jobs:
           # Run the tests.
           # CIBW_TEST_COMMAND: >
           #   python -m pip install pytest &&
-          #   python {project}/tools/build_package/validate.py --post
+          #   python {project}/espresso_machine/build_package/validate.py --post
 
       - uses: actions/upload-artifact@v3
         with:

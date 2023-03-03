@@ -10,10 +10,10 @@ import cofi_espresso as esp
 BASE_PATH = esp.__path__[0]
 DEST_PATH = Path(__file__).resolve().parent.parent / "user_guide" / "contrib" / "generated"
 ROOT_PATH = Path(__file__).resolve().parent.parent.parent.parent
-_tools_doc_utils_gen_docs = ROOT_PATH / "tools" / "doc_utils"
+_machine_doc_utils_gen_docs = ROOT_PATH / "espresso_machine" / "doc_utils"
 
 try:
-    sys.path.append(str(_tools_doc_utils_gen_docs))
+    sys.path.append(str(_machine_doc_utils_gen_docs))
     import gen_docs
 except:
     from esp._machine import gen_docs           # TODO test this after build.py is finished

@@ -462,7 +462,7 @@ def run_fm2dss(wdir):
     return subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
 
 def compile_fm2dss():
-    # https://github.com/inlab-geo/espresso/blob/main/tools/build_package/validate.py#L170
+    # https://github.com/inlab-geo/espresso/blob/main/espresso_machine/build_package/validate.py#L170
     build_dir = path(".")
     res1 = subprocess.call(["cmake", "."], cwd=build_dir)
     if res1:

@@ -2,11 +2,11 @@
 
 ####### TO INSTALL #######
 # pip install .                           # core only, or
-# python tools/build_package/build.py     # with contributions
+# python espresso_machine/build_package/build.py     # with contributions
 
 ####### TO TEST #######
-# python tools/build_package/validate.py --pre
-# python tools/build_package/validate.py --post
+# python espresso_machine/build_package/validate.py --pre
+# python espresso_machine/build_package/validate.py --post
 
 ####### TO FORMAT #######
 # black --check src/cofi_espresso

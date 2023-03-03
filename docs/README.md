@@ -25,8 +25,8 @@ $ mamba env create -f environment.yml
 3. Install `cofi_espresso` with all contributions by running one of the below
 
 ```console
-$ python tools/build_package/build.py               # if you want to be quick
-$ python tools/build_package/build_with_checks.py   # if you want to feel safe
+$ python espresso_machine/build_package/build.py               # if you want to be quick
+$ python espresso_machine/build_package/build.py --validate    # if you want to feel safe
 ```
 
 4. To build your changes

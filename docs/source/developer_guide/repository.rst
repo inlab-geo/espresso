@@ -18,7 +18,7 @@ The Espresso Github repository
 
   - If you'd like to bump the version, change file :code:`src/cofi_espresso/version.py`.
 
-- Folder **tools/** has all the utility scripts to be used by contributors and 
+- Folder **espresso_machine/** has all the utility scripts to be used by contributors and 
   developers.
 
 - Folder **_esp_build/** will contain temporary Python package source files after you

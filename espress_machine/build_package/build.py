@@ -12,6 +12,8 @@
 import subprocess
 import sys
 import os
+import argparse
+import pytest
 from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
 import versioningit
@@ -35,6 +37,19 @@ META_FILES = [
     ".gitignore",
     "CHANGELOG.md",
 ]
+
+# ------------------------ argument parser ------------------------
+def setup_parser():
+    parser = argparse.ArgumentParser(
+        description="Script to build Espresso, with/without pre/post-build validation"
+    )
+    parser.add_argument(
+        "--validate", "-v", "--checks", dest="validate", action="store_true", 
+        default=False, help="Run tests before and after building the package")
+    return parser
+
+args = setup_parser().parse_args()
+
 
 # ------------------------ helpers ------------------------
 def is_cache(file_name):
@@ -170,8 +185,9 @@ def println_with_emoji(content, emoji):
     except:
         print(f"\n{content}")
 
-# ------------------------ main ------------------------
-def main():
+
+# ------------------------ main functions ------------------------
+def build():
     println_with_emoji("Package building...", "🛠")
     # 1
     println_with_emoji("Cleaning build folder...", "🗂")
@@ -199,6 +215,32 @@ def main():
     if exit_code == 0: 
         println_with_emoji("Espresso installed!", "🍰")
     return exit_code
+
+def build_with_validate():
+    validate_script = str(Path(__file__).resolve().parent / "validate.py")
+
+    # pre-build validate
+    exit_code = subprocess.call([sys.executable, validate_script, "--pre"])
+    if exit_code != pytest.ExitCode.OK:
+        sys.exit(exit_code)
+
+    # build package
+    build()
+
+    # post-build validation
+    exit_code = subprocess.call([sys.executable, validate_script, "--post"])
+    if exit_code != pytest.ExitCode.OK:
+        sys.exit(exit_code)
+    else:
+        print("\n🍰 All done 🍰")
+        sys.exit(exit_code)
+
+
+def main():
+    if args.validate:
+        build_with_validate()
+    else:
+        build()
 
 if __name__ == "__main__":
     sys.exit(main())

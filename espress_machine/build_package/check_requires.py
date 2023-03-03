@@ -1,7 +1,7 @@
 """Check if all requirements are listed in pyproject.toml
 
 This script assumes you have cofi-espresso installed via:
-$ python tools/build_package/build.py
+$ python espresso_machine/build_package/build.py
 
 """
 

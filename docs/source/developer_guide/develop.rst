@@ -33,44 +33,44 @@ Modify EspressoProblem class
 2. Make sure your changes are backward compatible, otherwise take the responsibility of
    modifying existing contributions under folder :code:`contrib/`
 3. Make new contribution generation script compatible with new changes. Check by running 
-   file :code:`tools/new_contribution/create_new_contrib.py`. 
+   file :code:`espresso_machine/new_contribution/create_new_contrib.py`. 
 
    - If generated example doesn't comply with the new specification, potentially you need 
-     to edit some files under :code:`tools/new_contribution/_template`. Pay special 
+     to edit some files under :code:`espresso_machine/new_contribution/_template`. Pay special 
      attention to the following files:
 
-     - :code:`tools/new_contribution/_template/example_name.py`
-     - :code:`tools/new_contribution/_template/README.md`
+     - :code:`espresso_machine/new_contribution/_template/example_name.py`
+     - :code:`espresso_machine/new_contribution/_template/README.md`
 
 4. Ensure build and validation scripts are compatible with new changes. Check by running:
 
-   - :code:`tools/build_package/validate.py --pre`
-   - :code:`tools/build_package/build.py`
-   - :code:`tools/build_package/validate.py --post`
-   - :code:`tools/build_package/build_with_checks.py`
+   - :code:`espresso_machine/build_package/validate.py --pre`
+   - :code:`espresso_machine/build_package/build.py`
+   - :code:`espresso_machine/build_package/validate.py --post`
+   - :code:`espresso_machine/build_package/build.py --validate`
    
    Examine reported error (if any) to locate whether to change scripts themselves, or to
-   edit the template files under :code:`tools/new_contribution/_template`.
+   edit the template files under :code:`espresso_machine/new_contribution/_template`.
 
 5. Ensure documentations are up to date. The following places need checking:
 
    - :code:`README.md`
    - :code:`docs/source/user_guide/introduction.rst`
    - :code:`docs/source/contributor_guide/new_contrib.rst`
-   - :code:`tools/new_contribution/_template/README.md`
+   - :code:`espresso_machine/new_contribution/_template/README.md`
 
 
 Modify build/validation scripts
 -------------------------------
 
-1. Navigate to :code:`tools/build_package/` folder, all the scripts are there. Make changes as you need.
+1. Navigate to :code:`espresso_machine/build_package/` folder, all the scripts are there. Make changes as you need.
 2. Ensure the other scripts still work. For example, you might want to change usage of :code:`validate.py`
-   inside :code:`build_with_checks.py` after the argument parser is modified. Check by running them on
+   inside :code:`build.py --validate` after the argument parser is modified. Check by running them on
    your own.
 3. Ensure documentations are up to date. The following places need checking:
 
-   - :code:`tools/README.md`
-   - :code:`tools/new_contribution/_template/README.md`
+   - :code:`espresso_machine/README.md`
+   - :code:`espresso_machine/new_contribution/_template/README.md`
    - :code:`docs/source/contributor_guide/new_contrib.rst`
 
 
