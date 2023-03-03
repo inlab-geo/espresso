@@ -69,11 +69,8 @@ As mentioned earlier, the penetration of the EM fields depends on the frequency 
 
 ## Examples
 
-Two examples of inversion of MT data are presented here:
-- __Synthetic AMT data__: inversions of a synthetic 5 layers Earth model using smoothed and constrained regularizations. 
+Three examples of inversion of MT data are presented here:
+- __example01__: inversion of a synthetic 3 layers Earth model using a smoothed regularization. 
+- __Synthetic AMT data__: inversion of a synthetic 5 layers Earth model using a smoothed regularization. 
 - __Field AMT/BBMT data__: inversion of field AMT/BBMT data from the Coompana Province, South Australia.
-
-
-## Usage
-
 
