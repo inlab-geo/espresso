@@ -28,40 +28,8 @@ class Magnetotelluric1D(EspressoProblem):
     def __init__(self, example_number=1):
         super().__init__(example_number)
 
+
         if example_number == 1:
-            
-            # true model
-            # layer electrical resitivity in log10 ohm.m to ensures positive resistivities
-            true_model = np.array([2,1,3]) 
-            true_depths = np.array([100,300]) # depths in meters to the bottom of each layer (positive downwards), last layer infinite
-            
-            # define frequencies (in Hz) where responses are computed
-            fmin, fmax, f_per_decade = 0.1, 1e4, 5
-            freqs = get_frequencies(fmin,fmax,f_per_decade)
-            
-            # generate synthetic data 
-            # calculate impedance Z
-            Z = forward_1D_MT(true_model, true_depths, freqs, return_Z = True)
-            # add noise
-            Z, Zerr = add_noise(Z, percentage = 5, seed = 1234)
-            # transform Z to log10 apparent resistivity and phase (dobs)
-            dobs, derr = z2rhophy(freqs, Z, dZ=Zerr)
-
-            # define a starting 1D model 
-            nLayers = 3
-            starting_model = np.ones((nLayers)) * 2 # 100 ohm.m starting model (log10 scale) 
-
-            self._desc = "1 MT sounding over a 3 layers Earth model"
-            self._mtrue = true_model
-            self._dptrue = true_depths
-            self._mstart = starting_model
-            self._dpstart = true_depths
-            self._dobs = dobs
-            self._derr = derr
-            self._freqs = freqs
-
-
-        elif example_number == 2:
             
             # true model
             # layer electrical resitivity in log10 ohm.m to ensures positive resistivities
@@ -174,9 +142,11 @@ class Magnetotelluric1D(EspressoProblem):
     def plot_model(self, model, depths = None, max_depth = -1000, res_bounds = [0,4], title = None):
         nLayers = len(model) 
         if depths is None:
-            depths = np.r_[-self._dptrue,-100000]
+            max_z = min(max_depth,-self._dptrue[-1])
+            depths = np.r_[-self._dptrue,max_z]
         else:
-            depths = np.r_[-depths,-100000]
+            max_z = min(max_depth,-depths[-1])
+            depths = np.r_[-depths,max_z]
 
         fig = plt.figure(1,figsize=(4,4))
         ax = fig.add_subplot(1, 1, 1)
@@ -341,4 +311,38 @@ def add_noise(Z, percentage = 5, seed = 1234):
         Zi = Z[f].imag + np.random.normal(0.0, 0.01*percentage*abs(Z[f]))
         Z[f] = Zr + 1j*Zi
     return Z, Zerr
+
+
+def load_data(filename, error_floor = 0.05):
+
+	f = open('../data/%s'%(filename))
+
+	# load the data, transform the apparent resistivity and its error to log10
+	MTdata = np.loadtxt('../data/%s'%(filename),skiprows=1)
+	MTdata = MTdata[::3,:]
+
+	freqs = MTdata[:,0]
+	rho_app = MTdata[:,1]
+	rho_app_err = MTdata[:,2]
+	phase = MTdata[:,3]
+	phase_err = MTdata[:,4]
+
+	dobs = np.r_[np.log10(rho_app), phase]
+
+	log10_drho_app = (1/np.log(10)) * (MTdata[:,2]/MTdata[:,1])
+
+	# add an error floor to the data: if the error if lower than the floor, then it is raised to the floor
+	# it prevents from including unrealistic small data error into the inversion
+	error_floor_rho = error_floor # the error floor is set as a percentage of the apparent resistivity 
+	ef_rho_log = np.log10(1 + error_floor_rho) 
+	ef_phy = (100 * error_floor_rho) * 0.286    
+
+	err_rho_log = np.maximum(log10_drho_app, ef_rho_log)
+	err_phy = np.maximum(MTdata[:,4], ef_phy)
+
+	derr = np.r_[err_rho_log, err_phy]
+
+	return freqs, dobs, derr
+
+
 
