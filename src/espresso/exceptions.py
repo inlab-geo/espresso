@@ -15,7 +15,7 @@ class InvalidExampleError(EspressoError, ValueError):
     Examples
     --------
 
-    >>> from cofi_espresso import SimpleRegression, InvalidExampleError
+    >>> from espresso import SimpleRegression, InvalidExampleError
     >>> try:
     ...     reg = SimpleRegression(6)
     ... except InvalidExampleError:
@@ -29,7 +29,7 @@ class InvalidExampleError(EspressoError, ValueError):
     def __str__(self):
         super_msg = super().__str__()
         msg = "Unrecognised example number.\n\nPlease refer to the Espresso documentation " \
-              "(https://cofi-espresso.readthedocs.io/)\nfor full details of the examples " \
+              "(https://geo-espresso.readthedocs.io/)\nfor full details of the examples " \
               "provided within this test problem."
         if len(super_msg)>0:
             return msg+"\n\n"+super_msg

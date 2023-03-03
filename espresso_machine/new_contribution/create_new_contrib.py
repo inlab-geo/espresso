@@ -1,6 +1,6 @@
 # Command to create a new example folder:
 # In ROOT, execute:
-# python tools/new_contribution/create_new_contrib.py <example-name>
+# python espresso_machine/new_contribution/create_new_contrib.py <example-name>
 # Replacing <example_name> with the new example name.
 
 from glob import glob
@@ -31,7 +31,7 @@ def getListOfFiles(dirName):
 current_dir = Path(__file__).resolve().parent
 root_dir = current_dir.parent.parent
 CONTRIB_FOLDER = str(root_dir / "contrib")
-TEMPLATE_FOLDER = str(root_dir / "tools/new_contribution/_template")
+TEMPLATE_FOLDER = str(root_dir / "espresso_machine/new_contribution/_template")
 
 def main():
     print("🥰 Thanks for contributing! \nWe are generating new contribution component from template...\n")
@@ -46,7 +46,7 @@ def main():
         raise ValueError(
             "The example name provided already exists, please choose another name"
         )
-    elif example_name in ["utils"]:
+    elif example_name in ["utils", "_machine"]:
         raise ValueError(
             "This sub-folder name is occupied in Espresso core library, "
             "please choose another name"

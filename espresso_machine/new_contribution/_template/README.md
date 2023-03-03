@@ -13,23 +13,23 @@ installed in your system.
 
 [`mamba`](https://mamba.readthedocs.io/en/latest/) is recommended, and we provide
 instructions that work for both `conda` and `mamba` below. Check contributor's guide in 
-[cofi-espresso documentation](https://cofi-espresso.readthedocs.io/en/latest/index.html) 
+[geo-espresso documentation](https://geo-espresso.readthedocs.io/en/latest/index.html) 
 for other options.
 
-1. Install required Python packages for contributing to `cofi-espresso`. Run the following
+1. Install required Python packages for contributing to `geo-espresso`. Run the following
    commands with the project root level as working directory:
    ```console
    $ conda env create -f envs/environment_contrib.yml
    $ conda activate esp_contrib
    ```
-2. Install `cofi-espresso` base package
+2. Install `geo-espresso` core package
    ```console
    $ pip install .
    ```
 
 </details>
 
-## Getting started
+## Checklist
 
 To complete this contribution, here are some ideas on what to do next:
 
@@ -46,11 +46,11 @@ To complete this contribution, here are some ideas on what to do next:
    clearly some functionalities that are required to implement and others that are
    optional.
    - If you would like to load data from files, please use our 
-     [utility functions](https://cofi-espresso.readthedocs.io/en/latest/user_guide/api/generated/cofi_espresso.utils.html) 
+     [utility functions](https://geo-espresso.readthedocs.io/en/latest/user_guide/api/generated/espresso.utils.html) 
      to get absoluate path before calling your load function.
 - [ ] **Validate and build your contribution locally**. We have seperate scripts for 
    validation and packaging. Check 
-   [how to test building your contribution](README.md#how-to-test-building-your-contribution-with-cofi-espresso) 
+   [how to test building your contribution](README.md#how-to-test-building-your-contribution-with-geo-espresso) 
    for details.
 - [ ] **Delete / comment out these initial instructions**. They are for your own reference
    so feel free to delete them or comment them out once you've finished the above
@@ -90,12 +90,12 @@ from example_name import ExampleName       # import it this way
 
 </details>
 
-## How to test building your contribution with `cofi-espresso`
+## How to test building your contribution with `geo-espresso`
 
 The **recommended way** is this:
 
 ```console
-$ python tools/build_package/build_with_checks.py
+$ python espresso_machine/build_package/build.py --validate
 ```
 
 Read on if you are looking for further details:
@@ -103,48 +103,48 @@ Read on if you are looking for further details:
 1. To **validate your contribution** when almost finished, run the following (replacing `<example_name>` with your problem name, e.g. `simple_regression`)
 
    ```console
-   $ python tools/build_package/validate.py -c <example_name1>
+   $ python espresso_machine/build_package/validate.py -c <example_name1>
    ```
 
    Or the following for more than one contributions (replacing `<example_name_1>` and `<example_name_2>` with your problem names)
 
    ```console
-   $ python tools/build_package/validate.py -c <example_name_1> -c <example_name_2>
+   $ python espresso_machine/build_package/validate.py -c <example_name_1> -c <example_name_2>
    ```
 
    Or the following for all existing contributions
 
    ```console
-   $ python tools/build_package/validate.py --all
+   $ python espresso_machine/build_package/validate.py --all
    ```
 
-2. To **build your contribution into cofi-espresso**, run
+2. To **build your contribution into geo-espresso**, run
 
    ```console
-   $ python tools/build_package/build.py
+   $ python espresso_machine/build_package/build.py
    ```
 
 3. To **validate your built contribution** after running the build script above, run the following ()
 
    ```console
-   $ python tools/build_package/validate.py --post -c <example_name1>
+   $ python espresso_machine/build_package/validate.py --post -c <example_name1>
    ```
 
    Or the following for more than one contributions (replacing `<example_name_1>` and `<example_name_2>` with your problem names)
 
    ```console
-   $ python tools/build_package/validate.py --post -c <example_name_1> -c <example_name_2>
+   $ python espresso_machine/build_package/validate.py --post -c <example_name_1> -c <example_name_2>
    ```
 
    Or the following for all existing contributions
 
    ```console
-   $ python tools/build_package/validate.py --post --all
+   $ python espresso_machine/build_package/validate.py --post --all
    ```
 
 4. To do **pre-build validation**, **build**, **post-build validation** (1-3 above) all together at once,
 run
 
    ```console
-   $ python tools/build_package/build_with_checks.py
+   $ python espresso_machine/build_package/build.py --validate
    ```

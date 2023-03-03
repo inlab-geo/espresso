@@ -75,7 +75,7 @@ class EspressoProblem(metaclass=ABCMeta):
 
     .. code-block:: pycon
 
-       >>> from cofi_espresso import <ProblemClass>
+       >>> from espresso import <ProblemClass>
        >>> <ProblemClass>.metadata["problem_title"]
        This is a problem about...
        >>> <ProblemClass>.metadata.keys()
