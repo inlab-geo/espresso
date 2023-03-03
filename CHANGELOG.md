@@ -1,6 +1,6 @@
 # Change Log
 
-## v0.2.0.dev0 (Not yet released)
+## v0.2.0.dev0 (03/03/2023)
 
 ### Infrastructure
 
