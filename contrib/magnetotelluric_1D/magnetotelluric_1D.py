@@ -199,9 +199,9 @@ class Magnetotelluric1D(EspressoProblem):
     def misfit(self, data, data2, Cm_inv = None):
         res = data - data2
         if Cm_inv is None:
-            return float(1/self.data_size * (res.T @ res))
+            return float(res.T @ res)
         else:
-            return float(1/self.data_size * (res.T @ Cm_inv @ res))            
+            return float(res.T @ Cm_inv @ res)          
 
     def log_likelihood(self,data,data2):
         raise NotImplementedError               # optional

@@ -49,7 +49,7 @@ inv_result = inv.run()
 # Plot the results
 fig2 = mt.plot_model(inv_result.model, title='Inversion model')
 fig3 = mt.plot_data(mt.data, mt.forward(inv_result.model), Cm = mt.covariance_matrix)
-nRMSE = np.sqrt(mt.misfit(mt.data, mt.forward(inv_result.model), Cm_inv = mt.inverse_covariance_matrix))
+nRMSE = np.sqrt(mt.misfit(mt.data, mt.forward(inv_result.model), Cm_inv = mt.inverse_covariance_matrix)/mt.data_size)
 print('nRMSE = %.3f'%nRMSE)
 
 plt.show()
