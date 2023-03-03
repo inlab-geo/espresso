@@ -1,6 +1,6 @@
 """Run all problems and associated examples in espresso
 
-This script assumes you have cofi-espresso installed via:
+This script assumes you have geo-espresso installed via:
 $ python espresso_machine/build_package/build.py
 
 """
@@ -12,16 +12,16 @@ import pathlib
 import typing
 
 try:
-    import cofi_espresso
-    from cofi_espresso.exceptions import InvalidExampleError
+    import espresso
+    from espresso.exceptions import InvalidExampleError
 except ModuleNotFoundError as e:
     e.msg += "\n\nNote: To run pre-build validation, please firstly install " \
-             "`cofi_espresso` core module by running the following from the root" \
+             "`espresso` core module by running the following from the root" \
              "level of the project\n  $ pip install ."
     raise e
 
 
-PKG_NAME = "cofi_espresso"
+PKG_NAME = "espresso"
 ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
 CONTRIB_FOLDER = ROOT + "/contrib"
 

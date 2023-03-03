@@ -125,11 +125,11 @@ We strongly recommend installing Espresso within a `virtual environment <https:/
 
 .. tabbed:: pip
 
-  Espresso is available on `PyPI <https://pypi.org/project/cofi-espresso/>`_, so for most users installation is as simple as:
+  Espresso is available on `PyPI <https://pypi.org/project/geo-espresso/>`_, so for most users installation is as simple as:
 
   .. code-block:: console
 
-    $ pip install cofi-espresso
+    $ pip install geo-espresso
 
 .. tabbed:: From source
 
@@ -143,4 +143,4 @@ We strongly recommend installing Espresso within a `virtual environment <https:/
 
   The :code:`-e` flag ensures that the module is installed in editable mode; you can omit this if you do not intend to make any changes.
 
-If all has gone well, you should now be able to successfully :code:`import cofi_espresso` within your Python interpreter or script.
+If all has gone well, you should now be able to successfully :code:`import espresso` within your Python interpreter or script.

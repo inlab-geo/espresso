@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from cofi_espresso.utils import absolute_path as path, silent_remove
+from espresso.utils import absolute_path as path, silent_remove
 
 #--------------------------------------------------------------------------------------------
 

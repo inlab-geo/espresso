@@ -5,13 +5,13 @@ on:     # we won't build wheels in future distributions
   # push:
   #   branches: main
   #   paths:
-  #     - 'src/cofi_espresso/**'
+  #     - 'src/espresso/**'
   #     - 'contrib/**'
   #     - 'pyproject.toml'
   #     - 'setup.py'
   # pull_request:
   #   paths:
-  #     - 'src/cofi_espresso/**'
+  #     - 'src/espresso/**'
   #     - 'contrib/**'
   #     - 'pyproject.toml'
   #     - 'setup.py'

@@ -46,7 +46,7 @@ def main():
         raise ValueError(
             "The example name provided already exists, please choose another name"
         )
-    elif example_name in ["utils"]:
+    elif example_name in ["utils", "_machine"]:
         raise ValueError(
             "This sub-folder name is occupied in Espresso core library, "
             "please choose another name"

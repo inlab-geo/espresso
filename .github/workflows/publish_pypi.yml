@@ -5,7 +5,7 @@ on:
   push:
     branches: main
     paths:
-      - "src/cofi_espresso/version.py"
+      - "src/espresso/version.py"
 
 jobs:
   tag_and_gen_pkg_source:
@@ -25,7 +25,7 @@ jobs:
       
       - name: Extract Release Version
         id: release_version
-        working-directory: src/cofi_espresso
+        working-directory: src/espresso
         run: |
           set -e
           python -c "import version as v; print(v.__version__)"
@@ -66,7 +66,7 @@ jobs:
 
       - name: Extract Release Version
         id: release_version
-        working-directory: src/cofi_espresso
+        working-directory: src/espresso
         run: |
           set -e
           python -c "import version as v; print(v.__version__)"

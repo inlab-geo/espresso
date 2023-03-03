@@ -2,9 +2,9 @@ import subprocess
 import numpy as np
 from scipy.stats import multivariate_normal
 
-from cofi_espresso import EspressoProblem
-from cofi_espresso.exceptions import InvalidExampleError
-from cofi_espresso.utils import absolute_path as path, silent_remove
+from espresso import EspressoProblem
+from espresso.exceptions import InvalidExampleError
+from espresso.utils import absolute_path as path, silent_remove
 from . import waveTracker as wt
 
 

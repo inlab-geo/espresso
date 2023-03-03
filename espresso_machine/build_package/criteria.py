@@ -1,6 +1,6 @@
 """Helper functions to analyse the base class `EspressoProblem`
 
-This script assumes you have cofi-espresso installed via:
+This script assumes you have geo-espresso installed via:
     $ python espresso_machine/build_package/build.py
 Or the core package via:
     $ pip install .
@@ -18,10 +18,10 @@ from matplotlib.figure import Figure
 import run_examples
 
 try:
-    import cofi_espresso
+    import espresso
 except ModuleNotFoundError as e:
     e.msg += "\n\nNote: To run pre-build validation, please firstly install " \
-             "`cofi_espresso` core module by running the following from the root" \
+             "`espresso` core module by running the following from the root" \
              "level of the project\n  $ pip install ."
     raise e
 
@@ -60,10 +60,10 @@ def _check_init_all(parent_mod, prob_name, prob_class_name):
 
 # 5. The class is a subclass of EspressoProblem
 def _check_subclass(prob_class, prob_class_name):
-    assert issubclass(prob_class, cofi_espresso.EspressoProblem), \
+    assert issubclass(prob_class, espresso.EspressoProblem), \
         f"make sure your problem class `{prob_class_name}` is a subclass of " \
-            f"`cofi_espresso.EspressoProblem`, by defining it with:\n\n-------\n" \
-                f"from cofi_espresso import EspressoProblem\n\n" \
+            f"`espresso.EspressoProblem`, by defining it with:\n\n-------\n" \
+                f"from espresso import EspressoProblem\n\n" \
                     f"class {prob_class_name}(EspressoProblem):\n" \
                         f"\tdef __init__(self, example_number=1):\n" \
                             f"\t\tsuper().__init__(example_number)\n\t\t...\n\n-------"
@@ -176,9 +176,9 @@ def criteria_for_problem(prob_class, prob_class_name, prob_path, parent_mod):
 # --------------> validate an example of problem
 
 def _inspect_espresso_problem():
-    all_props = dir(cofi_espresso.EspressoProblem)
-    abs_meta = cofi_espresso.EspressoProblem.__abstract_metadata_keys__
-    abs_props = cofi_espresso.EspressoProblem.__abstractmethods__
+    all_props = dir(espresso.EspressoProblem)
+    abs_meta = espresso.EspressoProblem.__abstract_metadata_keys__
+    abs_props = espresso.EspressoProblem.__abstractmethods__
     opt_props = [p for p in all_props if p not in abs_meta and p not in abs_props]
     return {
         "required meta keys": abs_meta, 

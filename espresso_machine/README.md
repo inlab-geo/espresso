@@ -6,7 +6,7 @@ When Espresso is packaged with the contributed inference problems, we move most 
 files under this module into it as `espresso._machine`.
 
 This page contains a minimal guide on using them. For more details about contributing to Espresso, check 
-our [Contributor Guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/index.html).
+our [Contributor Guide](https://geo-espresso.readthedocs.io/en/latest/contributor_guide/index.html).
 
 ## Generate new Espresso problem
 

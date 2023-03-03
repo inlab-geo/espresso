@@ -1,6 +1,6 @@
 """Check if all requirements are listed in pyproject.toml
 
-This script assumes you have cofi-espresso installed via:
+This script assumes you have geo-espresso installed via:
 $ python espresso_machine/build_package/build.py
 
 """
@@ -67,7 +67,7 @@ def _get_requirements():
 
 def get_extra_requirements():
     inbuilt, known_depended, all_imported = _get_requirements()
-    to_exclude = {"cofi_espresso", "run_examples"}
+    to_exclude = {"espresso", "run_examples"}
     new_dependencies = all_imported - known_depended - inbuilt
     not_listed = new_dependencies - to_exclude
     return not_listed

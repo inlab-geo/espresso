@@ -4,7 +4,7 @@ Module to contain funtions that help generate documentation
 from pathlib import Path
 from shutil import copy
 import os
-import cofi_espresso as esp
+import espresso as esp
 
 
 def read_metadata(contrib_name, lines):

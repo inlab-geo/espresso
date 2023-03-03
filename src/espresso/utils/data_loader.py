@@ -25,7 +25,7 @@ def absolute_path(relative_path):
     Examples
     --------
 
-    >>> from cofi_espresso.utils import absolute_path
+    >>> from espresso.utils import absolute_path
     >>> from PIL import Image
     >>> png = Image.open(absolute_path("data/csiro_logo.png"))
 
@@ -50,7 +50,7 @@ def loadtxt(relative_path, *args, **kwargs):
     Examples
     --------
 
-    >>> from cofi_espresso.utils import loadtxt
+    >>> from espresso.utils import loadtxt
     >>> data = loadtxt("data/example1.dat")
     >>> data
     array([[0.    , 0.0323, 5.9987, 1.    , 0.0323, 2.057 ],

@@ -16,7 +16,7 @@ import sys
 import subprocess
 from pathlib import Path
 
-import cofi_espresso as esp
+import espresso as esp
 
 
 # -- Generate API references doc ---------------------------------------------

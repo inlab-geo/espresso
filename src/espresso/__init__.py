@@ -27,13 +27,13 @@ Utility functions
 -----------------
 
 Some utility functions are there to help contributors load data and calculate things.
-Check out documentation for submodule :mod:`cofi_espresso.utils` for details.
+Check out documentation for submodule :mod:`espresso.utils` for details.
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
     
-    cofi_espresso.utils
+    espresso.utils
 
 """
 

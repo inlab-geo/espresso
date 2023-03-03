@@ -4,7 +4,7 @@
 
 ### Infrastructure
 
-- Rename package from `cofi_espresso` to `geo_espresso`, module from `cofi_espresso`
+- Rename package from `cofi-espresso` to `geo-espresso`, module from `cofi_espresso`
   to `espresso`
 - Rename `tools/` folder into `espresso_machine/`
 

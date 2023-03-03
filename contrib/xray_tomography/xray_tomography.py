@@ -1,7 +1,7 @@
 import numpy as np
-from cofi_espresso import EspressoProblem
-from cofi_espresso.exceptions import InvalidExampleError
-from cofi_espresso.utils import loadtxt, absolute_path
+from espresso import EspressoProblem
+from espresso.exceptions import InvalidExampleError
+from espresso.utils import loadtxt, absolute_path
 from PIL import Image
 import matplotlib.pyplot as plt
 import tqdm

@@ -41,7 +41,7 @@ pip-wheel-metadata
 wheelhouse
 .tox
 # MANIFEST
-src/cofi_espresso/_version.py
+src/espresso/_version.py
 
 # pytest cache #
 ################

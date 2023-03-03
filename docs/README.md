@@ -22,7 +22,7 @@ $ cd espresso/docs
 $ mamba env create -f environment.yml
 ```
 
-3. Install `cofi_espresso` with all contributions by running one of the below
+3. Install `espresso` with all contributions by running one of the below
 
 ```console
 $ python espresso_machine/build_package/build.py               # if you want to be quick

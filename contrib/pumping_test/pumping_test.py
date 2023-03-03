@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 # from os import chdir
 # chdir('../../src')
-from cofi_espresso import EspressoProblem
-from cofi_espresso.exceptions import InvalidExampleError
+from espresso import EspressoProblem
+from espresso.exceptions import InvalidExampleError
 # chdir('../contrib/pumping_test')
 
 

@@ -11,7 +11,7 @@ on:
       - 'setup.py'
       - 'pyproject.toml'
       - 'CHANGELOG.md'
-      - '!src/cofi_espresso/version.py'
+      - '!src/espresso/version.py'
   
 jobs:
   ######################## GENERATE PACKAGE SOURCE #####################
