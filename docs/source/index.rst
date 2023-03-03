@@ -1,4 +1,4 @@
-.. cofi-espresso documentation master file, created by
+.. geo-espresso documentation master file, created by
    sphinx-quickstart on Fri Jun  3 13:47:44 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -53,7 +53,7 @@ Here's a simple illustration:
 
     # Select the test problem to be used -- change this line to any 
     # other test problem and everything else should still work!
-    from cofi_espresso import SimpleRegression as test_problem 
+    from espresso import SimpleRegression as test_problem 
 
     # Create an instance of the test problem class
     tp = test_problem()

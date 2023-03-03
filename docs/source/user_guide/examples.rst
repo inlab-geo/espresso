@@ -14,7 +14,7 @@ Gradient descent
     :caption: A generic gradient descent algorithm
     :name: gradient-descent 
 
-    from cofi_espresso import <testproblem> as testproblem 
+    from espresso import <testproblem> as testproblem 
 
     niterations = 100
     epsilon = 0.01
@@ -43,7 +43,7 @@ Let's go through :ref:`the code <gradient-descent>` in detail and explain the Es
 .. code-block:: python
     :linenos:
 
-    from cofi_espresso import <testproblem> as testproblem 
+    from espresso import <testproblem> as testproblem 
 
 Here ``<testproblem>`` should be replaced by any valid problem name. We then assign some values to variables representing the number of iterations of gradient descent,  and the learning rate :math:`\epsilon`. Next, we instantiate (initialise) the test problem we imported.
 

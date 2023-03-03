@@ -7,12 +7,12 @@ Usage
 =====
 
 
-Espresso is a collection of individual examples, or *test problems*. From a users' perspective, each test problem is a separate Python object (specifically, a subclass of :py:class:`cofi_espresso.EspressoProblem`) that is available to be imported:
+Espresso is a collection of individual examples, or *test problems*. From a users' perspective, each test problem is a separate Python object (specifically, a subclass of :py:class:`espresso.EspressoProblem`) that is available to be imported:
 
 .. code-block:: python
 
-    from cofi_espresso import XrayTomography as testproblem1
-    from cofi_espresso import SimpleRegression as testproblem2
+    from espresso import XrayTomography as testproblem1
+    from espresso import SimpleRegression as testproblem2
 
 Then, create an instance of the class to access its functionality:
 
@@ -28,13 +28,13 @@ Each test problem defines one or more *examples*. All examples will represent th
     tp1 = testproblem1(example_number = 3)
     tp2 = testproblem2(example_number = 2)
 
-If you wish to use more than one example in your code, you will need to create multiple :code:`testproblem` instances (or re-initialise an existing one). Attempting to load a non-existent example number will raise a :py:class:`cofi_espresso.exceptions.InvalidExampleError` exception.
+If you wish to use more than one example in your code, you will need to create multiple :code:`testproblem` instances (or re-initialise an existing one). Attempting to load a non-existent example number will raise a :py:class:`espresso.exceptions.InvalidExampleError` exception.
 
 .. code-block:: python
     :class: toggle
 
-    from cofi_espresso.exceptions import InvalidExampleError
-    from cofi_espresso import XrayTomography as xrt
+    from espresso.exceptions import InvalidExampleError
+    from espresso import XrayTomography as xrt
 
     iexample = 1
     try:
@@ -54,7 +54,7 @@ Your test problem instance provides access to simulation capabilities, data and 
 
 .. code-block:: python
 
-    from cofi_espresso import <TestProblem>
+    from espresso import <TestProblem>
     tp = TestProblem()
 
 All test problems will have at least the following attributes:

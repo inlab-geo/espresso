@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.2.0.dev0 (03/03/2023)
+
+### Infrastructure
+
+- Rename package from `cofi-espresso` to `geo-espresso`, module from `cofi_espresso`
+  to `espresso`
+- Rename `tools/` folder into `espresso_machine/`
+
 ## v0.1.0.dev0 (03/03/2023)
 
 ### New examples
