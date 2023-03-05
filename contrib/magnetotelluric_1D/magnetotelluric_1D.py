@@ -1,5 +1,5 @@
-from cofi_espresso import EspressoProblem
-from cofi_espresso.exceptions import InvalidExampleError
+from espresso import EspressoProblem
+from espresso.exceptions import InvalidExampleError
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -77,11 +77,8 @@ class Magnetotelluric1D(EspressoProblem):
         return self._desc
 
     @property
-    def model_size(self, model = None):
-        if model is None:
-            return len(self.good_model)
-        else:
-            return len(model)
+    def model_size(self):
+        return len(self.good_model)
 
     @property
     def data_size(self):
@@ -109,34 +106,27 @@ class Magnetotelluric1D(EspressoProblem):
         
     def set_start_model(self, new_start_model):
         self._mstart = new_start_model
+        self._mtrue = new_start_model
 
     def set_start_mesh(self, new_start_mesh):
         self._dpstart = new_start_mesh
+        self._dptrue = new_start_mesh
 
     def set_obs_data(self, dobs, derr, freqs):
         self._dobs = dobs
         self._derr = derr
         self._freqs = freqs
 
-    def forward(self, model, with_jacobian = False, depths = None):
+    def forward(self, model, with_jacobian = False):
         if with_jacobian:
-            if depths is None:
-                dpred, G = forward_1D_MT(model, self._dptrue, self._freqs, return_G=True)
-            else:
-                dpred, G = forward_1D_MT(model, depths, self._freqs, return_G=True)
+            dpred, G = forward_1D_MT(model, self._dptrue, self._freqs, return_G=True)
             return dpred, G
         else:
-            if depths is None:
-                dpred= forward_1D_MT(model, self._dptrue, self._freqs, return_G=False)
-            else:
-                dpred = forward_1D_MT(model, depths, self._freqs, return_G=False)
+            dpred= forward_1D_MT(model, self._dptrue, self._freqs, return_G=False)
             return dpred
     
-    def jacobian(self, model, depths=None):
-        if depths is None:
-            dpred, G = forward_1D_MT(model, self._dptrue, self._freqs, return_G = True)
-        else:
-            dpred, G = forward_1D_MT(model, depths, self._freqs, return_G=True)
+    def jacobian(self, model):
+        dpred, G = forward_1D_MT(model, self._dptrue, self._freqs, return_G = True)
         return G
 
     def plot_model(self, model, depths = None, max_depth = -1000, res_bounds = [0,4], title = None):
