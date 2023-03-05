@@ -15,4 +15,4 @@ Please `contact us <../user_guide/faq.html>`_ directly if you have questions.
     feedback or issues through `GitHub issues <https://github.com/inlab-geo/cofi/issues/new/choose>`_
     or `Slack`_ workspace.
 
-.. automodule:: cofi_espresso
+.. automodule:: espresso

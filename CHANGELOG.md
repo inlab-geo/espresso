@@ -1,5 +1,25 @@
 # Change Log
 
+## v0.2.0.dev0 (03/03/2023)
+
+### Infrastructure
+
+- Rename package from `cofi-espresso` to `geo-espresso`, module from `cofi_espresso`
+  to `espresso`
+- Rename `tools/` folder into `espresso_machine/`
+
+## v0.1.0.dev0 (03/03/2023)
+
+### New examples
+
+- [#114](https://github.com/inlab-geo/espresso/pull/114) Hydrology examples - pumping test and slug test
+
+### Infrastructure
+
+- [#91](https://github.com/inlab-geo/espresso/issues/91) Use versioningit to generate dynamic version
+- [#107](https://github.com/inlab-geo/espresso/issues/107) Documentation and structure update
+- [#108](https://github.com/inlab-geo/espresso/issues/108) New Espresso machine structure
+
 ## v0.0.2.dev0 (17/01/2023)
 
 ### Infrastructure

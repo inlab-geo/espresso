@@ -1,9 +1,8 @@
 # Espresso
 
-[![PyPI version](https://img.shields.io/pypi/v/cofi-espresso?logo=pypi&style=flat-square&color=bde0fe)](https://pypi.org/project/cofi-espresso/)
-[![build](https://img.shields.io/github/actions/workflow/status/inlab-geo/espresso/build_wheels.yml?branch=main&logo=githubactions&style=flat-square&color=ccd5ae)](https://github.com/inlab-geo/espresso/actions/workflows/build_wheels.yml)
-[![Documentation Status](https://img.shields.io/readthedocs/cofi-espresso?logo=readthedocs&style=flat-square&color=faedcd)](https://cofi-espresso.readthedocs.io/en/latest/?badge=latest)
-[![Slack](https://img.shields.io/badge/Slack-inlab-4A154B?logo=slack&style=flat-square&color=cdb4db)](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg)
+[![PyPI version](https://img.shields.io/pypi/v/geo-espresso?logo=pypi&style=flat-square&color=bde0fe&labelColor=f8f9fa)](https://pypi.org/project/geo-espresso/)
+[![Documentation Status](https://img.shields.io/readthedocs/geo-espresso?logo=readthedocs&style=flat-square&color=fed9b7&labelColor=f8f9fa&logoColor=eaac8b)](https://geo-espresso.readthedocs.io/en/latest/?badge=latest)
+[![Slack](https://img.shields.io/badge/Slack-InLab_community-4A154B?logo=slack&style=flat-square&color=cdb4db&labelColor=f8f9fa&logoColor=9c89b8)](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg)
 
 ## Introduction
 
@@ -27,11 +26,11 @@ For more information, please visit our documentation (coming soon).
 ## Installation
 
 ```console
-$ pip install cofi-espresso
+$ pip install geo-espresso
 ```
 
 Check Espresso documentation - 
-[installation page](https://cofi-espresso.readthedocs.io/en/latest/installation.html) 
+[installation page](https://geo-espresso.readthedocs.io/en/latest/user_guide/installation.html) 
 for details on dependencies and setting up with virtual environments.
 
 ## Basic usage
@@ -39,20 +38,23 @@ for details on dependencies and setting up with virtual environments.
 Once installed, each test problem can be imported using the following command:
 
 ```python
-from cofi_espresso import <testproblem>
+from espresso import <testproblem>
 ```
 
 Replace ``<testproblem>`` with one of the following currently available problems:
 
-- `GravityDensity`
 - `SimpleRegression`
 - `XrayTomography`
+- `FmmTomography`
+- `PumpingTest`
+- `SlugTest`
+- `GravityDensity`
 
 Once a problem is imported, its main functions can be called using the same 
 structure for each problem. For instance:
 
 ```python
-from cofi_espresso import GravityDensity
+from espresso import GravityDensity
 
 problem = GravityDensity(example_number=1)
 model = problem.good_model
@@ -79,12 +81,12 @@ print(problem.rec_coords)
 
 Which additional values are set is highly problem-specific and we suggest to 
 consult the 
-[Espresso Documentation on the problems](https://cofi-espresso.readthedocs.io/en/latest/user_guide/contrib/index.html).
+[Espresso Documentation on the problems](https://geo-espresso.readthedocs.io/en/latest/user_guide/contrib/index.html).
 
 
 ## Contributing
 
-Interested in contributing? Please check out our [contributor's guide](https://cofi-espresso.readthedocs.io/en/latest/contributor_guide/ways.html).
+Interested in contributing? Please check out our [contributor's guide](https://geo-espresso.readthedocs.io/en/latest/contributor_guide/index.html).
 
 
 ## Licence

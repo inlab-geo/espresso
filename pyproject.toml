@@ -2,18 +2,18 @@
 
 ####### TO INSTALL #######
 # pip install .                           # core only, or
-# python tools/build_package/build.py     # with contributions
+# python espresso_machine/build_package/build.py     # with contributions
 
 ####### TO TEST #######
-# python tools/build_package/validate.py --pre
-# python tools/build_package/validate.py --post
+# python espresso_machine/build_package/validate.py --pre
+# python espresso_machine/build_package/validate.py --post
 
 ####### TO FORMAT #######
-# black --check src/cofi_espresso
-# black src/cofi_espresso
+# black --check src/espresso
+# black src/espresso
 
 ####### PYLINT #######
-# pylint src/cofi_espresso
+# pylint src/espresso
 
 # --------------------------- END NOTES -----------------------------
 
@@ -22,7 +22,7 @@ requires = ["setuptools>=42", "numpy", "versioningit"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cofi_espresso"
+name = "geo-espresso"
 description = "Earth Science PRoblems for the Evaluation of Strategies, Solvers and Optimizers"
 authors = [{name = "InLab, Espresso development team"}]
 readme = "README.md"
@@ -51,6 +51,7 @@ dependencies = [
     "scipy>=1.0.0",
     "matplotlib>=3.1",
     "tqdm>=4.0",
+    "mpmath >= 1.2.0",
 ]
 dynamic = ["version"]
 
@@ -98,4 +99,4 @@ dirty = "{base_version}+{distance}.{vcs}{rev}.dirty.core"
 distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty.core"
 
 [tool.versioningit.write]
-file = "src/cofi_espresso/_version.py"
+file = "src/espresso/_version.py"

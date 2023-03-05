@@ -1,6 +1,6 @@
-====================
-New Espresso problem
-====================
+===============================
+Creating a new Espresso problem
+===============================
 
 👋 Everyone is welcomed to contribute with their own forward code. We aim to reduce the
 barrier of contributing so don't worry if you are not familiar with those technical
@@ -11,6 +11,9 @@ There are generally three steps involved in submiting your code:
 - **Download** - :ref:`get a copy of Espresso <get_own_copy>`
 - **Edit** - :ref:`add in your own Espresso problem <add_contrib>`
 - **Upload** - :ref:`submit your changes to our main repository <submit_changes>`
+
+It's important to note that after you've uploaded your contribution, you can still edit 
+it with the same "pull request" workflow.
 
 In the following paragraphs, we list out detailed steps on how to contribute a new 
 example. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
@@ -135,7 +138,7 @@ Add your own Espresso problem
 
    .. code-block:: bash
 
-        python <path-to-espresso>/tools/new_contribution/create_new_contrib.py <problem-name>
+        python <path-to-espresso>/espresso_machine/new_contribution/create_new_contrib.py <problem-name>
 
    Replacing :code:`path-to-espresso` with your path to the espresso folder you've just cloned,
    and :code:`problem-name` with your Espresso problem name, with lower case words connected
@@ -152,15 +155,14 @@ Add your own Espresso problem
    #. You should already have all the "pre-requisites" installed if you've gone through 
       the steps above.
 
-   #. Check the boxes under "getting started". These are pretty much all the things you've
+   #. See a list of "Checklists". These are pretty much all the things you've
       got to do to complete this contribution.
 
-   #. When you'd like to perform a quick local test by running your own code, tips under
-      "how to unit test your code" can be useful.
+   #. When you'd like to perform a quick local test by running your own code, run
+      :code:`python espresso_machine/build_package/validate.py -c <problem-name>`
 
-   #. When you think you've finished the coding, use scripts under "how to test building your
-      contribution with :code:`cofi-expresso`" to include your contribution into the package
-      locally.
+   #. When you think you've finished the coding, run
+      :code:`python espresso_machine/build_package/build.py --validate`
 
 
 .. _submit_changes:
@@ -196,6 +198,10 @@ Submit your changes
    assured - we will review your contribution, comment if necessary, and proceed to merge
    your contribution into our main repository when everything's ready.
 
+#. After your contribution is merged to the main branch, you can request another change
+   with the same workflow anytime you want. Just keep your own fork, edit, commit and 
+   push to your own fork, and raise a pull request from there.
+
 #. Thanks again, for your contribution to open source 🌟 
 
 
@@ -208,7 +214,7 @@ To install your development version locally, run the following in your terminal:
 
 .. code-block:: console
 
-   $ python tools/build_package/build.py
+   $ python espresso_machine/build_package/build.py
 
 
 The following table describes what happens when we package Espresso:
@@ -227,10 +233,10 @@ The following table describes what happens when we package Espresso:
      - Move meta data files to ``_esp_build/``
      - ``shutil.copy``
    * - 3
-     - Move ``src/`` content to ``_esp_build/src/cofi_espresso``
+     - Move ``src/`` content to ``_esp_build/src/espresso``
      - ``shutil.copytree``
    * - 4
-     - Move ``contrib/`` content to ``_esp_build/src/cofi_espresso/`` + ``_esp_build/src/cofi_espresso/__init__.py`` + ``_esp_build/src/cofi_espresso/list_problems.py``
+     - Move ``contrib/`` content to ``_esp_build/src/espresso/`` + ``_esp_build/src/espresso/__init__.py`` + ``_esp_build/src/espresso/list_problems.py``
      - ``shutil.copytree``, a series of file opening and string manipulation
    * - 5
      - Write dynamic version and extra versioningit configs into ``_esp_build/pyproject.toml``
@@ -250,7 +256,7 @@ the following in your terminal:
 
 .. code-block:: console
 
-   $ python tools/build_package/validate.py -c <contrib-name>
+   $ python espresso_machine/build_package/validate.py -c <contrib-name>
 
 You can run the validation script before (``--pre`` flag on) and/or after (``--post`` 
 flag on) you install your development version of Espresso. A better workflow is to run 
@@ -258,9 +264,9 @@ both:
 
 .. code-block:: console
 
-   $ python tools/build_package/validate.py --pre -c <contrib-name>
-   $ python tools/build_package/build.py
-   $ python tools/build_package/validate.py --post -c <contrib-name>
+   $ python espresso_machine/build_package/validate.py --pre -c <contrib-name>
+   $ python espresso_machine/build_package/build.py
+   $ python espresso_machine/build_package/validate.py --post -c <contrib-name>
 
 
 Or the following for a complete check on all examples (including yours), both before
@@ -268,14 +274,14 @@ and after Espresso installed:
 
 .. code-block:: console
 
-   $ python tools/build_package/build_with_checks.py
+   $ python espresso_machine/build_package/build.py
 
 
 Anyway, run the following for a detailed usage of this script:
 
 .. code-block:: console
 
-   $ python tools/build_package/validate.py --help
+   $ python espresso_machine/build_package/validate.py --help
 
 
 The following table describes what happens when we validate a certain version
