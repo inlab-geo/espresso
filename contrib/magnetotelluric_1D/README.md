@@ -32,7 +32,7 @@ Z =
 \end{pmatrix} 
 $$
 
-Therefore, the response of a 1D layered Earth is $Z_{1D}$, and is defined as a function of frequency. In 1-D, determining $Z$ given the electrical conductivity values of the Earth (the forward model) is done using a recursive approach (Wait, 1954). 
+Therefore, the response of a 1D layered Earth is $Z_{1D}$, and is defined as a function of frequency. In 1-D, determining $Z$ given the electrical conductivity values of the Earth (the forward model) is done using a recursive approach (Wait, 1954; Pedersen and Hermance, 1986). 
 
 Because of its practicality to visually interpret and analyse the data, it is common to represent the complex impedance tensor by its magnitude (the apparent resistivity) and its phase, defined by:
 
@@ -70,7 +70,7 @@ As mentioned earlier, the penetration of the EM fields depends on the frequency 
 ## Examples
 
 Three examples of inversion of MT data are presented here:
-- __example01__: inversion of a synthetic 3 layers Earth model using a smoothed regularization. 
-- __Synthetic AMT data__: inversion of a synthetic 5 layers Earth model using a smoothed regularization. 
-- __Field AMT/BBMT data__: inversion of field AMT/BBMT data from the Coompana Province, South Australia.
+- __Example 01__: inversion of a synthetic 3 layers Earth model using a smooth regularization. 
+- __Synthetic AMT data__: inversion of a synthetic 5 layers Earth model using a smooth regularization. 
+- __Field AMT/BBMT data__: inversion of field AMT/BBMT data from the Coompana Province, South Australia, using a smooth regularization.
 
