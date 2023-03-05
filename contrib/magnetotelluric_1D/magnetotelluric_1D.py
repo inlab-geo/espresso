@@ -303,36 +303,34 @@ def add_noise(Z, percentage = 5, seed = 1234):
     return Z, Zerr
 
 
-def load_data(filename, error_floor = 0.05):
+def load_data(filename, error_floor = 0.05, subsampling = 3):
 
-	f = open('../data/%s'%(filename))
-
-	# load the data, transform the apparent resistivity and its error to log10
-	MTdata = np.loadtxt('../data/%s'%(filename),skiprows=1)
-	MTdata = MTdata[::3,:]
-
-	freqs = MTdata[:,0]
-	rho_app = MTdata[:,1]
-	rho_app_err = MTdata[:,2]
-	phase = MTdata[:,3]
-	phase_err = MTdata[:,4]
-
-	dobs = np.r_[np.log10(rho_app), phase]
-
-	log10_drho_app = (1/np.log(10)) * (MTdata[:,2]/MTdata[:,1])
-
-	# add an error floor to the data: if the error if lower than the floor, then it is raised to the floor
-	# it prevents from including unrealistic small data error into the inversion
-	error_floor_rho = error_floor # the error floor is set as a percentage of the apparent resistivity 
-	ef_rho_log = np.log10(1 + error_floor_rho) 
-	ef_phy = (100 * error_floor_rho) * 0.286    
-
-	err_rho_log = np.maximum(log10_drho_app, ef_rho_log)
-	err_phy = np.maximum(MTdata[:,4], ef_phy)
-
-	derr = np.r_[err_rho_log, err_phy]
-
-	return freqs, dobs, derr
+    # load the data, transform the apparent resistivity and its error to log10
+    MTdata = np.loadtxt('../data/%s'%(filename),skiprows=1)
+    MTdata = MTdata[::subsampling,:]
+    
+    freqs = MTdata[:,0]
+    rho = MTdata[:,1]
+    rho_err = MTdata[:,2]
+    phase = MTdata[:,3]
+    phase_err = MTdata[:,4]
+    
+    dobs = np.r_[np.log10(rho), phase]
+    
+    log10_drho = (1/np.log(10)) * (rho_err/rho)
+    
+    # add an error floor to the data: if the error if lower than the floor, then it is raised to the floor
+    # it prevents from including unrealistic small data error into the inversion
+    error_floor_rho = error_floor # the error floor is set as a percentage of the apparent resistivity 
+    ef_rho_log = np.log10(1 + error_floor_rho) 
+    ef_phase = (100 * error_floor_rho) * 0.286    
+    
+    err_rho_log = np.maximum(log10_drho, ef_rho_log)
+    err_phase = np.maximum(phase_err, ef_phase)
+    
+    derr = np.r_[err_rho_log, err_phase]
+    
+    return freqs, dobs, derr
 
 
 
