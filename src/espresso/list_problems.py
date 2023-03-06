@@ -20,6 +20,7 @@ from ._slug_test import SlugTest
 from ._fmm_tomography import FmmTomography
 from ._xray_tomography import XrayTomography
 from ._gravity_density import GravityDensity
+from ._magnetotelluric_1D import Magnetotelluric1D
 from ._pumping_test import PumpingTest
 
 _all_problem_names = [
@@ -28,6 +29,7 @@ _all_problem_names = [
 	'FmmTomography',
 	'XrayTomography',
 	'GravityDensity',
+	'Magnetotelluric1D',
 	'PumpingTest',
 ]
 _all_problems = [
@@ -36,5 +38,6 @@ _all_problems = [
 	FmmTomography,
 	XrayTomography,
 	GravityDensity,
+	Magnetotelluric1D,
 	PumpingTest,
 ]

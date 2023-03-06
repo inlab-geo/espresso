@@ -58,6 +58,7 @@ from ._slug_test import SlugTest
 from ._fmm_tomography import FmmTomography
 from ._xray_tomography import XrayTomography
 from ._gravity_density import GravityDensity
+from ._magnetotelluric_1D import Magnetotelluric1D
 from ._pumping_test import PumpingTest
 
 from .list_problems import list_problem_names, list_problems
