@@ -16,7 +16,7 @@ try:
     sys.path.append(str(_machine_doc_utils_gen_docs))
     import gen_docs
 except:
-    from espresso._machine.doc_utils import gen_docs           # TODO test this after build.py is finished
+    from espresso._machine.doc_utils import gen_docs
 
 
 def setup(app):

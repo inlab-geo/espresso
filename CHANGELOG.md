@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.2.1.dev0 (06/03/2023)
+
+### New examples
+
+- [#100](https://github.com/inlab-geo/espresso/pull/100) 1D magnetotelluric example
+
+### Infrastructure
+
 ## v0.2.0.dev0 (03/03/2023)
 
 ### Infrastructure
