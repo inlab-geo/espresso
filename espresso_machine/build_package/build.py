@@ -118,7 +118,6 @@ def move_contrib_source():
     # collect a list of contributions + related strings to write later
     contribs = []
     init_file_imports = "\n"
-    init_file_all_nms = "\n_all_problem_names = [\n"
     init_file_all_cls = "\n_all_problems = [\n"
     for path in Path(CONTRIB_SRC).iterdir():
         if path.is_dir():
@@ -126,9 +125,7 @@ def move_contrib_source():
             contrib_class = contrib.title().replace("_", "")    # class
             contribs.append(contrib)
             init_file_imports += f"from ._{contrib} import {contrib_class}\n"
-            init_file_all_nms += f"\t'{contrib_class}',\n"
             init_file_all_cls += f"\t{contrib_class},\n"
-    init_file_all_nms += "]"
     init_file_all_cls += "]"
     # some constant strings to append to init file later
     init_file_imp_funcs = "\nfrom .list_problems import list_problem_names, list_problems"
@@ -142,7 +139,6 @@ def move_contrib_source():
         f.write(init_file_add_funcs)
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
         f.write(init_file_imports)
-        f.write(init_file_all_nms)
         f.write(init_file_all_cls)
 
 # 5
