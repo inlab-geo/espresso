@@ -11,18 +11,18 @@ import validate
 import report
 
 
-args = validate.args
-
 def _pre_build():
-    return args.pre or (not args.pre and not args.post)
+    _args = validate.args()
+    return _args.pre or (not _args.pre and not _args.post)
 
 @pytest.fixture
 def pre_build():
     return _pre_build()
 
 def _all_contribs():
+    _args = validate.args()
     pre = _pre_build()
-    problems = run_examples.problems_to_run(args.contribs)
+    problems = run_examples.problems_to_run(_args.contribs)
     print("🥃 Running " + ("pre-" if pre else "post-") + "build tests for the following contributions:")
     print("- " + "\n- ".join([c[0] for c in problems]) + "\n")
     # results = run_examples.run_problems(problems, pre_build=pre)

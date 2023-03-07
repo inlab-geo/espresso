@@ -25,18 +25,7 @@ known_dependencies = [
     "tqdm",
 ]
 
-args = validate.args
-
-def _pre_build():
-    return args.pre or (not args.pre and not args.post)
-
-def _all_contribs():
-    pre = _pre_build()
-    problems = run_examples.problems_to_run(args.contribs)
-    print("🥃 Running " + ("pre-" if pre else "post-") + "build tests for the following contributions:")
-    print("- " + "\n- ".join([c[0] for c in problems]) + "\n")
-    results = run_examples.run_problems(problems, pre_build=pre)
-    return results
+args = validate.args()
 
 def _strip_pkg(modules):
     res = set()

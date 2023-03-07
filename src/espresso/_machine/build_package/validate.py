@@ -37,10 +37,15 @@ def setup_parser():
             "otherwise please use `python build.py` beforehand)")
     return parser
 
-args = setup_parser().parse_args()
+parser = setup_parser()
+
+def args():
+    _args = parser.parse_args()
+    return _args
 
 def _pre_build():
-    return args.pre or (not args.pre and not args.post)
+    _args = args()
+    return _args.pre or (not _args.pre and not _args.post)
 
 
 # --> main test

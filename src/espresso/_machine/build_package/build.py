@@ -6,7 +6,8 @@
 4. "contrib/" => "_esp_build/src/espresso/" + "__init__.py" + "list_problems.py"
 5. "_version.py" => "_esp_build/pyproject.toml"
 6. "espresso_machine/" => _esp_build/src/_machine"
-6. `pip install .`
+7. build capability_matrix
+8. `pip install .`
 
 """
 
@@ -18,6 +19,10 @@ import pytest
 from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
 import versioningit
+import json
+
+import _utils
+import report
 
 
 # ------------------------ constants ------------------------
@@ -39,6 +44,8 @@ META_FILES = [
     ".gitignore",
     "CHANGELOG.md",
 ]
+validate_script = str(Path(__file__).resolve().parent / "validate.py")
+
 
 # ------------------------ argument parser ------------------------
 def setup_parser():
@@ -46,11 +53,19 @@ def setup_parser():
         description="Script to build Espresso, with/without pre/post-build validation"
     )
     parser.add_argument(
-        "--validate", "-v", "--checks", dest="validate", action="store_true", 
-        default=False, help="Run tests before and after building the package")
+        "-v", "--checks", "--post", "--validate",
+        dest="post", action="store_true", 
+        default=False, help="Run tests after building the package")
+    parser.add_argument(
+        "--pre", dest="pre", action="store_true",
+        default=False, help="Run tests before building the package")
+    parser.add_argument(
+        "--timeout", "-t", dest="timeout", action="store", default=None, type=int,
+        help="Specify the number of seconds as timeout limit for each attribute")
     return parser
 
-args = setup_parser().parse_args()
+def args():
+    return setup_parser().parse_args()
 
 
 # ------------------------ helpers ------------------------
@@ -118,7 +133,6 @@ def move_contrib_source():
     # collect a list of contributions + related strings to write later
     contribs = []
     init_file_imports = "\n"
-    init_file_all_nms = "\n_all_problem_names = [\n"
     init_file_all_cls = "\n_all_problems = [\n"
     for path in Path(CONTRIB_SRC).iterdir():
         if path.is_dir():
@@ -126,9 +140,7 @@ def move_contrib_source():
             contrib_class = contrib.title().replace("_", "")    # class
             contribs.append(contrib)
             init_file_imports += f"from ._{contrib} import {contrib_class}\n"
-            init_file_all_nms += f"\t'{contrib_class}',\n"
-            init_file_all_cls += f"\t{contrib_class},\n"
-    init_file_all_nms += "]"
+            init_file_all_cls += f"    {contrib_class},\n"
     init_file_all_cls += "]"
     # some constant strings to append to init file later
     init_file_imp_funcs = "\nfrom .list_problems import list_problem_names, list_problems"
@@ -142,7 +154,6 @@ def move_contrib_source():
         f.write(init_file_add_funcs)
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
         f.write(init_file_imports)
-        f.write(init_file_all_nms)
         f.write(init_file_all_cls)
 
 # 5
@@ -179,7 +190,16 @@ def write_version():
 def move_espresso_machine():
     move_folder_content(MACHINE_SRC, f"{BUILD_DIR}/src/espresso/_machine")
 
-# 7
+# 7 build capability matrix
+def build_problem_capability():
+    with _utils.suppress_stdout():
+        capability_report = report.capability_report()
+    report_to_write = json.dumps(capability_report, indent=4)
+    with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
+        f.write("\n\n_capability_matrix = ")
+        f.write(report_to_write)
+
+# 8 `pip install .`
 def install_pkg():
     subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
     return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
@@ -219,38 +239,37 @@ def build():
     println_with_emoji("Moving infrastructure code...", "🗂")
     move_espresso_machine()
     print("OK.")
-    # 6
+    # 7
+    println_with_emoji("Building capability matrix... (this will take some time)", "🗂")
+    build_problem_capability()
+    # 8
     println_with_emoji("Building Python package: geo-espresso...", "🗂")
     exit_code = install_pkg()
-    if exit_code == 0: 
+    if exit_code == pytest.ExitCode.OK:
         println_with_emoji("Espresso installed!", "🍰")
-    return exit_code
+    else:
+        sys.exit(exit_code)
 
-def build_with_validate():
-    validate_script = str(Path(__file__).resolve().parent / "validate.py")
-
-    # pre-build validate
+def pre_validate():
     exit_code = subprocess.call([sys.executable, validate_script, "--pre"])
     if exit_code != pytest.ExitCode.OK:
         sys.exit(exit_code)
 
-    # build package
-    build()
-
-    # post-build validation
+def post_validate():
     exit_code = subprocess.call([sys.executable, validate_script, "--post"])
     if exit_code != pytest.ExitCode.OK:
         sys.exit(exit_code)
     else:
-        print("\n🍰 All done 🍰")
+        println_with_emoji("All done", "🍰")
         sys.exit(exit_code)
 
-
 def main():
-    if args.validate:
-        build_with_validate()
-    else:
-        build()
+    _args = args()
+    if _args.pre:
+        pre_validate()
+    build()
+    if _args.post:
+        post_validate()
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
