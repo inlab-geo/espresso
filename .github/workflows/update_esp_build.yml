@@ -12,11 +12,11 @@ on:
       - 'pyproject.toml'
       - 'CHANGELOG.md'
       - '!src/espresso/version.py'
-  
+
 jobs:
   ######################## GENERATE PACKAGE SOURCE #####################
   gen_pkg_source:
-    if: github.repository_owner == 'inlab-geo' 
+    if: github.repository_owner == 'inlab-geo' && ${{ !contains(github.event.head_commit.message, 'release') }}
     name: Generate package source
     runs-on: ubuntu-latest
     steps:

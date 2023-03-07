@@ -11,8 +11,10 @@ import warnings
 import pathlib
 import typing
 
+import _utils
+import build
+
 try:
-    import espresso
     from espresso.exceptions import InvalidExampleError
 except ModuleNotFoundError as e:
     e.msg += "\n\nNote: To run pre-build validation, please firstly install " \
@@ -24,6 +26,7 @@ except ModuleNotFoundError as e:
 PKG_NAME = "espresso"
 ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
 CONTRIB_FOLDER = ROOT + "/contrib"
+
 
 def _problem_name_to_class(problem_name):   # e.g. "xray_tomography" -> "XrayTomography"
     return problem_name.title().replace("_", "")
@@ -107,23 +110,27 @@ prob_properties = [
     ("inv_cov", "inverse_covariance_matrix"),
 ]
 
+@_utils.timeout(seconds=build.args().timeout)
+def _run_attr(prob_instance, how_to_get, is_method=True):
+    if is_method:
+        return how_to_get(prob_instance)
+    return getattr(prob_instance, how_to_get)
+
+def _get_result(prob_instance, how_to_get, is_method=True):
+    try:
+        return _run_attr(prob_instance, how_to_get, is_method)
+    except NotImplementedError:
+        return None
+    except Exception as e:
+        return e
+
 def collect_methods_outputs(prob_instance_i, all_outputs):
     for (output_name, how_to_get) in prob_methods:
-        try:
-            all_outputs[output_name] = how_to_get(prob_instance_i)
-        except NotImplementedError:
-            all_outputs[output_name] = None
-        except Exception as e:
-            all_outputs[output_name] = e
+        all_outputs[output_name] = _get_result(prob_instance_i, how_to_get)
 
 def collect_properties(prob_instance_i, all_outputs):
     for (output_name, prop) in prob_properties:
-        try:
-            all_outputs[output_name] = getattr(prob_instance_i, prop)
-        except NotImplementedError:
-            all_outputs[output_name] = None
-        except Exception as e:
-            all_outputs[output_name] = e
+        all_outputs[output_name] = _get_result(prob_instance_i, prop, False)
 
 def run_example(problem_class, problem_class_str, i) -> dict:
     # prepare
