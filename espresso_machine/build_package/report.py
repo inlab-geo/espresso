@@ -6,11 +6,12 @@ Usage:
 - To print report, print_compliance_report(report)
 """
 
-import run_examples
-import criteria
+import os
+import sys
 
 
 def _init_attr_report():
+    import criteria
     _report = {
         "required": dict(),
         "optional": dict(),
@@ -24,6 +25,7 @@ def _init_attr_report():
     return _report
 
 def _collect_compliance_info(all_results, report):
+    import criteria
     _has_init_error = isinstance(all_results["prob_instance"], Exception)
     if _has_init_error:
         _init_error = all_results["prob_instance"]
@@ -87,6 +89,8 @@ def raw_compliance_report(problems_to_check=None, pre_build=True):
         }
     }
     """
+    import run_examples
+    import criteria
     report = dict()
     problems = run_examples.problems_to_run(problems_specified=problems_to_check)
     results = run_examples.run_problems(problems, pre_build=pre_build)
@@ -192,7 +196,7 @@ def compliance_report(problems_to_check=None, pre_build=True):
         new_report[prob_name] = _new_report
     return new_report
 
-# from SO: https://stackoverflow.com/questions/287871/how-do-i-print-colored-text-to-the-terminal
+# from SO: https://stackoverflow.com/a/287944
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -305,3 +309,19 @@ def pprint_compliance_report(report):
             print(cformat(bcolors.OKCYAN, f"\n{prob} is API-compliance. Cheers!"))
         else:
             print(cformat(bcolors.FAIL, f"\n{prob} is not API-compliant."))
+
+def capability_report(problems_to_check=None, pre_build=True, timeout=1):
+    # those with TimeoutError will be approximated to be OK
+    sys.argv.extend(["--timeout", str(timeout)])
+    _compliance_report = compliance_report(problems_to_check, pre_build)
+    _capability_report = dict()
+    for prob, res in _compliance_report.items():
+        _new_report = dict()
+        for attr, attr_res in res["required"].items():
+            _new_report[attr] = int(attr_res == "OK" or isinstance(attr_res, TimeoutError))
+        for attr, attr_res in res["optional"].items():
+            _new_report[attr] = int(attr_res == "OK" or isinstance(attr_res, TimeoutError))
+        for additional in res["additional"]:
+            _new_report[additional] = 1
+        _capability_report[prob] = _new_report
+    return _capability_report

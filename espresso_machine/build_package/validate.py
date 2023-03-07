@@ -35,12 +35,19 @@ def setup_parser():
         help="Run tests after building the package " + 
             "(we assume you've built the package so won't build it for you; " + 
             "otherwise please use `python build.py` beforehand)")
+    parser.add_argument(
+        "--timeout", "-t", dest="timeout", action="store", default=None, type=int,
+        help="Specify the number of seconds as timeout limit for each attribute")
     return parser
 
-args = setup_parser().parse_args()
+parser = setup_parser()
+
+def args():
+    return parser.parse_args()
 
 def _pre_build():
-    return args.pre or (not args.pre and not args.post)
+    _args = args()
+    return _args().pre or (not _args.pre and not _args.post)
 
 
 # --> main test
