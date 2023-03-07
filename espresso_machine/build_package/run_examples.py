@@ -12,7 +12,7 @@ import pathlib
 import typing
 
 import _utils
-import validate
+import build
 
 try:
     from espresso.exceptions import InvalidExampleError
@@ -110,7 +110,7 @@ prob_properties = [
     ("inv_cov", "inverse_covariance_matrix"),
 ]
 
-@_utils.timeout(seconds=validate.args().timeout)
+@_utils.timeout(seconds=build.args().timeout)
 def _run_attr(prob_instance, how_to_get, is_method=True):
     if is_method:
         return how_to_get(prob_instance)

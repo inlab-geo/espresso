@@ -53,15 +53,19 @@ def setup_parser():
         description="Script to build Espresso, with/without pre/post-build validation"
     )
     parser.add_argument(
-        "--validate", "-v", "--checks", "--post", 
+        "-v", "--checks", "--post", "--validate",
         dest="post", action="store_true", 
         default=False, help="Run tests after building the package")
     parser.add_argument(
         "--pre", dest="pre", action="store_true",
         default=False, help="Run tests before building the package")
+    parser.add_argument(
+        "--timeout", "-t", dest="timeout", action="store", default=None, type=int,
+        help="Specify the number of seconds as timeout limit for each attribute")
     return parser
 
-args = setup_parser().parse_args()
+def args():
+    return setup_parser().parse_args()
 
 
 # ------------------------ helpers ------------------------
@@ -260,10 +264,11 @@ def post_validate():
         sys.exit(exit_code)
 
 def main():
-    if args.pre:
+    _args = args()
+    if _args.pre:
         pre_validate()
     build()
-    if args.post:
+    if _args.post:
         post_validate()
 
 if __name__ == "__main__":
