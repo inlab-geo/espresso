@@ -20,8 +20,8 @@ from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
 import versioningit
 import json
-import contextlib
 
+import _utils
 import report
 
 
@@ -136,7 +136,7 @@ def move_contrib_source():
             contrib_class = contrib.title().replace("_", "")    # class
             contribs.append(contrib)
             init_file_imports += f"from ._{contrib} import {contrib_class}\n"
-            init_file_all_cls += f"\t{contrib_class},\n"
+            init_file_all_cls += f"    {contrib_class},\n"
     init_file_all_cls += "]"
     # some constant strings to append to init file later
     init_file_imp_funcs = "\nfrom .list_problems import list_problem_names, list_problems"
@@ -188,7 +188,7 @@ def move_espresso_machine():
 
 # 7 build capability matrix
 def build_problem_capability():
-    with contextlib.redirect_stdout(None):
+    with _utils.suppress_stdout():
         capability_report = report.capability_report()
     report_to_write = json.dumps(capability_report, indent=4)
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:

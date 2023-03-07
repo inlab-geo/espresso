@@ -181,7 +181,7 @@ class Magnetotelluric1D(EspressoProblem):
         axs[1].set_xlabel('Log$_{10}$ Period (s)')
         axs[0].grid(lw=0.2)
         axs[1].grid(lw=0.2)
-        axs[0].legend()
+        # axs[0].legend()
         plt.tight_layout()
         #plt.show()
         return fig
