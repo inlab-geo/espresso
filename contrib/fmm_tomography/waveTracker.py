@@ -95,9 +95,9 @@ class gridModel(object):
         # run fmst wavefront tracker code from command line
         # see if the executable is there, otherwise do preparation for the executable
         out = run_fm2dss(wdir)
-        if out.returncode:      # re-compile if there's an error
-            compile_fm2dss()
-            out = run_fm2dss(wdir)
+        # if out.returncode:      # re-compile if there's an error
+        #     compile_fm2dss()
+        #     out = run_fm2dss(wdir)
         if out.returncode:      # add permission if there's a further error
             print("Trying to fix now...")
             try:

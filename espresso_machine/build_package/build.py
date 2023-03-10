@@ -172,11 +172,13 @@ def move_contrib_source():
     init_file_add_all_nms = "\n__all__ += list_problem_names()"
     init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
     # write all above to files
+    compiled_code_list = set()          # TODO add as optional installation
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
-            if Path(f"{CONTRIB_SRC}/_{contrib}/CMakeLists.txt").exists():
+            if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
                 f.write(f"add_subdirectory(_{contrib})\n")
+                compiled_code_list.add(contrib)
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_imp_funcs)
