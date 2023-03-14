@@ -17,13 +17,13 @@ on:
       - 'setup.py'
 
 jobs:
-  build_wheels_non_windows:
+  build_wheels:
     if: github.repository_owner == 'inlab-geo'
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - name: Symlink gfortran (macOS)
