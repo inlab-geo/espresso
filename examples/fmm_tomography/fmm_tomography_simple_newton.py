@@ -8,7 +8,7 @@ Last updated July 2022
 
 from cofi import BaseProblem, InversionOptions, Inversion
 from cofi.utils import QuadraticReg
-from cofi_espresso import FmmTomography
+from espresso import FmmTomography
 
 
 # get espresso problem FmmTomography information

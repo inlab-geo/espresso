@@ -4,7 +4,7 @@ with data uncertainty and regularization taken into account.
 
 import numpy as np
 from cofi import BaseProblem, InversionOptions, Inversion
-from cofi_espresso import XrayTomography
+from espresso import XrayTomography
 
 
 # define CoFI BaseProblem

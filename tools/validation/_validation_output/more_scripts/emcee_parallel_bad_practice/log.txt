@@ -1,4 +1,4 @@
 Serial took 21.1 seconds
-Multiprocessing took 24.9 seconds
-0.8 times faster(?) than serial
+Multiprocessing took 32.8 seconds
+0.6 times faster(?) than serial
 48 CPUs

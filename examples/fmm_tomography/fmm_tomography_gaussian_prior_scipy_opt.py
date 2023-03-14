@@ -9,7 +9,7 @@ Last updated July 2022
 import numpy as np
 
 from cofi import BaseProblem, InversionOptions, Inversion
-from cofi_espresso import FmmTomography
+from espresso import FmmTomography
 
 # get espresso problem FmmTomography information
 fmm = FmmTomography()

@@ -13,6 +13,6 @@ dependencies:
   - pip
   - pip:
     - cofi>=0.1.2.dev22
-    - cofi-espresso>=0.0.1.dev4
+    - geo-espresso>=0.2.1.dev0 
     - ipywidgets>=7.7.0
     - tqdm>=4.0
