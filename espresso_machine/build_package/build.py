@@ -189,8 +189,8 @@ def move_contrib_source():
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_all_cls)
-    with open(f"{ROOT_DIR}/contrib/{PROBLEMS_TO_COMPILE_FILE}", "w") as f:
-        f.writelines(compiled_code_list)
+    # with open(f"{ROOT_DIR}/contrib/{PROBLEMS_TO_COMPILE_FILE}", "w") as f:
+    #     f.writelines(compiled_code_list)
 
 # 7 move espresso_machine into espresso/_machine
 def move_espresso_machine():
