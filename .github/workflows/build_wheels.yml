@@ -52,6 +52,7 @@ jobs:
       - name: Generate package source with contributions
         run: |
           python -m pip install -r envs/requirements_test.txt
+          python -m pip install .
           python espresso_machine/build_package/build.py
 
       - name: Build wheels
