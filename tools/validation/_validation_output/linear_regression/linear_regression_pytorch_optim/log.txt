@@ -27,6 +27,11 @@ algorithm = Adam
 lr = 0.1
 num_iterations = 500
 Use `suggest_solver_params()` to check required/optional solver-specific parameters.
+algorithm
+lr
+1
+num_iterations
+algorithm_params
 Iteration #0, objective value: 2817.747736682037
 Iteration #1, objective value: 2181.6679276745836
 Iteration #2, objective value: 1684.8936958165225
