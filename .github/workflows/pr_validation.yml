@@ -32,4 +32,4 @@ jobs:
       
       - name: Build with pre and post validation
         run: |
-          python espresso_machine/build_package/build.py --validate
+          python espresso_machine/build_package/build.py --pre --post

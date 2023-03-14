@@ -6,7 +6,6 @@ Usage:
 - To print report, print_compliance_report(report)
 """
 
-import os
 import sys
 
 

@@ -47,6 +47,7 @@ META_FILES = [
     ".gitignore",
     "CHANGELOG.md",
 ]
+PROBLEMS_TO_COMPILE_FILE = "problems_to_compile.txt"
 validate_script = str(Path(__file__).resolve().parent / "validate.py")
 
 
@@ -79,7 +80,8 @@ def is_cache(file_name):
                 file_name.endswith(".mod") or \
                     file_name.endswith(".out") or \
                         file_name == "CMakeFiles" or \
-                            file_name == "Makefile"
+                            file_name == "Makefile" or \
+                                file_name == PROBLEMS_TO_COMPILE_FILE
 
 def move_folder_content(folder_path, dest_path, prefix=None):
     if prefix is None:
@@ -187,6 +189,8 @@ def move_contrib_source():
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_all_cls)
+    with open(f"{ROOT_DIR}/contrib/{PROBLEMS_TO_COMPILE_FILE}", "w") as f:
+        f.writelines(compiled_code_list)
 
 # 7 move espresso_machine into espresso/_machine
 def move_espresso_machine():
@@ -211,7 +215,7 @@ def install_pkg():
 # printing helper
 def println_with_emoji(content, emoji):
     try:
-        print(f"\n{emoji}  {content}")
+        print(f"\n{emoji} {content}")
     except:
         print(f"\n{content}")
 
@@ -233,7 +237,11 @@ def build():
     println_with_emoji("Package building...", "🛠")
     for (step, desc) in build_pipeline:
         println_with_emoji(desc, "🗂")
-        step()
+        try:
+            step()
+        except Exception as e:
+            println_with_emoji(f"Problem occurred in this step: {desc}\n", "❗️")
+            raise e
         print("OK.")
     println_with_emoji("Espresso installed!", "🍰")
 

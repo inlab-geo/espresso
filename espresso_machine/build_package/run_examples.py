@@ -39,6 +39,7 @@ def get_folder_content(folder_name):
 def problems_to_run(problems_specified: typing.Optional[list] = None):
     all_problems = get_folder_content(CONTRIB_FOLDER)
     all_problems_zipped = list(zip(*all_problems))
+    all_problems_zipped = [c for c in all_problems_zipped if "." not in c[0]]
     if problems_specified is None:
         return all_problems_zipped
     else:       # filter by specified problems list
