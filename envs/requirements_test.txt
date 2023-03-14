@@ -3,6 +3,7 @@ pyyaml
 numpy
 matplotlib
 scipy
+tqdm
 scikit-build
 cibuildwheel==2.10.0
 versioningit==2.1.0
