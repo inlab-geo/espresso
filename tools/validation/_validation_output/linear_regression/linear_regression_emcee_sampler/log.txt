@@ -18,7 +18,7 @@ Summary for inversion options
 Solving method: None set
 Use `suggest_solving_methods()` to check available solving methods.
 -----------------------------
-Backend tool: `emcee` - an MIT licensed pure-Python implementation of Goodman & Weare’s Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+Backend tool: `<class 'cofi.tools._emcee.Emcee'>` - an MIT licensed pure-Python implementation of Goodman & Weare’s Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
 References: ['https://emcee.readthedocs.io/en/stable/user/sampler/#emcee.EnsembleSampler', 'https://emcee.readthedocs.io/en/stable/user/sampler/#emcee.EnsembleSampler.sample']
 Use `suggest_tools()` to check available backend tools.
 -----------------------------

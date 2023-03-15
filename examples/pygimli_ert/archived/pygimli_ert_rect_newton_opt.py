@@ -25,7 +25,7 @@ import pygimli
 from pygimli.physics import ert
 
 from cofi import BaseProblem, InversionOptions, Inversion
-from cofi.solvers import BaseSolver
+from cofi.tools import BaseInferenceTool
 
 from pygimli_ert_lib import *
 
@@ -46,7 +46,7 @@ _figs_prefix = f"./{_file_prefix}"
 
 ############# Define a custom solver (Newton's optimization method) ###################
 
-class MyNewtonSolver(BaseSolver):
+class MyNewtonSolver(BaseInferenceTool):
     def __init__(self, inv_problem, inv_options):
         __params = inv_options.get_params()
         self._niter = __params["niter"]
