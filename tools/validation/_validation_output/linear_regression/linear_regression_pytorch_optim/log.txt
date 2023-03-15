@@ -18,7 +18,7 @@ Summary for inversion options
 Solving method: None set
 Use `suggest_solving_methods()` to check available solving methods.
 -----------------------------
-Backend tool: `torch.optim` - PyTorch Optimizers under module `pytorch.optim`
+Backend tool: `<class 'cofi.tools._pytorch_optim.PyTorchOptim'>` - PyTorch Optimizers under module `pytorch.optim`
 References: ['https://pytorch.org/docs/stable/optim.html#algorithms']
 Use `suggest_tools()` to check available backend tools.
 -----------------------------
@@ -27,11 +27,6 @@ algorithm = Adam
 lr = 0.1
 num_iterations = 500
 Use `suggest_solver_params()` to check required/optional solver-specific parameters.
-algorithm
-lr
-1
-num_iterations
-algorithm_params
 Iteration #0, objective value: 2817.747736682037
 Iteration #1, objective value: 2181.6679276745836
 Iteration #2, objective value: 1684.8936958165225

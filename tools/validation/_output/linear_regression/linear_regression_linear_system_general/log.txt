@@ -18,7 +18,7 @@ Summary for inversion options
 Solving method: None set
 Use `suggest_solving_methods()` to check available solving methods.
 -----------------------------
-Backend tool: `scipy.linalg.lstsq` - SciPy's wrapper function over LAPACK's linear least-squares solver, using 'gelsd', 'gelsy' (default), or 'gelss' as backend driver
+Backend tool: `<class 'cofi.tools._scipy_lstsq.ScipyLstSq'>` - SciPy's wrapper function over LAPACK's linear least-squares solver, using 'gelsd', 'gelsy' (default), or 'gelss' as backend driver
 References: ['https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html', 'https://www.netlib.org/lapack/lug/node27.html']
 Use `suggest_tools()` to check available backend tools.
 -----------------------------

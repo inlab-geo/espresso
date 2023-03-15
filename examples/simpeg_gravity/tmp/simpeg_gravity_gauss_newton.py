@@ -23,7 +23,7 @@ from SimPEG import (
 )
 
 from cofi import BaseProblem, InversionOptions, Inversion
-from cofi.solvers import BaseSolver
+from cofi.tools import BaseInferenceTool
 
 
 ############# Define the true model with SimPEG #######################################
@@ -218,7 +218,7 @@ def get_hessian(model, simulation, Wm, lamda):
 
 ############# Inverted by our Gauss-Newton algorithm ##################################
 
-class GaussNewton(BaseSolver):
+class GaussNewton(BaseInferenceTool):
     def __init__(self, inv_problem, inv_options):
         __params = inv_options.get_params()
         self._niter = __params["niter"]

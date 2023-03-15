@@ -3,7 +3,7 @@ import numpy as np
 import pygimli
 from pygimli.physics import ert
 from cofi import BaseProblem, InversionOptions, Inversion
-from cofi.solvers import BaseSolver
+from cofi.tools import BaseInferenceTool
 
 from pygimli_ert_lib import (
     survey_scheme,
@@ -68,7 +68,11 @@ ax[0].figure.savefig("figs/tri_mesh/tri_gauss_newton_armijo_linesearch_model_sta
 ############# Inverted by our Gauss-Newton algorithm ##################################
 
 
-class GaussNewtonArmjioLineaSearch(BaseSolver):
+class GaussNewtonArmjioLineaSearch(BaseInferenceTool):
+    required_in_problem = {"initial_model", "residual", "jacobian", "gradient"}
+    optional_in_problem = dict()
+    required_in_options = set()
+    optional_in_options = {"niter": 100, "verbose": True, "tau_tol": 1e-5, "update_tol": 1e-5}
     def __init__(self, inv_problem, inv_options):
         __params = inv_options.get_params()
         self._niter = __params.get("niter", 100)

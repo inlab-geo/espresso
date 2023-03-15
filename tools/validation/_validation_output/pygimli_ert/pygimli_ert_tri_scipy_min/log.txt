@@ -17,17 +17,17 @@ Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.005
+Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Forward: time: 0.158s
+Forward: time: 0.16s
 Response: min = 98.7322 max = 218.789 mean = 173.9
 Reciprocity rms(modelReciprocity) 0.409386%, max: 1.53119%
 relativeError set to a value > 0.5 .. assuming this is a percentage Error level dividing them by 100

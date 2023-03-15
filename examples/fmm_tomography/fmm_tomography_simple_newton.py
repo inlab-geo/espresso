@@ -30,6 +30,8 @@ reg_damping = QuadraticReg(damping_factor, model_size, "damping", ref_start_slow
 reg_flattening = QuadraticReg(flattening_factor, model_shape, "flattening")
 reg_smoothing = QuadraticReg(smoothing_factor, model_shape, "smoothing")
 reg = reg_damping + reg_flattening + reg_smoothing
+reg.__name__ = "regularization"
+reg.__doc__ = ""
 fmm_problem.set_regularization(reg)
 
 sigma =  0.00001                   # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals

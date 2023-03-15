@@ -18,7 +18,7 @@ Summary for inversion options
 Solving method: None set
 Use `suggest_solving_methods()` to check available solving methods.
 -----------------------------
-Backend tool: `scipy.optimize.least_squares` - SciPy's non-linear least squares solver with bounds on variables, algorithms include 'trf' (default), 'dogbox', and 'lm'
+Backend tool: `<class 'cofi.tools._scipy_opt_lstsq.ScipyOptLstSq'>` - SciPy's non-linear least squares solver with bounds on variables, algorithms include 'trf' (default), 'dogbox', and 'lm'
 References: ['https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html']
 Use `suggest_tools()` to check available backend tools.
 -----------------------------
