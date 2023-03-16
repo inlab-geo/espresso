@@ -15,7 +15,9 @@ Check comments for these functions for what criteria are implemented.
 import os
 import numpy as np
 from matplotlib.figure import Figure
+
 import run_examples
+import _utils
 
 try:
     import espresso
@@ -161,7 +163,7 @@ def criteria_for_problem(prob_class, prob_class_name, prob_path, parent_mod):
     the examples to function `criteria_for_example`.
     """
     # preparation
-    names_in_folder, paths_in_folder = run_examples.get_folder_content(prob_path)
+    names_in_folder, paths_in_folder = _utils.get_folder_content(prob_path)
     prob_name = prob_path.split("/")[-1]
 
     # checking
@@ -284,7 +286,7 @@ def criteria_for_example(all_results):
 
 
 def main():
-    problems = run_examples.problems_to_run(problems_specified=["testtest"])
+    problems = _utils.problems_to_run(problems_specified=["testtest"])
     results = run_examples.run_problems(problems, pre_build=True)
     for res in results:
         criteria_for_problem(

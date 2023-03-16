@@ -15,7 +15,6 @@
 import subprocess
 import sys
 import os
-import argparse
 import pytest
 from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
@@ -49,27 +48,6 @@ META_FILES = [
 ]
 PROBLEMS_TO_COMPILE_FILE = "problems_to_compile.txt"
 validate_script = str(Path(__file__).resolve().parent / "validate.py")
-
-
-# ------------------------ argument parser ------------------------
-def setup_parser():
-    parser = argparse.ArgumentParser(
-        description="Script to build Espresso, with/without pre/post-build validation"
-    )
-    parser.add_argument(
-        "-v", "--checks", "--post", "--validate",
-        dest="post", action="store_true", 
-        default=False, help="Run tests after building the package")
-    parser.add_argument(
-        "--pre", dest="pre", action="store_true",
-        default=False, help="Run tests before building the package")
-    parser.add_argument(
-        "--timeout", "-t", dest="timeout", action="store", default=None, type=int,
-        help="Specify the number of seconds as timeout limit for each attribute")
-    return parser
-
-def args():
-    return setup_parser().parse_args()
 
 
 # ------------------------ helpers ------------------------
@@ -162,9 +140,9 @@ def move_contrib_source():
     init_file_imports = "\n"
     init_file_all_cls = "\n_all_problems = [\n"
     for path in Path(CONTRIB_SRC).iterdir():
+        contrib = os.path.basename(path)                    # name
         if path.is_dir():
-            contrib = os.path.basename(path)                    # name
-            contrib_class = contrib.title().replace("_", "")    # class
+            contrib_class = _utils.problem_name_to_class(contrib)    # class
             contribs.append(contrib)
             init_file_imports += f"from ._{contrib} import {contrib_class}\n"
             init_file_all_cls += f"    {contrib_class},\n"
@@ -174,13 +152,13 @@ def move_contrib_source():
     init_file_add_all_nms = "\n__all__ += list_problem_names()"
     init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
     # write all above to files
-    compiled_code_list = set()          # TODO add as optional installation
+    # compiled_code_list = set()
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
             if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
                 f.write(f"add_subdirectory(_{contrib})\n")
-                compiled_code_list.add(contrib)
+                # compiled_code_list.add(contrib)
     with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_imp_funcs)
@@ -259,7 +237,7 @@ def post_validate():
         sys.exit(exit_code)
 
 def main():
-    _args = args()
+    _args = _utils.args()
     if _args.pre:
         pre_validate()
     build()
