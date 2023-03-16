@@ -4,7 +4,7 @@ Makefile
 cmake_install.cmake
 
 # --- below are dummy files to let pip keep track of ---
-# fm2dss.o
+fm2dss.o
 
 fm2dss.in
 frechet.out
