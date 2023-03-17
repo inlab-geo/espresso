@@ -29,12 +29,13 @@ class ReceiverFunction(EspressoProblem):
             the local crustal properties.
             """,    # 1-3 sentences
 
-        "author_names": ["Malcolm Sambridge"],    # List of names e.g. author_names = ["Sally Smith", "Mark Brown"]
+        "author_names": ["Malcolm Sambridge","Takuo Shibutani"],    # List of names e.g. author_names = ["Sally Smith", "Mark Brown"]
 
         "contact_name": "Malcolm Sambridge",         # Contact for contributor/maintainer of espresso example
         "contact_email": "Malcolm.Sambridge@anu.edu.au",
 
-        "citations": [("TODO", "TODO")], # Reference to publication(s) that describe this example. In most 
+        "citations": [("Langston, C. A., Structure under Mount Rainer, Washington, inferred from teleseismic body waves, J. Geophys. Res., vol 84, 4749-4762, 1979.", 
+                       "Shibutani, T., Kennett, B. and Sambridge, M., Genetic algorithm inversion for receiver functions with application to crust and uppermost mantle structure beneath Eastern Australia, Geophys. Res. Lett., 23 , No. 4, 1829-1832, 1996")], # Reference to publication(s) that describe this example. In most 
                                 # cases there will only be a single entry in this list.
                                 # List of (citation, doi) pairs e.g. 
                                 # citations = [("Newton, I (1687). Philosophiae naturalis principia mathematica.", "")]
