@@ -71,7 +71,7 @@ def _collect_additional_attr(all_results, report):
     _additional_attr = {a for a in p_dir if a not in _standard_attr}
     report["additional"].update(_additional_attr)
 
-def raw_compliance_report(problems_to_check=None):
+def raw_compliance_report(problems_to_check=None, pre_build=True):
     """Run all problems and generate a raw compliance report
     
     A typical raw report looks like:
@@ -94,7 +94,7 @@ def raw_compliance_report(problems_to_check=None):
     """
     report = dict()
     problems = _utils.problems_to_run(problems_to_check)
-    results = run_examples.run_problems(problems, pre_build=_utils.pre_build())
+    results = run_examples.run_problems(problems, pre_build=pre_build)
     for res in results:
         _report_for_problem = dict()
         # problem level report
@@ -152,7 +152,7 @@ def _analyse_compliance(new_report):
     _optional_ok = new_report["optional_count"]["error"] == 0
     return _metadata_ok and _required_ok and _optional_ok
 
-def compliance_report(problems_to_check=None):
+def compliance_report(problems_to_check=None, pre_build=True):
     """Generate a readable compliance report based on running raw report
     
     A typical compliance report looks like:
@@ -169,7 +169,7 @@ def compliance_report(problems_to_check=None):
         }
     }
     """
-    raw_report = raw_compliance_report(problems_to_check)
+    raw_report = raw_compliance_report(problems_to_check, pre_build)
     new_report = dict()
     for prob_name, prob_report in raw_report.items():
         _new_report = dict()
@@ -314,10 +314,12 @@ def pprint_compliance_report(report):
 def capability_report(problems_to_check=None, timeout=1):
     # those with TimeoutError will be approximated to be OK
     sys.argv.extend(["--timeout", str(timeout)])
-    _compliance_report = compliance_report(problems_to_check)
+    _compliance_report = compliance_report(problems_to_check, True)
     _capability_report = dict()
     for prob, res in _compliance_report.items():
         _new_report = dict()
+        if "required" not in res:
+            raise RuntimeError(res)
         for attr, attr_res in res["required"].items():
             _new_report[attr] = int(attr_res == "OK" or isinstance(attr_res, TimeoutError))
         for attr, attr_res in res["optional"].items():

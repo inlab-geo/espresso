@@ -8,6 +8,8 @@ $ python espresso_machine/build_package/build.py
 import sys
 import os
 import typing
+import pathlib
+import subprocess
 
 import _utils
 
@@ -135,11 +137,19 @@ def run_problem(problem_class, problem_class_str) -> typing.Iterator[dict]:
 
 def run_cmake_if_needed(prob_path, pre_build):
     if pre_build and "CMakeLists.txt" in os.listdir(prob_path):
-        raise RuntimeError(prob_path)
+        build_dir = pathlib.Path(prob_path) / "build"
+        build_dir.mkdir(exist_ok=True)
+        res1 = subprocess.call(["cmake", ".."], cwd=build_dir)
+        if res1:
+            raise ChildProcessError("`cmake ..` failed in example_sub_folder")
+        res2 = subprocess.call(["make"], cwd=build_dir)
+        if res2:
+            raise ChildProcessError("`make` failed in example_sub_folder")
 
 def run_problems(problems, pre_build):
     for (prob_name, prob_path) in problems:
         prob_class_str = _utils.problem_name_to_class(prob_name)
+        run_cmake_if_needed(prob_path, pre_build)
         try:
             with _ProblemModule(pre_build, prob_name) as parent_module:
                 try:

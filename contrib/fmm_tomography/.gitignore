@@ -1,17 +1,14 @@
-CMakeCache.txt
-CMakeFiles/
-Makefile
-cmake_install.cmake
+build
 
 # --- below are dummy files to let pip keep track of ---
-fm2dss.o
+# fm2dss.o
 
-fm2dss.in
-frechet.out
-gridc.vtx
-otimes.dat
-receivers.dat
-rtravel.out
-sources.dat
-globalp.mod
-traveltime.mod
+# fm2dss.in
+# frechet.out
+# gridc.vtx
+# otimes.dat
+# receivers.dat
+# rtravel.out
+# sources.dat
+# globalp.mod
+# traveltime.mod

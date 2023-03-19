@@ -26,7 +26,8 @@ import report
 
 
 # ------------------------ constants ------------------------
-PKG_NAME = "espresso"
+MODULE_NAME = "espresso"
+PKG_NAME = "geo-espresso"
 current_directory = Path(__file__).resolve().parent
 root = current_directory.parent.parent
 ROOT_DIR = str(root)
@@ -134,7 +135,7 @@ def change_versioningit_config():
 # 6
 def move_contrib_source():
     # move all contribution subfolders with prefix "_"
-    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}", prefix="_")
+    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{MODULE_NAME}", prefix="_")
     # collect a list of contributions + related strings to write later
     contribs = []
     init_file_imports = "\n"
@@ -153,18 +154,18 @@ def move_contrib_source():
     init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
     # write all above to files
     # compiled_code_list = set()
-    with open(f"{BUILD_DIR}/src/{PKG_NAME}/CMakeLists.txt", "a") as f:
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/CMakeLists.txt", "a") as f:
         for contrib in contribs:
             f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
             if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
                 f.write(f"add_subdirectory(_{contrib})\n")
                 # compiled_code_list.add(contrib)
-    with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_imp_funcs)
         f.write(init_file_add_all_nms)
         f.write(init_file_add_funcs)
-    with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/list_problems.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_all_cls)
     # with open(f"{ROOT_DIR}/contrib/{PROBLEMS_TO_COMPILE_FILE}", "w") as f:
@@ -179,7 +180,7 @@ def build_problem_capability():
     with _utils.suppress_stdout():
         capability_report = report.capability_report()
     report_to_write = json.dumps(capability_report, indent=4)
-    with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/list_problems.py", "a") as f:
         f.write("\n\n_capability_matrix = ")
         f.write(report_to_write)
 

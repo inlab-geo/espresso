@@ -458,22 +458,18 @@ def generateSurfacePoints(nPerSide,extent=(0,1,0,1),surface=[True,True,True,True
     return np.array(out)
 
 def run_fm2dss(wdir):
-    command = "./fm2dss.o"
+    command = "./build/fm2dss.o"
     return subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
 
 def compile_fm2dss():
     # https://github.com/inlab-geo/espresso/blob/main/espresso_machine/build_package/validate.py#L170
-    build_dir = path(".")
-    res1 = subprocess.call(["cmake", "."], cwd=build_dir)
+    build_dir = path("./build")
+    res1 = subprocess.call(["cmake", ".."], cwd=build_dir)
     if res1:
         raise ChildProcessError(f"`cmake .` failed in {build_dir}")
     res2 = subprocess.call(["make"], cwd=build_dir)
     if res2:
         raise ChildProcessError(f"`make` failed in {build_dir}")
-    clean_cmake_files()
 
-def clean_cmake_files():
-    shutil.rmtree(path("CMakeFiles"))
-    files_to_rm = ["Makefile", "cmake_install.cmake", "CMakeCache.txt"]
-    for file in files_to_rm:
-        silent_remove(path(file))
+def clean_fm2dss():
+    shutil.rmtree(path("build"))
