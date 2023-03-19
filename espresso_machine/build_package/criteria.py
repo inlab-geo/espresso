@@ -287,7 +287,7 @@ def criteria_for_example(all_results):
 
 def main():
     problems = _utils.problems_to_run(problems_specified=["testtest"])
-    results = run_examples.run_problems(problems, pre_build=True)
+    results = run_examples.run_problems(problems, pre_build=True, timeout=None)
     for res in results:
         criteria_for_problem(
             res["problem class"],

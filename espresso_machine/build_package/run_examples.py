@@ -78,13 +78,12 @@ prob_properties = [
     ("inv_cov", "inverse_covariance_matrix"),
 ]
 
-@_utils.timeout(seconds=_utils.args().timeout)
-def _run_attr(prob_instance, how_to_get, is_method=True):
-    if is_method:
-        return how_to_get(prob_instance)
-    return getattr(prob_instance, how_to_get)
-
-def _get_result(prob_instance, how_to_get, is_method=True):
+def _get_result(prob_instance, how_to_get, is_method=True, timeout=None):
+    @_utils.timeout(seconds=timeout)
+    def _run_attr(prob_instance, how_to_get, is_method=True):
+        if is_method:
+            return how_to_get(prob_instance)
+        return getattr(prob_instance, how_to_get)
     try:
         return _run_attr(prob_instance, how_to_get, is_method)
     except NotImplementedError:
@@ -102,33 +101,33 @@ def instantiate_example(problem_class, i):
             raise e
     return prob_instance_i
 
-def collect_methods_outputs(prob_instance_i, all_outputs):
-    for (output_name, how_to_get) in prob_methods:
-        all_outputs[output_name] = _get_result(prob_instance_i, how_to_get)
+def collect_methods_outputs(prob_instance_i, all_outputs, timeout=None):
+    for (output_name, how) in prob_methods:
+        all_outputs[output_name] = _get_result(prob_instance_i, how, True, timeout)
 
-def collect_properties(prob_instance_i, all_outputs):
+def collect_properties(prob_instance_i, all_outputs, timeout=None):
     for (output_name, prop) in prob_properties:
-        all_outputs[output_name] = _get_result(prob_instance_i, prop, False)
+        all_outputs[output_name] = _get_result(prob_instance_i, prop, False, timeout)
 
-def run_example(problem_class, problem_class_str, i) -> dict:
+def run_example(problem_class, problem_class_str, i, timeout=None) -> dict:
     # prepare
     all_outputs = dict()
     prob_instance_i = instantiate_example(problem_class, i)
     if not isinstance(prob_instance_i, Exception):  # collect results
-        collect_methods_outputs(prob_instance_i, all_outputs)
-        collect_properties(prob_instance_i, all_outputs)
+        collect_methods_outputs(prob_instance_i, all_outputs, timeout)
+        collect_properties(prob_instance_i, all_outputs, timeout)
     all_outputs["prob_instance_str"] = f"{problem_class_str}({i})"
     all_outputs["prob_instance"] = prob_instance_i
     all_outputs["i"] = i
     return all_outputs
 
-def run_problem(problem_class, problem_class_str) -> typing.Iterator[dict]:
+def run_problem(problem_class, problem_class_str, timeout=None) -> typing.Iterator[dict]:
     if isinstance(problem_class, Exception): return []
     i = 1
     while True:
         if i > 99: raise ValueError("Reached example 100: aborting.") # Guard against silliness
         try:
-            example_res = run_example(problem_class, problem_class_str, i)
+            example_res = run_example(problem_class, problem_class_str, i, timeout)
         except InvalidExampleError:
             if i == 1: raise ValueError("Ensure there are at least one examples")
             return
@@ -146,7 +145,7 @@ def run_cmake_if_needed(prob_path, pre_build):
         if res2:
             raise ChildProcessError("`make` failed in example_sub_folder")
 
-def run_problems(problems, pre_build):
+def run_problems(problems, pre_build, timeout=None):
     for (prob_name, prob_path) in problems:
         prob_class_str = _utils.problem_name_to_class(prob_name)
         run_cmake_if_needed(prob_path, pre_build)
@@ -161,7 +160,8 @@ def run_problems(problems, pre_build):
                     "problem class": prob_class, 
                     "problem class str": prob_class_str, 
                     "problem path": prob_path, 
-                    "problem results generator": run_problem(prob_class, prob_class_str),
+                    "problem results generator": \
+                        run_problem(prob_class, prob_class_str, timeout),
                 }
         except Exception as e:
             yield {
@@ -172,10 +172,10 @@ def run_problems(problems, pre_build):
             }
 
 
-def main(problems_specified=None):
+def main(problems_specified=None, timeout=None):
     _you_want_to_print_something = False
     problems = _utils.problems_to_run(problems_specified)
-    results = run_problems(problems, pre_build=True)
+    results = run_problems(problems, pre_build=True, timeout=timeout)
     for res in results:
         if _you_want_to_print_something: print(res["problem class"])
         for prob_out_i in res["problem results generator"]:
