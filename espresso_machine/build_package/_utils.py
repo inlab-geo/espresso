@@ -24,7 +24,7 @@ def setup_parser():
         "--pre", dest="pre", action="store_true",
         default=False, help="Run tests before building the package")
     parser.add_argument(
-        "--timeout", "-t", dest="timeout", action="store", default=None, type=int,
+        "--timeout", "-t", dest="timeout", action="store", default=999, type=int,
         help="Specify the number of seconds as timeout limit for each attribute")
     parser.add_argument(
         "--contrib", "-c", "--contribution", 
