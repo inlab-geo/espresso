@@ -30,8 +30,15 @@ jobs:
         with:
           msystem: UCRT64
           update: true
-          install: git base-devel gcc python pip
-          pacboy: toolchain:p cmake:p ninja:p
+          install: >-
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-gcc-fortran
+            mingw-w64-x86_64-hdf5
+
+      - uses: actions/setup-python
+        with:
+          python-version: '3.10'
 
       - name: Checkout
         uses: actions/checkout@v2
