@@ -30,7 +30,7 @@ jobs:
         with:
           msystem: UCRT64
           update: true
-          install: git base-devel gcc python
+          install: git base-devel gcc python pip
           pacboy: toolchain:p cmake:p ninja:p
 
       - name: Checkout
@@ -53,13 +53,7 @@ jobs:
         run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
         env:
-          CIBW_SKIP: pp* cp36* *-win32 *-manylinux_i686 *-musllinux_*
-          CIBW_ARCHS_MACOS: x86_64 arm64
-          CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
-          # Run the tests.
-          # CIBW_TEST_COMMAND: >
-          #   python -m pip install pytest &&
-          #   python {project}/espresso_machine/build_package/validate.py --post
+          CIBW_SKIP: pp* cp36* *-win32
 
       - uses: actions/upload-artifact@v3
         with:
