@@ -12,6 +12,7 @@ on:
       - 'pyproject.toml'
       - 'CHANGELOG.md'
       - '!src/espresso/version.py'
+      - '!CHANGELOG.md'
 
 jobs:
   ######################## GENERATE PACKAGE SOURCE #####################

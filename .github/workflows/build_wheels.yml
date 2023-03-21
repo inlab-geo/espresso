@@ -64,6 +64,6 @@ jobs:
           #   python -m pip install pytest &&
           #   python {project}/espresso_machine/build_package/validate.py --post
 
-      - uses: actions/upload-artifact@v3
-        with:
-          path: _esp_build/wheelhouse/*.whl
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     path: _esp_build/wheelhouse/*.whl
