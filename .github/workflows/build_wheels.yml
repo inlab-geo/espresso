@@ -55,10 +55,19 @@ jobs:
       - name: Update CMake
         uses: jwlawson/actions-setup-cmake@v1.13
 
-      - name: Generate package source with contributions
+      - uses: awvwgk/setup-fortran@main
+        id: setup-fortran
+        with:
+          compiler: gcc
+          version: 11
+
+      - name: Prepare Python environment
         run: |
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
+
+      - name: Generate package source with contributions
+        run: |
           python espresso_machine/build_package/build.py
 
       - name: Build wheels
