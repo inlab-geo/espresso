@@ -53,8 +53,7 @@ jobs:
       - name: Link fortran (Windows)
         if: runner.os == 'Windows'
         run: |
-          CMAKE_Fortran_COMPILER="${{ steps.setup-fortran.outputs.fc }}"
-          echo "CMAKE_Fortran_COMPILER=${CMAKE_Fortran_COMPILER}" >> $GITHUB_ENV
+          echo "CMAKE_Fortran_COMPILER=${steps.setup-fortran.outputs.fc}" >> $GITHUB_ENV
 
       - name: Prepare Python environment
         run: |
