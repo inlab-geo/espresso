@@ -19,7 +19,6 @@ on:
 jobs:
   build_wheels_non_windows:
     if: github.repository_owner == 'inlab-geo'
-    if: false   # tmp
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
