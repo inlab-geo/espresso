@@ -17,8 +17,57 @@ on:
       - 'setup.py'
 
 jobs:
-  build_wheels_non_windows:
+  build_wheels_windows:
     if: github.repository_owner == 'inlab-geo'
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+  
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          install: git cmake ninja gcc-fortran python-pip python-scipy lapack
+
+      - name: Get tags
+        shell: msys2 {0}
+        run: |
+          git fetch --tags origin
+          git describe
+      
+      - name: Prepare Python environment
+        shell: msys2 {0}
+        run: |
+          python -m pip install -r envs/requirements_test.txt
+          python -m pip install .
+    
+      - name: Generate package source with contributions
+        shell: msys2 {0}
+        run: |
+          python espresso_machine/build_package/build.py
+  
+      - name: Build wheels
+        shell: msys2 {0}
+        run: python -m cibuildwheel --output-dir wheelhouse
+        working-directory: _esp_build
+        env:
+          CIBW_SKIP: pp* cp36* *-win32
+      
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          path: _esp_build/wheelhouse/*.whl
+
+  build_wheels_non_windows:
+    # if: github.repository_owner == 'inlab-geo'
+    if: false
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
