@@ -50,7 +50,7 @@ jobs:
           compiler: gcc
           version: 11
 
-      - uses: Link fortran (Windows)
+      - name: Link fortran (Windows)
         if: runner.os == 'Windows'
         run: |
           echo "CMAKE_Fortran_COMPILER=${steps.setup-fortran.outputs.fc}" >> $GITHUB_ENV
