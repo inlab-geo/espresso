@@ -17,78 +17,18 @@ on:
       - 'setup.py'
 
 jobs:
-  build_wheels_windows:
-    if: github.repository_owner == 'inlab-geo'
-    name: Build wheels on windows-latest
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: msys2 {0}
-    
-    steps:
-      - uses: msys2/setup-msys2@v2
-        with:
-          msystem: UCRT64
-          update: true
-          install: >-
-            git
-            mingw-w64-ucrt-x86_64-cmake
-            mingw-w64-ucrt-x86_64-ninja
-            mingw-w64-ucrt-x86_64-gcc-fortran
-            mingw-w64-ucrt-x86_64-python-pip
-
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      
-      - name: Get tags
-        run: |
-          git fetch --tags origin
-          git describe
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10' 
-
-      - name: Generate package source with contributions
-        run: |
-          python -m pip install -r envs/requirements_test.txt
-          python -m pip install .
-          python espresso_machine/build_package/build.py
-
-      - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
-        working-directory: _esp_build
-        env:
-          CIBW_SKIP: pp* cp36* *-win32
-
-      - uses: actions/upload-artifact@v3
-        with:
-          path: _esp_build/wheelhouse/*.whl
-
-
   build_wheels_non_windows:
-    # if: github.repository_owner == 'inlab-geo'
-    if: false   # tmp
+    if: github.repository_owner == 'inlab-geo'
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        # Giving up windows, see the following two links:
+        # https://groups.google.com/g/comp.lang.fortran/c/Jna-QAHCOpk/m/VZq7gVq3AgAJ
+        # https://github.com/awvwgk/setup-fortran/issues/6
         os: [ubuntu-latest, macos-latest]
 
     steps:
-      - name: Symlink gfortran (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          # make sure gfortran is available
-          # https://github.com/actions/virtual-environments/issues/2524
-          # https://github.com/actions/runner-images/blob/macOS-12/20221215.1/images/macos/macos-12-Readme.md
-          sudo ln -s /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
-          sudo mkdir /usr/local/gfortran
-          sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
-          gfortran --version
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -98,15 +38,20 @@ jobs:
         run: |
           git fetch --tags origin
           git describe
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      
+      - name: Setup GNU Fortran
+        uses: modflowpy/install-gfortran-action@v1
 
-      - uses: actions/setup-python@v3
-
-      - name: Generate package source with contributions
+      - name: Prepare Python environment
         run: |
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
+      - name: Generate package source with contributions
+        run: |
           python espresso_machine/build_package/build.py
-
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
