@@ -10,8 +10,7 @@ import pathlib
 import pytest
 from stdlib_list import stdlib_list
 
-import validate
-
+import _utils
 
 known_dependencies = [
     "numpy",
@@ -25,7 +24,7 @@ known_dependencies = [
     "tqdm",
 ]
 
-args = validate.args()
+args = _utils.args()
 
 def _strip_pkg(modules):
     res = set()
