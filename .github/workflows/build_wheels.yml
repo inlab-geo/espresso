@@ -27,17 +27,6 @@ jobs:
         # os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
-      - name: Symlink gfortran (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          # make sure gfortran is available
-          # https://github.com/actions/virtual-environments/issues/2524
-          # https://github.com/actions/runner-images/blob/macOS-12/20221215.1/images/macos/macos-12-Readme.md
-          sudo ln -s /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
-          sudo mkdir /usr/local/gfortran
-          sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
-          gfortran --version
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -60,6 +49,12 @@ jobs:
         with:
           compiler: gcc
           version: 11
+
+      - uses: Link fortran (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "CMAKE_Fortran_COMPILER=${steps.setup-fortran.outputs.fc}" >> $GITHUB_ENV
+          echo $env:CMAKE_Fortran_COMPILER
 
       - name: Prepare Python environment
         run: |
