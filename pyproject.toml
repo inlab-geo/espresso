@@ -18,61 +18,14 @@
 # --------------------------- END NOTES -----------------------------
 
 [build-system]
-requires = ["setuptools>=42", "numpy", "versioningit"]
+requires = [
+    "setuptools>=42",
+    "scikit-build>=0.13",
+    "cmake>=3.18",
+    "ninja",
+    "versioningit",
+]
 build-backend = "setuptools.build_meta"
-
-[project]
-name = "geo-espresso"
-description = "Earth Science PRoblems for the Evaluation of Strategies, Solvers and Optimizers"
-authors = [{name = "InLab, Espresso development team"}]
-readme = "README.md"
-requires-python = ">=3.6"
-keywords = ["inversion", "inference", "python package", "geoscience", "geophysics"]
-classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
-    "Intended Audience :: Education",
-    "Intended Audience :: Science/Research",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: C",
-    "Programming Language :: Fortran",
-    "Topic :: Scientific/Engineering :: Physics",
-    "License :: OSI Approved :: BSD License",
-    "License :: Other/Proprietary License",
-]
-dependencies = [
-    "numpy>=1.18",
-    "scipy>=1.0.0",
-    "matplotlib>=3.1",
-    "tqdm>=4.0",
-    "mpmath >= 1.2.0",
-]
-dynamic = ["version"]
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-"*" = [
-    # data files
-    "*.txt",
-    "*.dat",
-    "*.csv",
-    "*.png",
-    # metadata
-    "LICENCE",
-    "README.md",
-    # source to be compiled
-    "*.f90",
-    # dummy files
-    "*.o",
-]
 
 [tool.black]
 line-length = 88
@@ -92,18 +45,3 @@ exclude = '''
   | tests
 )
 '''
-
-[tool.versioningit.format]
-distance = "{base_version}+{distance}.{vcs}{rev}"
-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
-distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
-
-[tool.versioningit.write]
-file = "src/espresso/_version.py"
-
-[tool.versioningit]
-default-version = '0.2.1.dev0+6.g848170e'
-
-[tool.versioningit.tag2version]
-rmprefix = 'v'
-rmsuffix = '-build'

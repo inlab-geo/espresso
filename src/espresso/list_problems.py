@@ -44,25 +44,63 @@ def list_capability(problem_names: list) -> dict:
 #     ...
 # }
 
+from ._fmm_tomography import FmmTomography
+from ._pumping_test import PumpingTest
 from ._simple_regression import SimpleRegression
 from ._slug_test import SlugTest
-from ._fmm_tomography import FmmTomography
 from ._xray_tomography import XrayTomography
 from ._gravity_density import GravityDensity
 from ._magnetotelluric_1D import Magnetotelluric1D
-from ._pumping_test import PumpingTest
 
 _all_problems = [
+    FmmTomography,
+    PumpingTest,
     SimpleRegression,
     SlugTest,
-    FmmTomography,
     XrayTomography,
     GravityDensity,
     Magnetotelluric1D,
-    PumpingTest,
 ]
 
 _capability_matrix = {
+    "FmmTomography": {
+        "model_size": 1,
+        "data_size": 1,
+        "good_model": 1,
+        "starting_model": 1,
+        "data": 1,
+        "forward": 1,
+        "description": 0,
+        "covariance_matrix": 0,
+        "inverse_covariance_matrix": 0,
+        "jacobian": 1,
+        "plot_model": 1,
+        "plot_data": 0,
+        "misfit": 0,
+        "log_likelihood": 0,
+        "log_prior": 0,
+        "clean_tmp_files": 1,
+        "tmp_files": 1,
+        "exe_fm2dss": 1,
+        "tmp_paths": 1
+    },
+    "PumpingTest": {
+        "model_size": 1,
+        "data_size": 1,
+        "good_model": 1,
+        "starting_model": 1,
+        "data": 1,
+        "forward": 0,
+        "description": 1,
+        "covariance_matrix": 1,
+        "inverse_covariance_matrix": 1,
+        "jacobian": 0,
+        "plot_model": 1,
+        "plot_data": 0,
+        "misfit": 0,
+        "log_likelihood": 1,
+        "log_prior": 0
+    },
     "SimpleRegression": {
         "model_size": 1,
         "data_size": 1,
@@ -96,27 +134,6 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 1,
         "log_prior": 0
-    },
-    "FmmTomography": {
-        "model_size": 1,
-        "data_size": 1,
-        "good_model": 1,
-        "starting_model": 1,
-        "data": 1,
-        "forward": 1,
-        "description": 0,
-        "covariance_matrix": 0,
-        "inverse_covariance_matrix": 0,
-        "jacobian": 1,
-        "plot_model": 1,
-        "plot_data": 0,
-        "misfit": 0,
-        "log_likelihood": 0,
-        "log_prior": 0,
-        "tmp_paths": 1,
-        "tmp_files": 1,
-        "clean_tmp_files": 1,
-        "exe_fm2dss": 1
     },
     "XrayTomography": {
         "model_size": 1,
@@ -168,25 +185,8 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
-        "set_start_model": 1,
         "set_start_mesh": 1,
-        "set_obs_data": 1
-    },
-    "PumpingTest": {
-        "model_size": 1,
-        "data_size": 1,
-        "good_model": 1,
-        "starting_model": 1,
-        "data": 1,
-        "forward": 0,
-        "description": 1,
-        "covariance_matrix": 1,
-        "inverse_covariance_matrix": 1,
-        "jacobian": 0,
-        "plot_model": 1,
-        "plot_data": 0,
-        "misfit": 0,
-        "log_likelihood": 1,
-        "log_prior": 0
+        "set_obs_data": 1,
+        "set_start_model": 1
     }
 }

@@ -11,47 +11,15 @@ python validate.py [-h] [--contrib CONTRIBS] [--all] [--pre] [--post]
 
 import sys
 import pathlib
-import argparse
 import pytest
 
-
-# --> define arguments to be parsed with Python command
-def setup_parser():
-    parser = argparse.ArgumentParser(
-        description="Script to validate specified or all contributions for Espresso, pre/post build for the package"
-    )
-    parser.add_argument(
-        "--contrib", "-c", "--contribution", 
-        dest="contribs", action="append", 
-        help="Specify which contribution to validate")
-    parser.add_argument(
-        "--all", "-a", default=None,
-        dest="all", action="store_true")
-    parser.add_argument(
-        "--pre", dest="pre", action="store_true", default=None,
-        help="Run tests before building the package")
-    parser.add_argument(
-        "--post", dest="post", action="store_true", default=None,
-        help="Run tests after building the package " + 
-            "(we assume you've built the package so won't build it for you; " + 
-            "otherwise please use `python build.py` beforehand)")
-    return parser
-
-parser = setup_parser()
-
-def args():
-    _args = parser.parse_args()
-    return _args
-
-def _pre_build():
-    _args = args()
-    return _args.pre or (not _args.pre and not _args.post)
+import _utils
 
 
 # --> main test
 def main():
     # preparation
-    pre = _pre_build()
+    pre = _utils.pre_build()
     dir_parent = pathlib.Path(__file__).parent.resolve()
     py_test_examples = dir_parent / "test_examples.py"
     py_check_requires = dir_parent / "check_requires.py"

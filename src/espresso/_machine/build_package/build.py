@@ -2,19 +2,19 @@
 
 1. clean "_esp_build/"
 2. "/<meta-data-files>" => "_esp_build/"
-3. "src/" => "_esp_build/src/"
-4. "contrib/" => "_esp_build/src/espresso/" + "__init__.py" + "list_problems.py"
-5. "_version.py" => "_esp_build/pyproject.toml"
-6. "espresso_machine/" => _esp_build/src/_machine"
-7. build capability_matrix
-8. `pip install .`
+3. generate "_version.py"
+4. "src/" => "_esp_build/src/"
+5. "contrib/" => "_esp_build/src/espresso/" + "__init__.py" + "list_problems.py"
+6. remove `.core` from versioningit_config
+7. "espresso_machine/" => _esp_build/src/_machine"
+8. build capability_matrix
+9. `pip install .`
 
 """
 
 import subprocess
 import sys
 import os
-import argparse
 import pytest
 from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
@@ -26,7 +26,8 @@ import report
 
 
 # ------------------------ constants ------------------------
-PKG_NAME = "espresso"
+MODULE_NAME = "espresso"
+PKG_NAME = "geo-espresso"
 current_directory = Path(__file__).resolve().parent
 root = current_directory.parent.parent
 ROOT_DIR = str(root)
@@ -39,33 +40,15 @@ MACHINE_SRC = str(root / "espresso_machine")
 META_FILES = [
     "README.md",
     "pyproject.toml",
+    "setup.py",
     "LICENCE",
+    "CMakeLists.txt",
     ".readthedocs.yml",
     ".gitignore",
     "CHANGELOG.md",
 ]
+PROBLEMS_TO_COMPILE_FILE = "problems_to_compile.txt"
 validate_script = str(Path(__file__).resolve().parent / "validate.py")
-
-
-# ------------------------ argument parser ------------------------
-def setup_parser():
-    parser = argparse.ArgumentParser(
-        description="Script to build Espresso, with/without pre/post-build validation"
-    )
-    parser.add_argument(
-        "-v", "--checks", "--post", "--validate",
-        dest="post", action="store_true", 
-        default=False, help="Run tests after building the package")
-    parser.add_argument(
-        "--pre", dest="pre", action="store_true",
-        default=False, help="Run tests before building the package")
-    parser.add_argument(
-        "--timeout", "-t", dest="timeout", action="store", default=None, type=int,
-        help="Specify the number of seconds as timeout limit for each attribute")
-    return parser
-
-def args():
-    return setup_parser().parse_args()
 
 
 # ------------------------ helpers ------------------------
@@ -76,7 +59,8 @@ def is_cache(file_name):
                 file_name.endswith(".mod") or \
                     file_name.endswith(".out") or \
                         file_name == "CMakeFiles" or \
-                            file_name == "Makefile"
+                            file_name == "Makefile" or \
+                                file_name == PROBLEMS_TO_COMPILE_FILE
 
 def move_folder_content(folder_path, dest_path, prefix=None):
     if prefix is None:
@@ -123,42 +107,7 @@ def move_pkg_metadata():
         copy(f"{ROOT_DIR}/{f}", f"{BUILD_DIR}/{f}")
 
 # 3
-def move_pkg_source():
-    move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
-
-# 4
-def move_contrib_source():
-    # move all contribution subfolders with prefix "_"
-    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{PKG_NAME}", prefix="_")
-    # collect a list of contributions + related strings to write later
-    contribs = []
-    init_file_imports = "\n"
-    init_file_all_cls = "\n_all_problems = [\n"
-    for path in Path(CONTRIB_SRC).iterdir():
-        if path.is_dir():
-            contrib = os.path.basename(path)                    # name
-            contrib_class = contrib.title().replace("_", "")    # class
-            contribs.append(contrib)
-            init_file_imports += f"from ._{contrib} import {contrib_class}\n"
-            init_file_all_cls += f"    {contrib_class},\n"
-    init_file_all_cls += "]"
-    # some constant strings to append to init file later
-    init_file_imp_funcs = "\nfrom .list_problems import list_problem_names, list_problems"
-    init_file_add_all_nms = "\n__all__ += list_problem_names()"
-    init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
-    # write all above to files
-    with open(f"{BUILD_DIR}/src/{PKG_NAME}/__init__.py", "a") as f:
-        f.write(init_file_imports)
-        f.write(init_file_imp_funcs)
-        f.write(init_file_add_all_nms)
-        f.write(init_file_add_funcs)
-    with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
-        f.write(init_file_imports)
-        f.write(init_file_all_cls)
-
-# 5
 def write_version():
-    # get version
     versioningit_config = {
         "format": {
             "distance": "{base_version}+{distance}.{vcs}{rev}",
@@ -169,86 +118,111 @@ def write_version():
             "file": "src/espresso/_version.py"
         }
     }
-    version = versioningit.get_version(root, versioningit_config, True)
-    # --> read pyproject.toml
-    with open(f"{BUILD_DIR}/pyproject.toml", "r") as f:
-        file_content = f.read()
-    # --> process pyproject.toml
-    # write version to pyproject.toml (for local build)
-    file_content += "\n[tool.versioningit]"
-    file_content += f"\ndefault-version = '{version}'\n"
-    # change versioningit configs (for build from branch "esp_build")
-    file_content = file_content.replace(".core", "")
-    file_content += "\n[tool.versioningit.tag2version]"
-    file_content += "\nrmprefix = 'v'"
-    file_content += "\nrmsuffix = '-build'\n"
-    # --> write pyproject.toml
-    with open(f"{BUILD_DIR}/pyproject.toml", "w") as f:
-        f.write(file_content)
+    versioningit.get_version(root, versioningit_config, True)
 
-# 6 move espresso_machine into espresso/_machine
+# 4
+def move_pkg_source():
+    move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
+
+# 5 
+def change_versioningit_config():
+    with open(f"{BUILD_DIR}/setup.py", "r") as f:
+        setup_content = f.read()
+    setup_content = setup_content.replace(".core", "")
+    with open(f"{BUILD_DIR}/setup.py", "w") as f:
+        f.write(setup_content)
+
+# 6
+def move_contrib_source():
+    # move all contribution subfolders with prefix "_"
+    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{MODULE_NAME}", prefix="_")
+    # collect a list of contributions + related strings to write later
+    contribs = []
+    init_file_imports = "\n"
+    init_file_all_cls = "\n_all_problems = [\n"
+    for path in Path(CONTRIB_SRC).iterdir():
+        contrib = os.path.basename(path)                    # name
+        if path.is_dir():
+            contrib_class = _utils.problem_name_to_class(contrib)    # class
+            contribs.append(contrib)
+            init_file_imports += f"from ._{contrib} import {contrib_class}\n"
+            init_file_all_cls += f"    {contrib_class},\n"
+    init_file_all_cls += "]"
+    # some constant strings to append to init file later
+    init_file_imp_funcs = "\nfrom .list_problems import list_problem_names, list_problems"
+    init_file_add_all_nms = "\n__all__ += list_problem_names()"
+    init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
+    # write all above to files
+    # compiled_code_list = set()
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/CMakeLists.txt", "a") as f:
+        for contrib in contribs:
+            f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
+            if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
+                f.write(f"add_subdirectory(_{contrib})\n")
+                # compiled_code_list.add(contrib)
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/__init__.py", "a") as f:
+        f.write(init_file_imports)
+        f.write(init_file_imp_funcs)
+        f.write(init_file_add_all_nms)
+        f.write(init_file_add_funcs)
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/list_problems.py", "a") as f:
+        f.write(init_file_imports)
+        f.write(init_file_all_cls)
+    # with open(f"{ROOT_DIR}/contrib/{PROBLEMS_TO_COMPILE_FILE}", "w") as f:
+    #     f.writelines(compiled_code_list)
+
+# 7 move espresso_machine into espresso/_machine
 def move_espresso_machine():
     move_folder_content(MACHINE_SRC, f"{BUILD_DIR}/src/espresso/_machine")
 
-# 7 build capability matrix
+# 8 build capability matrix
 def build_problem_capability():
     with _utils.suppress_stdout():
         capability_report = report.capability_report()
     report_to_write = json.dumps(capability_report, indent=4)
-    with open(f"{BUILD_DIR}/src/{PKG_NAME}/list_problems.py", "a") as f:
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/list_problems.py", "a") as f:
         f.write("\n\n_capability_matrix = ")
         f.write(report_to_write)
 
-# 8 `pip install .`
+# 9 `pip install .`
 def install_pkg():
     subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
-    return subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
+    exit_code = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
+    if exit_code != pytest.ExitCode.OK:
+        sys.exit(exit_code)
 
 # printing helper
 def println_with_emoji(content, emoji):
     try:
-        print(f"\n{emoji}  {content}")
+        print(f"\n{emoji} {content}")
     except:
         print(f"\n{content}")
 
 
 # ------------------------ main functions ------------------------
+build_pipeline = [
+    ( clean_build_folder, "Cleaning build folder..." ),
+    ( move_pkg_metadata, "Moving package metadata..." ),
+    ( write_version, "Generating version file..." ),
+    ( move_pkg_source, "Moving Espresso core packaging files..." ),
+    ( change_versioningit_config, "Removing `.core` from versioningit config..." ),
+    ( move_contrib_source, "Moving all contributions..." ),
+    ( move_espresso_machine, "Moving infrastructure code..." ),
+    ( build_problem_capability, "Building capability matrix... (this will take some time)" ),
+    ( install_pkg, "Building Python package: geo-espresso..." ),
+]
+
 def build():
     println_with_emoji("Package building...", "🛠")
-    # 1
-    println_with_emoji("Cleaning build folder...", "🗂")
-    clean_build_folder()
-    print("OK.")
-    # 2
-    println_with_emoji("Moving package metadata...", "🗂")
-    move_pkg_metadata()
-    print("OK.")
-    # 3
-    println_with_emoji("Moving Espresso core packaging files...", "🗂")
-    move_pkg_source()
-    print("OK.")
-    # 4
-    println_with_emoji("Moving all contributions...", "🗂")
-    move_contrib_source()
-    print("OK.")
-    # 5
-    println_with_emoji("Generating version file...", "🗂")
-    write_version()
-    print("OK.")
-    # 6
-    println_with_emoji("Moving infrastructure code...", "🗂")
-    move_espresso_machine()
-    print("OK.")
-    # 7
-    println_with_emoji("Building capability matrix... (this will take some time)", "🗂")
-    build_problem_capability()
-    # 8
-    println_with_emoji("Building Python package: geo-espresso...", "🗂")
-    exit_code = install_pkg()
-    if exit_code == pytest.ExitCode.OK:
-        println_with_emoji("Espresso installed!", "🍰")
-    else:
-        sys.exit(exit_code)
+    for (step, desc) in build_pipeline:
+        println_with_emoji(desc, "🗂")
+        try:
+            step()
+        except Exception as e:
+            println_with_emoji(f"Problem occurred in this step: {desc}\n", "❗️")
+            raise e
+        print("OK.")
+    println_with_emoji("Espresso installed!", "🍰")
 
 def pre_validate():
     exit_code = subprocess.call([sys.executable, validate_script, "--pre"])
@@ -264,7 +238,7 @@ def post_validate():
         sys.exit(exit_code)
 
 def main():
-    _args = args()
+    _args = _utils.args()
     if _args.pre:
         pre_validate()
     build()
