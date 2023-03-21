@@ -63,11 +63,14 @@ jobs:
       - name: Generate package source with contributions
         run: |
           python espresso_machine/build_package/build.py
+        env:
+          CMAKE_Fortran_COMPILER: gfortran
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
         env:
+          CMAKE_Fortran_COMPILER: gfortran
           CIBW_SKIP: pp* cp36* *-win32 *-manylinux_i686 *-musllinux_*
           CIBW_ARCHS_MACOS: x86_64 arm64
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
