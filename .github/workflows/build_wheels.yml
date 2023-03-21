@@ -36,8 +36,6 @@ jobs:
             mingw-w64-ucrt-x86_64-gcc-fortran
             mingw-w64-ucrt-x86_64-python-pip
             mingw-w64-ucrt-x86_64-lapack
-            mingw-w64-ucrt-x86_64-python-numpy
-            mingw-w64-ucrt-x86_64-python-scipy
 
       - name: Checkout
         uses: actions/checkout@v2
