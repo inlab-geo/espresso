@@ -34,7 +34,7 @@ jobs:
       - name: Set up MSYS2
         uses: msys2/setup-msys2@v2
         with:
-          install: git cmake ninja gcc-fortran python-pip
+          install: git cmake ninja gcc-fortran mingw-w64-x86_64-python-pip mingw-w64-x86_64-meson
 
       - name: Get tags
         shell: msys2 {0}
