@@ -29,6 +29,10 @@ versioningit_config = {
     "write": {
         "file": "src/espresso/_version.py"
     },
+    "tag2version": {
+        "rmprefix": "v",
+        "rmsuffix": "-build",
+    }
 }
 try:            # generate _version.py when building the core package
     versioningit.get_version(_ROOT, versioningit_config, True)
