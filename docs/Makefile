@@ -6,7 +6,7 @@
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
-BUILDDIR      = _build
+BUILDDIR      = build
 APIDIR        = source/user_guide/api
 CONTRIBDIR    = source/user_guide/contrib
 SPHINXAPIDOC  = sphinx-apidoc
