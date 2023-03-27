@@ -1,12 +1,18 @@
 # Change Log
 
+## v0.2.1.dev1 (27/03/2023)
+
+### Infrastructure
+
+- [#118](https://github.com/inlab-geo/espresso/pull/118) Capability matrix on build
+- [#121](https://github.com/inlab-geo/espresso/pull/121) Compile on build (instead of on import)
+- Code refactor in `espresso_machine`
+
 ## v0.2.1.dev0 (06/03/2023)
 
 ### New examples
 
 - [#100](https://github.com/inlab-geo/espresso/pull/100) 1D magnetotelluric example
-
-### Infrastructure
 
 ## v0.2.0.dev0 (03/03/2023)
 
