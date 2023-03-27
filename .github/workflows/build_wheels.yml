@@ -38,6 +38,7 @@ jobs:
         run: |
           git fetch --tags origin
           git describe
+
       - uses: actions/setup-python@v4
         with:
           python-version: 3.9
@@ -49,15 +50,17 @@ jobs:
         run: |
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
+
       - name: Generate package source with contributions
         run: |
           python espresso_machine/build_package/build.py
+
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
         env:
           CIBW_SKIP: pp* cp36* *-win32 *-manylinux_i686 *-musllinux_*
-          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_ARCHS_MACOS: universal2      # to reduce testing time
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
           # Run the tests.
           # CIBW_TEST_COMMAND: >
