@@ -129,6 +129,7 @@ def change_versioningit_config():
     with open(f"{BUILD_DIR}/setup.py", "r") as f:
         setup_content = f.read()
     setup_content = setup_content.replace(".core", "")
+    setup_content = setup_content.replace('"rmsuffix": ""', '"rmsuffix": "-build"')
     with open(f"{BUILD_DIR}/setup.py", "w") as f:
         f.write(setup_content)
 
