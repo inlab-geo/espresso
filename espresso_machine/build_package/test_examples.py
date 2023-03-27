@@ -23,15 +23,13 @@ def _all_contribs():
     problems = _utils.problems_to_run()
     print("🥃 Running " + ("pre-" if pre else "post-") + "build tests for the following contributions:")
     print("- " + "\n- ".join([c[0] for c in problems]) + "\n")
-    # results = run_examples.run_problems(problems)
-    # return results
     return problems
 
 @pytest.fixture(params=_all_contribs())
 def contrib(request):
     return request.param
 
-def test_contrib(contrib, pre_build):
+def test_contrib(contrib):
     _report = report.compliance_report([contrib[0]])
     for _r in _report.values():
         report.pprint_compliance_report(_report)

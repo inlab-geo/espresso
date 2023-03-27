@@ -17,22 +17,21 @@ import _utils
 
 
 # --> main test
-def main():
+def main(pre_build=None):
     # preparation
-    pre = _utils.pre_build()
+    pre = _utils.pre_build() if pre_build is None else pre_build
     dir_parent = pathlib.Path(__file__).parent.resolve()
     py_test_examples = dir_parent / "test_examples.py"
     py_check_requires = dir_parent / "check_requires.py"
     # test all examples
     exit_status_test_examples = pytest.main([py_test_examples])
-    if pre:
+    if exit_status_test_examples != pytest.ExitCode.OK:
         sys.exit(exit_status_test_examples)
     # test requirements
-    else:
-        if exit_status_test_examples != pytest.ExitCode.OK:
-            sys.exit(exit_status_test_examples)
+    if not pre:
         exit_status_check_requires = pytest.main([py_check_requires])
-        sys.exit(exit_status_check_requires)
+        if exit_status_check_requires != pytest.ExitCode.OK:
+            sys.exit(exit_status_check_requires)
 
 if __name__ == "__main__":
     main()
