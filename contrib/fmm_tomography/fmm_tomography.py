@@ -1,3 +1,6 @@
+# Fmm tomography
+# 37 Earth Sciences -> 3707 Unkown -> 370702 Unkown -> magnetotelluric -> # Xray Tomography
+# description: this is a description, if you can see this, it works!
 import subprocess
 import numpy as np
 from scipy.stats import multivariate_normal

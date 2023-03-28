@@ -1,3 +1,7 @@
+# Xray Tomography
+# 37 Earth Sciences -> 3707 Unkown -> 370702 Unkown -> magnetotelluric -> # Xray Tomography
+# description: this is a description, if you can see this, it works!
+from espresso import EspressoProblem
 import numpy as np
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
