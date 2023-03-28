@@ -101,7 +101,10 @@ class gridModel(object):
         if out.returncode:      # add permission if there's a further error
             print("Trying to fix now...")
             try:
-                Path(wdir + "/fm2dss.o").chmod(0o774)
+                import stat
+                exe_file = Path(wdir + "/build/fm2dss.o")
+                st = os.stat(exe_file)
+                os.chmod(exe_file, st.st_mode | stat.S_IEXEC)
                 print("Execute permission given to fm2dss.o.")
             except:
                 print("Failed to fix. Check error message above.")
