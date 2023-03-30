@@ -12,7 +12,7 @@ from stdlib_list import stdlib_list
 
 import _utils
 
-known_dependencies = [
+known_dependencies = {
     "numpy",
     "scipy",
     "scipy.stats",
@@ -22,7 +22,13 @@ known_dependencies = [
     "matplotlib",
     "matplotlib.pyplot",
     "tqdm",
-]
+    "mpmath",
+}
+to_exclude = {
+    "espresso", 
+    "run_examples"
+}
+
 
 args = _utils.args()
 
@@ -42,26 +48,25 @@ def _get_known_depended_pkg():
         __import__(pkg)
     return _strip_pkg(set(sys.modules.keys()))
 
-def _get_imported_pkg():
+def _get_imported_pkg(problem_specified):
     import run_examples
-    run_examples.main(args.contribs)
+    run_examples.main([problem_specified])
     return _strip_pkg(set(sys.modules.keys()))
 
-def _get_requirements():
+def _get_requirements(problem_specified):
     inbuilt = _get_inbuilt_pkg()
     known_depended = _get_known_depended_pkg()
-    all_imported = _get_imported_pkg()
+    all_imported = _get_imported_pkg(problem_specified)
     return inbuilt, known_depended, all_imported
 
-def get_extra_requirements():
-    inbuilt, known_depended, all_imported = _get_requirements()
-    to_exclude = {"espresso", "run_examples"}
+def get_extra_requirements(problem_specified):
+    inbuilt, known_depended, all_imported = _get_requirements(problem_specified)
     new_dependencies = all_imported - known_depended - inbuilt
     not_listed = new_dependencies - to_exclude
     return not_listed
 
-def test_requires():
-    not_listed = get_extra_requirements()
+def test_requires(contrib):
+    not_listed = get_extra_requirements(contrib[0])
     assert len(not_listed) == 0, \
         f"new dependency to be listed: {not_listed}"
     print("√ Passed requirements test.")
