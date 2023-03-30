@@ -58,7 +58,9 @@ def _check_init_all(parent_mod, prob_name, prob_class_name):
     except:
         raise AssertionError(_class_not_in_init_all_msg)
     else:
-        assert prob_class_name in _init_all, _class_not_in_init_all_msg
+        assert prob_class_name in _init_all, \
+            _class_not_in_init_all_msg + \
+                f". We found {_init_all} but {prob_class_name} is not in there"
 
 # 5. The class is a subclass of EspressoProblem
 def _check_subclass(prob_class, prob_class_name):
@@ -287,7 +289,7 @@ def criteria_for_example(all_results):
 
 def main():
     problems = _utils.problems_to_run(problems_specified=["testtest"])
-    results = run_examples.run_problems(problems, pre_build=True, timeout=None)
+    results = run_examples.run_problems(problems, pre_build=True, timeout=300)
     for res in results:
         criteria_for_problem(
             res["problem class"],

@@ -42,6 +42,7 @@ def pre_build():
     _args = args()
     return _args.pre or (not _args.pre and not _args.post)
 
+
 # ------------------------------- running timeout -------------------------------------
 # Thanks to: https://stackoverflow.com/a/2282656
 def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
