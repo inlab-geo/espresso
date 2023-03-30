@@ -10,18 +10,13 @@ import report
 import _utils
 
 
-def _pre_build():
-    _args = _utils.args()
-    return _args.pre or (not _args.pre and not _args.post)
-
 @pytest.fixture
-def pre_build():
-    return _pre_build()
+def pre_build(request):
+    return not request.config.getoption("--post")
 
 def _all_contribs():
-    pre = _pre_build()
     problems = _utils.problems_to_run()
-    print("🥃 Running " + ("pre-" if pre else "post-") + "build tests for the following contributions:")
+    print("🥃 Running tests for the following contributions:")
     print("- " + "\n- ".join([c[0] for c in problems]) + "\n")
     return problems
 
@@ -29,8 +24,9 @@ def _all_contribs():
 def contrib(request):
     return request.param
 
-def test_contrib(contrib):
-    _report = report.compliance_report([contrib[0]])
+def test_contrib(contrib, pre_build):
+    _report = report.compliance_report([contrib[0]], pre_build)
+    # raise RuntimeError(str(contrib) + str(pre_build))
     for _r in _report.values():
         report.pprint_compliance_report(_report)
         if isinstance(_r["api_compliance"], Exception):

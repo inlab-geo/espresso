@@ -24,7 +24,8 @@ def main(pre_build=None):
     py_test_examples = dir_parent / "test_examples.py"
     py_check_requires = dir_parent / "check_requires.py"
     # test all examples
-    exit_status_test_examples = pytest.main([py_test_examples])
+    pytest_args = [py_test_examples] if pre else ["--post", py_test_examples]
+    exit_status_test_examples = pytest.main(pytest_args)
     if exit_status_test_examples != pytest.ExitCode.OK:
         sys.exit(exit_status_test_examples)
     # test requirements
