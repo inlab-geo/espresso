@@ -17,29 +17,41 @@ import pytest
 import _utils
 
 
-def test_all_examples(pre, dir_parent):
+def prep_params(pre_build=None):
+    pre = _utils.pre_build() if pre_build is None else pre_build
+    dir_parent = pathlib.Path(__file__).parent.resolve()
+    specified_contribs = _utils.problems_specified_from_args()
+    extra_args = []
+    if specified_contribs is not None:
+        for contrib in specified_contribs:
+            extra_args.append("--contribution")
+            extra_args.append(contrib)
+    return pre, dir_parent, extra_args
+
+def test_all_examples(pre, dir_parent, extra_args):
     py_test_examples = dir_parent / "test_examples.py"
     pytest_cmd = [sys.executable, "-m", "pytest", str(py_test_examples)]
+    pytest_cmd.extend(extra_args)
     if not pre:
         pytest_cmd.append("--post")
     exit_status_test_examples = subprocess.run(pytest_cmd).returncode
     if exit_status_test_examples != pytest.ExitCode.OK:
         sys.exit(exit_status_test_examples)
 
-def test_requirements(pre, dir_parent):
+def test_requirements(pre, dir_parent, extra_args):
     if not pre:
         py_check_requires = dir_parent / "check_requires.py"
         pytest_cmd = [sys.executable, "-m", "pytest", str(py_check_requires)]
+        pytest_cmd.extend(extra_args)
         exit_status_check_requires = subprocess.run(pytest_cmd).returncode
         if exit_status_check_requires != pytest.ExitCode.OK:
             sys.exit(exit_status_check_requires)
 
 # --> main test
 def main(pre_build=None):
-    pre = _utils.pre_build() if pre_build is None else pre_build
-    dir_parent = pathlib.Path(__file__).parent.resolve()
-    test_all_examples(pre, dir_parent)
-    test_requirements(pre, dir_parent)
+    pre, dir_parent, extra_args = prep_params(pre_build)
+    test_all_examples(pre, dir_parent, extra_args)
+    test_requirements(pre, dir_parent, extra_args)
 
 if __name__ == "__main__":
     main()

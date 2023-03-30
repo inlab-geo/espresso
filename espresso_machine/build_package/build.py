@@ -15,7 +15,6 @@
 import subprocess
 import sys
 import os
-import pytest
 from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
 import versioningit
