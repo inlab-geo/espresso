@@ -5,9 +5,6 @@ Usage:
 - To generate report, compliance_report(problems_to_check=None, pre_build=True)
 - To print report, print_compliance_report(report)
 """
-
-import sys
-
 import run_examples
 import criteria
 import _utils
