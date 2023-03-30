@@ -7,7 +7,6 @@ import sys
 import tqdm
 import argparse
 import warnings
-import typing
 import pathlib
 
 
@@ -36,7 +35,8 @@ def setup_parser():
     return parser
 
 def args():
-    return setup_parser().parse_args()
+    args, unknown = setup_parser().parse_known_args()
+    return args
 
 def pre_build():
     _args = args()
