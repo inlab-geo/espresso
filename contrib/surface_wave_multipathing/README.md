@@ -1,11 +1,12 @@
 # Surface Wave Multipathing
 
-This is a collection of surface wave multipthaing forward problems. The Espresso problem is 
-defined as thin interface to the swmp pckage that is available here:
+This is a collection of synthetic surface wave multipthaing forward problems. 
+The Espresso problems ared defined as thin interface to a subset of the demose in 
+the swmp pckage that is available here:
 
 https://github.com/JuergHauser/swmp
 
-The methodolgy and theory are describbed in:
+The methodology and theory are described in:
 
 Hauser, J., Sambridge, M. and Rawlinson, N. (2008). Multiarrival wavefront tracking and 
 its applications. Geochem. Geophys. Geosyst., 9(11), Q11001. 
