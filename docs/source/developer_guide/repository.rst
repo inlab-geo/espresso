@@ -2,7 +2,7 @@
 The Espresso Github repository
 ==============================
 
-. figure:: ../_static/espresso_arch.svg
+.. figure:: ../_static/espresso_arch.svg
     :align: center
 
 - Folder **contrib/** contains subfolders for each Espresso problem. Each Espresso

@@ -15,7 +15,6 @@
 import subprocess
 import sys
 import os
-import pytest
 from shutil import copytree, copy, rmtree, ignore_patterns
 from pathlib import Path
 import versioningit
@@ -23,6 +22,7 @@ import json
 
 import _utils
 import report
+import validate
 
 
 # ------------------------ constants ------------------------
@@ -62,7 +62,7 @@ def is_cache(file_name):
                             file_name == "Makefile" or \
                                 file_name == PROBLEMS_TO_COMPILE_FILE
 
-def move_folder_content(folder_path, dest_path, prefix=None):
+def move_folder_content(folder_path, dest_path, prefix=None, only_include=None):
     if prefix is None:
         copytree(
             folder_path, 
@@ -72,7 +72,7 @@ def move_folder_content(folder_path, dest_path, prefix=None):
          )
     else:
         for f in os.listdir(folder_path):
-            if is_cache(f):
+            if is_cache(f) or (only_include is not None and f not in only_include):
                 continue
             src = f"{folder_path}/{f}"
             dst = f"{dest_path}/{prefix}{f}"
@@ -129,20 +129,29 @@ def change_versioningit_config():
     with open(f"{BUILD_DIR}/setup.py", "r") as f:
         setup_content = f.read()
     setup_content = setup_content.replace(".core", "")
+    setup_content = setup_content.replace('"rmsuffix": ""', '"rmsuffix": "-build"')
     with open(f"{BUILD_DIR}/setup.py", "w") as f:
         f.write(setup_content)
 
 # 6
 def move_contrib_source():
+    # see if any contribution is specified through command line args
+    specified_problems = _utils.args().contribs
     # move all contribution subfolders with prefix "_"
-    move_folder_content(CONTRIB_SRC, f"{BUILD_DIR}/src/{MODULE_NAME}", prefix="_")
+    move_folder_content(
+        CONTRIB_SRC, 
+        f"{BUILD_DIR}/src/{MODULE_NAME}", 
+        prefix="_",
+        only_include=specified_problems,
+    )
     # collect a list of contributions + related strings to write later
     contribs = []
     init_file_imports = "\n"
     init_file_all_cls = "\n_all_problems = [\n"
     for path in Path(CONTRIB_SRC).iterdir():
         contrib = os.path.basename(path)                    # name
-        if path.is_dir():
+        if path.is_dir() and \
+            (specified_problems is None or contrib in specified_problems):
             contrib_class = _utils.problem_name_to_class(contrib)    # class
             contribs.append(contrib)
             init_file_imports += f"from ._{contrib} import {contrib_class}\n"
@@ -177,8 +186,12 @@ def move_espresso_machine():
 
 # 8 build capability matrix
 def build_problem_capability():
+    # see if any contribution is specified through command line args
+    specified_problems = _utils.args().contribs
     with _utils.suppress_stdout():
-        capability_report = report.capability_report()
+        capability_report = report.capability_report(
+            problems_to_check=specified_problems
+        )
     report_to_write = json.dumps(capability_report, indent=4)
     with open(f"{BUILD_DIR}/src/{MODULE_NAME}/list_problems.py", "a") as f:
         f.write("\n\n_capability_matrix = ")
@@ -187,9 +200,9 @@ def build_problem_capability():
 # 9 `pip install .`
 def install_pkg():
     subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
-    exit_code = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
-    if exit_code != pytest.ExitCode.OK:
-        sys.exit(exit_code)
+    res = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
+    if res != 0:
+        sys.exit(res)
 
 # printing helper
 def println_with_emoji(content, emoji):
@@ -225,17 +238,10 @@ def build():
     println_with_emoji("Espresso installed!", "🍰")
 
 def pre_validate():
-    exit_code = subprocess.call([sys.executable, validate_script, "--pre"])
-    if exit_code != pytest.ExitCode.OK:
-        sys.exit(exit_code)
+    validate.main(pre_build=True)
 
 def post_validate():
-    exit_code = subprocess.call([sys.executable, validate_script, "--post"])
-    if exit_code != pytest.ExitCode.OK:
-        sys.exit(exit_code)
-    else:
-        println_with_emoji("All done", "🍰")
-        sys.exit(exit_code)
+    validate.main(pre_build=False)
 
 def main():
     _args = _utils.args()
@@ -244,6 +250,7 @@ def main():
     build()
     if _args.post:
         post_validate()
+    println_with_emoji("All done", "🍰")
 
 if __name__ == "__main__":
     main()

@@ -5,9 +5,6 @@ Usage:
 - To generate report, compliance_report(problems_to_check=None, pre_build=True)
 - To print report, print_compliance_report(report)
 """
-
-import sys
-
 import run_examples
 import criteria
 import _utils
@@ -152,7 +149,7 @@ def _analyse_compliance(new_report):
     _optional_ok = new_report["optional_count"]["error"] == 0
     return _metadata_ok and _required_ok and _optional_ok
 
-def compliance_report(problems_to_check=None, pre_build=True, timeout=None):
+def compliance_report(problems_to_check=None, pre_build=True, timeout=60):
     """Generate a readable compliance report based on running raw report
     
     A typical compliance report looks like:

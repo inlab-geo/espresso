@@ -80,8 +80,8 @@ _capability_matrix = {
         "log_likelihood": 0,
         "log_prior": 0,
         "clean_tmp_files": 1,
-        "tmp_files": 1,
         "exe_fm2dss": 1,
+        "tmp_files": 1,
         "tmp_paths": 1
     },
     "PumpingTest": {
@@ -185,8 +185,8 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
-        "set_start_mesh": 1,
         "set_obs_data": 1,
-        "set_start_model": 1
+        "set_start_model": 1,
+        "set_start_mesh": 1
     }
 }
