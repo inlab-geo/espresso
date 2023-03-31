@@ -79,10 +79,10 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 0,
         "log_prior": 0,
-        "clean_tmp_files": 1,
-        "exe_fm2dss": 1,
         "tmp_files": 1,
-        "tmp_paths": 1
+        "exe_fm2dss": 1,
+        "tmp_paths": 1,
+        "clean_tmp_files": 1
     },
     "PumpingTest": {
         "model_size": 1,
