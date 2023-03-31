@@ -84,7 +84,7 @@ jobs:
   ######################## SOURCE DISTRIBUTION #########################
   build_sdist:
     name: Build source distribution
-    needs: tag_and_gen_pkg_source
+    needs: tag_pkg_source
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -113,7 +113,7 @@ jobs:
 
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
-    needs: tag_and_gen_pkg_source
+    needs: tag_pkg_source
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
