@@ -8,8 +8,9 @@
 6. remove `.core` from versioningit_config
 7. "espresso_machine/" => _esp_build/src/_machine"
 8. build capability_matrix
-9. `pip install .`
+9. `pip install .`      (can be disabled by `--no-install`)
 
+Usage: python build.py [--pre] [--post] [--no-install] [-c <example_name>]
 """
 
 import subprocess
@@ -197,13 +198,6 @@ def build_problem_capability():
         f.write("\n\n_capability_matrix = ")
         f.write(report_to_write)
 
-# 9 `pip install .`
-def install_pkg():
-    subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
-    res = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
-    if res != 0:
-        sys.exit(res)
-
 # printing helper
 def println_with_emoji(content, emoji):
     try:
@@ -222,7 +216,7 @@ build_pipeline = [
     ( move_contrib_source, "Moving all contributions..." ),
     ( move_espresso_machine, "Moving infrastructure code..." ),
     ( build_problem_capability, "Building capability matrix... (this will take some time)" ),
-    ( install_pkg, "Building Python package: geo-espresso..." ),
+    # ( install_pkg, "Building Python package: geo-espresso..." ),
 ]
 
 def build():
@@ -235,7 +229,15 @@ def build():
             println_with_emoji(f"Problem occurred in this step: {desc}\n", "❗️")
             raise e
         print("OK.")
-    println_with_emoji("Espresso installed!", "🍰")
+    # println_with_emoji("Espresso installed!", "🍰")
+
+def install_pkg():
+    desc = "Building Python package: geo-espresso..."
+    println_with_emoji(desc, "🗂")
+    subprocess.call([sys.executable, "-m", "pip", "uninstall", "-y", PKG_NAME])
+    res = subprocess.call([sys.executable, "-m", "pip", "install", "."], cwd=BUILD_DIR)
+    if res != 0:
+        sys.exit(res)
 
 def pre_validate():
     validate.main(pre_build=True)
@@ -248,6 +250,8 @@ def main():
     if _args.pre:
         pre_validate()
     build()
+    if not _args.dont_install:
+        install_pkg()
     if _args.post:
         post_validate()
     println_with_emoji("All done", "🍰")

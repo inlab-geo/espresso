@@ -32,6 +32,9 @@ def setup_parser():
     parser.add_argument(
         "--all", "-a", default=None,
         dest="all", action="store_true")
+    parser.add_argument(
+        "--no-install", default=False, 
+        dest="dont_install", action="store_true")
     return parser
 
 def args():
