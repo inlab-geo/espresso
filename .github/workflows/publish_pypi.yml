@@ -78,7 +78,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git tag "v${{ steps.release_version.outputs.version }}-build"
-          git push origin "v${{ steps.release_version.outputs.version }}-build"
+          git push -f origin "v${{ steps.release_version.outputs.version }}-build"
 
 
   ######################## SOURCE DISTRIBUTION #########################
