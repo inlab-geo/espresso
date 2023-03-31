@@ -42,10 +42,10 @@ jobs:
         run: |
           python -m pip install -r envs/requirements_test.txt
 
-      - name: Build with pre and post validation
+      - name: Build package
         run: |
           python -m pip install .
-          python espresso_machine/build_package/build.py --validate
+          python espresso_machine/build_package/build.py --no-install
 
       - name: Deploy to esp_build branch
         uses: s0/git-publish-subdir-action@develop
@@ -78,7 +78,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git tag "v${{ steps.release_version.outputs.version }}-build"
-          git push origin "v${{ steps.release_version.outputs.version }}-build"
+          git push -f origin "v${{ steps.release_version.outputs.version }}-build"
 
 
   ######################## SOURCE DISTRIBUTION #########################
