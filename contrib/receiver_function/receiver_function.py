@@ -1,11 +1,9 @@
-import subprocess
 import pathlib
-import shutil
 import numpy as np
 import matplotlib.pyplot as plt
 
-from cofi_espresso import EspressoProblem
-from cofi_espresso.exceptions import InvalidExampleError
+from espresso import EspressoProblem
+from espresso.exceptions import InvalidExampleError
 
 
 LIB_DIR = pathlib.Path(__file__).resolve().parent / "lib"
@@ -14,7 +12,6 @@ class ReceiverFunction(EspressoProblem):
     """Forward simulation class
     """
 
-    # TODO fill in the following metadata.
     metadata = {
         "problem_title": "Receiver function",                # To be used in docs
         "problem_short_description": \
@@ -52,13 +49,7 @@ class ReceiverFunction(EspressoProblem):
     def __init__(self, example_number=1):
         super().__init__(example_number)
 
-        # build fortran code if not found
-        try:
-            from .lib import rf
-        except:
-            build_clean()
-            build_fortran_source()
-            from .lib import rf
+        from .lib import rf
         self.rf = rf
 
         # example initialisation
@@ -191,21 +182,3 @@ class ReceiverFunction(EspressoProblem):
             if depths_in_0_60 and veloc_in_4_6:
                 return np.log(1/60).item()
         return float("-inf")
-
-
-def build_fortran_source():
-    subprocess.run(["cmake", "-S", ".", "-B", "build"], cwd=LIB_DIR)
-    subprocess.run(["cmake", "--build", "build"], cwd=LIB_DIR)
-    subprocess.run(["cmake", "--build", "build"], cwd=LIB_DIR)
-
-def build_clean():
-    shutil.rmtree(LIB_DIR / "build", ignore_errors=True)
-
-
-if __name__ == "__main__":
-    try:
-        from lib import rf
-    except Exception as e:
-        build_clean()
-        build_fortran_source()
-
