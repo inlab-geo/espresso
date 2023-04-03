@@ -190,24 +190,24 @@ def _inspect_espresso_problem():
         "optional attributes": opt_props, 
     }
 
-def _check_is_number(all_results, obj, obj_str):
+def _check_is_number(all_results: run_examples.ResultsFromExample, obj, obj_str):
     assert isinstance(obj, (float, int)), f"ensure {obj_str} is a number"
 
-def _check_is_str(all_results, obj, obj_str):
+def _check_is_str(all_results: run_examples.ResultsFromExample, obj, obj_str):
     assert isinstance(obj, str), f"ensure {obj_str} is a string"
 
-def _check_is_figure(all_results, obj, obj_str):
+def _check_is_figure(all_results: run_examples.ResultsFromExample, obj, obj_str):
     assert isinstance(obj, Figure), f"ensure {obj_str} returns an instance of " \
         "matplotlib.figure.Figure"
 
-def _check_1d_array_like(all_results, obj, obj_str):
+def _check_1d_array_like(all_results: run_examples.ResultsFromExample, obj, obj_str):
     assert np.ndim(obj) == 1, f"ensure {obj_str} is a flat array"
 
-def _check_2d_array_like(all_results, obj, obj_str):
+def _check_2d_array_like(all_results: run_examples.ResultsFromExample, obj, obj_str):
     assert np.ndim(obj) == 2, f"ensure {obj_str} is a 2d array"
 
 def _check_shape_factory(get_shape, get_shape_str):
-    def _check_shape(all_results, obj, obj_str):
+    def _check_shape(all_results: run_examples.ResultsFromExample, obj, obj_str):
         expected_shape = get_shape(all_results)
         expected_shape_str = get_shape_str(all_results)
         assert np.shape(obj) == expected_shape, \
@@ -216,28 +216,28 @@ def _check_shape_factory(get_shape, get_shape_str):
     return _check_shape
 
 def _check_shape_config_models():
-    get_shape = lambda all_results: (all_results["nmodel"],)
-    get_shape_str = lambda all_results: f"({all_results['prob_instance_str']}.model_size,)"
+    get_shape = lambda all_results: (all_results.nmodel,)
+    get_shape_str = lambda all_results: f"({all_results.prob_instance_str}.model_size,)"
     return get_shape, get_shape_str
 _check_model_shape = _check_shape_factory(*_check_shape_config_models())
 
 def _check_shape_config_data():
-    get_shape = lambda all_results: (all_results["ndata"],)
-    get_shape_str = lambda all_results: f"({all_results['prob_instance_str']}.data_size,)"
+    get_shape = lambda all_results: (all_results.ndata,)
+    get_shape_str = lambda all_results: f"({all_results.prob_instance_str}.data_size,)"
     return get_shape, get_shape_str
 _check_data_shape = _check_shape_factory(*_check_shape_config_data())
 
 def _check_shape_config_cov():
-    get_shape = lambda all_results: (all_results["ndata"],all_results["ndata"])
+    get_shape = lambda all_results: (all_results.ndata,all_results.ndata)
     get_shape_str = lambda all_results: \
-        f"({all_results['prob_instance_str']}.data_size, {all_results['prob_instance_str']}.data_size)"
+        f"({all_results.prob_instance_str}.data_size, {all_results.prob_instance_str}.data_size)"
     return get_shape, get_shape_str
 _check_cov_shape = _check_shape_factory(*_check_shape_config_cov())
 
 def _check_shape_config_jac():
-    get_shape = lambda all_results: (all_results["ndata"],all_results["nmodel"])
+    get_shape = lambda all_results: (all_results.ndata,all_results.nmodel)
     get_shape_str = lambda all_results: \
-        f"({all_results['prob_instance_str']}.data_size, {all_results['prob_instance_str']}.model_size)"
+        f"({all_results.prob_instance_str}.data_size, {all_results.prob_instance_str}.model_size)"
     return get_shape, get_shape_str
 _check_jac_shape = _check_shape_factory(*_check_shape_config_jac())
 

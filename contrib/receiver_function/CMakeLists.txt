@@ -1,9 +1,7 @@
 ### setup project ###
 cmake_minimum_required(VERSION 3.9)
 
-project(rfc
-  LANGUAGES C Fortran
-  )
+project(rfc C Fortran)
 
 # Safety net
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
@@ -49,8 +47,8 @@ execute_process(
 
 # Prepping the module
 set(f2py_module_name "rfc")
-set(fortran_src_file "${CMAKE_SOURCE_DIR}/RF.f90")
-file(GLOB_RECURSE fortran_src_file_subs "${CMAKE_SOURCE_DIR}/RFsubs/*.f*")
+set(fortran_src_file "${CMAKE_CURRENT_SOURCE_DIR}/RF.f90")
+file(GLOB_RECURSE fortran_src_file_subs "${CMAKE_CURRENT_SOURCE_DIR}/RFsubs/*.f*")
 set(f2py_module_c "${f2py_module_name}module.c")
 
 # Target for enforcing dependencies
@@ -63,28 +61,28 @@ add_custom_command(
   DEPENDS ${fortran_src_file} # Fortran source
 )
 
-add_library(${CMAKE_PROJECT_NAME} MODULE
+add_library(${f2py_module_name} MODULE
             "${f2py_module_c}"
             "${F2PY_INCLUDE_DIR}/fortranobject.c"
             "${fortran_src_file_subs}"
             "${fortran_src_file}")
 
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
+target_include_directories(${f2py_module_name} PUBLIC
                            ${F2PY_INCLUDE_DIR}
                            ${NumPy_INCLUDE_DIRS}
                            ${PYTHON_INCLUDE_DIRS})
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES SUFFIX "${PYTHON_EXTENSION_MODULE_SUFFIX}")
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES PREFIX "")
+set_target_properties(${f2py_module_name} PROPERTIES SUFFIX "${PYTHON_EXTENSION_MODULE_SUFFIX}")
+set_target_properties(${f2py_module_name} PROPERTIES PREFIX "")
 
 # Linker fixes
 if (UNIX)
   if (APPLE)
-    set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
+    set_target_properties(${f2py_module_name} PROPERTIES
     LINK_FLAGS  '-Wl,-dylib,-undefined,dynamic_lookup')
   else()
-    set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
+    set_target_properties(${f2py_module_name} PROPERTIES
   LINK_FLAGS  '-Wl,--allow-shlib-undefined')
   endif()
 endif()
 
-install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION .)
+install(TARGETS ${f2py_module_name} DESTINATION .)

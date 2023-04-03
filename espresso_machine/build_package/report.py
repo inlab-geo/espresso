@@ -26,9 +26,9 @@ def _init_attr_report():
 
 def _collect_compliance_info(all_results, report):
     import criteria
-    _has_init_error = isinstance(all_results["prob_instance"], Exception)
+    _has_init_error = isinstance(all_results.prob_instance, Exception)
     if _has_init_error:
-        _init_error = all_results["prob_instance"]
+        _init_error = all_results.prob_instance
     for attr_check in criteria.attributes_to_check:
         attr_key, attr_str, required, to_check = attr_check
         _report_key = "required" if required else "optional"
@@ -37,8 +37,8 @@ def _collect_compliance_info(all_results, report):
         if _has_init_error:
             _to_update.append(_init_error)
             continue
-        obj = all_results[attr_key]
-        obj_str = f"{all_results['prob_instance_str']}.{attr_str}"
+        obj = getattr(all_results, attr_key)
+        obj_str = f"{all_results.prob_instance_str}.{attr_str}"
         if isinstance(obj, Exception) or obj is None:
             _to_update.append(obj)
         else:
@@ -60,7 +60,7 @@ def _example_standard(example_instance, report):
     return _standard_attr
 
 def _collect_additional_attr(all_results, report):
-    p = all_results["prob_instance"]
+    p = all_results.prob_instance
     if isinstance(p, Exception):
         return
     p_dir = [attr for attr in dir(p) if not attr.startswith("_")]
