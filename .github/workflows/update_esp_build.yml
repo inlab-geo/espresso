@@ -11,11 +11,13 @@ on:
       - 'setup.py'
       - 'pyproject.toml'
       - 'CHANGELOG.md'
-  
+      - '!src/espresso/version.py'
+      - '!CHANGELOG.md'
+
 jobs:
   ######################## GENERATE PACKAGE SOURCE #####################
   gen_pkg_source:
-    if: github.repository_owner == 'inlab-geo' 
+    if: github.repository_owner == 'inlab-geo' && ${{ !contains(github.event.head_commit.message, 'release') }}
     name: Generate package source
     runs-on: ubuntu-latest
     steps:
@@ -41,7 +43,7 @@ jobs:
       
       - name: Build with pre and post validation
         run: |
-          python tools/build_package/build_with_checks.py
+          python espresso_machine/build_package/build.py --no-install
       
       - name: Deploy to esp_build branch
         uses: s0/git-publish-subdir-action@develop

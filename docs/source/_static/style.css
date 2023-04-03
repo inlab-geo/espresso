@@ -8,6 +8,33 @@ p {
     font-size: 1rem;
 }
 
+
+/* APV modifications */
+/* Mainly designed to get FAQ looking good */
+h1 {
+    font-size: 200%;
+}
+
+h2 {
+    font-size: 150%;
+}
+
+h3 {
+    font-size:100%;
+    font-weight: 450;
+}
+
+div.contents {
+    padding: 1em 1em 1em;
+}
+div.contents>ul>li>p>a {
+    font-size: 100%;
+}
+
+
+/* End APV modifications */
+
+
 /* TOP LEFT: logo + project title */
 div.navbar-brand-box a.navbar-brand img {
     max-height: 10vh !important;
@@ -37,7 +64,7 @@ div.dropdown-buttons-trigger div.dropdown-buttons button.topbarbtn {
 
 /* HOME: inference tree */
 div.mermaid:not([data-processed]) {
-    opacity: 0;
+    display: none;
 }
 div.mermaid {
     transition: transform .2s;

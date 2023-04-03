@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from cofi_espresso.utils import absolute_path as path, silent_remove
+from espresso.utils import absolute_path as path, silent_remove
 
 #--------------------------------------------------------------------------------------------
 
@@ -95,13 +95,16 @@ class gridModel(object):
         # run fmst wavefront tracker code from command line
         # see if the executable is there, otherwise do preparation for the executable
         out = run_fm2dss(wdir)
-        if out.returncode:      # re-compile if there's an error
-            compile_fm2dss()
-            out = run_fm2dss(wdir)
+        # if out.returncode:      # re-compile if there's an error
+        #     compile_fm2dss()
+        #     out = run_fm2dss(wdir)
         if out.returncode:      # add permission if there's a further error
             print("Trying to fix now...")
             try:
-                Path(wdir + "/fm2dss.o").chmod(0o774)
+                import stat
+                exe_file = Path(wdir + "/build/fm2dss.o")
+                st = os.stat(exe_file)
+                os.chmod(exe_file, st.st_mode | stat.S_IEXEC)
                 print("Execute permission given to fm2dss.o.")
             except:
                 print("Failed to fix. Check error message above.")
@@ -458,22 +461,18 @@ def generateSurfacePoints(nPerSide,extent=(0,1,0,1),surface=[True,True,True,True
     return np.array(out)
 
 def run_fm2dss(wdir):
-    command = "./fm2dss.o"
+    command = "./build/fm2dss.o"
     return subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
 
 def compile_fm2dss():
-    # https://github.com/inlab-geo/espresso/blob/main/tools/build_package/validate.py#L170
-    build_dir = path(".")
-    res1 = subprocess.call(["cmake", "."], cwd=build_dir)
+    # https://github.com/inlab-geo/espresso/blob/main/espresso_machine/build_package/validate.py#L170
+    build_dir = path("./build")
+    res1 = subprocess.call(["cmake", ".."], cwd=build_dir)
     if res1:
         raise ChildProcessError(f"`cmake .` failed in {build_dir}")
     res2 = subprocess.call(["make"], cwd=build_dir)
     if res2:
         raise ChildProcessError(f"`make` failed in {build_dir}")
-    clean_cmake_files()
 
-def clean_cmake_files():
-    shutil.rmtree(path("CMakeFiles"))
-    files_to_rm = ["Makefile", "cmake_install.cmake", "CMakeCache.txt"]
-    for file in files_to_rm:
-        silent_remove(path(file))
+def clean_fm2dss():
+    shutil.rmtree(path("build"))

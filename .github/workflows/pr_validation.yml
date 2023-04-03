@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
   pull_request:
 
-
 jobs:
   gen_pkg_source:
     name: Generate package source
@@ -32,4 +31,4 @@ jobs:
       
       - name: Build with pre and post validation
         run: |
-          python tools/build_package/build_with_checks.py
+          python espresso_machine/build_package/build.py --pre --post

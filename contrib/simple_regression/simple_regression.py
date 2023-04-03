@@ -1,6 +1,6 @@
 import numpy as np
-from cofi_espresso import EspressoProblem
-from cofi_espresso.exceptions import InvalidExampleError
+from espresso import EspressoProblem
+from espresso.exceptions import InvalidExampleError
 
 
 class SimpleRegression(EspressoProblem):

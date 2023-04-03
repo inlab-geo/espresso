@@ -5,9 +5,10 @@ on:
   push:
     branches: main
     paths:
-      - "src/cofi_espresso/version.py"
+      - "src/espresso/version.py"
 
 jobs:
+  ######################## GENERATE PACKAGE SOURCE #####################
   tag_and_gen_pkg_source:
     if: github.repository_owner == 'inlab-geo'
     name: Tag current commit and send package source to _esp_build branch
@@ -22,10 +23,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      
+
       - name: Extract Release Version
         id: release_version
-        working-directory: src/cofi_espresso
+        working-directory: src/espresso
         run: |
           set -e
           python -c "import version as v; print(v.__version__)"
@@ -41,10 +42,10 @@ jobs:
         run: |
           python -m pip install -r envs/requirements_test.txt
 
-      - name: Build with pre and post validation
+      - name: Build package
         run: |
           python -m pip install .
-          python tools/build_package/build_with_checks.py
+          python espresso_machine/build_package/build.py --no-install
 
       - name: Deploy to esp_build branch
         uses: s0/git-publish-subdir-action@develop
@@ -66,7 +67,7 @@ jobs:
 
       - name: Extract Release Version
         id: release_version
-        working-directory: src/cofi_espresso
+        working-directory: src/espresso
         run: |
           set -e
           python -c "import version as v; print(v.__version__)"
@@ -77,31 +78,102 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git tag "v${{ steps.release_version.outputs.version }}-build"
-          git push origin "v${{ steps.release_version.outputs.version }}-build"
+          git push -f origin "v${{ steps.release_version.outputs.version }}-build"
 
-  publish_pypi:
-    name: Build source distribution and upload to PyPI
-    needs: tag_and_gen_pkg_source
+
+  ######################## SOURCE DISTRIBUTION #########################
+  build_sdist:
+    name: Build source distribution
+    needs: tag_pkg_source
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
           ref: esp_build
+          fetch-depth: 0
+      
+      - name: Get tags
+        run: |
+          git fetch --tags origin
+          git describe --tags
 
       - name: Install Python 3.9
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
       - name: Set up environment
         run: |
-          python -m pip install scikit-build versioningit
+          python -m pip install scikit-build versioningit build
 
       - name: Build and check sdist
         run: |
-          pip install build
-          python -m build --sdist --wheel
+          python -m build --sdist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: dist/*.tar.gz
+
+  ######################## WHEELS DISTRIBUTION #########################
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    needs: tag_pkg_source
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # Giving up windows, see the following two links:
+        # https://groups.google.com/g/comp.lang.fortran/c/Jna-QAHCOpk/m/VZq7gVq3AgAJ
+        # https://github.com/awvwgk/setup-fortran/issues/6
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: esp_build
+          fetch-depth: 0
+
+      - name: Get tags
+        run: |
+          git fetch --tags origin
+          git describe --tags
+
+      - name: Install Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Setup GNU Fortran
+        uses: modflowpy/install-gfortran-action@v1
+
+      - name: Set up environment
+        run: |
+          python -m pip install scikit-build versioningit cibuildwheel
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_SKIP: pp* cp36* *-win32 *-manylinux_i686 *-musllinux_*
+          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: wheelhouse/*.whl
+
+
+  ######################## UPLOAD TO PYPI #########################
+  publish_pypi:
+    name: Build source distribution and upload to PyPI
+    needs: [build_sdist, build_wheels]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: dist
 
       - name: Publish package to TestPyPI
         uses: pypa/gh-action-pypi-publish@v1.4.1
