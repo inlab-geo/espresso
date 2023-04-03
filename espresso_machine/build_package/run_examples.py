@@ -10,17 +10,38 @@ import os
 import typing
 import pathlib
 import subprocess
+import dataclasses
 
 import _utils
 
 try:
     from espresso.exceptions import InvalidExampleError
+    from espresso import EspressoProblem
 except ModuleNotFoundError as e:
     e.msg += "\n\nNote: To run pre-build validation, please firstly install " \
              "`espresso` core module by running the following from the root" \
              "level of the project\n  $ pip install ."
     raise e
 
+
+@dataclasses.dataclass
+class ResultsFromExample:
+    prob_instance_str: str              # e.g. "SimpleRegression(2)""
+    prob_instance: EspressoProblem      # e.g. actual instance of str above
+    i: int                              # e.g. 2
+    results: dict
+
+    def error_in_init(self) -> \
+        typing.Tuple[str, typing.Union[Exception, EspressoProblem]]:
+        return isinstance(self.prob_instance, Exception), self.prob_instance
+
+    def __getattr__(self, key):
+        if key in self.results:
+            return self.results[key]
+        else:
+            raise AttributeError(
+                f"'{self.__class__.__name__}' object has no attribute '{key}'"
+            )
 
 class _ProblemModule:
     """get the parent module of a problem class
@@ -109,17 +130,21 @@ def collect_properties(prob_instance_i, all_outputs, timeout=None):
     for (output_name, prop) in prob_properties:
         all_outputs[output_name] = _get_result(prob_instance_i, prop, False, timeout)
 
-def run_example(problem_class, problem_class_str, i, timeout=None) -> dict:
+def run_example(problem_class, problem_class_str, i, timeout=None) \
+    -> ResultsFromExample:
     # prepare
     all_outputs = dict()
     prob_instance_i = instantiate_example(problem_class, i)
-    if not isinstance(prob_instance_i, Exception):  # collect results
+    results_from_example = ResultsFromExample(
+        prob_instance_str = f"{problem_class_str}({i})",
+        prob_instance = prob_instance_i,
+        i = i,
+        results = all_outputs
+    )
+    if not results_from_example.error_in_init()[0]:  # collect results
         collect_methods_outputs(prob_instance_i, all_outputs, timeout)
         collect_properties(prob_instance_i, all_outputs, timeout)
-    all_outputs["prob_instance_str"] = f"{problem_class_str}({i})"
-    all_outputs["prob_instance"] = prob_instance_i
-    all_outputs["i"] = i
-    return all_outputs
+    return results_from_example
 
 def run_problem(problem_class, problem_class_str, timeout=None) -> typing.Iterator[dict]:
     if isinstance(problem_class, Exception): return []
@@ -131,6 +156,8 @@ def run_problem(problem_class, problem_class_str, timeout=None) -> typing.Iterat
         except InvalidExampleError:
             if i == 1: raise ValueError("Ensure there are at least one examples")
             return
+        if example_res.error_in_init()[0]:
+            raise example_res.error_in_init()[1]
         i += 1
         yield example_res
 

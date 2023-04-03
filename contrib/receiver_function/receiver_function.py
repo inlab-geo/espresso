@@ -49,7 +49,7 @@ class ReceiverFunction(EspressoProblem):
     def __init__(self, example_number=1):
         super().__init__(example_number)
 
-        from .lib import rf
+        from . import rf
         self.rf = rf
 
         # example initialisation
