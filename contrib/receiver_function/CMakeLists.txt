@@ -50,12 +50,10 @@ execute_process(
 # Prepping the module
 set(f2py_module_name "rfc")
 set(fortran_src_file "${CMAKE_SOURCE_DIR}/RF.f90")
+file(GLOB_RECURSE fortran_src_file_subs "${CMAKE_SOURCE_DIR}/RFsubs/*.f*")
 set(f2py_module_c "${f2py_module_name}module.c")
 
 # Target for enforcing dependencies
-add_custom_target(genpyf
-  DEPENDS "${fortran_src_file}"
-)
 add_custom_command(
   OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${f2py_module_c}"
   COMMAND ${PYTHON_EXECUTABLE}  -m "numpy.f2py"
@@ -66,8 +64,9 @@ add_custom_command(
 )
 
 add_library(${CMAKE_PROJECT_NAME} MODULE
-            "${f2py_module_name}module.c"
+            "${f2py_module_c}"
             "${F2PY_INCLUDE_DIR}/fortranobject.c"
+            "${fortran_src_file_subs}"
             "${fortran_src_file}")
 
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
@@ -87,7 +86,5 @@ if (UNIX)
   LINK_FLAGS  '-Wl,--allow-shlib-undefined')
   endif()
 endif()
-
-add_dependencies(${CMAKE_PROJECT_NAME} genpyf)
 
 install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION .)
