@@ -292,12 +292,12 @@ def main():
     results = run_examples.run_problems(problems, pre_build=True, timeout=300)
     for res in results:
         criteria_for_problem(
-            res["problem class"],
-            res["problem class str"],
-            res["problem path"],
-            res["parent module"], 
+            res.problem_class,
+            res.problem_class_str,
+            res.problem_path,
+            res.parent_module,
         )
-        for prob_out_i in res["problem results generator"]:
+        for prob_out_i in res.problem_results_generator:
             criteria_for_example(prob_out_i)
 
 if __name__ == "__main__":

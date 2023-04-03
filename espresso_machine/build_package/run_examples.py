@@ -8,6 +8,7 @@ $ python espresso_machine/build_package/build.py
 import sys
 import os
 import typing
+import types
 import pathlib
 import subprocess
 import dataclasses
@@ -42,6 +43,15 @@ class ResultsFromExample:
             raise AttributeError(
                 f"'{self.__class__.__name__}' object has no attribute '{key}'"
             )
+
+@dataclasses.dataclass
+class ResultsFromProblem:
+    parent_module: types.ModuleType
+    problem_class: typing.Type
+    problem_class_str: str
+    problem_path: str
+    problem_results_generator: typing.Iterator[dict]
+
 
 class _ProblemModule:
     """get the parent module of a problem class
@@ -131,7 +141,7 @@ def collect_properties(prob_instance_i, all_outputs, timeout=None):
         all_outputs[output_name] = _get_result(prob_instance_i, prop, False, timeout)
 
 def run_example(problem_class, problem_class_str, i, timeout=None) \
-    -> ResultsFromExample:
+        -> ResultsFromExample:
     # prepare
     all_outputs = dict()
     prob_instance_i = instantiate_example(problem_class, i)
@@ -146,7 +156,8 @@ def run_example(problem_class, problem_class_str, i, timeout=None) \
         collect_properties(prob_instance_i, all_outputs, timeout)
     return results_from_example
 
-def run_problem(problem_class, problem_class_str, timeout=None) -> typing.Iterator[dict]:
+def run_problem(problem_class, problem_class_str, timeout=None) \
+        -> typing.Iterator[dict]:
     if isinstance(problem_class, Exception): return []
     i = 1
     while True:
@@ -172,7 +183,8 @@ def run_cmake_if_needed(prob_path, pre_build):
         if res2:
             raise ChildProcessError("`make` failed in example_sub_folder")
 
-def run_problems(problems, pre_build, timeout=None):
+def run_problems(problems, pre_build, timeout=None) \
+        -> typing.Iterator[ResultsFromProblem]:
     for (prob_name, prob_path) in problems:
         prob_class_str = _utils.problem_name_to_class(prob_name)
         run_cmake_if_needed(prob_path, pre_build)
@@ -182,21 +194,22 @@ def run_problems(problems, pre_build, timeout=None):
                     prob_class = getattr(parent_module, prob_class_str)
                 except Exception as e:
                     prob_class = e
-                yield {
-                    "parent module": parent_module,
-                    "problem class": prob_class, 
-                    "problem class str": prob_class_str, 
-                    "problem path": prob_path, 
-                    "problem results generator": \
+                yield ResultsFromProblem(
+                    parent_module = parent_module,
+                    problem_class = prob_class,
+                    problem_class_str = prob_class_str,
+                    problem_path = prob_path,
+                    problem_results_generator = \
                         run_problem(prob_class, prob_class_str, timeout),
-                }
+                )
         except Exception as e:
-            yield {
-                "parent module": e,
-                "problem class str": prob_class_str,
-                "problem path": prob_path,
-                "problem results generator": [],
-            }
+            yield ResultsFromProblem (
+                parent_module = e,
+                problem_class = None,
+                problem_class_str = prob_class_str,
+                problem_path = prob_path,
+                problem_results_generator = [],
+            )
 
 
 def main(problems_specified=None, timeout=None):
@@ -204,8 +217,8 @@ def main(problems_specified=None, timeout=None):
     problems = _utils.problems_to_run(problems_specified)
     results = run_problems(problems, pre_build=True, timeout=timeout)
     for res in results:
-        if _you_want_to_print_something: print(res["problem class"])
-        for prob_out_i in res["problem results generator"]:
+        if _you_want_to_print_something: print(res.problem_class)
+        for prob_out_i in res.problem_results_generator:
             if _you_want_to_print_something: print(prob_out_i.keys())
 
 if __name__ == "__main__":
