@@ -26,9 +26,9 @@ def _init_attr_report():
 
 def _collect_compliance_info(all_results, report):
     import criteria
-    _has_init_error = isinstance(all_results["prob_instance"], Exception)
+    _has_init_error = isinstance(all_results.prob_instance, Exception)
     if _has_init_error:
-        _init_error = all_results["prob_instance"]
+        _init_error = all_results.prob_instance
     for attr_check in criteria.attributes_to_check:
         attr_key, attr_str, required, to_check = attr_check
         _report_key = "required" if required else "optional"
@@ -37,8 +37,8 @@ def _collect_compliance_info(all_results, report):
         if _has_init_error:
             _to_update.append(_init_error)
             continue
-        obj = all_results[attr_key]
-        obj_str = f"{all_results['prob_instance_str']}.{attr_str}"
+        obj = getattr(all_results, attr_key)
+        obj_str = f"{all_results.prob_instance_str}.{attr_str}"
         if isinstance(obj, Exception) or obj is None:
             _to_update.append(obj)
         else:
@@ -60,7 +60,7 @@ def _example_standard(example_instance, report):
     return _standard_attr
 
 def _collect_additional_attr(all_results, report):
-    p = all_results["prob_instance"]
+    p = all_results.prob_instance
     if isinstance(p, Exception):
         return
     p_dir = [attr for attr in dir(p) if not attr.startswith("_")]
@@ -95,15 +95,15 @@ def raw_compliance_report(problems_to_check=None, pre_build=True, timeout=None):
     for res in results:
         _report_for_problem = dict()
         # problem level report
-        if isinstance(res["parent module"], Exception):
-            _report_for_problem["metadata"] = res["parent module"]
+        if isinstance(res.parent_module, Exception):
+            _report_for_problem["metadata"] = res.parent_module
         else:
             try:
                 criteria.criteria_for_problem(
-                    res["problem class"],
-                    res["problem class str"],
-                    res["problem path"],
-                    res["parent module"], 
+                    res.problem_class,
+                    res.problem_class_str,
+                    res.problem_path,
+                    res.parent_module,
                 )
             except Exception as e:
                 _report_for_problem["metadata"] = e
@@ -111,12 +111,12 @@ def raw_compliance_report(problems_to_check=None, pre_build=True, timeout=None):
                 _report_for_problem["metadata"] = True
                 # example level report
                 _report_for_problem["attributes"] = _init_attr_report()
-                for prob_out_i in res["problem results generator"]:
+                for prob_out_i in res.problem_results_generator:
                     # required / optional attributes
                     _collect_compliance_info(prob_out_i, _report_for_problem["attributes"])
                     # additional attributes
                     _collect_additional_attr(prob_out_i, _report_for_problem["attributes"])
-        report[res["problem class str"]] = _report_for_problem
+        report[res.problem_class_str] = _report_for_problem
     return report
 
 def _analyse_report_dict(sub_report):
