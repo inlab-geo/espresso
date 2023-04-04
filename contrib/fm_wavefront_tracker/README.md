@@ -1,4 +1,4 @@
-# FMM Tomography
+# FM Wavefront Tracer
 
 <!-- Please write anything you'd like to explain about the forward problem here -->
 
@@ -50,31 +50,3 @@ where $\delta d_i$ is the difference in travel time, of the ith path, between th
 All the methods comply to `geo-espresso` standards. Additionally, you can display 
 paths together with the model when running `fmm_instance.plot_model(model, paths=True)`,
 where `fmm_instance` is an instance of class `FmmTomography`.
-
-<!-- ## Getting started
-
-To complete this contribution, here are some ideas on what to do next:
-
-- [ ] **Modify [README.md](README.md)**. Document anything you'd like to add for this problem
-  (in this README.md file). Some recommended parts include:
-   - What this test problem is about
-   - What you would recommend inversion practitioners to notice
-   - etc.
-- [ ] **Modify [LICENCE](LICENCE)**. The default one we've used is a 2-clauss BSD licence. 
-   Feel free to replace the content with a licence that suits you best.
-- [ ] **Write code in [fmm_tomography.py](fmm_tomography.py) (and [\_\_init\_\_.py](__init__.py) if
-   necessary)**. Some basic functions have been defined in the template - these are the
-   standard interface we'd like to enforce in Espresso. You'll see
-   clearly some functionalities that are required to implement and others that are
-   optional.
-   - If you would like to load data from files, please use our 
-     [utility functions](https://geo-espresso.readthedocs.io/en/latest/user_guide/api/generated/espresso.utils.html) 
-     to get absoluate path before calling your load function.
-- [ ] **Validate and build your contribution locally**. We have seperate scripts for 
-   validation and packaging. Check 
-   [how to test building your contribution](README.md#how-to-test-building-your-contribution-with-geo-espresso) 
-   for details.
-- [ ] **Delete / comment out these initial instructions**. They are for your own reference
-   so feel free to delete them or comment them out once you've finished the above
-   checklist. -->
-

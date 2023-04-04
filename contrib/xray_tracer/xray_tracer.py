@@ -8,12 +8,12 @@ import tqdm
 
 
 
-class XrayTomography(EspressoProblem):
+class XrayTracer(EspressoProblem):
     """Forward simulation class
     """
 
     metadata = {
-        "problem_title": "X-ray tomography",
+        "problem_title": "X-ray Tracer",
         "problem_short_description": "",
 
         "author_names": ["Andrew Valentine"],
@@ -30,19 +30,19 @@ class XrayTomography(EspressoProblem):
         super().__init__(example_number)
         if example_number == 1:
             self._paths, self._attns = load_data('data/example1.dat')
-            self._desc = "A straightforward X-ray tomography setup with good data coverage (InLab logo)"
+            self._desc = "A straightforward X-ray tracer setup with good data coverage (InLab logo)"
             self._ngrid = 50 
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/inlab_logo.png',self._ngrid,self._ngrid,2,0.5)
         elif example_number == 2:
             self._paths, self._attns = load_data('data/example2.dat')
-            self._desc = "A straightforward X-ray tomography setup with good data coverage (CSIRO logo)"
+            self._desc = "A straightforward X-ray tracer setup with good data coverage (CSIRO logo)"
             self._ngrid = 50 
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)
         elif example_number == 3:
             self._paths, self._attns = load_data('data/example3.dat')
-            self._desc = "X-ray tomography with large gaps (CSIRO logo)"
+            self._desc = "X-ray tracer with large gaps (CSIRO logo)"
             self._ngrid = 50
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)

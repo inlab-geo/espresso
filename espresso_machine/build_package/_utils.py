@@ -100,7 +100,7 @@ PKG_NAME = "espresso"
 ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
 CONTRIB_FOLDER = ROOT + "/contrib"
 
-def problem_name_to_class(problem_name):   # e.g. "xray_tomography" -> "XrayTomography"
+def problem_name_to_class(problem_name):   # e.g. "xray_tracer" -> "XrayTracer"
     return problem_name.title().replace("_", "")
 
 def get_folder_content(folder_name) -> typing.Tuple[typing.List[str], typing.List[str]]:
