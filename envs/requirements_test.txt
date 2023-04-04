@@ -2,6 +2,7 @@ pytest
 pyyaml
 numpy
 matplotlib
+cartopy>=0.18
 scipy
 tqdm
 scikit-build
