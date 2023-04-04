@@ -1,3 +1,6 @@
+# Magnetotelluric 1D
+# 49 -> 4905 -> 490501 -> curve fitting
+# description: this is a description, if you can see this, it works!
 import numpy as np
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError

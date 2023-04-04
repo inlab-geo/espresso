@@ -1,5 +1,5 @@
-# Xray Tomography
-# 37 Earth Sciences -> 3707 Unkown -> 370702 Unkown -> magnetotelluric -> # Xray Tomography
+# Xray tomography
+# 37 Earth Sciences -> 3706 Geophysics -> 370609 -> Xray tracer
 # description: this is a description, if you can see this, it works!
 from espresso import EspressoProblem
 import numpy as np

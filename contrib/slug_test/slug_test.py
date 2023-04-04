@@ -1,3 +1,6 @@
+# Magnetotelluric 1D
+# 37 Earth Sciences -> 3707 -> 370703 -> slug test
+# description: this is a description, if you can see this, it works!
 import numpy as np
 import matplotlib.pyplot as plt
 

@@ -1,5 +1,5 @@
 # Fmm tomography
-# 37 Earth Sciences -> 3707 Unkown -> 370702 Unkown -> magnetotelluric -> # Xray Tomography
+# 37 Earth Sciences -> 3706 Geophysics -> 370609 -> fast marching method
 # description: this is a description, if you can see this, it works!
 import subprocess
 import numpy as np
