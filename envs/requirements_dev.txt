@@ -2,6 +2,7 @@ numpy>=1.20
 scipy>=1.0.0
 scikit-build
 black>=22.0.0
+cartopy>=0.18
 sphinx==4.5.0
 matplotlib
 cython

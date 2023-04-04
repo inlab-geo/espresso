@@ -10,6 +10,7 @@ dependencies:
   - black
   - matplotlib
   - pytest
+  - cartopy>=0.18
   - pip
   - pip:
     - pyyaml

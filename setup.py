@@ -96,6 +96,7 @@ INSTALL_REQUIRES = [
     "matplotlib>=3.1",
     "tqdm>=4.0",
     "mpmath>=1.2.0",
+    "cartopy>=0.18",
 ]
 EXTRAS_REQUIRE = {
     "doc": [
