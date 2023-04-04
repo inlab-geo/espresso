@@ -12,6 +12,7 @@ import _utils
 
 def _init_attr_report():
     import criteria
+
     _report = {
         "required": dict(),
         "optional": dict(),
@@ -24,8 +25,10 @@ def _init_attr_report():
         _report[_report_key][_attr_key_name] = []
     return _report
 
+
 def _collect_compliance_info(all_results, report):
     import criteria
+
     _has_init_error = isinstance(all_results.prob_instance, Exception)
     if _has_init_error:
         _init_error = all_results.prob_instance
@@ -50,14 +53,16 @@ def _collect_compliance_info(all_results, report):
             else:
                 _to_update.append(True)
 
+
 def _example_standard(example_instance, report):
-    _standard_attr = set(report["required"].keys()) 
+    _standard_attr = set(report["required"].keys())
     _standard_attr.update(report["optional"].keys())
     _standard_attr.update(example_instance.__abstract_metadata_keys__)
     _standard_attr.add("metadata")
     _standard_attr.add("params")
     _standard_attr.add("example_number")
     return _standard_attr
+
 
 def _collect_additional_attr(all_results, report):
     p = all_results.prob_instance
@@ -68,20 +73,21 @@ def _collect_additional_attr(all_results, report):
     _additional_attr = {a for a in p_dir if a not in _standard_attr}
     report["additional"].update(_additional_attr)
 
+
 def raw_compliance_report(problems_to_check=None, pre_build=True, timeout=None):
     """Run all problems and generate a raw compliance report
-    
+
     A typical raw report looks like:
     {
         'FmmTomography': {
-            'metadata': True, 
+            'metadata': True,
             'attributes': {
                 'required': {
                     'model_size': [True], 'data_size': [True], 'good_model': [True], 'starting_model': [True], 'data': [True], 'forward': [True]
-                }, 
+                },
                 'optional': {
                     'description': [None], 'covariance_matrix': [None], 'inverse_covariance_matrix': [None], 'jacobian': [True], 'forward': [True, True], 'plot_model': [True], 'plot_data': [None], 'misfit': [None], 'log_likelihood': [None], 'log_prior': [None]
-                }, 
+                },
                 'additional': {
                     'exe_fm2dss', 'clean_tmp_files', 'tmp_paths', 'tmp_files'
                 }
@@ -113,11 +119,16 @@ def raw_compliance_report(problems_to_check=None, pre_build=True, timeout=None):
                 _report_for_problem["attributes"] = _init_attr_report()
                 for prob_out_i in res.problem_results_generator:
                     # required / optional attributes
-                    _collect_compliance_info(prob_out_i, _report_for_problem["attributes"])
+                    _collect_compliance_info(
+                        prob_out_i, _report_for_problem["attributes"]
+                    )
                     # additional attributes
-                    _collect_additional_attr(prob_out_i, _report_for_problem["attributes"])
+                    _collect_additional_attr(
+                        prob_out_i, _report_for_problem["attributes"]
+                    )
         report[res.problem_class_str] = _report_for_problem
     return report
+
 
 def _analyse_report_dict(sub_report):
     _new_report = dict()
@@ -142,6 +153,7 @@ def _analyse_report_dict(sub_report):
         _new_count["total"] += 1
     return _new_report, _new_count
 
+
 def _analyse_compliance(new_report):
     _metadata_ok = new_report["metadata"] == "OK"
     _required_count = new_report["required_count"]
@@ -149,19 +161,20 @@ def _analyse_compliance(new_report):
     _optional_ok = new_report["optional_count"]["error"] == 0
     return _metadata_ok and _required_ok and _optional_ok
 
+
 def compliance_report(problems_to_check=None, pre_build=True, timeout=60):
     """Generate a readable compliance report based on running raw report
-    
+
     A typical compliance report looks like:
     {
         'FmmTomography': {
-            'metadata': 'OK', 
-            'required': {'model_size': 'OK', 'data_size': 'OK', 'good_model': 'OK', 'starting_model': 'OK', 'data': 'OK', 'forward': 'OK'}, 
-            'required_count': {'implemented': 6, 'not_implemented': 0, 'error': 0, 'total': 6}, 
-            'optional': {'description': 'Not implemented', 'covariance_matrix': 'Not implemented', 'inverse_covariance_matrix': 'Not implemented', 'jacobian': 'OK', 'forward': 'OK', 'plot_model': 'OK', 'plot_data': 'Not implemented', 'misfit': 'Not implemented', 'log_likelihood': 'Not implemented', 'log_prior': 'Not implemented'}, 
-            'optional_count': {'implemented': 3, 'not_implemented': 7, 'error': 0, 'total': 10}, 
-            'additional': {'clean_tmp_files', 'tmp_paths', 'exe_fm2dss', 'tmp_files'}, 
-            'additional_count': 4, 
+            'metadata': 'OK',
+            'required': {'model_size': 'OK', 'data_size': 'OK', 'good_model': 'OK', 'starting_model': 'OK', 'data': 'OK', 'forward': 'OK'},
+            'required_count': {'implemented': 6, 'not_implemented': 0, 'error': 0, 'total': 6},
+            'optional': {'description': 'Not implemented', 'covariance_matrix': 'Not implemented', 'inverse_covariance_matrix': 'Not implemented', 'jacobian': 'OK', 'forward': 'OK', 'plot_model': 'OK', 'plot_data': 'Not implemented', 'misfit': 'Not implemented', 'log_likelihood': 'Not implemented', 'log_prior': 'Not implemented'},
+            'optional_count': {'implemented': 3, 'not_implemented': 7, 'error': 0, 'total': 10},
+            'additional': {'clean_tmp_files', 'tmp_paths', 'exe_fm2dss', 'tmp_files'},
+            'additional_count': 4,
             'api_compliance': True,
         }
     }
@@ -194,24 +207,27 @@ def compliance_report(problems_to_check=None, pre_build=True, timeout=60):
         new_report[prob_name] = _new_report
     return new_report
 
+
 # from SO: https://stackoverflow.com/a/287944
 class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+
 
 def cformat(style, content):
     return f"{style}{content}{bcolors.ENDC}"
 
+
 def pprint_compliance_report(report):
     """Pretty print a compliance report (i.e. output of compliance_report())
-    
+
     The console output typically looks like:
     ```
     ----------------------------------------
@@ -276,8 +292,10 @@ def pprint_compliance_report(report):
         )
         print(_required_title)
         for attr_name, attr_res in r["required"].items():
-            if attr_res == "OK": attr_res_str = cformat(bcolors.OKGREEN, "OK")
-            else: attr_res_str = cformat(bcolors.FAIL, attr_res.__repr__())
+            if attr_res == "OK":
+                attr_res_str = cformat(bcolors.OKGREEN, "OK")
+            else:
+                attr_res_str = cformat(bcolors.FAIL, attr_res.__repr__())
             print(f"\t.{attr_name}\t- {attr_res_str}")
         #### optional
         _optional_title = cformat(bcolors.UNDERLINE, "Optional attributes") + ": "
@@ -289,8 +307,9 @@ def pprint_compliance_report(report):
         )
         print(_optional_title)
         for attr_name, attr_res in r["optional"].items():
-            if attr_res == "OK": attr_res_str = cformat(bcolors.OKGREEN, "OK")
-            elif isinstance(attr_res, Exception): 
+            if attr_res == "OK":
+                attr_res_str = cformat(bcolors.OKGREEN, "OK")
+            elif isinstance(attr_res, Exception):
                 attr_res_str = cformat(bcolors.FAIL, attr_res.__repr__())
             else:
                 attr_res_str = cformat(bcolors.WARNING, attr_res)
@@ -308,6 +327,7 @@ def pprint_compliance_report(report):
         else:
             print(cformat(bcolors.FAIL, f"\n{prob} is not API-compliant."))
 
+
 def capability_report(problems_to_check=None, timeout=1):
     # those with TimeoutError will be approximated to be OK
     _compliance_report = compliance_report(problems_to_check, True, timeout)
@@ -317,9 +337,13 @@ def capability_report(problems_to_check=None, timeout=1):
         if "required" not in res:
             raise RuntimeError(res)
         for attr, attr_res in res["required"].items():
-            _new_report[attr] = int(attr_res == "OK" or isinstance(attr_res, TimeoutError))
+            _new_report[attr] = int(
+                attr_res == "OK" or isinstance(attr_res, TimeoutError)
+            )
         for attr, attr_res in res["optional"].items():
-            _new_report[attr] = int(attr_res == "OK" or isinstance(attr_res, TimeoutError))
+            _new_report[attr] = int(
+                attr_res == "OK" or isinstance(attr_res, TimeoutError)
+            )
         for additional in res["additional"]:
             _new_report[additional] = 1
         _capability_report[prob] = _new_report

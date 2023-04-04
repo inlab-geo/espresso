@@ -28,6 +28,7 @@ def prep_params(pre_build=None):
             extra_args.append(contrib)
     return pre, dir_parent, extra_args
 
+
 def test_all_examples(pre, dir_parent, extra_args):
     py_test_examples = dir_parent / "test_examples.py"
     pytest_cmd = [sys.executable, "-m", "pytest", str(py_test_examples)]
@@ -38,6 +39,7 @@ def test_all_examples(pre, dir_parent, extra_args):
     if exit_status_test_examples != pytest.ExitCode.OK:
         sys.exit(exit_status_test_examples)
 
+
 def test_requirements(pre, dir_parent, extra_args):
     if not pre:
         py_check_requires = dir_parent / "check_requires.py"
@@ -47,11 +49,13 @@ def test_requirements(pre, dir_parent, extra_args):
         if exit_status_check_requires != pytest.ExitCode.OK:
             sys.exit(exit_status_check_requires)
 
+
 # --> main test
 def main(pre_build=None):
     pre, dir_parent, extra_args = prep_params(pre_build)
     test_all_examples(pre, dir_parent, extra_args)
     test_requirements(pre, dir_parent, extra_args)
+
 
 if __name__ == "__main__":
     main()
