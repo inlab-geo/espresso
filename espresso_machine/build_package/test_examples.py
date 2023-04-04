@@ -22,11 +22,10 @@ def test_contrib(contrib, pre_build):
     _report = report.compliance_report([contrib[0]], pre_build)
     for _r in _report.values():  # always only one iteration
         report.pprint_compliance_report(_report)
-        if isinstance(_r["api_compliance"], Exception):
-            raise _r["api_compliance"]
-        assert _r[
-            "api_compliance"
-        ], "Not API-compliant. Check report above for details."
+        if isinstance(_r.api_compliance, Exception):
+            raise _r.api_compliance
+        assert _r.api_compliance, \
+            "Not API-compliant. Check report above for details."
 
 
 def main():

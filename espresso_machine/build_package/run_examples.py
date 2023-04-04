@@ -54,7 +54,7 @@ class ResultsFromProblem:
     problem_class: typing.Type
     problem_class_str: str
     problem_path: str
-    problem_results_generator: typing.Iterator[dict]
+    problem_results_generator: typing.Iterator[ResultsFromExample]
 
 
 class _ProblemModule:
