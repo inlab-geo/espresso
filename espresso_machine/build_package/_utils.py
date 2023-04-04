@@ -7,8 +7,8 @@ import sys
 import tqdm
 import argparse
 import warnings
-import typing
 import pathlib
+import typing
 
 
 # ------------------------------- argument parser -------------------------------------
@@ -33,14 +33,19 @@ def setup_parser():
     parser.add_argument(
         "--all", "-a", default=None,
         dest="all", action="store_true")
+    parser.add_argument(
+        "--no-install", default=False, 
+        dest="dont_install", action="store_true")
     return parser
 
 def args():
-    return setup_parser().parse_args()
+    args, unknown = setup_parser().parse_known_args()
+    return args
 
 def pre_build():
     _args = args()
     return _args.pre or (not _args.pre and not _args.post)
+
 
 # ------------------------------- running timeout -------------------------------------
 # Thanks to: https://stackoverflow.com/a/2282656
@@ -98,7 +103,7 @@ CONTRIB_FOLDER = ROOT + "/contrib"
 def problem_name_to_class(problem_name):   # e.g. "xray_tomography" -> "XrayTomography"
     return problem_name.title().replace("_", "")
 
-def get_folder_content(folder_name):
+def get_folder_content(folder_name) -> typing.Tuple[typing.List[str], typing.List[str]]:
     names = [name for name in os.listdir(folder_name)]
     paths = [f"{folder_name}/{name}" for name in names]
     return names, paths
@@ -106,7 +111,7 @@ def get_folder_content(folder_name):
 def problems_specified_from_args():
     return args().contribs
 
-def problems_to_run(problems_specified=None):
+def problems_to_run(problems_specified=None) -> typing.List[typing.Tuple[str, str]]:
     if problems_specified is None:
         problems_specified = problems_specified_from_args()
     all_problems = get_folder_content(CONTRIB_FOLDER)
