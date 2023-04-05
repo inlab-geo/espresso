@@ -126,8 +126,8 @@ ert_problem.set_initial_model(start_model_log)
 
 # CoFI - define InversionOptions
 inv_options = InversionOptions()
-inv_options.set_tool(GaussNewton)
-inv_options.set_params(niter=niter, verbose=inv_verbose, step=step)
+inv_options.set_tool("cofi.simple_newton")
+inv_options.set_params(num_iterations=niter, verbose=inv_verbose, step_length=step)
 
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options)

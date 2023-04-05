@@ -67,50 +67,11 @@ ax[0].figure.savefig("figs/rect_mesh/rect_gauss_newton_rect_model_start")
 
 ############# Inverted by our Gauss-Newton algorithm ##################################
 
-# reference: 
-# Carsten Rücker, Thomas Günther, Florian M. Wagner,
-# pyGIMLi: An open-source library for modelling and inversion in geophysics,
-# https://doi.org/10.1016/j.cageo.2017.07.011.
-
-class GaussNewton(BaseInferenceTool):
-    required_in_problem = {"initial_model", "residual", "jacobian", "gradient"}
-    optional_in_problem = dict()
-    required_in_options = set()
-    optional_in_options = {"niter": 100, "verbose": True, "tau_tol": 1e-5, "update_tol": 1e-5}
-    def __init__(self, inv_problem, inv_options):
-        __params = inv_options.get_params()
-        self._niter = __params.get("niter", 100)
-        self._verbose = __params.get("verbose", True)
-        self._step = __params.get("step", 1)
-        self._model_0 = inv_problem.initial_model
-        self._residual = inv_problem.residual
-        self._jacobian = inv_problem.jacobian
-        self._gradient = inv_problem.gradient
-        self._hessian = inv_problem.hessian
-        self._misfit = inv_problem.data_misfit if inv_problem.data_misfit_defined else None
-        self._reg = inv_problem.regularization if inv_problem.regularization_defined else None
-        self._obj = inv_problem.objective if inv_problem.objective_defined else None
-
-    def __call__(self):
-        current_model = np.array(self._model_0)
-        for i in range(self._niter):
-            if self._verbose:
-                print("-" * 80)
-                print(f"Iteration {i+1}")
-                print("model min and max:", np.min(current_model), np.max(current_model))
-                if self._misfit: print("data misfit:", self._misfit(current_model))
-                if self._reg: print("regularization:", self._reg(current_model))
-            term1 = self._hessian(current_model)
-            term2 = - self._gradient(current_model)
-            model_update = np.linalg.solve(term1, term2) * self._step
-            current_model = current_model + model_update
-        return {"model": current_model, "success": True}
-
 # hyperparameters
 lamda = 0.0001
 niter = 10          # more iterations are needed, try with a different number
 inv_verbose = True
-step = 0.001
+step = 0.01
 
 # CoFI - define BaseProblem
 ert_problem = BaseProblem()
@@ -126,8 +87,8 @@ ert_problem.set_initial_model(start_model_log)
 
 # CoFI - define InversionOptions
 inv_options = InversionOptions()
-inv_options.set_tool(GaussNewton)
-inv_options.set_params(niter=niter, verbose=inv_verbose, step=step)
+inv_options.set_tool("cofi.simple_newton")
+inv_options.set_params(num_iterations=niter, verbose=inv_verbose, step_length=step)
 
 # CoFI - define Inversion, run it
 inv = Inversion(ert_problem, inv_options)
