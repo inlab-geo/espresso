@@ -7,27 +7,27 @@ Found non-Neumann domain
 FOP updating mesh dependencies ... 0 s
 Obtaining geometric factors (analytical)
 Calculating response for model: min = 50 max = 200
-Allocating memory for primary potential...... 0.004
+Allocating memory for primary potential...... 0.003
 
 No primary potential for secondary field calculation. Calculating analytically...
-Factorize (Cholmod) matrix ... 0.006
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.005
+Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
 Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.005
 Factorize (Cholmod) matrix ... 0.004
-Forward: time: 0.17s
+Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.005
+Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.004
+Factorize (Cholmod) matrix ... 0.005
+Forward: time: 0.159s
 Response: min = 98.7322 max = 218.789 mean = 173.9
 Reciprocity rms(modelReciprocity) 0.409386%, max: 1.53119%
 relativeError set to a value > 0.5 .. assuming this is a percentage Error level dividing them by 100
@@ -44,44 +44,44 @@ data misfit: 225.0062389801261
 regularization: 0.04652832807110134
 --------------------------------------------------------------------------------
 Iteration 3
-model min and max: 5.236311005310655 5.305026617154598
+model min and max: 5.2363110053106645 5.305026617154991
 data misfit: 220.59472201881655
-regularization: 0.08536402357421413
+regularization: 0.08536402357421931
 --------------------------------------------------------------------------------
 Iteration 4
-model min and max: 5.210902112832705 5.30964106077756
+model min and max: 5.210902112832664 5.309641060777082
 data misfit: 216.17372398495723
-regularization: 0.16055696546297515
+regularization: 0.1605569654629263
 --------------------------------------------------------------------------------
 Iteration 5
-model min and max: 5.185334584006247 5.310300331879808
+model min and max: 5.18533458400622 5.310300331877967
 data misfit: 211.9409948120742
-regularization: 0.2370279950041192
+regularization: 0.23702799500400393
 --------------------------------------------------------------------------------
 Iteration 6
-model min and max: 5.1609761642728635 5.312931780933355
+model min and max: 5.160976164272865 5.312931780934939
 data misfit: 207.72671667018278
-regularization: 0.3334812815353174
+regularization: 0.33348128153515066
 --------------------------------------------------------------------------------
 Iteration 7
-model min and max: 5.136599472976405 5.313211445231921
+model min and max: 5.136599472976403 5.313211445230549
 data misfit: 203.65497213778065
-regularization: 0.43104042565517725
+regularization: 0.43104042565516015
 --------------------------------------------------------------------------------
 Iteration 8
-model min and max: 5.113071746738989 5.314900562427277
+model min and max: 5.113071746738971 5.31490056242776
 data misfit: 199.61876353413135
-regularization: 0.5414699935152151
+regularization: 0.5414699935151798
 --------------------------------------------------------------------------------
 Iteration 9
-model min and max: 5.08972039641616 5.3151172322125335
+model min and max: 5.089720396416191 5.31511723221287
 data misfit: 195.70051977560755
-regularization: 0.6520763323406457
+regularization: 0.652076332340721
 --------------------------------------------------------------------------------
 Iteration 10
-model min and max: 5.066959051882347 5.316291993712845
+model min and max: 5.066959051882298 5.316291993712402
 data misfit: 191.82796331733567
-regularization: 0.7713726236351919
+regularization: 0.7713726236350575
 ============================
 Summary for inversion result
 ============================

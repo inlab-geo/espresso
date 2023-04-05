@@ -4,3 +4,7 @@
  100  travel times
  Range of travel times:  0.008911182496368759 0.0153757024856463 
  Mean travel time: 0.01085811731230709
+Iteration #0, objective function value: 110298.7001724638
+Iteration #1, objective function value: 1787.1346663271027
+Iteration #2, objective function value: 121.11366247104033
+Iteration #3, objective function value: 5.822067381678084
