@@ -6,4 +6,3 @@ xray_tracer
 magnetotelluric_1D
 receiver_function
 simple_regression
-fm_wavefront_tracker
