@@ -16,13 +16,15 @@ import _utils
 @dataclasses.dataclass
 class ProblemRawReport:
     problem_name: str
+    problem_class_name: str
     metadata: typing.Union[bool, Exception]
     attributes_required: dict[str, list[typing.Optional[bool]]]
     attributes_optional: dict[str, list[typing.Optional[bool]]]
     attributes_additional: list[str]
 
     def __init__(self, results: run_examples.ResultsFromProblem):
-        self.problem_name = results.problem_class_str
+        self.problem_name = results.problem_name
+        self.problem_class_name = results.problem_class_str
         self.metadata = self._collect_metadata_report(results)
         if self.metadata_ok():
             self.attributes_required = dict()
@@ -129,6 +131,7 @@ def raw_compliance_report(problems_to_check=None, pre_build=True, timeout=None) 
 @dataclasses.dataclass
 class ProblemReport:
     problem_name: str
+    problem_class_name: str
     metadata: typing.Union[str, Exception]
     required: dict[str, typing.Union[str, Exception]]
     required_count: dict[str, int]
@@ -140,6 +143,7 @@ class ProblemReport:
 
     def __init__(self, raw_report: ProblemRawReport):
         self.problem_name = raw_report.problem_name
+        self.problem_class_name = raw_report.problem_class_name
         self.metadata = self._collect_metadata_report(raw_report)
         if self.metadata_ok():
             self._collect_required_attr_report(raw_report)
@@ -278,7 +282,7 @@ def pprint_compliance_report(report: dict[str, ProblemReport]):
             .exe_fm2dss
             .tmp_files
 
-    FmmTomography is API-compliance. Cheers!
+    FmmTomography (fmm_tomography) is API-compliance. Cheers!
     ```
     """
     # title
@@ -341,9 +345,9 @@ def pprint_compliance_report(report: dict[str, ProblemReport]):
         #### sum up
         _api_compliance = r.api_compliance
         if _api_compliance:
-            print(cformat(bcolors.OKCYAN, f"\n{prob} is API-compliance. Cheers!"))
+            print(cformat(bcolors.OKCYAN, f"\n{prob} ({r.problem_name}) is API-compliant. Cheers!"))
         else:
-            print(cformat(bcolors.FAIL, f"\n{prob} is not API-compliant."))
+            print(cformat(bcolors.FAIL, f"\n{prob} ({r.problem_name}) is not API-compliant."))
 
 
 def capability_report(problems_to_check=None, timeout=_utils.DEFAULT_TIMEOUT_SHORT):

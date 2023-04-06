@@ -51,6 +51,7 @@ class ResultsFromExample:
 @dataclasses.dataclass
 class ResultsFromProblem:
     parent_module: types.ModuleType
+    problem_name: str
     problem_class: typing.Type
     problem_class_str: str
     problem_path: str
@@ -218,6 +219,7 @@ def run_problems(
                     prob_class = e
                 yield ResultsFromProblem(
                     parent_module=parent_module,
+                    problem_name=prob_name,
                     problem_class=prob_class,
                     problem_class_str=prob_class_str,
                     problem_path=prob_path,
@@ -228,6 +230,7 @@ def run_problems(
         except Exception as e:
             yield ResultsFromProblem(
                 parent_module=e,
+                problem_name=prob_name,
                 problem_class=None,
                 problem_class_str=prob_class_str,
                 problem_path=prob_path,

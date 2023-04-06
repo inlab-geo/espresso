@@ -60,8 +60,7 @@ def main():
         )
 
     # convert example name to other formats
-    example_name_capitalised = example_name.title().replace("_", " ").replace("-", " ")
-    example_name_no_space = example_name_capitalised.replace(" ", "")
+    example_name_capitalised = example_name.title().replace("_", "").replace("-", "")
 
     # make new folders and subfolders
     new_subfolder = CONTRIB_FOLDER + "/" + example_name
