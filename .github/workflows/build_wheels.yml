@@ -53,7 +53,7 @@ jobs:
 
       - name: Generate package source with contributions
         run: |
-          python espresso_machine/build_package/build.py
+          python espresso_machine/build_package/build.py -f contrib/active_problems.txt
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse

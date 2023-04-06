@@ -28,7 +28,19 @@ jobs:
         run: |
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
-      
-      - name: Build with pre and post validation
+
+      - name: Get changed folders in the contrib folder
+        id: changed-contribs
+        uses: tj-actions/changed-files@v35
+        with:
+          files: contrib/*/  # Alternatively using: `docs/**` or `docs`
+
+      - name: List all changed files
         run: |
-          python espresso_machine/build_package/build.py --pre --post
+          for folder in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$folder was changed"
+          done
+
+      # - name: Build with pre and post validation
+      #   run: |
+      #     python espresso_machine/build_package/build.py --pre --post
