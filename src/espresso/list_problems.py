@@ -49,6 +49,7 @@ from ._simple_regression import SimpleRegression
 from ._slug_test import SlugTest
 from ._xray_tracer import XrayTracer
 from ._receiver_function import ReceiverFunction
+from ._fm_wavefront_tracker import FmWavefrontTracker
 from ._gravity_density import GravityDensity
 from ._magnetotelluric_1D import Magnetotelluric1D
 
@@ -58,6 +59,7 @@ _all_problems = [
     SlugTest,
     XrayTracer,
     ReceiverFunction,
+    FmWavefrontTracker,
     GravityDensity,
     Magnetotelluric1D,
 ]
@@ -148,6 +150,27 @@ _capability_matrix = {
         "log_likelihood": 1,
         "log_prior": 1,
         "rf": 1
+    },
+    "FmWavefrontTracker": {
+        "model_size": 1,
+        "data_size": 1,
+        "good_model": 1,
+        "starting_model": 1,
+        "data": 1,
+        "forward": 1,
+        "description": 0,
+        "covariance_matrix": 0,
+        "inverse_covariance_matrix": 0,
+        "jacobian": 1,
+        "plot_model": 1,
+        "plot_data": 0,
+        "misfit": 0,
+        "log_likelihood": 0,
+        "log_prior": 0,
+        "tmp_files": 1,
+        "tmp_paths": 1,
+        "clean_tmp_files": 1,
+        "exe_fm2dss": 1
     },
     "GravityDensity": {
         "model_size": 1,
