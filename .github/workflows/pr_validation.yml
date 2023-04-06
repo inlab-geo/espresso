@@ -39,7 +39,10 @@ jobs:
         run: |
           for folder in ${{ steps.changed-contribs.outputs.all_changed_files }}; do
             echo "$folder was changed"
+            contrib_name=$(echo $folder | cut -d'/' -f2)
+            echo $contrib_name >> changed_contribs.txt
           done
+          cat changed_contribs.txt
 
       # - name: Build with pre and post validation
       #   run: |

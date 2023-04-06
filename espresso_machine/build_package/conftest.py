@@ -25,4 +25,4 @@ def pytest_generate_tests(metafunc):
     if "contrib" in metafunc.fixturenames:
         specified = metafunc.config.getoption("contribs")
         problems = _utils.problems_to_run(specified)
-        metafunc.parametrize("contrib", problems)
+        metafunc.parametrize("contrib", set(problems))
