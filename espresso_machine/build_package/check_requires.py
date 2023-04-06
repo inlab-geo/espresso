@@ -27,9 +27,6 @@ known_dependencies = {
 to_exclude = {"espresso", "run_examples"}
 
 
-args = _utils.args()
-
-
 def _strip_pkg(modules):
     res = set()
     for mod in modules:

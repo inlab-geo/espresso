@@ -51,6 +51,14 @@ def setup_parser():
         default=None,
         help="Specify which contribution to validate",
     )
+    parser.add_argument(
+        "--file",
+        "-f",
+        dest="file",
+        action="store",
+        default=None,
+        help="Specify which contributions to validate in a txt file",
+    )
     parser.add_argument("--all", "-a", default=None, dest="all", action="store_true")
     parser.add_argument(
         "--no-install", default=False, dest="dont_install", action="store_true"
@@ -136,7 +144,18 @@ def get_folder_content(folder_name) -> typing.Tuple[typing.List[str], typing.Lis
 
 
 def problems_specified_from_args():
-    return args().contribs
+    contribs_file = args().file
+    if contribs_file is not None:
+        with open(contribs_file, "r") as f:
+            lines = f.readlines()
+        contribs = []
+        for line in lines:
+            if line.startswith("#"):
+                continue
+            contribs.append(line.strip())
+    else:
+        contribs = args().contribs
+    return contribs
 
 
 def problems_to_run(problems_specified=None) -> typing.List[typing.Tuple[str, str]]:

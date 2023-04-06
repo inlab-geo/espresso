@@ -153,7 +153,7 @@ def change_versioningit_config():
 # 6
 def move_contrib_source():
     # see if any contribution is specified through command line args
-    specified_problems = _utils.args().contribs
+    specified_problems = _utils.problems_specified_from_args()
     # move all contribution subfolders with prefix "_"
     move_folder_content(
         CONTRIB_SRC,
@@ -209,7 +209,7 @@ def move_espresso_machine():
 # 8 build capability matrix
 def build_problem_capability():
     # see if any contribution is specified through command line args
-    specified_problems = _utils.args().contribs
+    specified_problems = _utils.problems_specified_from_args()
     with _utils.suppress_stdout():
         capability_report = report.capability_report(
             problems_to_check=specified_problems
