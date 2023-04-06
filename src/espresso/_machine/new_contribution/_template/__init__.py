@@ -12,4 +12,4 @@ Don't touch this file unless you know what you are doing :)
 
 from .example_name import *
 
-__all__ = [ "ExampleName" ]
+__all__ = ["ExampleName"]

@@ -8,12 +8,10 @@ build
 
 # Compiled source #
 ###################
-# --- note: we need some dummy files to let pip keep track of
-# https://stackoverflow.com/questions/59597791/how-to-have-pip-uninstall-remove-files-created-after-installation
-# *.a
-# *.o
-# *.so
-# *.mod
+*.a
+*.o
+*.so
+*.mod
 
 # Doc generated files #
 #######################
@@ -50,6 +48,7 @@ src/espresso/_version.py
 *__pycache__
 .ipynb_checkpoints
 *.pyc
+.report.json
 
 # OS generated files #
 ######################

@@ -53,11 +53,10 @@ __all__ = [
 # __all__ += list_problem_names()
 # __all__ += ["list_problem_names", "list_problems"]
 
-from ._fmm_tomography import FmmTomography
 from ._pumping_test import PumpingTest
 from ._simple_regression import SimpleRegression
 from ._slug_test import SlugTest
-from ._xray_tomography import XrayTomography
+from ._xray_tracer import XrayTracer
 from ._receiver_function import ReceiverFunction
 from ._gravity_density import GravityDensity
 from ._magnetotelluric_1D import Magnetotelluric1D

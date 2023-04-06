@@ -10,7 +10,7 @@
 8. build capability_matrix
 9. `pip install .`      (can be disabled by `--no-install`)
 
-Usage: python build.py [--pre] [--post] [--no-install] [-c <example_name>]
+Usage: python build.py [--pre] [--post] [--no-install] [-c <example_name>] [--file <file_name>]
 """
 
 import subprocess
@@ -54,33 +54,45 @@ validate_script = str(Path(__file__).resolve().parent / "validate.py")
 
 # ------------------------ helpers ------------------------
 def is_cache(file_name):
-    return file_name.endswith(".pyc") or \
-        file_name == "__pycache__" or \
-            file_name == "cmake_install.cmake" or \
-                file_name.endswith(".mod") or \
-                    file_name.endswith(".out") or \
-                        file_name == "CMakeFiles" or \
-                            file_name == "Makefile" or \
-                                file_name == PROBLEMS_TO_COMPILE_FILE
+    return (
+        file_name.endswith(".pyc")
+        or file_name == "__pycache__"
+        or file_name == "cmake_install.cmake"
+        or file_name.endswith(".mod")
+        or file_name.endswith(".out")
+        or file_name == "CMakeFiles"
+        or file_name == "Makefile"
+        or file_name == PROBLEMS_TO_COMPILE_FILE
+    )
+
 
 def move_folder_content(folder_path, dest_path, prefix=None, only_include=None):
     if prefix is None:
         copytree(
-            folder_path, 
-            dest_path, 
-            # dirs_exist_ok=True, 
-            ignore=ignore_patterns('*.pyc', 'tmp*', '__pycache__')
-         )
-    else:
+            folder_path,
+            dest_path,
+            # dirs_exist_ok=True,
+            ignore=ignore_patterns("*.pyc", "tmp*", "__pycache__"),
+        )
+    else:           # moving contributions source
         for f in os.listdir(folder_path):
-            if is_cache(f) or (only_include is not None and f not in only_include):
-                continue
             src = f"{folder_path}/{f}"
             dst = f"{dest_path}/{prefix}{f}"
-            copytree(src, dst, 
+            if is_cache(f) or not os.path.isdir(src) or (only_include is not None and f not in only_include):
+                continue
+            copytree(
+                src,
+                dst,
                 ignore=ignore_patterns(
-                    "*.pyc", "__pycache__", "tmp*", "CMakeFiles", "Makefile", "*.mod", "*.out"
-                ))
+                    "*.pyc",
+                    "__pycache__",
+                    "tmp*",
+                    "CMakeFiles",
+                    "Makefile",
+                    "*.mod",
+                    "*.out",
+                ),
+            )
             # add underscore prefix to file name
             for ff in os.listdir(dst):
                 if ff == f"{f}.py":
@@ -94,6 +106,7 @@ def move_folder_content(folder_path, dest_path, prefix=None, only_include=None):
                         for line in lines:
                             fff.write(line.replace(f, f"_{f}"))
 
+
 # ------------------------ tasks ------------------------
 # 1
 def clean_build_folder():
@@ -101,11 +114,13 @@ def clean_build_folder():
     if dirpath.exists() and dirpath.is_dir():
         rmtree(dirpath)
 
+
 # 2
 def move_pkg_metadata():
     move_folder_content(DOCS_SRC, f"{BUILD_DIR}/docs")
     for f in META_FILES:
         copy(f"{ROOT_DIR}/{f}", f"{BUILD_DIR}/{f}")
+
 
 # 3
 def write_version():
@@ -115,17 +130,17 @@ def write_version():
             "dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
             "distance-dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
         },
-        "write": {
-            "file": "src/espresso/_version.py"
-        }
+        "write": {"file": "src/espresso/_version.py"},
     }
     versioningit.get_version(root, versioningit_config, True)
+
 
 # 4
 def move_pkg_source():
     move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
 
-# 5 
+
+# 5
 def change_versioningit_config():
     with open(f"{BUILD_DIR}/setup.py", "r") as f:
         setup_content = f.read()
@@ -134,14 +149,15 @@ def change_versioningit_config():
     with open(f"{BUILD_DIR}/setup.py", "w") as f:
         f.write(setup_content)
 
+
 # 6
 def move_contrib_source():
     # see if any contribution is specified through command line args
-    specified_problems = _utils.args().contribs
+    specified_problems = _utils.problems_to_run_names_only()
     # move all contribution subfolders with prefix "_"
     move_folder_content(
-        CONTRIB_SRC, 
-        f"{BUILD_DIR}/src/{MODULE_NAME}", 
+        CONTRIB_SRC,
+        f"{BUILD_DIR}/src/{MODULE_NAME}",
         prefix="_",
         only_include=specified_problems,
     )
@@ -150,16 +166,19 @@ def move_contrib_source():
     init_file_imports = "\n"
     init_file_all_cls = "\n_all_problems = [\n"
     for path in Path(CONTRIB_SRC).iterdir():
-        contrib = os.path.basename(path)                    # name
-        if path.is_dir() and \
-            (specified_problems is None or contrib in specified_problems):
-            contrib_class = _utils.problem_name_to_class(contrib)    # class
+        contrib = os.path.basename(path)  # name
+        if path.is_dir() and (
+            specified_problems is None or contrib in specified_problems
+        ):
+            contrib_class = _utils.problem_name_to_class(contrib)  # class
             contribs.append(contrib)
             init_file_imports += f"from ._{contrib} import {contrib_class}\n"
             init_file_all_cls += f"    {contrib_class},\n"
     init_file_all_cls += "]"
     # some constant strings to append to init file later
-    init_file_imp_funcs = "\nfrom .list_problems import list_problem_names, list_problems"
+    init_file_imp_funcs = (
+        "\nfrom .list_problems import list_problem_names, list_problems"
+    )
     init_file_add_all_nms = "\n__all__ += list_problem_names()"
     init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
     # write all above to files
@@ -181,14 +200,16 @@ def move_contrib_source():
     # with open(f"{ROOT_DIR}/contrib/{PROBLEMS_TO_COMPILE_FILE}", "w") as f:
     #     f.writelines(compiled_code_list)
 
+
 # 7 move espresso_machine into espresso/_machine
 def move_espresso_machine():
     move_folder_content(MACHINE_SRC, f"{BUILD_DIR}/src/espresso/_machine")
 
+
 # 8 build capability matrix
 def build_problem_capability():
     # see if any contribution is specified through command line args
-    specified_problems = _utils.args().contribs
+    specified_problems = _utils.problems_to_run_names_only()
     with _utils.suppress_stdout():
         capability_report = report.capability_report(
             problems_to_check=specified_problems
@@ -197,6 +218,7 @@ def build_problem_capability():
     with open(f"{BUILD_DIR}/src/{MODULE_NAME}/list_problems.py", "a") as f:
         f.write("\n\n_capability_matrix = ")
         f.write(report_to_write)
+
 
 # printing helper
 def println_with_emoji(content, emoji):
@@ -208,16 +230,20 @@ def println_with_emoji(content, emoji):
 
 # ------------------------ main functions ------------------------
 build_pipeline = [
-    ( clean_build_folder, "Cleaning build folder..." ),
-    ( move_pkg_metadata, "Moving package metadata..." ),
-    ( write_version, "Generating version file..." ),
-    ( move_pkg_source, "Moving Espresso core packaging files..." ),
-    ( change_versioningit_config, "Removing `.core` from versioningit config..." ),
-    ( move_contrib_source, "Moving all contributions..." ),
-    ( move_espresso_machine, "Moving infrastructure code..." ),
-    ( build_problem_capability, "Building capability matrix... (this will take some time)" ),
+    (clean_build_folder, "Cleaning build folder..."),
+    (move_pkg_metadata, "Moving package metadata..."),
+    (write_version, "Generating version file..."),
+    (move_pkg_source, "Moving Espresso core packaging files..."),
+    (change_versioningit_config, "Removing `.core` from versioningit config..."),
+    (move_contrib_source, "Moving all contributions..."),
+    (move_espresso_machine, "Moving infrastructure code..."),
+    (
+        build_problem_capability,
+        "Building capability matrix... (this will take some time)",
+    ),
     # ( install_pkg, "Building Python package: geo-espresso..." ),
 ]
+
 
 def build():
     println_with_emoji("Package building...", "🛠")
@@ -231,6 +257,7 @@ def build():
         print("OK.")
     # println_with_emoji("Espresso installed!", "🍰")
 
+
 def install_pkg():
     desc = "Building Python package: geo-espresso..."
     println_with_emoji(desc, "🗂")
@@ -239,11 +266,14 @@ def install_pkg():
     if res != 0:
         sys.exit(res)
 
+
 def pre_validate():
     validate.main(pre_build=True)
 
+
 def post_validate():
     validate.main(pre_build=False)
+
 
 def main():
     _args = _utils.args()
@@ -255,6 +285,7 @@ def main():
     if _args.post:
         post_validate()
     println_with_emoji("All done", "🍰")
+
 
 if __name__ == "__main__":
     main()

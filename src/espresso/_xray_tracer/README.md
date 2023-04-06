@@ -1,4 +1,4 @@
-# Xray Tomography
+# Xray Tracer
 
 <!-- Please write anything you'd like to explain about the forward problem here -->
 
