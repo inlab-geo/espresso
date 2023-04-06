@@ -37,7 +37,7 @@ jobs:
 
       - name: List all changed files
         run: |
-          for folder in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          for folder in ${{ steps.changed-contribs.outputs.all_changed_files }}; do
             echo "$folder was changed"
           done
 
