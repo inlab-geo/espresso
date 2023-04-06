@@ -40,9 +40,14 @@ jobs:
           for folder in ${{ steps.changed-contribs.outputs.all_changed_files }}; do
             contrib_name=$(echo $folder | cut -d'/' -f2)
             echo $contrib_name >> changed_contribs.txt
-          done
-          cat changed_contribs.txt
+          done    
 
       - name: Build with pre and post validation
         run: |
-          python espresso_machine/build_package/build.py --pre --post -f changed_contribs.txt
+          if [[ -f "changed_contribs.txt" ]]
+          then
+            cat changed_contribs.txt
+            python espresso_machine/build_package/build.py --pre --post -f changed_contribs.txt
+          else
+            python espresso_machine/build_package/build.py --pre --post
+          fi
