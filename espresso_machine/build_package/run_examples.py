@@ -235,15 +235,14 @@ def run_problems(
             )
 
 
-def main(problems_specified=None, timeout=None):
-    _you_want_to_print_something = False
+def main(problems_specified=None, timeout=_utils.DEFAULT_TIMEOUT, verbose=False):
     problems = _utils.problems_to_run(problems_specified)
     results = run_problems(problems, pre_build=True, timeout=timeout)
     for res in results:
-        if _you_want_to_print_something:
+        if verbose:
             print(res.problem_class)
         for prob_out_i in res.problem_results_generator:
-            if _you_want_to_print_something:
+            if verbose:
                 print(prob_out_i.keys())
 
 

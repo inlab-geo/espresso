@@ -3,6 +3,7 @@
 This script assumes you have geo-espresso installed via:
 $ python espresso_machine/build_package/build.py
 
+Usage: python check_requires.py [-c <example_name] [--file <file_name>]
 """
 
 import sys
@@ -49,7 +50,7 @@ def _get_known_depended_pkg():
 def _get_imported_pkg(problem_specified):
     import run_examples
 
-    run_examples.main([problem_specified])
+    run_examples.main([problem_specified], _utils.DEFAULT_TIMEOUT)
     return _strip_pkg(set(sys.modules.keys()))
 
 

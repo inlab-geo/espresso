@@ -3,13 +3,14 @@
 2. criteria specified in: criteria.py
 3. problems identified in: conftest.py
 
-Usage: python test_examples.py [--post] [--contribution <example_name>]
+Usage: python test_examples.py [--post] [--contribution <example_name>] [--file <file_name>]
 """
 
 import pathlib
 import pytest
 
 import report
+import _utils
 
 
 @pytest.fixture
@@ -29,7 +30,8 @@ def test_contrib(contrib, pre_build):
 
 
 def main():
-    pytest.main([pathlib.Path(__file__)])
+    this_file = pathlib.Path(__file__)
+    pytest.main([this_file, "--junitxml", str(this_file.parent / "_pytest_result.xml")])
 
 
 if __name__ == "__main__":

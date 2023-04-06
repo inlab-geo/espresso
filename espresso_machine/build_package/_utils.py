@@ -11,6 +11,16 @@ import pathlib
 import typing
 
 
+# ------------------------------- constants -------------------------------------------
+PKG_NAME = "espresso"
+ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
+CONTRIB_FOLDER = ROOT + "/contrib"
+ACTIVE_LIST = CONTRIB_FOLDER + "/active_problems.txt"
+
+DEFAULT_TIMEOUT = 60
+DEFAULT_TIMEOUT_SHORT = 1
+
+
 # ------------------------------- argument parser -------------------------------------
 def setup_parser():
     parser = argparse.ArgumentParser(
@@ -128,11 +138,6 @@ def suppress_stdout():
 
 
 # ------------------------------- contribution processing -----------------------------
-PKG_NAME = "espresso"
-ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
-CONTRIB_FOLDER = ROOT + "/contrib"
-
-
 def problem_name_to_class(problem_name):  # e.g. "xray_tracer" -> "XrayTracer"
     return problem_name.title().replace("_", "")
 
@@ -157,7 +162,6 @@ def problems_specified_from_args():
         contribs = args().contribs
     return contribs
 
-
 def problems_to_run(problems_specified=None) -> typing.List[typing.Tuple[str, str]]:
     if problems_specified is None:
         problems_specified = problems_specified_from_args()
@@ -177,3 +181,8 @@ def problems_to_run(problems_specified=None) -> typing.List[typing.Tuple[str, st
                 + ", ".join(problems_not_in_folder)
             )
         return problems
+
+def problems_to_run_names_only(problems_specified=None) -> typing.List[str]:
+    problems = problems_to_run(problems_specified)
+    problem_names = [c[0] for c in problems]
+    return problem_names

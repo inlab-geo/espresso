@@ -141,7 +141,7 @@ class ProblemReport:
     def __init__(self, raw_report: ProblemRawReport):
         self.problem_name = raw_report.problem_name
         self.metadata = self._collect_metadata_report(raw_report)
-        if self.metadata_ok:
+        if self.metadata_ok():
             self._collect_required_attr_report(raw_report)
             self._collect_optional_attr_report(raw_report)
             self._collect_additional_attr_report(raw_report)
@@ -201,7 +201,7 @@ class ProblemReport:
         self.api_compliance = _metadata_ok and _required_ok and _optional_ok
 
 
-def compliance_report(problems_to_check=None, pre_build=True, timeout=60) \
+def compliance_report(problems_to_check=None, pre_build=True, timeout=_utils.DEFAULT_TIMEOUT) \
     -> dict[str, ProblemReport]:
     """Generate a readable compliance report based on running raw report
 
@@ -346,7 +346,7 @@ def pprint_compliance_report(report: dict[str, ProblemReport]):
             print(cformat(bcolors.FAIL, f"\n{prob} is not API-compliant."))
 
 
-def capability_report(problems_to_check=None, timeout=1):
+def capability_report(problems_to_check=None, timeout=_utils.DEFAULT_TIMEOUT_SHORT):
     # those with TimeoutError will be approximated to be OK
     _compliance_report = compliance_report(problems_to_check, True, timeout)
     _capability_report = dict()

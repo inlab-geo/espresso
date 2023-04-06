@@ -10,7 +10,7 @@
 8. build capability_matrix
 9. `pip install .`      (can be disabled by `--no-install`)
 
-Usage: python build.py [--pre] [--post] [--no-install] [-c <example_name>]
+Usage: python build.py [--pre] [--post] [--no-install] [-c <example_name>] [--file <file_name>]
 """
 
 import subprocess
@@ -74,12 +74,12 @@ def move_folder_content(folder_path, dest_path, prefix=None, only_include=None):
             # dirs_exist_ok=True,
             ignore=ignore_patterns("*.pyc", "tmp*", "__pycache__"),
         )
-    else:
+    else:           # moving contributions source
         for f in os.listdir(folder_path):
-            if is_cache(f) or (only_include is not None and f not in only_include):
-                continue
             src = f"{folder_path}/{f}"
             dst = f"{dest_path}/{prefix}{f}"
+            if is_cache(f) or not os.path.isdir(src) or (only_include is not None and f not in only_include):
+                continue
             copytree(
                 src,
                 dst,
@@ -153,7 +153,7 @@ def change_versioningit_config():
 # 6
 def move_contrib_source():
     # see if any contribution is specified through command line args
-    specified_problems = _utils.problems_specified_from_args()
+    specified_problems = _utils.problems_to_run_names_only()
     # move all contribution subfolders with prefix "_"
     move_folder_content(
         CONTRIB_SRC,
@@ -209,7 +209,7 @@ def move_espresso_machine():
 # 8 build capability matrix
 def build_problem_capability():
     # see if any contribution is specified through command line args
-    specified_problems = _utils.problems_specified_from_args()
+    specified_problems = _utils.problems_to_run_names_only()
     with _utils.suppress_stdout():
         capability_report = report.capability_report(
             problems_to_check=specified_problems

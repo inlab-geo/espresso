@@ -6,7 +6,7 @@
    - tested by check_requires.py
 
 Usage: 
-python validate.py [-h] [--contrib CONTRIBS] [--all] [--pre] [--post]
+python validate.py [-h] [--all] [--pre] [--post] [--contrib CONTRIBS] [--file <file_name>]
 """
 
 import sys
@@ -20,7 +20,7 @@ import _utils
 def prep_params(pre_build=None):
     pre = _utils.pre_build() if pre_build is None else pre_build
     dir_parent = pathlib.Path(__file__).parent.resolve()
-    specified_contribs = _utils.problems_specified_from_args()
+    specified_contribs = _utils.problems_to_run_names_only()
     extra_args = []
     if specified_contribs is not None:
         for contrib in specified_contribs:
