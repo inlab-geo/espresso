@@ -35,15 +35,14 @@ jobs:
         with:
           files: contrib/*/  # Alternatively using: `docs/**` or `docs`
 
-      - name: List all changed files
+      - name: List all changed contributions
         run: |
           for folder in ${{ steps.changed-contribs.outputs.all_changed_files }}; do
-            echo "$folder was changed"
             contrib_name=$(echo $folder | cut -d'/' -f2)
             echo $contrib_name >> changed_contribs.txt
           done
           cat changed_contribs.txt
 
-      # - name: Build with pre and post validation
-      #   run: |
-      #     python espresso_machine/build_package/build.py --pre --post
+      - name: Build with pre and post validation
+        run: |
+          python espresso_machine/build_package/build.py --pre --post -f changed_contribs.txt
