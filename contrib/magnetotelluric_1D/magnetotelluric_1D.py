@@ -145,7 +145,7 @@ class Magnetotelluric1D(EspressoProblem):
         ax.plot((px[:,0]),px[:,1],'k-',lw=3)
         ax.set_xlim(res_bounds);
         ax.set_ylim(max_depth,0)
-        ax.set_xlabel('Log$_{10}$ resistivity ($\Omega$m)')
+        ax.set_xlabel(r'Log$_{10}$ resistivity ($\Omega$m)')
         ax.set_ylabel('Depth (m)')
         ax.grid(lw=0.2)
         ax.set_title(title)
@@ -175,7 +175,7 @@ class Magnetotelluric1D(EspressoProblem):
             phase2 = data2[nf:]
             axs[0].plot(np.log10(1/self._freqs), log10_rho2, 'k-', lw = 1, zorder = 2, label = 'Resp')
             axs[1].plot(np.log10(1/self._freqs), phase2, 'k-', lw = 1, zorder = 2)
-        axs[0].set_ylabel('Log$_{10}$ $\\rho_{app}$ ($\Omega$m)')
+        axs[0].set_ylabel(r'Log$_{10}$ $\rho_{app}$ ($\Omega$m)')
         axs[1].set_yticks([0,45,90])
         axs[1].set_ylabel('Phase (deg.)')
         axs[1].set_xlabel('Log$_{10}$ Period (s)')

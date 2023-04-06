@@ -1,4 +1,3 @@
-import subprocess
 import numpy as np
 from scipy.stats import multivariate_normal
 
@@ -8,7 +7,7 @@ from espresso.utils import absolute_path as path, silent_remove
 from . import waveTracker as wt
 
 
-class FmmTomography(EspressoProblem):
+class FmWavefrontTracker(EspressoProblem):
     """Forward simulation class
     """
 

@@ -9,11 +9,11 @@ if(SKBUILD)
     ${CMAKE_CURRENT_BINARY_DIR}/${fmm_generated} 
     ${CMAKE_CURRENT_BINARY_DIR}/globalp.mod
     ${CMAKE_CURRENT_BINARY_DIR}/traveltime.mod
-    DESTINATION fmm_tomography/build)
+    DESTINATION fm_wavefront_tracker/build)
 else()
   # Run "mkdir build; cd build; cmake ..; make"
   message(STATUS "The project is NOT built using scikit-build")
   cmake_minimum_required(VERSION 3.11.0)
-  project(FMMTOMO Fortran)
+  project(FMMTracer Fortran)
   add_executable(fm2dss.o fmst/src/fm2dss.f90)
 endif()

@@ -26,3 +26,4 @@ dependencies:
     - sphinx-copybutton==0.5.1
     - versioningit==2.1.0
     - stdlib_list==0.8.0
+    - pytest-json-report==1.5.0

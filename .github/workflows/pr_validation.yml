@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -28,7 +28,21 @@ jobs:
         run: |
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
-      
+
+      - name: Get changed folders in the contrib folder
+        id: changed-contribs
+        uses: tj-actions/changed-files@v35
+        with:
+          files: contrib/*/  # Alternatively using: `docs/**` or `docs`
+
+      - name: List all changed contributions
+        run: |
+          for folder in ${{ steps.changed-contribs.outputs.all_changed_files }}; do
+            contrib_name=$(echo $folder | cut -d'/' -f2)
+            echo $contrib_name >> changed_contribs.txt
+          done
+          cat changed_contribs.txt
+
       - name: Build with pre and post validation
         run: |
-          python espresso_machine/build_package/build.py --pre --post
+          python espresso_machine/build_package/build.py --pre --post -f changed_contribs.txt
