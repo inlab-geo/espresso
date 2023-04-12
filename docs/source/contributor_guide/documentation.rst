@@ -1,3 +1,3 @@
 ======================
-Editting Documentation
+Editing Documentation
 ======================
