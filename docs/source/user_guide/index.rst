@@ -12,6 +12,7 @@ User Guide
     contrib/index.rst
     api/index.rst
     faq.rst
+    changelog.md
 
 
 This guide describes how to install and use Espresso, and provides :doc:`detailed information <contrib/index>` about individal test problems. You may also wish to look at:

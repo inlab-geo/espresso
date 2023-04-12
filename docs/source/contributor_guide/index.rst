@@ -9,6 +9,7 @@ Contributor Guide
     setup.rst
     new_contrib.rst 
     documentation.rst
+    faq.rst
 
 Espresso is a community project, and we welcome contributions! Ways you can get involved include:
 
