@@ -33,6 +33,13 @@ I have put together an espresso contribution but I also have this new awesome in
 - An Espresso problem may include an example solution of the related inverse problem in form 
   of a jupyter notebook in the example folder.
 
+The Espresso interface is too restrictive
+-----------------------------------------
+
+- While Espresso requires all problems to adhere to the same minimal standard to 
+  facilitate testing and experimentation it allows to define optional functions such 
+  as `my_unicorn_figure`
+
 .. My forward simulation code is already in a GitHub repository, how to include it?
 .. --------------------------------------------------------------------------------
 
