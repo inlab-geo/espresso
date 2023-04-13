@@ -10,7 +10,6 @@ on:
       - 'docs/**'
       - 'setup.py'
       - 'pyproject.toml'
-      - 'CHANGELOG.md'
       - '!src/espresso/version.py'
       - '!CHANGELOG.md'
 
