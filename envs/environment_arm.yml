@@ -7,6 +7,9 @@ dependencies:
   - jupyterlab>=3
   - matplotlib>=3.5.0
   - nodejs>=12
+  - shapely
+  - cython
+  - cartopy
   - pip
   - pip:
     - cofi>=0.1.2.dev22
