@@ -4,11 +4,11 @@ channels:
   - defaults
   - gimli
 dependencies:
-  - python=3.10
+  - python=3.9
   - jupyterlab>=3
   - matplotlib>=3.5.0
   - nodejs>=12
-  - pygimli
+  - pygimli==1.3.0
   - simpeg
   - pip
   - pip:
@@ -16,3 +16,4 @@ dependencies:
     - geo-espresso>=0.2.1.dev0 
     - ipywidgets>=7.7.0
     - tqdm>=4.0
+    - seislib>=0.6.7
