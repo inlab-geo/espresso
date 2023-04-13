@@ -4,17 +4,17 @@ with data uncertainty and regularization taken into account.
 
 import numpy as np
 from cofi import BaseProblem, InversionOptions, Inversion
-from espresso import XrayTomography
+from espresso import XrayTracer
 
 
 # define CoFI BaseProblem
-xrt = XrayTomography()
+xrt = XrayTracer()
 xrt_problem = BaseProblem()
 xrt_problem.set_data(xrt.data)
 xrt_problem.set_jacobian(xrt.jacobian(xrt.starting_model))
 sigma = 0.002
 lamda = 50
-data_cov_inv = np.identity(xrt.data_size) * (1/sigma**2)
+data_cov_inv = np.identity(xrt.data_size) * (1 / sigma**2)
 reg_matrix = lamda * np.identity(xrt.model_size)
 xrt_problem.set_data_covariance_inv(data_cov_inv)
 xrt_problem.set_regularization(2, 1, reg_matrix)

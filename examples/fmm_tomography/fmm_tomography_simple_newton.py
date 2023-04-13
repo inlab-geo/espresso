@@ -8,14 +8,14 @@ Last updated July 2022
 
 from cofi import BaseProblem, InversionOptions, Inversion
 from cofi.utils import QuadraticReg
-from espresso import FmmTomography
+from espresso import FmWavefrontTracker
 
 
-# get espresso problem FmmTomography information
-fmm = FmmTomography()
-model_size = fmm.model_size         # number of model parameters
-model_shape = fmm.model_shape       # 2D spatial grids
-data_size = fmm.data_size           # number of data points
+# get espresso problem FmWavefrontTracker information
+fmm = FmWavefrontTracker()
+model_size = fmm.model_size  # number of model parameters
+model_shape = fmm.model_shape  # 2D spatial grids
+data_size = fmm.data_size  # number of data points
 ref_start_slowness = fmm.starting_model
 
 # define CoFI BaseProblem
@@ -34,23 +34,30 @@ reg.__name__ = "regularization"
 reg.__doc__ = ""
 fmm_problem.set_regularization(reg)
 
-sigma =  0.00001                   # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals
+sigma = 0.00001  # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals
+
+
 def objective_func(slowness):
     ttimes = fmm.forward(slowness)
     residual = fmm.data - ttimes
     data_misfit = residual.T @ residual / sigma**2
     model_reg = reg(slowness)
-    return  data_misfit + model_reg
+    return data_misfit + model_reg
+
+
 def gradient(slowness):
     ttimes, A = fmm.forward(slowness, with_jacobian=True)
     data_misfit_grad = -2 * A.T @ (fmm.data - ttimes) / sigma**2
     model_reg_grad = reg.gradient(slowness)
-    return  data_misfit_grad + model_reg_grad
+    return data_misfit_grad + model_reg_grad
+
+
 def hessian(slowness):
     A = fmm.jacobian(slowness)
-    data_misfit_hess = 2 * A.T @ A / sigma**2 
+    data_misfit_hess = 2 * A.T @ A / sigma**2
     model_reg_hess = reg.hessian(slowness)
     return data_misfit_hess + model_reg_hess
+
 
 fmm_problem.set_objective(objective_func)
 fmm_problem.set_gradient(gradient)
