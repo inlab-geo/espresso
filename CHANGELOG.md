@@ -1,5 +1,25 @@
 # Change Log
 
+## v0.2.2.dev0 (13/04/2023)
+
+### New examples
+
+- [#106](https://github.com/inlab-geo/espresso/pull/106) Receiver function
+
+### Changed examples
+
+- Naming changes
+    - `FmmTomography` -> `FmWavefrontTracker`
+    - `XrayTomography` -> `XrayTracer`
+
+### Infrastructure
+
+- Build and validation scripts to run only on specified contributions
+- CI to test only changed contributions on pull request
+- Write changed contributions to file
+- Routinely check and update active problems list
+- Timeout value defaults to 60 seconds for each method
+
 ## v0.2.1.dev1 (27/03/2023)
 
 ### Infrastructure
