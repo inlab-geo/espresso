@@ -56,3 +56,4 @@ jobs:
           labels: |
             bug
             changes to existing problems
+          delete-branch: true
