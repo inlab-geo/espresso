@@ -15,28 +15,28 @@ Welcome to Espresso!
 
 .. toctree::
     :hidden: 
-    :maxdepth: 1
+    :maxdepth: 2
 
     user_guide/index.rst
 
 .. toctree::
     :hidden:
-    :maxdepth: 1
+    :maxdepth: 2
 
     contributor_guide/index.rst
 
 .. toctree::
     :hidden:
-    :maxdepth: 1
+    :maxdepth: 2
 
     developer_guide/index.rst
 
 
-.. toctree::
-    :hidden:
+.. .. toctree::
+..     :hidden:
     
-    GitHub repository <https://github.com/inlab-geo/espresso/>
-    Issue tracker <https://github.com/inlab-geo/espresso/issues/>
+..     GitHub repository <https://github.com/inlab-geo/espresso/>
+..     Issue tracker <https://github.com/inlab-geo/espresso/issues/>
 
 
 You've just come up with a new optimisation algorithm, inversion strategy, or machine learning-based inference framework. Now you want to see how it performs on a real-world problem... 
@@ -81,34 +81,66 @@ Here's a simple illustration:
     espresso_fig = tp.plot_model(tp.good_model)
     data_fig = tp.plot_model(tp.data, tp.forward(model))
 
+
 If this looks interesting, you can:
 
-- Read the :doc:`user_guide/index` for more information about what Espresso provides and how to use it;
-- Contribute your own example problems by following the instructions in the :doc:`contributor_guide/index`;
-- Learn about the infrastructure behind Espresso by looking at the :doc:`developer_guide/index`;
-- Explore the source code on `GitHub <https://github.com/inlab-geo/espresso/>`_;
-- Report a bug or suggest a feature using the `Issue Tracker <https://github.com/inlab-geo/espresso/issues/>`_;
-- Join the conversation on `Slack <https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg>`_.
+.. grid:: 1 3 3 3
+    :gutter: 3
+    :padding: 2
+
+    .. grid-item-card::
+        :link: user_guide/index.html
+        :text-align: center
+        :class-card: card-border
+
+        *📙 User Guide*
+        ^^^^^^^^^^^^^^^
+        Read about what Espresso provides and how to use it
+
+    .. grid-item-card::
+        :link: contributor_guide/index.html
+        :text-align: center
+        :class-card: card-border
+
+        *📗 Contributor Guide*
+        ^^^^^^^^^^^^^^^^^^^^^^
+        Contribute your own example problems with minimal steps
+
+    .. grid-item-card::
+        :link: developer_guide/index.html
+        :text-align: center
+        :class-card: card-border
+
+        *📘 Developer Guide*
+        ^^^^^^^^^^^^^^^^^^^^
+        Learn about the infrastructure behind Espresso
+
+    .. grid-item-card::
+        :link: https://github.com/inlab-geo/espresso/
+        :text-align: center
+        :class-card: card-border
+
+        *🐍 GitHub Repository*
+        ^^^^^^^^^^^^^^^^^^^^^^
+        Explore the source code on GitHub
+
+    .. grid-item-card::
+        :link: https://github.com/inlab-geo/espresso/issues/
+        :text-align: center
+        :class-card: card-border
+
+        *🐛 Issue Tracker*
+        ^^^^^^^^^^^^^^^^^^
+        Report a bug or suggest a feature by creating an issue
+
+    .. grid-item-card::
+        :link: https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg
+        :text-align: center
+        :class-card: card-border
+
+        *💬 Join Slack*
+        ^^^^^^^^^^^^^^^
+        Accept this invitation to join the conversation on Slack
+
 
 Espresso is an open-source community effort, currently supported and coordinated by `InLab <http://www.inlab.edu.au/>`_.
-
-
-.. Espresso (**E**\ arth **S**\ cience **PR**\ oblems for the **E**\ valuation of **S**\ trategies,
-.. **S**\ olvers and **O**\ ptimizers) is:
-
-.. - A collection of:
-
-..   - geoscience simulation codes (or 'forward models'), with 
-..   - associated datasets;
-
-.. - Designed for researchers, educators and students working in areas such as inference, inversion, optimisation or machine learning. It aims to:
-
-..   - Provide real-world test problems to support algorithm development;
-..   - Enable benchmarking and comparison of techniques across a range of application areas;
-..   - Support teaching by providing a variety of examples that can be incorporated into lectures, demonstrations and practical exercises.
-
-.. - Accessible via a standardised interface. Testing your algorithm on a new problem means changing just one line of code, and does not require any domain knowledge.
-
-.. - An open-source community effort, currently coordinated by `InLab <http://www.inlab.edu.au/>`_, with support from the CoFI development team.
-
-

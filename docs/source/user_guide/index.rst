@@ -15,10 +15,18 @@ User Guide
     changelog.md
 
 
-This guide describes how to install and use Espresso, and provides :doc:`detailed information <contrib/index>` about individal test problems. You may also wish to look at:
+This guide describes:
+
+- :doc:`What is Espresso and why <why>`,
+- :doc:`How to install Espresso <installation>`,
+- :doc:`How to use Espresso <usage>`,
+- :doc:`Detailed information <contrib/index>` about individal test problems,
+- :doc:`API reference <api/index>`, :doc:`FAQ <faq>`, and :doc:`Release notes <changelog>`
+
+You may also wish to look at:
 
 - The :doc:`../contributor_guide/index`, which explains how you can add a new test problem into Espresso, or improve an existing one;
 - The :doc:`../developer_guide/index`, which describes the infrastructure that runs 'in the background' to build Espresso;
 - Our `Github repository <https://github.com/inlab-geo/espresso/>`_ 
-- The Espresso community on Slack
+- The ``#espresso`` channel on `Slack`_
 

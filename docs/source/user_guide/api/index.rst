@@ -1,11 +1,7 @@
 .. _api:
 
-List of functions and classes (API)
-===================================
-
-🚧 This page is under construction. 
-
-Please `contact us <../user_guide/faq.html>`_ directly if you have questions.
+API Reference
+=============
 
 
 .. attention::
