@@ -97,19 +97,6 @@ INSTALL_REQUIRES = [
     "tqdm>=4.0",
     "mpmath>=1.2.0",
 ]
-EXTRAS_REQUIRE = {
-    "doc": [
-        "sphinx", 
-        "sphinx-book-theme", 
-        "sphinx-panels", 
-        "sphinx-togglebutton",
-        "sphinx-autobuild",
-        "pypandoc",
-        "myst-nb",
-        "sphinxcontrib-mermaid",
-        "sphinx-copybutton",
-    ],
-}
 
 
 ########################## SETUP ######################################################
@@ -136,7 +123,6 @@ try:
         cmake_args=CMAKE_ARGS,
         python_requires=PYTHON_REQUIRES,
         install_requires=INSTALL_REQUIRES,
-        extras_require=EXTRAS_REQUIRE,
     )
 except SystemExit as e:
     skbuild_error : skbuild.exceptions.SKBuildError = e.args[0]
