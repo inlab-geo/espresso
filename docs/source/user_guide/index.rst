@@ -19,8 +19,8 @@ This guide describes:
 
 - :doc:`What is Espresso and why <why>`,
 - :doc:`How to install Espresso <installation>`,
-- :doc:`How to use Espresso <usage>`,
-- :doc:`Detailed information <contrib/index>` about individal test problems,
+- :doc:`How to use Espresso <usage>` and :doc:`examples <examples>`,
+- :doc:`Reference <contrib/index>` for individal test problems,
 - :doc:`API reference <api/index>`, :doc:`FAQ <faq>`, and :doc:`Release notes <changelog>`
 
 You may also wish to look at:
