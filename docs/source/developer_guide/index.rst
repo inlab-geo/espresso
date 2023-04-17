@@ -7,6 +7,7 @@ Developer Guide
     repository.rst
     build.rst
     develop.rst
+    documentation.rst
     deploy.rst
     sphinx.rst
     licence.rst

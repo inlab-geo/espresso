@@ -1,140 +1,18 @@
-===============================
-Creating a new Espresso problem
-===============================
+================
+New contribution
+================
 
 👋 Everyone is welcomed to contribute with their own forward code. We aim to reduce the
-barrier of contributing so don't worry if you are not familiar with those technical
-stuff like git operations - we are here to help.
+barrier of contributing so don't worry if you are not familiar with some technical
+stuff - we are here to help.
 
-There are generally three steps involved in submiting your code:
-
-- **Download** - :ref:`get a copy of Espresso <get_own_copy>`
-- **Edit** - :ref:`add in your own Espresso problem <add_contrib>`
-- **Upload** - :ref:`submit your changes to our main repository <submit_changes>`
-
-It's important to note that after you've uploaded your contribution, you can still edit 
-it with the same "pull request" workflow.
-
-In the following paragraphs, we list out detailed steps on how to contribute a new 
-example. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
-
-In case you prefer an alternative guide, we've also prepared a demo video below. If 
-your browser fails to load the video, head to 
-`this link <https://dl.dropbox.com/s/j1xdl0q7zj039cl/%28with%20clicks%29%20how-to-contribute-an-example-in-espresso.mp4?dl=0>`_ 
-to watch it.
-
-.. raw:: html
-
-    <iframe width="560" height="315" src="https://www.dropbox.com/s/j1xdl0q7zj039cl/%28with%20clicks%29%20how-to-contribute-an-example-in-espresso.mp4?dl=0&raw=1" frameborder="0" allowfullscreen></iframe>
-
-.. _get_own_copy:
-
-Get your own copy of Espresso
------------------------------
-
-#. Open your browser and go to the Espresso `repository`_.
-#. Ensure you have a GitHub account and it's signed in. If not, click the "Sign Up"
-   button on the top right and fill in the necessary information to sign up an account.
-#. Now click the "Fork" button on the top right.
-
-   .. figure:: ../_static/contrib_fork.png
-    :align: center
-
-#. Leave everything by default and click the green "Create fork" button.
-
-   .. figure:: ../_static/contrib_fork2.png
-    :align: center
-
-#. Now you will be redirected to your own "fork" of the Espresso repository.
-
-   This fork is your own version of Espresso, and you can make changes however you 
-   want. We will later demonstrate that after you make your own changes, you are
-   able to "contribute" back to the main repository.
-
-   .. figure:: ../_static/contrib_fork3.png
-    :align: center
-
-#. We will clone your fork into your local machine. Click the green "Code" button first, 
-   and then copy the content under the "HTTPS" tab.
-
-   .. figure:: ../_static/contrib_fork4.png
-    :align: center
-
-#. Clone your fork to somewhere in your computer.
-
-   - For **MacOS** and **Linux** users, open your "Terminal" app, change your working 
-     directory into somehwere you'd like to place the Espresso code, then run the 
-     :code:`git clone` command as following.
-   - For **Windows** users, please install `git <https://git-scm.com/downloads>`_ first, 
-     and open "Git Bash" to run the following commands. In the steps afterwards, it's
-     always "Git Bash" when we refer to a "terminal" if you are on Windows.
-
-   .. code-block:: console
-
-    cd <path-to-espresso>
-    git clone <url-you-copied-in-step-6>
-    cd espresso
-    git remote add upstream https://github.com/inlab-geo/espresso
-    git fetch upstream
-
-   .. admonition:: Instructions for first-time GitHub users
-      :class: dropdown, attention
-
-      If this is the first time you clone a GitHub repository, it's very likely that you 
-      will need a personal access token as your password. 
-      
-      **Option 1** - Check out this page:
-      `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_
-      for how to create a personal access token, and use it as your password when you are
-      asked to enter it in the terminal.
-
-      **Option 2** - Alternatively, set up SSH key and upload your public key to your 
-      GitHub account. Follow instructions in this page:
-      `Generating a new SSH key and adding it to the ssh-agent <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`_
-      for how to set up SSH keys with GitHub.
-
-#. Open :code:`<path-to-espresso>/espresso` folder with your favourite code editor. 
-   You will see a copy of Espresso in front of you, cheers ☕️! 
-
-
-.. _add_contrib:
 
 Add your own Espresso problem
 -----------------------------
 
-#. Let's now ensure that you have a correct environment set up. Python >= 3.6 is required,
-   and see this 
-   `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_ 
-   file for a list of required packages.
-
-   .. toggle::
-        
-        - Choose a Python environment manager first. 
-          `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
-          `conda <https://docs.conda.io/en/latest/>`_ is recommended as it can set 
-          up system-wide dependencies as well, but feel free to use the one you are most 
-          familiar with.
-
-        - Python >= 3.6 is required.
-
-        - If you use `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
-          `conda <https://docs.conda.io/en/latest/>`_, run 
-          :code:`conda create -f envs/environment_contrib.yml` under the project root folder.
-          Otherwise, make sure you have the list of packages in 
-          `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_
-          in the virtual environment with your preferred tool.
-
-#. Install Espresso core library - this enables you to access the base class for an Espresso problem
-   :code:`EspressoProblem` and some utility functions to help the development.
-
-   Run the following in your terminal, with :code:`<path-to-espresso>/` as your working directory.
-
-   .. code-block:: bash
-
-      pip install .
-
-#. Create a folder for your new contribution under :code:`contrib/<problem-name>`,
-   by running the following in your terminal:
+#. A new contribution to Espresso has to conform to a consistent
+   file structure. The simplest way to ensure that a new contribution includes
+   all files is to start the creation of a new problem from the template:
 
    .. code-block:: bash
 
@@ -145,7 +23,9 @@ Add your own Espresso problem
    by underscores (e.g. :code:`gravity_density`, :code:`polynomial_regression`).
 
 #. Navigate to folder :code:`<path-to-espresso>/contrib/<problem-name>`, and you'll see template 
-   files.
+   files needed for a new contribution. Each Espresso example is organised around a
+   central class object that contains, at minimum, a set of functions with names
+   that are shared by all examples.
 
    .. figure:: ../_static/contrib_edit1.png
     :align: center
@@ -164,45 +44,87 @@ Add your own Espresso problem
    #. When you think you've finished the coding, run
       :code:`python espresso_machine/build_package/build.py --validate`
 
+There are several things to keep in mind to make a contribution successful:
 
-.. _submit_changes:
+1. All files as generated by the template must be present in the contributed
+   folder.
 
-Submit your changes
--------------------
+2. Choose a sensible, unique name for your contribution that makes it easy to
+   understand what the new example is about. The name can contain more than
+   one word, connected by ``_`` (i.e. NEW_PROBLEM). Spaces are not allowed.
 
-#. It's helpful to "commit" your changes when you have any progress. Feel free to make 
-   commits as often as necesary.
-   
-   - Use :code:`git add <file-name-1> <file-name-2>` to choose which files you'd like to 
-     include in the following "commit".
-   - Use :code:`git commit -m "progress in xxx"` to commit your changes.
-   - Use :code:`git push origin <branch-name>` to push your changes onto your GitHub fork,
-     where :code:`<branch-name>` is :code:`main` by default.
+3. The name of the new contribution (NEW_PROBLEM) must be used twice:
 
-   .. seealso::
+   - for the folder name: espresso/contrib/NEW_PROBLEM
+   - for the central class object in NEW_PROBLEM/__init__.py, i.e.::
 
-    Check `this cheatsheet <https://education.github.com/git-cheat-sheet-education.pdf>`_
-    for a good reference of using Git.
+       ```
+       class new_problem():
+       ...
+       ```
 
-#. After you've commited code changes and pushed your commits up to your fork, open your 
-   fork on GitHub :code:`https://github.com/<your-gh-account>/espresso` in a browser.
+5. Some contributions might want to include measured values. To ensure that any
+   included data can be accessed on any platform, the Python package ``pkgutil``
+   has to be used. A contribution can include small datasets in plain textfiles
+   (ASCII or similar). Data files are stored in ``/contrib/NEW_PROBLEM/data/``
+   and can be loaded using the following code::
 
-#. Find the word "Contribute" on top of the page, click it and choose the green "Open 
-   pull request" button. Follow the prompts and fill in necessary message you'd like us
-   to know.
+     tmp = pkgutil.get_data(__name__, "data/datafile.txt")
+     tmp2=tmp.decode("utf-8")
+     self.m=np.loadtxt(StringIO(tmp2))
+     del  tmp, tmp2
 
-   .. figure:: ../_static/contrib_pr1.png
-    :align: center
+   The decoder might have to be adjusted to load the data successfully. For a
+   full list of encodings, see
+   `here
+   <https://docs.python.org/3/library/codecs.html#standard-encodings/>`_.
 
-#. Once your pull request is submitted, some automatic checks will be triggered. Rest 
-   assured - we will review your contribution, comment if necessary, and proceed to merge
-   your contribution into our main repository when everything's ready.
 
-#. After your contribution is merged to the main branch, you can request another change
-   with the same workflow anytime you want. Just keep your own fork, edit, commit and 
-   push to your own fork, and raise a pull request from there.
+6. The contribution can include problem-specific functions, but should always
+   include the following standard functions::
 
-#. Thanks again, for your contribution to open source 🌟 
+     - get_model: Returns the starting model as numpy array
+     - get_data: Returns reasonable values that could be measured on the recording
+        locations. This can be real measured values, or prepared synthetic
+        data with reasonable noise added; numpy array.
+     - forward: Contains the forward calculation. Returns synthetic data values
+        based on the input model and specified recording locations; numpy array.
+     - plot_model: Visualises the problem. This should include a sensible visualisation
+        of the model and the synthetic data.
+
+   There are many more functions and values that a new contribution can contain, for example::
+
+     - inversion_suggestion: A string containing inversion suggestions..
+     - gradient: Returns the Jacobian of the problem, given the model and recording locations.
+     - reg_param: Contains a sensible value for regularisation parameter
+     - dx: Spatial resolution in x-direction
+     - dt: temporal resolution
+     - nt: Number of time steps
+     - The possibilities are endless! Whatever information you find helpful is
+        probably also helpful for the user.
+
+7. We aim to follow `Python PEP8 style conventions <https://peps.python.org/pep-0008/>`
+   to make source code readable for any user. Once your forward code is converted
+   into a contribution for Espresso, we recommend to use `PyLint
+   <https://pypi.org/project/pylint/>`_  to enforce PEP8 coding standard in the
+   new contribution.
+
+Jupyter Notebook
+----------------
+
+Additionally, we encourage you to add a Jupyter Notebook with an identical name
+into the folder Jupyter Notebooks that contains the following:
+
+1. An extensive description of the new Espresso Problem, containing
+   information about (but not limited to)...:
+
+   - the forward calculation (ie. the underlying physics) and how it was implemented.
+   - which inversion method is used (and regularisation) and how it was implemented.
+   - the physical unit of relevant variables, but at least of ``model`` and ``data``.
+   - all changeable parameters, possibly in a list.
+
+
+2. An example of the new problem being used, with a reasonable output.
 
 
 .. _appendix_build_steps:
@@ -245,8 +167,6 @@ The following table describes what happens when we package Espresso:
      - Install package from ``_esp_build/``
      - ``pip install _esp_build``
 
-
-.. _appendix_validation_steps:
 
 Appendix II: validation steps
 -----------------------------

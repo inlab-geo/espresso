@@ -6,7 +6,7 @@ Welcome to your new Espresso example!
 
 ## Pre-requisites
 
-Make sure you have Python>=3.6 and [required packages](../../envs/environment_contrib.yml) 
+Make sure you have Python>=3.6 and [required packages](../../envs/environment_dev.yml) 
 installed in your system. 
 
 <details>
@@ -19,7 +19,7 @@ for other options.
 1. Install required Python packages for contributing to `geo-espresso`. Run the following
    commands with the project root level as working directory:
    ```console
-   $ conda env create -f envs/environment_contrib.yml
+   $ conda env create -f envs/environment_dev.yml
    $ conda activate esp_contrib
    ```
 2. Install `geo-espresso` core package
