@@ -199,10 +199,10 @@ def run_cmake_if_needed(prob_path, pre_build):
         build_dir.mkdir(exist_ok=True)
         res1 = subprocess.call(["cmake", ".."], cwd=build_dir)
         if res1:
-            raise ChildProcessError("`cmake ..` failed in example_sub_folder")
+            raise ChildProcessError(f"`cmake ..` failed in {prob_path}/build")
         res2 = subprocess.call(["make"], cwd=build_dir)
         if res2:
-            raise ChildProcessError("`make` failed in example_sub_folder")
+            raise ChildProcessError(f"`make` failed in {prob_path}/build")
 
 
 def run_problems(

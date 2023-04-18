@@ -14,17 +14,10 @@ class ReceiverFunction(EspressoProblem):
 
     metadata = {
         "problem_title": "Receiver function",                # To be used in docs
-        "problem_short_description": \
-            """
-            'Receiver functions' are a class of seismic data used to study 
-            discontinuities (layering) in the Earth's crust. At each discontinuity, 
-            P-to-S conversions occur, introducing complexity in the waveform. By 
-            deconvolving horizontal- and vertical-channel waveforms from earthquakes 
-            at teleseismic distances, we can isolate information about these 
-            conversions, and hence learn about the crustal structure. This deconvolved 
-            signal is the receiver function, and has a highly non-linear dependence on 
-            the local crustal properties.
-            """,    # 1-3 sentences
+        "problem_short_description": (
+            "'Receiver functions' are a class of seismic data used to study "
+            "discontinuities (layering) in the Earth's crust"
+        ),    # 1-3 sentences
 
         "author_names": ["Malcolm Sambridge","Takuo Shibutani"],    # List of names e.g. author_names = ["Sally Smith", "Mark Brown"]
 
