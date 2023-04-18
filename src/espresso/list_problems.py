@@ -11,6 +11,11 @@ def list_problems(capabilities: list = None):
     """Returns a list of all Espresso problem classes"""
     if capabilities is None:
         return _all_problems
+    elif not isinstance(capabilities, (list, set, tuple)):
+        raise ValueError(
+            "pass in a list of capabilities, e.g. "
+            "`espresso.list_problems(['plot_model'])"
+        )
     else:
         _problem_names = []
         for p, c in _capability_matrix.items():

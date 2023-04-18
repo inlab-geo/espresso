@@ -21,7 +21,7 @@ please consider contributing an example or two from your own research. The proje
 is currently being coordinated by InLab, with support from the CoFI development
 team.
 
-For more information, please visit our documentation (coming soon).
+For more information, please visit [our documentation](geo-espresso.readthedocs.io).
 
 
 ## Installation
@@ -42,42 +42,37 @@ Once installed, each test problem can be imported using the following command:
 from espresso import <testproblem>
 ```
 
-Replace ``<testproblem>`` with one of the following currently available problems:
-
-- `SimpleRegression`
-- `XrayTomography`
-- `FmmTomography`
-- `PumpingTest`
-- `SlugTest`
-- `GravityDensity`
+Replace ``<testproblem>`` with an actual problem class in Espresso, such as
+`SimpleRegression` and `FmWavefrontTracker`. See 
+[here](https://geo-espresso.readthedocs.io/en/latest/user_guide/contrib/index.html) 
+for a full list of problems Espresso currently includes.
 
 Once a problem is imported, its main functions can be called using the same 
 structure for each problem. For instance:
 
 ```python
-from espresso import GravityDensity
+from espresso import FmWavefrontTracker
 
-problem = GravityDensity(example_number=1)
+problem = FmWavefrontTracker(example_number=1)
 model = problem.good_model
 data = problem.data
 pred = problem.forward(model)
 fig_model = problem.plot_model(model)
-fig_data = problem.plot_data(data, pred)
 ```
 
 You can access related metadata programatically:
 
 ```python
-print(GravityDensity.problem_title)
-print(GravityDensity.problem_short_description)
-print(GravityDensity.author_names)
+print(FmWavefrontTracker.metadata["problem_title"])
+print(FmWavefrontTracker.metadata["problem_short_description"])
+print(FmWavefrontTracker.metadata["author_names"])
 ```
 
 Other problem-specific parameters can be accessed through the problem instance. For instance:
 
 ```python
-print(problem.m)
-print(problem.rec_coords)
+print(problem.extent)
+print(problem.model_shape)
 ```
 
 Which additional values are set is highly problem-specific and we suggest to 
