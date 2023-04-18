@@ -1,33 +1,32 @@
-===============
-Developer Notes
-===============
-
-🚧 This page is under construction. 
-
-Please `contact us <../user_guide/faq.html>`_ directly if you have questions.
-
-How-to Guides
+=============
+How-to guides
 =============
 
+.. rubric:: Contents
+
 .. contents::
-    :local:
+   :local:
 
 
-Build the package locally
--------------------------
+Getting ready
+*************
 
-Check out the `contributor guide  <../contributor_guide/new_contrib.html>`_.
+How to get started with developing Espresso
+-------------------------------------------
 
+Before you work on any parts of Epsresso, make sure you have the project forked and 
+cloned, and a development environment prepared.
 
-Build the documentation locally
--------------------------------
+If not, follow these pages before you continue with the development:
 
-Check out README file under docs folder 
-`here <https://github.com/inlab-geo/espresso/tree/main/docs/README.md>`_.
+#. :doc:`Contributor guide - GitHub setup <../contributor_guide/setup>`
+#. :doc:`Contributor guide - environment setup <../contributor_guide/setup>`
 
+Espresso core
+*************
 
-Modify EspressoProblem class
-----------------------------
+How to modify EspressoProblem base class
+----------------------------------------
 
 1. Modify the class in file :code:`src/espresso/espresso_problem.py`
 2. Make sure your changes are backward compatible, otherwise take the responsibility of
@@ -47,7 +46,7 @@ Modify EspressoProblem class
    - :code:`espresso_machine/build_package/validate.py --pre`
    - :code:`espresso_machine/build_package/build.py`
    - :code:`espresso_machine/build_package/validate.py --post`
-   - :code:`espresso_machine/build_package/build.py --validate`
+   - :code:`espresso_machine/build_package/build.py --pre --post`
    
    Examine reported error (if any) to locate whether to change scripts themselves, or to
    edit the template files under :code:`espresso_machine/new_contribution/_template`.
@@ -57,11 +56,31 @@ Modify EspressoProblem class
    - :code:`README.md`
    - :code:`docs/source/user_guide/introduction.rst`
    - :code:`docs/source/contributor_guide/new_contrib.rst`
-   - :code:`espresso_machine/new_contribution/_template/README.md`
 
 
-Modify build/validation scripts
--------------------------------
+How to add a new EspressoError
+------------------------------
+
+1. Add the exception in file :code:`src/espresso/exceptions.py`.
+2. Add docstring inside the class itself, and add its name to the docstring of the 
+   super class :code:`EspressoError`.
+3. Add new exception into the list in file :code:`docs/source/_templates/exception.rst`.
+
+
+How to add a new utility function
+---------------------------------
+
+1. Add the function in folder :code:`src/espresso/utils/`.
+2. Write docstring for the function.
+3. Import and add the name to :code:`__all__` variable from :code:`src/espresso/utils/__init__.py`.
+4. Add the name into docstring at top of :code:`src/espresso/utils/__init__.py`.
+
+
+Espresso machine
+****************
+
+How to modify build/validation scripts
+--------------------------------------
 
 1. Navigate to :code:`espresso_machine/build_package/` folder, all the scripts are there. Make changes as you need.
 2. Ensure the other scripts still work. For example, you might want to change usage of :code:`validate.py`
@@ -70,32 +89,50 @@ Modify build/validation scripts
 3. Ensure documentations are up to date. The following places need checking:
 
    - :code:`espresso_machine/README.md`
-   - :code:`espresso_machine/new_contribution/_template/README.md`
    - :code:`docs/source/contributor_guide/new_contrib.rst`
 
 
-Add a new EspressoError
------------------------
+Documentation
+*************
 
-1. Add the exception in file :code:`src/espresso/exceptions.py`.
-2. Add docstring inside the class itself, and add its name to the docstring of the 
-   super class :code:`EspressoError`.
-3. Add new exception into the list in file :code:`docs/source/_templates/exception.rst`.
+How to build the documentation locally
+--------------------------------------
+
+#. To build the documentation, run the following under the ``docs/`` folder:
+  
+   .. code-block:: console
+
+      $ make html
+
+#. To serve the website locally:
+
+   .. code-block:: console
+
+      $ python -m http.server 8000 -d build/html
+
+#. Open ``localhost:8000`` in your browser.
 
 
-Add a new utility function
---------------------------
+How to edit the documentation
+-----------------------------
 
-1. Add the function in folder :code:`src/espresso/utils/`.
-2. Write docstring for the function.
-3. Import and add the name to :code:`__all__` variable from :code:`src/espresso/utils/__init__.py`.
-4. Add the name into docstring at top of :code:`src/espresso/utils/__init__.py`.
+Folder ``docs/source`` contains all the text files for this documentation:
+
+- ``docs/source/conf.py`` has all the configurations for this documentation, including the
+  theme, extensions, title, where templates are, what to exclude / include when building 
+  the documentation, etc.
+
+- ``docs/source/index.rst`` corresponds to the home page, in which you can see the source 
+  of the introductory paragraph, 4 panels in the home page and the table of contents.
+
+- ``docs/source/user_guide/``, ``docs/source/contributor_guide/`` and 
+  ``docs/source/developer_notes`` contain the other documentation pages.
 
 
-Change layout of problem-specific documentation
+How to change layout of Test Problems Reference
 -----------------------------------------------
 
-This refers to the 
-`pages for each contribution problem <https://geo-espresso.readthedocs.io/en/latest/user_guide/contrib/index.html>`_.
-These pages are dynamically generated by :code:`docs/source/_ext/generate_contrib_docs.py`.
-To change the layout of README, metadata and licence, modify the code in this file directly.
+If you want to change the auto-generated :doc:`../user_guide/contrib/index` page, 
+modify the Python script ``espresso_machine/doc_utils/gen_docs.py``. In the backend,
+functions in this file is called by ``docs/source/_ext/generate_contrib_docs.py``
+as a part of builder-inited plugin when building the documentation.

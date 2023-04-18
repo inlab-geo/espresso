@@ -1,8 +1,8 @@
 .. highlight:: python
 
-========
-Examples
-========
+==============
+Usage Examples
+==============
 
 This page provides some annotated examples showing how Espresso can be used.
 

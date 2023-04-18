@@ -11,6 +11,11 @@ def list_problems(capabilities: list = None):
     """Returns a list of all Espresso problem classes"""
     if capabilities is None:
         return _all_problems
+    elif not isinstance(capabilities, (list, set, tuple)):
+        raise ValueError(
+            "pass in a list of capabilities, e.g. "
+            "`espresso.list_problems(['plot_model'])"
+        )
     else:
         _problem_names = []
         for p, c in _capability_matrix.items():
@@ -81,9 +86,9 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
-        "set_obs_data": 1,
+        "set_start_mesh": 1,
         "set_start_model": 1,
-        "set_start_mesh": 1
+        "set_obs_data": 1
     },
     "SlugTest": {
         "model_size": 1,
@@ -118,10 +123,10 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 0,
         "log_prior": 0,
-        "tmp_paths": 1,
-        "clean_tmp_files": 1,
         "tmp_files": 1,
-        "exe_fm2dss": 1
+        "tmp_paths": 1,
+        "exe_fm2dss": 1,
+        "clean_tmp_files": 1
     },
     "GravityDensity": {
         "model_size": 1,
