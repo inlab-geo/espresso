@@ -14,7 +14,7 @@ Developer Guide
 
 
 This guide explains how Espresso works 'behind the scenes', particularly the systems 
-for validation, build, documentation and deployment:
+for validation, build, documentation and deployment - the Espresso Machine:
 
 - :doc:`repository`
 - :doc:`build`
