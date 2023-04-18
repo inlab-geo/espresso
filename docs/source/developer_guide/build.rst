@@ -66,6 +66,10 @@ Implementation wise,
   the parser of all build-related scripts are defined only once in the file
   ``espresso_machine/build_package/_utils.py``
 
+The GitHub branch `esp_build <https://github.com/inlab-geo/espresso/tree/esp_build>`_ 
+is reserved for holding the latest package source. Check out the :doc:`ci` page for 
+more details.
+
 
 Validation script
 -----------------
