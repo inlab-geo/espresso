@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.2.2.dev1 (18/04/2023)
+
+### Changed examples
+
+- Fix installation of receiver function under SKBUILD
+
 ## v0.2.2.dev0 (13/04/2023)
 
 ### New examples
