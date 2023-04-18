@@ -21,7 +21,7 @@ please consider contributing an example or two from your own research. The proje
 is currently being coordinated by InLab, with support from the CoFI development
 team.
 
-For more information, please visit our documentation (coming soon).
+For more information, please visit [our documentation](geo-espresso.readthedocs.io).
 
 
 ## Installation
