@@ -47,7 +47,7 @@ jobs:
           if [[ -f "changed_contribs.txt" ]]
           then
             cat changed_contribs.txt
-            python espresso_machine/build_package/build.py --pre --post -f changed_contribs.txt
+            python espresso_machine/build_package/build.py --post -f changed_contribs.txt
           else
-            python espresso_machine/build_package/build.py --pre --post
+            python espresso_machine/build_package/build.py --post
           fi
