@@ -1,5 +1,5 @@
 # Gravity Density
-# 37 Earth Sciences -> 3706 -> 370606 -> 3D gravity
+# 37 Earth Sciences -> 3706 Geophysics -> 370606 Gravimetrics -> 3D gravity
 # description: this is a description, if you can see this, it works!
 """Gravity density library file
 

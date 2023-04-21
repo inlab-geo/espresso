@@ -1,5 +1,5 @@
 # Magnetotelluric 1D
-# 37 Earth Sciences -> 3707 -> 370703 -> slug test
+# 37 Earth Sciences -> 3707 Hydrology -> 370703 Groundwater Hydrology -> Slug Test
 # description: this is a description, if you can see this, it works!
 import numpy as np
 import matplotlib.pyplot as plt
