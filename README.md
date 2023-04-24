@@ -5,6 +5,10 @@
 [![Documentation Status](https://img.shields.io/readthedocs/geo-espresso?logo=readthedocs&style=flat-square&color=fed9b7&labelColor=f8f9fa&logoColor=eaac8b)](https://geo-espresso.readthedocs.io/en/latest/?badge=latest)
 [![Slack](https://img.shields.io/badge/Slack-InLab_community-4A154B?logo=slack&style=flat-square&color=cdb4db&labelColor=f8f9fa&logoColor=9c89b8)](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg)
 
+> Related repositories by [InLab](https://inlab.edu.au/community/)
+> - [CoFI](https://github.com/inlab-geo/cofi)
+> - [CoFI Examples](https://github.com/inlab-geo/cofi-examples)
+
 ## Introduction
 
 **E**arth **S**cience **PR**oblems for the **E**valuation of **S**trategies, 
