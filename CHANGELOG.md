@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.3.0.dev0 (24/04/2023)
+
+### Changed examples
+
+- Fix installation of receiver function on Windows
+- Fix documentation rendering of 1D MT problem
+
+
 ## v0.2.2.dev1 (18/04/2023)
 
 ### Changed examples

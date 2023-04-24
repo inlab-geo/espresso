@@ -47,9 +47,10 @@ execute_process(
 
 # Prepping the module
 set(f2py_module_name "rfc")
-set(fortran_src_file "${CMAKE_CURRENT_SOURCE_DIR}/RF.f90")
+set(fortran_src_file ${CMAKE_CURRENT_SOURCE_DIR}/RF.f90)
 file(GLOB_RECURSE fortran_src_file_subs "${CMAKE_CURRENT_SOURCE_DIR}/RFsubs/*.f*")
-set(f2py_module_c "${f2py_module_name}module.c")
+set(f2py_module_c ${f2py_module_name}module.c)
+file(TO_CMAKE_PATH "${F2PY_INCLUDE_DIR}/fortranobject.c" f2py_fortran_object)
 
 # Target for enforcing dependencies
 add_custom_command(
@@ -63,7 +64,7 @@ add_custom_command(
 
 add_library(${f2py_module_name} MODULE
             "${f2py_module_c}"
-            "${F2PY_INCLUDE_DIR}/fortranobject.c"
+            "${f2py_fortran_object}"
             "${fortran_src_file_subs}"
             "${fortran_src_file}")
 

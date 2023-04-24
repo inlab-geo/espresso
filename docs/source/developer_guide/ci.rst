@@ -35,14 +35,14 @@ This is a validation for new pull requests and merged ones, mainly running the s
 
 .. code-block:: console
 
-    $ python espresso_machine/build_package/build.py --pre --post
+    $ python espresso_machine/build_package/build.py --post
 
 If only a few contribution sub-folders are changed, this workflow will detect a list of
 changed contributions and run tests only on them:
 
 .. code-block:: console
 
-    $ python espresso_machine/build_package/build.py --pre --post -f changed_contribs.txt
+    $ python espresso_machine/build_package/build.py --post -f changed_contribs.txt
 
 
 publish_pypi.yml

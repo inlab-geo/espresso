@@ -19,9 +19,9 @@ class Magnetotelluric1D(EspressoProblem):
         "contact_name": "Hoël Seillé",         
         "contact_email": "hoel.seille@csiro.au",
 
-        "citations": [("","")],
+        "citations": [],
 
-        "linked_sites": [("","")], 
+        "linked_sites": [], 
     }
 
 
