@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.3.0 (24/04/2023)
+
+First release.
+
 ## v0.3.0.dev0 (24/04/2023)
 
 ### Changed examples
