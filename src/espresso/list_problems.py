@@ -32,8 +32,10 @@ def list_problems(capabilities: list = None):
                 _problems.append(p)
         return _problems
 
-def list_capability(problem_names: list) -> dict:
-    return {k:v for k,v in _capability_matrix.items() if k in problem_names}
+def list_capabilities(problem_names: Union[list, str] = None) -> dict:
+    problems = list(problem_names)
+    return {k:v for k,v in _capability_matrix.items() if k in problems}
+
 
 # from .example_name import ExampleName
 

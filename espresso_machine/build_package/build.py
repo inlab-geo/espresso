@@ -177,10 +177,10 @@ def move_contrib_source():
     init_file_all_cls += "]"
     # some constant strings to append to init file later
     init_file_imp_funcs = (
-        "\nfrom .list_problems import list_problem_names, list_problems"
+        "\nfrom .list_problems import list_problem_names, list_problems, list_capabilities\n"
     )
     init_file_add_all_nms = "\n__all__ += list_problem_names()"
-    init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
+    init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems', 'list_capabilities']\n"
     # write all above to files
     # compiled_code_list = set()
     with open(f"{BUILD_DIR}/src/{MODULE_NAME}/CMakeLists.txt", "a") as f:
