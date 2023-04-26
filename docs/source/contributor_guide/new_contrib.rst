@@ -193,7 +193,7 @@ The following table describes what happens when we package Espresso:
      - Move ``src/`` content to ``_esp_build/src/espresso``
      - ``shutil.copytree``
    * - 4
-     - Move ``contrib/`` content to ``_esp_build/src/espresso/`` + ``_esp_build/src/espresso/__init__.py`` + ``_esp_build/src/espresso/list_problems.py``
+     - Move ``contrib/`` content to ``_esp_build/src/espresso/`` + ``_esp_build/src/espresso/__init__.py`` + ``_esp_build/src/espresso/capabilities.py``
      - ``shutil.copytree``, a series of file opening and string manipulation
    * - 5
      - Write dynamic version and extra versioningit configs into ``_esp_build/pyproject.toml``
