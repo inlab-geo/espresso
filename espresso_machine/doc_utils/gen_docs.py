@@ -61,14 +61,27 @@ def read_metadata(contrib_name, lines):
 
 
 def write_sample_code(class_name, name, lines):
+    capabilities = espresso.list_capabilities(class_name)[class_name]
     problem_var_name = f"my{name}"
     lines.append(f"## Example usage for `{class_name}` \n")
     with open(Path(__file__).resolve().parent / "_sample_code.txt", "r") as f:
+        optional = False
         for line in f:
-            
-            line = line.replace("<class_name>", class_name)
+            if "Optional API" in line:
+                optional = True
+            if "<problem_var_name>." in line:
+                attr_name = line.split("<problem_var_name>.")[1].split("(")[0].strip()
+                if attr_name not in capabilities and optional:
+                    continue
+                elif attr_name in capabilities:
+                    capabilities.remove(attr_name)
             line = line.replace("<problem_var_name>", problem_var_name)
+            line = line.replace("<class_name>", class_name)
             lines.append(line.strip())
+    if capabilities:
+        additional_api = f"Additional attributes to explore: {capabilities}."
+        additional_api = additional_api.replace("'", "`")
+        lines.append(additional_api)
 
 
 def read_file(contrib_dir, dest_contrib_dir, file_name, lines):

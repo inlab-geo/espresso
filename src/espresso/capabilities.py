@@ -89,7 +89,7 @@ def list_capabilities(problem_names: typing.Union[list, str] = None) -> dict:
         return all_capabilities
     else:
         problem_names = [problem_names] if isinstance(problem_names, str) else problem_names
-        filtered_capabilities = {k: v for k,v in _capability_matrix.items() if k in problem_names}
+        filtered_capabilities = {k: v for k,v in all_capabilities.items() if k in problem_names}
         return filtered_capabilities
 
 
