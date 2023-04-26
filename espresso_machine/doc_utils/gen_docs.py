@@ -1,10 +1,10 @@
 r"""
-Module to contain funtions that help generate documentation
+Module to contain functions that help generate documentation
 """
 from pathlib import Path
 from shutil import copy
 import os
-import espresso as esp
+import espresso
 
 
 def read_metadata(contrib_name, lines):
@@ -16,7 +16,7 @@ def read_metadata(contrib_name, lines):
     # - [optional] citations -> []
     # - [optional] linked_sites -> [(name, link)]
     contrib_class_name = contrib_name.title().replace("_", "")
-    contrib_class = getattr(esp, contrib_class_name)
+    contrib_class = getattr(espresso, contrib_class_name)
     class_metadata = contrib_class.metadata
     lines.append(":::{admonition} Contribution Metadata for ")
     lines[-1] += "*" + class_metadata["problem_title"] + "* \n:class: important"
@@ -60,15 +60,27 @@ def read_metadata(contrib_name, lines):
     lines.append(":::")
 
 
+def write_sample_code(class_name, name, lines):
+    problem_var_name = f"my{name}"
+    lines.append(f"## Example usage for `{class_name}` \n")
+    with open(Path(__file__).resolve().parent / "_sample_code.txt", "r") as f:
+        for line in f:
+            
+            line = line.replace("<class_name>", class_name)
+            line = line.replace("<problem_var_name>", problem_var_name)
+            lines.append(line.strip())
+
+
 def read_file(contrib_dir, dest_contrib_dir, file_name, lines):
     src_path = contrib_dir / file_name
     dst_path = dest_contrib_dir / file_name
     copy(src_path, dst_path)
-    lines.append("```{include} ./" + file_name + "\n```")
+    lines.append("```{include} ./" + file_name + "\n```\n")
 
 
 def contribs(BASE_PATH, DEST_PATH):
-    names = [cls.__module__.split(".")[-1] for cls in esp.list_problems()]
+    names = [cls.__module__.split(".")[-1] for cls in espresso.list_problems()]
+    class_names = espresso.list_problem_names()
     all_contribs = [
         (contrib, Path(f"{BASE_PATH}/{contrib}"), Path(f"{DEST_PATH}/{contrib}"))
         for contrib in names
@@ -78,7 +90,7 @@ def contribs(BASE_PATH, DEST_PATH):
         for contrib in all_contribs
         if contrib[1].exists() and contrib[1].is_dir()
     ]
-    return all_contribs
+    return zip(all_contribs, class_names)
 
 
 def gen_contrib_docs(BASE_PATH, DEST_PATH):
@@ -86,7 +98,8 @@ def gen_contrib_docs(BASE_PATH, DEST_PATH):
     # prepare index file
     index_lines = []
     # move info for each contribution
-    for (contrib, src_folder, dst_folder) in contribs(BASE_PATH, DEST_PATH):
+    for (contrib, src_folder, dst_folder), class_name in \
+        contribs(BASE_PATH, DEST_PATH):
         # make new folder docs/source/contrib/<contrib-name>
         os.mkdir(dst_folder)
         lines = []
@@ -102,6 +115,8 @@ def gen_contrib_docs(BASE_PATH, DEST_PATH):
         read_file(src_folder, dst_folder, "README.md", lines)
         # format metadata content
         read_metadata(contrib, lines)
+        # format sample code based on capability matrix
+        write_sample_code(class_name, contrib, lines)
         # include LICENCE
         lines.append("\n## LICENCE\n")
         read_file(src_folder, dst_folder, "LICENCE", lines)
