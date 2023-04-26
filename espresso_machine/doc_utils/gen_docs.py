@@ -84,11 +84,28 @@ def write_sample_code(class_name, name, lines):
         lines.append(additional_api)
 
 
+def write_example_files(contrib_dir, dest_contrib_dir, lines):
+    if "examples" in os.listdir(contrib_dir):
+        lines.append("## Example files \n")
+        for file_name in os.listdir(contrib_dir / "examples"):
+            if file_name.endswith(".pyc") or file_name == "__pycache__":
+                continue
+            link_file(contrib_dir / "examples", dest_contrib_dir, file_name, lines)
+    
+
 def read_file(contrib_dir, dest_contrib_dir, file_name, lines):
     src_path = contrib_dir / file_name
     dst_path = dest_contrib_dir / file_name
     copy(src_path, dst_path)
     lines.append("```{include} ./" + file_name + "\n```\n")
+
+
+def link_file(contrib_dir, dest_contrib_dir, file_name, lines):
+    src_path = contrib_dir / file_name
+    dst_path = dest_contrib_dir / "examples" / file_name
+    os.makedirs(dest_contrib_dir / "examples", exist_ok=True)
+    copy(src_path, dst_path)
+    lines.append("- {download}" + f"`examples/{file_name}`")
 
 
 def contribs(BASE_PATH, DEST_PATH):
@@ -130,6 +147,8 @@ def gen_contrib_docs(BASE_PATH, DEST_PATH):
         read_metadata(contrib, lines)
         # format sample code based on capability matrix
         write_sample_code(class_name, contrib, lines)
+        # format example files (if any)
+        write_example_files(src_folder, dst_folder, lines)
         # include LICENCE
         lines.append("\n## LICENCE\n")
         read_file(src_folder, dst_folder, "LICENCE", lines)

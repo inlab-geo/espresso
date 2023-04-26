@@ -74,7 +74,7 @@ templates_path = ['_templates']
 exclude_patterns = [
     ".DS_Store",
     "user_guide/contrib/_index.rst",
-    "contributor_guide/contribute.rst",     # TODO migrate to new_contrib.rst
+    "user_guide/contrib/generated/*/examples/*",
 ]
 
 source_suffix = ".rst"

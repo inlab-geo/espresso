@@ -1,3 +1,7 @@
+Code block below is generated automatically based on our tests and inspection of the
+example objects. We'd like to also refer you to the {doc}`../../../api/index` for more
+about the Espresso API.
+
 ```{code-block} python
 :linenos:
 :emphasize-lines: 3,6,14
