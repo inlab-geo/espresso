@@ -43,7 +43,7 @@ def setup(app):
 # -- Project information -----------------------------------------------------
 project = 'Espresso'
 copyright = f"{datetime.date.today().year}, InLab, {project} development team"
-version = "dev" if "dev" in esp.__version__ else f"v{esp.__version__}"
+version = "dev" if "dev" in esp.__version__ else f"v{esp.__version__}".replace(".dirty", "")
 
 
 # -- General configuration ---------------------------------------------------
