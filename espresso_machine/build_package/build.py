@@ -193,6 +193,7 @@ def move_contrib_source():
     # write all above to files
     # compiled_code_list = set()
     with open(f"{BUILD_DIR}/src/{MODULE_NAME}/CMakeLists.txt", "a") as f:
+        f.write(f"install (DIRECTORY _machine DESTINATION .)\n")
         for contrib in contribs:
             f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
             if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
