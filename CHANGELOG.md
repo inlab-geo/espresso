@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.3.1 (27/04/2023)
+
+### Espresso core
+
+- Fix `list_capabilities` and enhance related documentation 
+
 ## v0.3.0 (24/04/2023)
 
 First release.
