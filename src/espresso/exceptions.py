@@ -1,3 +1,12 @@
+"""
+===================
+Espresso exceptions
+===================
+
+Submodule for Espresso exceptions.
+
+"""
+
 class EspressoError(Exception):
     """Base class for all Espresso errors
     """
@@ -35,5 +44,3 @@ class InvalidExampleError(EspressoError, ValueError):
             return msg+"\n\n"+super_msg
         else:
             return msg
-
-
