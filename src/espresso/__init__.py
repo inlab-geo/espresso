@@ -5,8 +5,7 @@ EspressoProblem
 
 The essential idea of Espresso is to have exactly same interface for different 
 inversion test problems, so we list all the standard methods and attributes once in 
-this API reference page. Check out documentation for :class:`EspressoProblem` for 
-details.
+this API reference page.
 
 .. autosummary::
     :toctree: generated/
@@ -14,26 +13,39 @@ details.
 
     EspressoProblem
 
-List the problems
------------------
-
-To programatically see what problems are available in Espresso, these functions are 
-helpful:
-
-.. autofunction:: list_problems
-.. autofunction:: list_problem_names
 
 Utility functions
 -----------------
 
 Some utility functions are there to help contributors load data and calculate things.
-Check out documentation for submodule :mod:`espresso.utils` for details.
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
     
     espresso.utils
+
+
+List the problems & capabilities
+--------------------------------
+
+To programatically see what problems are available in Espresso, these functions are 
+helpful:
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+    
+    espresso.capabilities
+
+Espresso exceptions
+-------------------
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+    
+    espresso.exceptions
 
 """
 
@@ -49,19 +61,20 @@ __all__ = [
 
 # from .example_name import ExampleName
 
-# from .list_problems import list_problem_names, list_problems
+# from .capabilities import list_problem_names, list_problems
 # __all__ += list_problem_names()
-# __all__ += ["list_problem_names", "list_problems"]
+# __all__ += ["list_problem_names", "list_problems", "list_capabilities"]
 
-from ._magnetotelluric_1D import Magnetotelluric1D
-from ._slug_test import SlugTest
-from ._fm_wavefront_tracker import FmWavefrontTracker
-from ._gravity_density import GravityDensity
-from ._pumping_test import PumpingTest
 from ._xray_tracer import XrayTracer
-from ._receiver_function import ReceiverFunction
+from ._slug_test import SlugTest
+from ._pumping_test import PumpingTest
+from ._gravity_density import GravityDensity
+from ._magnetotelluric_1D import Magnetotelluric1D
 from ._simple_regression import SimpleRegression
+from ._receiver_function import ReceiverFunction
+from ._fm_wavefront_tracker import FmWavefrontTracker
 
-from .list_problems import list_problem_names, list_problems
+from .capabilities import list_problem_names, list_problems, list_capabilities
+
 __all__ += list_problem_names()
-__all__ += ['list_problem_names', 'list_problems']
+__all__ += ['list_problem_names', 'list_problems', 'list_capabilities']

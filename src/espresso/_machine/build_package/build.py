@@ -4,7 +4,7 @@
 2. "/<meta-data-files>" => "_esp_build/"
 3. generate "_version.py"
 4. "src/" => "_esp_build/src/"
-5. "contrib/" => "_esp_build/src/espresso/" + "__init__.py" + "list_problems.py"
+5. "contrib/" => "_esp_build/src/espresso/" + "__init__.py" + "capabilities.py"
 6. remove `.core` from versioningit_config
 7. "espresso_machine/" => _esp_build/src/_machine"
 8. build capability_matrix
@@ -74,11 +74,15 @@ def move_folder_content(folder_path, dest_path, prefix=None, only_include=None):
             # dirs_exist_ok=True,
             ignore=ignore_patterns("*.pyc", "tmp*", "__pycache__"),
         )
-    else:           # moving contributions source
+    else:  # moving contributions source
         for f in os.listdir(folder_path):
             src = f"{folder_path}/{f}"
             dst = f"{dest_path}/{prefix}{f}"
-            if is_cache(f) or not os.path.isdir(src) or (only_include is not None and f not in only_include):
+            if (
+                is_cache(f)
+                or not os.path.isdir(src)
+                or (only_include is not None and f not in only_include)
+            ):
                 continue
             copytree(
                 src,
@@ -165,6 +169,7 @@ def move_contrib_source():
     contribs = []
     init_file_imports = "\n"
     init_file_all_cls = "\n_all_problems = [\n"
+    init_file_deletes = "\n"
     for path in Path(CONTRIB_SRC).iterdir():
         contrib = os.path.basename(path)  # name
         if path.is_dir() and (
@@ -174,13 +179,17 @@ def move_contrib_source():
             contribs.append(contrib)
             init_file_imports += f"from ._{contrib} import {contrib_class}\n"
             init_file_all_cls += f"    {contrib_class},\n"
+            init_file_deletes += f"del {contrib_class}\n"
     init_file_all_cls += "]"
     # some constant strings to append to init file later
     init_file_imp_funcs = (
-        "\nfrom .list_problems import list_problem_names, list_problems"
+        "\nfrom .capabilities import list_problem_names, list_problems,"
+        " list_capabilities\n"
     )
     init_file_add_all_nms = "\n__all__ += list_problem_names()"
-    init_file_add_funcs = "\n__all__ += ['list_problem_names', 'list_problems']\n"
+    init_file_add_funcs = (
+        "\n__all__ += ['list_problem_names', 'list_problems', 'list_capabilities']\n"
+    )
     # write all above to files
     # compiled_code_list = set()
     with open(f"{BUILD_DIR}/src/{MODULE_NAME}/CMakeLists.txt", "a") as f:
@@ -194,9 +203,10 @@ def move_contrib_source():
         f.write(init_file_imp_funcs)
         f.write(init_file_add_all_nms)
         f.write(init_file_add_funcs)
-    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/list_problems.py", "a") as f:
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/capabilities.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_all_cls)
+        f.write(init_file_deletes)
     # with open(f"{ROOT_DIR}/contrib/{PROBLEMS_TO_COMPILE_FILE}", "w") as f:
     #     f.writelines(compiled_code_list)
 
@@ -215,7 +225,7 @@ def build_problem_capability():
             problems_to_check=specified_problems
         )
     report_to_write = json.dumps(capability_report, indent=4)
-    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/list_problems.py", "a") as f:
+    with open(f"{BUILD_DIR}/src/{MODULE_NAME}/capabilities.py", "a") as f:
         f.write("\n\n_capability_matrix = ")
         f.write(report_to_write)
 
@@ -247,7 +257,7 @@ build_pipeline = [
 
 def build():
     println_with_emoji("Package building...", "🛠")
-    for (step, desc) in build_pipeline:
+    for step, desc in build_pipeline:
         println_with_emoji(desc, "🗂")
         try:
             step()

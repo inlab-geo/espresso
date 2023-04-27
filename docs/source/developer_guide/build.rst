@@ -48,9 +48,9 @@ files:
    :ref:`versioning` section below for details.
 #. A prefix of ``_`` is added to all contribution folder names and Python file names
    to ensure cleaner tab completion results (e.g. from a iPython console)
-#. All example classes and names are collected into ``src/espresso/list_problems.py``
+#. All example classes and names are collected into ``src/espresso/capabilities.py``
 #. All examples are run by the build script with a timeout setting of 1 second per
-   method, to quickly build a capability matrix into ``src/espresso/list_problems.py``
+   method, to quickly build a capability matrix into ``src/espresso/capabilities.py``
 #. All examples with ``CMakeLists.txt`` files are recognized as having something to 
    build so the corresponding folders are added to the top-level ``CMakeLists.txt`` 
    file

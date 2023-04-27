@@ -1,4 +1,9 @@
-r"""Submodule for utility functions in espresso.
+r"""
+=================
+Utility functions
+=================
+
+Submodule for utility functions in espresso.
 
 Some of these functions are used by contributors to conveniently implement their
 problem class. Others can be utilised by users to perform analysis on inversion
