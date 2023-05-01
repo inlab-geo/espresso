@@ -152,7 +152,8 @@ _capability_matrix = {
         "plot_data": 0,
         "misfit": 0,
         "log_likelihood": 0,
-        "log_prior": 0
+        "log_prior": 0,
+        "list_capabilities": 1
     },
     "SlugTest": {
         "model_size": 1,
@@ -169,7 +170,8 @@ _capability_matrix = {
         "plot_data": 0,
         "misfit": 0,
         "log_likelihood": 1,
-        "log_prior": 0
+        "log_prior": 0,
+        "list_capabilities": 1
     },
     "PumpingTest": {
         "model_size": 1,
@@ -186,7 +188,8 @@ _capability_matrix = {
         "plot_data": 0,
         "misfit": 0,
         "log_likelihood": 1,
-        "log_prior": 0
+        "log_prior": 0,
+        "list_capabilities": 1
     },
     "GravityDensity": {
         "model_size": 1,
@@ -203,7 +206,8 @@ _capability_matrix = {
         "plot_data": 1,
         "misfit": 0,
         "log_likelihood": 0,
-        "log_prior": 0
+        "log_prior": 0,
+        "list_capabilities": 1
     },
     "Magnetotelluric1D": {
         "model_size": 1,
@@ -221,9 +225,10 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
-        "set_start_model": 1,
         "set_obs_data": 1,
-        "set_start_mesh": 1
+        "set_start_mesh": 1,
+        "list_capabilities": 1,
+        "set_start_model": 1
     },
     "SimpleRegression": {
         "model_size": 1,
@@ -240,7 +245,8 @@ _capability_matrix = {
         "plot_data": 0,
         "misfit": 0,
         "log_likelihood": 0,
-        "log_prior": 0
+        "log_prior": 0,
+        "list_capabilities": 1
     },
     "ReceiverFunction": {
         "model_size": 1,
@@ -251,13 +257,14 @@ _capability_matrix = {
         "forward": 0,
         "description": 1,
         "covariance_matrix": 1,
-        "inverse_covariance_matrix": 0,
+        "inverse_covariance_matrix": 1,
         "jacobian": 0,
         "plot_model": 1,
         "plot_data": 1,
         "misfit": 0,
         "log_likelihood": 1,
         "log_prior": 1,
+        "list_capabilities": 1,
         "rf": 1
     },
     "FmWavefrontTracker": {
@@ -276,9 +283,10 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 0,
         "log_prior": 0,
-        "tmp_paths": 1,
         "clean_tmp_files": 1,
         "tmp_files": 1,
-        "exe_fm2dss": 1
+        "exe_fm2dss": 1,
+        "tmp_paths": 1,
+        "list_capabilities": 1
     }
 }

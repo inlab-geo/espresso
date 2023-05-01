@@ -99,14 +99,14 @@ class ReceiverFunction(EspressoProblem):
         return self._data
 
     @property
-    def covariance_matrix(self):                # optional
-        Cdinv = self.rf.InvDataCov(2.5,0.01,len(self.data))
-        Cdinv /= 100        # temper the likelihood by rescaling the data covariance
-        return Cdinv
+    def covariance_matrix(self): 
+        return np.linalg.inv(self.inverse_covariance_matrix)
 
     @property
     def inverse_covariance_matrix(self):
-        raise NotImplementedError               # optional
+        Cdinv = self.rf.InvDataCov(2.5,0.01,len(self.data))
+        Cdinv /= 100        # temper the likelihood by rescaling the data covariance
+        return Cdinv
 
     def _model_setup(self, model):
         model_setup = np.copy(self._ref_model_setup)

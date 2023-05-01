@@ -350,7 +350,19 @@ class EspressoProblem(metaclass=ABCMeta):
             seeing any data.
         """
         raise NotImplementedError
-        
+
+    def list_capabilities(self):
+        """Returns a dictionary describing the capabilities of the current example
+
+        Examples
+        --------
+        >>> import espresso
+        >>> r = espresso.ReceiverFunction()
+        >>> r.list_capabilities()
+        ['model_size', 'data_size', 'good_model', 'starting_model', 'data', 'description', 'covariance_matrix', 'plot_model', 'plot_data', 'log_likelihood', 'log_prior', 'rf', 'capability_report']
+        """
+        from .capabilities import list_capabilities
+        return list_capabilities(self.__class__.__name__)[self.__class__.__name__]
 
     def __getattr__(self, key):
         if hasattr(self, "params") and key in self.params:
