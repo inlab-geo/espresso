@@ -26,7 +26,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get install python3.10-dev
+          sudo apt-get install python3.10-dev
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
 
