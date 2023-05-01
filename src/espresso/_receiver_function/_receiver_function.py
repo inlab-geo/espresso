@@ -157,7 +157,7 @@ class ReceiverFunction(EspressoProblem):
         raise NotImplementedError               # optional
 
     def log_likelihood(self,data,data2):
-        Cdinv = self.covariance_matrix
+        Cdinv = self.inverse_covariance_matrix
         res = data2 - data
         logLike = -0.5*np.dot(res,np.transpose(np.dot(Cdinv, res)))/2.0
         return logLike.item()
