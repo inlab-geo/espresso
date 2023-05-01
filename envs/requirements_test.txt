@@ -4,7 +4,7 @@ numpy
 matplotlib
 scipy
 tqdm
-scikit-build
+scikit-build==0.17.2
 cibuildwheel==2.10.0
 versioningit==2.1.0
 stdlib_list==0.8.0

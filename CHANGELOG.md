@@ -1,5 +1,16 @@
 # Change Log
 
+## v0.3.2 (01/05/2023)
+
+### Espresso core
+
+- `EspressoProblem.list_capabilities`
+
+### Changed examples
+
+- Fix `covariance_matrix` and `inverse_covariance_matrix` in `ReceiverFunction`
+
+
 ## v0.3.1 (27/04/2023)
 
 ### Espresso core
