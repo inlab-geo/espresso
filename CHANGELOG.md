@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.3.3 (01/05/2023)
+
+### Changed examples
+
+- Fix `log_likelihood` in `ReceiverFunction`
+
 ## v0.3.2 (01/05/2023)
 
 ### Espresso core
