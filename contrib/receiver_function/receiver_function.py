@@ -52,6 +52,13 @@ class ReceiverFunction(EspressoProblem):
                                         [20, 6,1.7],
                                         [45,6.2,1.7]])
         self._t, self._data = self.rf.rfcalc(self._ref_model_setup, sn=0.5)
+
+        # compute covariance matrix
+        self._Cdinv = self.rf.InvDataCov(2.5,0.01,len(self._data))
+        self._Cdinv /= 100        # temper the likelihood by rescaling the data covariance
+        self._Cd = np.linalg.inv(self._Cdinv)
+
+        # example-specific model setup
         if example_number == 1:
             self._description = "Inverting depths of the 2nd and 3rd interfaces"
             self._good_model = np.array([8., 20.])
@@ -100,13 +107,11 @@ class ReceiverFunction(EspressoProblem):
 
     @property
     def covariance_matrix(self): 
-        return np.linalg.inv(self.inverse_covariance_matrix)
+        return self._Cd
 
     @property
     def inverse_covariance_matrix(self):
-        Cdinv = self.rf.InvDataCov(2.5,0.01,len(self.data))
-        Cdinv /= 100        # temper the likelihood by rescaling the data covariance
-        return Cdinv
+        return self._Cdinv
 
     def _model_setup(self, model):
         model_setup = np.copy(self._ref_model_setup)
@@ -167,11 +172,11 @@ class ReceiverFunction(EspressoProblem):
             depths_in_0_60 = all([m_p < 60.0 and m_p > 0. for m_p in model])
             if depths_in_0_60: return np.log(1/60).item()
         elif self.example_number == 2:
-            veloc_in_4_6 = all([m_p < 60.0 and m_p > 0. for m_p in model])
+            veloc_in_4_6 = all([m_p < 4. and m_p > 6. for m_p in model])
             if veloc_in_4_6: return np.log(1/2).item()
         elif self.example_number == 3:
             depths_in_0_60 = all([m_p < 60 and m_p > 0 for m_p in model[[0,2,4,6,8]]])
-            veloc_in_4_6 = all([m_p < 60 and m_p > 0 for m_p in model[[1,3,5,7,9]]])
+            veloc_in_4_6 = all([m_p < 4. and m_p > 6. for m_p in model[[1,3,5,7,9]]])
             if depths_in_0_60 and veloc_in_4_6:
                 return np.log(1/60).item()
         return float("-inf")

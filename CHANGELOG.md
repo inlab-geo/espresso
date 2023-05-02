@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.3.4 (02/05/2023)
+
+### Changed examples
+
+- Improve performance of `ReceiverFunction.log_likelihood` by pre computing covariance matrix
+
 ## v0.3.3 (01/05/2023)
 
 ### Changed examples
