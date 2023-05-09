@@ -1,4 +1,4 @@
-# Magnetotelluric 1D
+# Application : Magnetotelluric 1D
 # 37 Earth Sciences -> 3707 Hydrology -> 370703 Groundwater Hydrology -> Pumping Test
 # description: this is a description, if you can see this, it works!
 import numpy as np
