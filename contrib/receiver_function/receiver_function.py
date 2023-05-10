@@ -55,7 +55,7 @@ class ReceiverFunction(EspressoProblem):
 
         # compute covariance matrix
         self._Cdinv = self.rf.InvDataCov(2.5,0.01,len(self._data))
-        self._Cdinv /= 100        # temper the likelihood by rescaling the data covariance
+        # self._Cdinv /= 100        # (potentially we can) temper the likelihood by rescaling the data covariance
         self._Cd = np.linalg.inv(self._Cdinv)
 
         # example-specific model setup
@@ -159,24 +159,27 @@ class ReceiverFunction(EspressoProblem):
         return fig
 
     def misfit(self, data, data2):
-        raise NotImplementedError               # optional
+        return -self.log_likelihood(data, data2)
 
     def log_likelihood(self,data,data2):
         Cdinv = self.inverse_covariance_matrix
         res = data2 - data
-        logLike = -0.5*np.dot(res,np.transpose(np.dot(Cdinv, res)))/2.0
+        logLike = -np.dot(res,np.transpose(np.dot(Cdinv, res)))
         return logLike.item()
 
     def log_prior(self, model):
         if self.example_number == 1:
-            depths_in_0_60 = all([m_p < 60.0 and m_p > 0. for m_p in model])
-            if depths_in_0_60: return np.log(1/60).item()
+            depths_increasing = model[0] < model[1]
+            depths_in_range = model[0] >= 3.5 and model[1] <= 40
+            if depths_increasing and depths_in_range: 
+                return np.log(1/(40-3.5)).item()
         elif self.example_number == 2:
-            veloc_in_4_6 = all([m_p < 4. and m_p > 6. for m_p in model])
-            if veloc_in_4_6: return np.log(1/2).item()
+            veloc_in_3_7 = all([m_p < 7. and m_p > 3. for m_p in model])
+            if veloc_in_3_7: return np.log(1/2).item()
         elif self.example_number == 3:
             depths_in_0_60 = all([m_p < 60 and m_p > 0 for m_p in model[[0,2,4,6,8]]])
-            veloc_in_4_6 = all([m_p < 4. and m_p > 6. for m_p in model[[1,3,5,7,9]]])
-            if depths_in_0_60 and veloc_in_4_6:
+            veloc_in_3_7 = all([m_p < 7. and m_p > 3. for m_p in model[[1,3,5,7,9]]])
+            params_increasing = all([model[i] < model[i+2] for i in range(0,len(model)-2,2)])
+            if depths_in_0_60 and veloc_in_3_7 and params_increasing:
                 return np.log(1/60).item()
         return float("-inf")
