@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.3.5 (10/05/2023)
+
+- Fix `ReceiverFunction.log_prior` by adding more constraints
+
 ## v0.3.4 (02/05/2023)
 
 ### Changed examples
