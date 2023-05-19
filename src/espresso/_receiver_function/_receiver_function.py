@@ -51,7 +51,10 @@ class ReceiverFunction(EspressoProblem):
                                         [8.0,4.2,2.0],
                                         [20, 6,1.7],
                                         [45,6.2,1.7]])
-        self._t, self._data = self.rf.rfcalc(self._ref_model_setup, sn=0.5)
+        self._t, self._data = self.rf.rfcalc(self._ref_model_setup, sn=0.2)
+        
+        # good_model = np.array([1, 4, 3.5, 4.3, 8, 4.2, 20, 6, 45, 6.2])
+        # null_model = np.array([1, 4.3, 4, 4.3, 7.5, 4.5, 21, 5, 40, 6.5])
 
         # compute covariance matrix
         self._Cdinv = self.rf.InvDataCov(2.5,0.01,len(self._data))
@@ -62,21 +65,18 @@ class ReceiverFunction(EspressoProblem):
         if example_number == 1:
             self._description = "Inverting depths of the 2nd and 3rd interfaces"
             self._good_model = np.array([8., 20.])
-            self._null_model = np.array([10., 30.])
+            self._null_model = np.array([7.5, 21])
             self._interfaces = [2, 3]      # 1st and 2nd interfaces for inversion
             self._nmodel = len(self._interfaces)
         elif example_number == 2:
             self._description = "Inverting velocities of 5 layers"
             self._good_model = np.array([4., 4.3, 4.2, 6., 6.2])
-            self._null_model = np.ones(5) * 4.5
+            self._null_model = np.array([4.3, 4.3, 4.5, 5, 6.5])
             self._nmodel = self._ref_model_setup.shape[0]
         elif example_number == 3:
             self._description = "Inverting depths and velocities of 5 layers"
             self._good_model = self._ref_model_setup[:,:2].flatten()
-            _null_depths = np.array([10,20,30,40,50])
-            _null_velocities = np.ones(5) * 4.5
-            _null_model = np.vstack((_null_depths, _null_velocities))
-            self._null_model = _null_model.T.flatten()
+            self._null_model = np.array([1, 4.3, 4, 4.3, 7.5, 4.5, 21, 5, 40, 6.5])
             self._nmodel = len(self._null_model)
         else:
             raise InvalidExampleError
@@ -134,18 +134,27 @@ class ReceiverFunction(EspressoProblem):
     def jacobian(self, model):
         raise NotImplementedError               # optional
 
-    def plot_model(self, model):
+    def plot_model(self, model, model2=None, label=None, label2=None):
+        fig, ax = plt.subplots(1, 1, figsize=(4,6))
+        ax.set_xlabel('Vs (km/s)')
+        ax.set_ylabel('Depth (km)')
+        ax.invert_yaxis()
+        # process and plot model
         model_setup = self._model_setup(model)
         px = np.zeros([2*len(model_setup),2])
         px[0::2,0] = model_setup[:,1]
         px[1::2,0] = model_setup[:,1]
         px[1::2,1] = model_setup[:,0]
         px[2::2,1] = model_setup[:-1,0]
-        fig, ax = plt.subplots(1, 1, figsize=(4,6))
-        ax.set_xlabel('Vs (km/s)')
-        ax.set_ylabel('Depth (km)')
-        ax.invert_yaxis()
-        ax.plot(px[:,0],px[:,1],'b-')
+        ax.plot(px[:,0], px[:,1], 'b-', label=label)
+        if model2 is not None:
+            model_setup2 = self._model_setup(model2)
+            px2 = np.zeros([2*len(model_setup2),2])
+            px2[0::2,0] = model_setup2[:,1]
+            px2[1::2,0] = model_setup2[:,1]
+            px2[1::2,1] = model_setup2[:,0]
+            px2[2::2,1] = model_setup2[:-1,0]
+            ax.plot(px2[:,0], px2[:,1], 'r-', label=label2)
         return fig
     
     def plot_data(self, data, data2=None, label=None, label2=None):

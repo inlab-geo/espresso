@@ -65,14 +65,14 @@ __all__ = [
 # __all__ += list_problem_names()
 # __all__ += ["list_problem_names", "list_problems", "list_capabilities"]
 
+from ._simple_regression import SimpleRegression
+from ._pumping_test import PumpingTest
+from ._receiver_function import ReceiverFunction
+from ._magnetotelluric_1D import Magnetotelluric1D
 from ._xray_tracer import XrayTracer
 from ._slug_test import SlugTest
-from ._pumping_test import PumpingTest
-from ._gravity_density import GravityDensity
-from ._magnetotelluric_1D import Magnetotelluric1D
-from ._simple_regression import SimpleRegression
-from ._receiver_function import ReceiverFunction
 from ._fm_wavefront_tracker import FmWavefrontTracker
+from ._gravity_density import GravityDensity
 
 from .capabilities import list_problem_names, list_problems, list_capabilities
 
