@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.3.6 (19/05/2023)
+
+### Changed examples
+
+- Improve `ReceiverFunction.starting_model` and `ReceiverFunction.plot_model`
+
 ## v0.3.5 (10/05/2023)
 
 - Fix `ReceiverFunction.log_prior` by adding more constraints
