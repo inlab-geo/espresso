@@ -24,6 +24,22 @@ known_dependencies = {
     "matplotlib.pyplot",
     "tqdm",
     "mpmath",
+    "seislib", 
+    "requests", 
+    "socks", 
+    "lxml", 
+    "shapefile", 
+    "pkg_resources", 
+    "idna", 
+    "urllib3", 
+    "certifi", 
+    "brotli", 
+    "decorator", 
+    "pyproj", 
+    "charset_normalizer", 
+    "shapely", 
+    "obspy", 
+    "cartopy", 
 }
 to_exclude = {"espresso", "run_examples"}
 
