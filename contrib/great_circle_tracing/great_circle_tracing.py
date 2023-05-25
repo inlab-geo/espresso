@@ -72,7 +72,8 @@ class GreatCircleTracing(EspressoProblem):
                 )
         else:
             raise InvalidExampleError
-            
+        
+        self._example_number = example_number
         self.example_dict = load_pickle(
             absolute_path('./data/example%d.pickle'%example_number)
             )
@@ -129,8 +130,9 @@ class GreatCircleTracing(EspressoProblem):
     def plot_model(self, model, **kwargs):
         velocity = 1 / model
         vmean = np.mean(velocity)
+        proj = ccrs.Robinson() if self._example_number==2 else ccrs.Mercator()
         fig = plt.figure()
-        ax = plt.subplot(111, projection=ccrs.Mercator())
+        ax = plt.subplot(111, projection=proj)
         ax.coastlines()
         img, cb = plot_map(self.parameterization.mesh,
                            velocity,
