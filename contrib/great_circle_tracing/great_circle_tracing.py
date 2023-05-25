@@ -15,8 +15,14 @@ class GreatCircleTracing(EspressoProblem):
     """Forward simulation class"""
 
     metadata = {
-        "problem_title": "Surface-wave imaging",  # To be used in docs
-        "problem_short_description": "Surface-wave imaging",  # 1-3 sentences
+        "problem_title": "Surface-wave Tomography",  # To be used in docs
+        "problem_short_description": (
+            "Mapping lateral variations in surface-wave "
+            "velocity at continental (USA -- example 1) and global (example 2) "
+            "scale. Here, the problem is linearized, meaning that we assume that "
+            "surface waves travel along the great-circle path connecting two "
+            "points on the Earth surface."
+        ), # 1-3 sentences
         # List of names e.g. author_names = ["Sally Smith", "Mark Brown"]
         "author_names": [
             "Fabrizio Magrini",
@@ -30,12 +36,16 @@ class GreatCircleTracing(EspressoProblem):
         # citations = [("Newton, I (1687). Philosophiae naturalis principia mathematica.", "")]
         # If there are no citations, use empty list `[]`
         "citations": [
-            ("Surface-wave tomography using SeisLib: a Python package for \
-             multiscale seismic imaging, GJI,  vol 84, 1011-1030, 2022. \
-                 F. Magrini, L. Sebastian, E. K{\"a}stle, L. Boschi",
-            "https://doi.org/10.1093/gji/ggac236"
+            ('Surface-wave tomography using SeisLib: a Python package for '
+             'multiscale seismic imaging, GJI, vol 84, 1011-1030, 2022. '
+             'F. Magrini, L. Sebastian, E. K{\"a}stle, L. Boschi',
+            'https://doi.org/10.1093/gji/ggac236'
+            ),
+            ('A global model of Love and Rayleigh surface wave dispersion and '
+             'anisotropy, GJI, vol 187, 1668-1686, 2011. G. Ekstr{\"o}m',
+             'https://doi.org/10.1111/j.1365-246X.2011.05225.x'
             )
-                                                ],
+        ],
         # List of (title, address) pairs for any websites that
         # should be linked in the documentation, e.g.
         # linked_sites = [("Parent project on Github","https://github.com/user/repo"),
@@ -50,10 +60,22 @@ class GreatCircleTracing(EspressoProblem):
         super().__init__(example_number)
 
         if example_number == 1:
-            self._description = "Rayleigh-wave phase velocity across USA at 10 s period"
-            self.example_dict = load_pickle(absolute_path('./data/example1.pickle'))
+            self._description = (
+                'Rayleigh-wave phase velocity across USA at 10 s period as '
+                'calculated by Magrini et al. (2022)'
+                )
+            
+        elif example_number == 2:
+            self._description = (
+                'Global measurements of Rayleigh-wave phase velocity at 50 s '
+                'period as calculated by Ekström et al. (2011)'
+                )
         else:
             raise InvalidExampleError
+            
+        self.example_dict = load_pickle(
+            absolute_path('./data/example%d.pickle'%example_number)
+            )
         self._data = self.example_dict['slowness']
         self._jacobian = self.example_dict['jacobian']
         self._good_model = self.example_dict['model']
