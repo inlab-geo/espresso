@@ -59,7 +59,10 @@ def _get_inbuilt_pkg():
 
 def _get_known_depended_pkg():
     for pkg in known_dependencies:
-        __import__(pkg)
+        try:
+            __import__(pkg)
+        except:
+            pass
     return _strip_pkg(set(sys.modules.keys()))
 
 
