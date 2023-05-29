@@ -109,6 +109,7 @@ def list_capabilities(problem_names: typing.Union[list, str] = None) -> dict:
 
 from ._simple_regression import SimpleRegression
 from ._pumping_test import PumpingTest
+from ._great_circle_tracing import GreatCircleTracing
 from ._receiver_function import ReceiverFunction
 from ._magnetotelluric_1D import Magnetotelluric1D
 from ._xray_tracer import XrayTracer
@@ -119,6 +120,7 @@ from ._gravity_density import GravityDensity
 _all_problems = [
     SimpleRegression,
     PumpingTest,
+    GreatCircleTracing,
     ReceiverFunction,
     Magnetotelluric1D,
     XrayTracer,
@@ -128,6 +130,7 @@ _all_problems = [
 ]
 del SimpleRegression
 del PumpingTest
+del GreatCircleTracing
 del ReceiverFunction
 del Magnetotelluric1D
 del XrayTracer
@@ -173,6 +176,26 @@ _capability_matrix = {
         "log_prior": 0,
         "list_capabilities": 1
     },
+    "GreatCircleTracing": {
+        "model_size": 1,
+        "data_size": 1,
+        "good_model": 1,
+        "starting_model": 1,
+        "data": 1,
+        "forward": 1,
+        "description": 1,
+        "covariance_matrix": 0,
+        "inverse_covariance_matrix": 0,
+        "jacobian": 1,
+        "plot_model": 1,
+        "plot_data": 0,
+        "misfit": 1,
+        "log_likelihood": 0,
+        "log_prior": 0,
+        "example_dict": 1,
+        "list_capabilities": 1,
+        "parameterization": 1
+    },
     "ReceiverFunction": {
         "model_size": 1,
         "data_size": 1,
@@ -189,8 +212,8 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 1,
         "log_prior": 1,
-        "list_capabilities": 1,
-        "rf": 1
+        "rf": 1,
+        "list_capabilities": 1
     },
     "Magnetotelluric1D": {
         "model_size": 1,
@@ -208,9 +231,9 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
-        "list_capabilities": 1,
         "set_start_mesh": 1,
         "set_start_model": 1,
+        "list_capabilities": 1,
         "set_obs_data": 1
     },
     "XrayTracer": {
@@ -265,11 +288,11 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 0,
         "log_prior": 0,
-        "tmp_files": 1,
         "list_capabilities": 1,
         "exe_fm2dss": 1,
+        "tmp_paths": 1,
         "clean_tmp_files": 1,
-        "tmp_paths": 1
+        "tmp_files": 1
     },
     "GravityDensity": {
         "model_size": 1,

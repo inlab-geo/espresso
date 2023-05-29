@@ -67,6 +67,7 @@ __all__ = [
 
 from ._simple_regression import SimpleRegression
 from ._pumping_test import PumpingTest
+from ._great_circle_tracing import GreatCircleTracing
 from ._receiver_function import ReceiverFunction
 from ._magnetotelluric_1D import Magnetotelluric1D
 from ._xray_tracer import XrayTracer
