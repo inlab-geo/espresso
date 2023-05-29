@@ -24,6 +24,22 @@ known_dependencies = {
     "matplotlib.pyplot",
     "tqdm",
     "mpmath",
+    "seislib", 
+    "requests", 
+    "socks", 
+    "lxml", 
+    "shapefile", 
+    "pkg_resources", 
+    "idna", 
+    "urllib3", 
+    "certifi", 
+    "brotli", 
+    "decorator", 
+    "pyproj", 
+    "charset_normalizer", 
+    "shapely", 
+    "obspy", 
+    "cartopy", 
 }
 to_exclude = {"espresso", "run_examples"}
 
@@ -43,7 +59,10 @@ def _get_inbuilt_pkg():
 
 def _get_known_depended_pkg():
     for pkg in known_dependencies:
-        __import__(pkg)
+        try:
+            __import__(pkg)
+        except:
+            pass
     return _strip_pkg(set(sys.modules.keys()))
 
 

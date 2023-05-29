@@ -96,6 +96,8 @@ INSTALL_REQUIRES = [
     "matplotlib>=3.1",
     "tqdm>=4.0",
     "mpmath>=1.2.0",
+    "cython",
+    "seislib>=0.6.11"
 ]
 
 

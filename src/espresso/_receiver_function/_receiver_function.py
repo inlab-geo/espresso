@@ -128,8 +128,8 @@ class ReceiverFunction(EspressoProblem):
             raise NotImplementedError           # optional
         else:
             model_setup = self._model_setup(model)
-            _, rfunc = self.rf.rfcalc(model_setup, *args, **kwargs)
-            return rfunc
+            _, dpred = self.rf.rfcalc(model_setup, *args, **kwargs)
+            return dpred
 
     def jacobian(self, model):
         raise NotImplementedError               # optional
