@@ -1,4 +1,4 @@
-# Great Cirle Tracing
+# Great Circle Tracing
 
 
 <!-- Welcome to your new Espresso example! -->
