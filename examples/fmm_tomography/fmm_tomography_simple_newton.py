@@ -22,13 +22,24 @@ ref_start_slowness = fmm.starting_model
 fmm_problem = BaseProblem()
 fmm_problem.set_initial_model(ref_start_slowness)
 
-# add regularization: damping + smoothing
+# add regularization: damping + flattening + smoothing
 damping_factor = 100
 flattening_factor = 0
 smoothing_factor = 1e4
-reg_damping = QuadraticReg(damping_factor, model_size, "damping", ref_start_slowness)
-reg_flattening = QuadraticReg(flattening_factor, model_shape, "flattening")
-reg_smoothing = QuadraticReg(smoothing_factor, model_shape, "smoothing")
+reg_damping = damping_factor * QuadraticReg(
+    model_shape=model_shape, 
+    weighting_matrix="damping", 
+    reference_model=ref_start_slowness
+)
+reg_flattening = flattening_factor * QuadraticReg(
+    model_shape=model_shape,
+    weighting_matrix="flattening"
+)
+reg_smoothing = smoothing_factor * QuadraticReg(
+    model_shape=model_shape,
+    weighting_matrix="smoothing"
+)
+
 reg = reg_damping + reg_flattening + reg_smoothing
 reg.__name__ = "regularization"
 reg.__doc__ = ""
@@ -75,7 +86,7 @@ inv_options_newton.set_params(num_iterations=4, step_length=1)
 inv_newton = Inversion(fmm_problem, inv_options_newton)
 inv_result_newton = inv_newton.run()
 fig2 = fmm.plot_model(inv_result_newton.model)
-fig2.savefig(f"figs/fmm_{int(damping_factor)}_{int(smoothing_factor)}_simple_newton")
+fig2.savefig(f"figs/fmm_{int(damping_factor)}_{int(flattening_factor)}_{int(smoothing_factor)}_simple_newton")
 
 # Plot the true model
 fig3 = fmm.plot_model(fmm.good_model)
