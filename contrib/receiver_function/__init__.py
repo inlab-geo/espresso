@@ -5,11 +5,11 @@ executed when this submodule is imported, so adding things in this file can slow
 the importing process of `espresso`.
 
 For contributors, add any intialisation code for your problem into receiver_function.py, 
-under the method `__init__()` of the class `ReceiverFunction`.
+under the method `__init__()` of the class `ReceiverFunctionInversion`.
 
 Don't touch this file unless you know what you are doing :)
 """
 
 from .receiver_function import *
 
-__all__ = [ "ReceiverFunction" ]
+__all__ = [ "ReceiverFunctionInversion" ]

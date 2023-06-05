@@ -7,7 +7,7 @@ from espresso.utils import absolute_path as path, silent_remove
 from . import waveTracker as wt
 
 
-class FmWavefrontTracker(EspressoProblem):
+class FmmTomography(EspressoProblem):
     """Forward simulation class
     """
 

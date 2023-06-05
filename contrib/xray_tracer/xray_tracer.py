@@ -8,7 +8,7 @@ import tqdm
 
 
 
-class XrayTracer(EspressoProblem):
+class XrayTomography(EspressoProblem):
     """Forward simulation class
     """
 

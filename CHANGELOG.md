@@ -1,5 +1,16 @@
 # Change Log
 
+## v0.3.7 (not yet released)
+
+### Changed examples
+
+- Naming changes
+    - `FmWavefrontTracker` -> `FmmTomography`
+    - `XrayTracer` -> `XrayTomography`
+    - `ReceiverFunction` -> `ReceiverFunctionInversion`
+    - `GravityDensity` -> `GravityInversion`
+    - `GreatCircleTracing` -> `SurfaceWaveTomography`
+
 ## v0.3.6 (19/05/2023)
 
 ### Changed examples

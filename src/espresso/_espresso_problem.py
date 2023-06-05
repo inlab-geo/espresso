@@ -357,7 +357,7 @@ class EspressoProblem(metaclass=ABCMeta):
         Examples
         --------
         >>> import espresso
-        >>> r = espresso.ReceiverFunction()
+        >>> r = espresso.ReceiverFunctionInversion()
         >>> r.list_capabilities()
         ['model_size', 'data_size', 'good_model', 'starting_model', 'data', 'description', 'covariance_matrix', 'plot_model', 'plot_data', 'log_likelihood', 'log_prior', 'rf', 'capability_report']
         """

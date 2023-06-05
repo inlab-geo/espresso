@@ -15,7 +15,7 @@ from espresso.exceptions import InvalidExampleError
 from espresso.utils import loadtxt
 
 
-class GravityDensity(EspressoProblem):
+class GravityInversion(EspressoProblem):
     """Forward simulation class
     """
 

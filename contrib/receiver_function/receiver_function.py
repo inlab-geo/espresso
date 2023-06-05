@@ -8,7 +8,7 @@ from espresso.exceptions import InvalidExampleError
 
 LIB_DIR = pathlib.Path(__file__).resolve().parent / "lib"
 
-class ReceiverFunction(EspressoProblem):
+class ReceiverFunctionInversion(EspressoProblem):
     """Forward simulation class
     """
 

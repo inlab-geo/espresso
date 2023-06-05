@@ -7,4 +7,4 @@ For contributors: feel free to add your initialisation code here if needed.
 
 from .gravity_density import *
 
-__all__ = [ "GravityDensity" ]
+__all__ = [ "GravityInversion" ]

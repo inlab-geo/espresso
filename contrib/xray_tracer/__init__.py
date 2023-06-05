@@ -7,4 +7,4 @@ For contributors: feel free to add your initialisation code here if needed.
 
 from .xray_tracer import *
 
-__all__ = [ "XrayTracer" ]
+__all__ = [ "XrayTomography" ]

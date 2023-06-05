@@ -138,7 +138,7 @@ def suppress_stdout():
 
 
 # ------------------------------- contribution processing -----------------------------
-def problem_name_to_class(problem_name):  # e.g. "xray_tracer" -> "XrayTracer"
+def problem_name_to_class(problem_name):  # e.g. "xray_tracer" -> "XrayTomography"
     return problem_name.title().replace("_", "")
 
 
