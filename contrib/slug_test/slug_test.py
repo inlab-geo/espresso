@@ -129,10 +129,10 @@ class SlugTest(EspressoProblem):
         plt.xlabel('Time elapsed')
         plt.ylabel('Displacement')
 
-    def misfit(self, data, data2):              # optional
+    def misfit(self, data1, data2):              # optional
         raise NotImplementedError
 
-    def log_likelihood(self, data, data2): 
+    def log_likelihood(self, data1, data2): 
         residual = data - data2
         return (-0.5*residual@self.inverse_covariance_matrix@residual.T).item()
     

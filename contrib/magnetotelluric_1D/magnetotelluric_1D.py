@@ -153,7 +153,7 @@ class Magnetotelluric1D(EspressoProblem):
         #plt.show()
         return fig
     
-    def plot_data(self, data, data2 = None, Cm = None):
+    def plot_data(self, data1, data2 = None, Cm = None):
         nf = len(self._freqs)
         log10_rho = data[:nf]
         phase = data[nf:]
@@ -186,7 +186,7 @@ class Magnetotelluric1D(EspressoProblem):
         #plt.show()
         return fig
 
-    def misfit(self, data, data2, Cm_inv = None):
+    def misfit(self, data1, data2, Cm_inv = None):
         res = data - data2
         if Cm_inv is None:
             return float(res.T @ res)

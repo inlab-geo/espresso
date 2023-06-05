@@ -206,10 +206,10 @@ class FmWavefrontTracker(EspressoProblem):
                 **kwargs
             ) 
     
-    def plot_data(self, data, data2=None):
+    def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional
 
-    def misfit(self, data, data2):
+    def misfit(self, data1, data2):
         raise NotImplementedError               # optional
 
     def log_likelihood(self,data,data2):

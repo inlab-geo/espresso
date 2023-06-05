@@ -86,16 +86,16 @@ class ExampleName(EspressoProblem):
     def jacobian(self, model):
         raise NotImplementedError  # optional
 
-    def plot_model(self, model):
+    def plot_model(self, model, **kwargs):
         raise NotImplementedError  # optional
 
-    def plot_data(self, data, data2=None):
+    def plot_data(self, data1, data2=None, **kwargs):
         raise NotImplementedError  # optional
 
-    def misfit(self, data, data2):
+    def misfit(self, data1, data2):
         raise NotImplementedError  # optional
 
-    def log_likelihood(self, data, data2):
+    def log_likelihood(self, data1, data2):
         raise NotImplementedError  # optional
 
     def log_prior(self, model):

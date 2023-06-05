@@ -278,7 +278,7 @@ class EspressoProblem(metaclass=ABCMeta):
         """
         raise NotImplementedError
     
-    def plot_data(self, data, data2 = None):
+    def plot_data(self, data1, data2 = None):
         """Returns a figure containing a basic visualisation of a dataset and 
         (optionally) comparing it to a second dataset
 

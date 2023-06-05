@@ -157,7 +157,7 @@ class ReceiverFunction(EspressoProblem):
             ax.plot(px2[:,0], px2[:,1], 'r-', label=label2)
         return fig
     
-    def plot_data(self, data, data2=None, label=None, label2=None):
+    def plot_data(self, data1, data2=None, label=None, label2=None):
         fig, ax = plt.subplots(1, 1)
         ax.plot(self._t,data,label=label)
         if data2 is not None:
@@ -167,8 +167,8 @@ class ReceiverFunction(EspressoProblem):
         ax.grid(True)
         return fig
 
-    def misfit(self, data, data2):
-        return -self.log_likelihood(data, data2)
+    def misfit(self, data1, data2):
+        return -self.log_likelihood(data1, data2)
 
     def log_likelihood(self,data,data2):
         Cdinv = self.inverse_covariance_matrix
