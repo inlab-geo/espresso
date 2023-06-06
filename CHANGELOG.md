@@ -2,6 +2,10 @@
 
 ## v0.3.7 (not yet released)
 
+### New examples
+
+- `SurfaceWaveTomography` examples
+
 ### Changed examples
 
 - Naming changes
