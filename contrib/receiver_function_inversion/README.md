@@ -1,4 +1,4 @@
-# Receiver Function
+# Receiver Function Inversion
 
 <!-- Please write anything you'd like to explain about the forward problem here -->
 

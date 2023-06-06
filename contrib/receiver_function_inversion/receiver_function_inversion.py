@@ -159,7 +159,7 @@ class ReceiverFunctionInversion(EspressoProblem):
     
     def plot_data(self, data1, data2=None, label=None, label2=None):
         fig, ax = plt.subplots(1, 1)
-        ax.plot(self._t,data,label=label)
+        ax.plot(self._t,data1,label=label)
         if data2 is not None:
             ax.plot(self._t,data2,'r-',label=label2)
         ax.set_xlabel('Time/s')
@@ -170,9 +170,9 @@ class ReceiverFunctionInversion(EspressoProblem):
     def misfit(self, data1, data2):
         return -self.log_likelihood(data1, data2)
 
-    def log_likelihood(self,data,data2):
+    def log_likelihood(self,data1,data2):
         Cdinv = self.inverse_covariance_matrix
-        res = data2 - data
+        res = data2 - data1
         logLike = -np.dot(res,np.transpose(np.dot(Cdinv, res)))
         return logLike.item()
 

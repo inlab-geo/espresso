@@ -172,7 +172,7 @@ class PumpingTest(EspressoProblem):
         raise NotImplementedError
 
     def log_likelihood(self, data1, data2): 
-        residual = data - data2
+        residual = data1 - data2
         return (-0.5*residual@self.inverse_covariance_matrix@residual.T).item()
     
     def log_prior(self, model):

@@ -13,7 +13,7 @@ class XrayTomography(EspressoProblem):
     """
 
     metadata = {
-        "problem_title": "X-ray Tracer",
+        "problem_title": "X-ray Tomography",
         "problem_short_description": "",
 
         "author_names": ["Andrew Valentine"],

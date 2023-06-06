@@ -9,7 +9,7 @@ if(SKBUILD)
     ${CMAKE_CURRENT_BINARY_DIR}/${fmm_generated} 
     ${CMAKE_CURRENT_BINARY_DIR}/globalp.mod
     ${CMAKE_CURRENT_BINARY_DIR}/traveltime.mod
-    DESTINATION fm_wavefront_tracker/build)
+    DESTINATION fmm_tomography/build)
 else()
   # Run "mkdir build; cd build; cmake ..; make"
   message(STATUS "The project is NOT built using scikit-build")

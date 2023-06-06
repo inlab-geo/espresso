@@ -5,6 +5,6 @@ Code inside this file will be executed when this submodule is imported.
 For contributors: feel free to add your initialisation code here if needed.
 """
 
-from .gravity_density import *
+from .gravity_inversion import *
 
 __all__ = [ "GravityInversion" ]
