@@ -40,6 +40,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y libgeos++-dev
           python -m pip install -r envs/requirements_test.txt
 
       - name: Build package

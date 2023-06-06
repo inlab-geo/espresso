@@ -26,7 +26,7 @@ class ExampleName(EspressoProblem):
         # List of (title, address) pairs for any websites that
         # should be linked in the documentation, e.g.
         # linked_sites = [("Parent project on Github","https://github.com/user/repo"),
-        #                 ("Data source"),"https://www.data.com") ]
+        #                 ("Data source","https://www.data.com") ]
         # If there are no links, use empty list `[]`
         "linked_sites": [("", "")],
     }
