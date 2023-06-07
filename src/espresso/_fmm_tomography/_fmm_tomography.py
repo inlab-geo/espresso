@@ -7,7 +7,7 @@ from espresso.utils import absolute_path as path, silent_remove
 from . import waveTracker as wt
 
 
-class FmWavefrontTracker(EspressoProblem):
+class FmmTomography(EspressoProblem):
     """Forward simulation class
     """
 
@@ -195,9 +195,10 @@ class FmWavefrontTracker(EspressoProblem):
                     alpha=alpha,
                     **kwargs
                 )
-            return (fig, paths) if return_paths else fig
+            ax = fig.get_axes()[0]
+            return (ax, paths) if return_paths else ax
         else:
-            return wt.displayModel(
+            fig = wt.displayModel(
                 velocity, 
                 paths=None, 
                 extent=self.extent, 
@@ -205,11 +206,12 @@ class FmWavefrontTracker(EspressoProblem):
                 alpha=alpha,
                 **kwargs
             ) 
+            return fig.get_axes()[0]
     
-    def plot_data(self, data, data2=None):
+    def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional
 
-    def misfit(self, data, data2):
+    def misfit(self, data1, data2):
         raise NotImplementedError               # optional
 
     def log_likelihood(self,data,data2):

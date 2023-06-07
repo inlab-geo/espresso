@@ -8,7 +8,7 @@ from espresso.exceptions import InvalidExampleError
 
 LIB_DIR = pathlib.Path(__file__).resolve().parent / "lib"
 
-class ReceiverFunction(EspressoProblem):
+class ReceiverFunctionInversion(EspressoProblem):
     """Forward simulation class
     """
 
@@ -155,24 +155,24 @@ class ReceiverFunction(EspressoProblem):
             px2[1::2,1] = model_setup2[:,0]
             px2[2::2,1] = model_setup2[:-1,0]
             ax.plot(px2[:,0], px2[:,1], 'r-', label=label2)
-        return fig
+        return ax
     
-    def plot_data(self, data, data2=None, label=None, label2=None):
+    def plot_data(self, data1, data2=None, label=None, label2=None):
         fig, ax = plt.subplots(1, 1)
-        ax.plot(self._t,data,label=label)
+        ax.plot(self._t,data1,label=label)
         if data2 is not None:
             ax.plot(self._t,data2,'r-',label=label2)
         ax.set_xlabel('Time/s')
         ax.set_ylabel('Amplitude')
         ax.grid(True)
-        return fig
+        return ax
 
-    def misfit(self, data, data2):
-        return -self.log_likelihood(data, data2)
+    def misfit(self, data1, data2):
+        return -self.log_likelihood(data1, data2)
 
-    def log_likelihood(self,data,data2):
+    def log_likelihood(self,data1,data2):
         Cdinv = self.inverse_covariance_matrix
-        res = data2 - data
+        res = data2 - data1
         logLike = -np.dot(res,np.transpose(np.dot(Cdinv, res)))
         return logLike.item()
 

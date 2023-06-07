@@ -10,6 +10,6 @@ under the method `__init__()` of the class `GreatCirleTracing`.
 Don't touch this file unless you know what you are doing :)
 """
 
-from ._great_circle_tracing import *
+from ._surface_wave_tomography import *
 
-__all__ = ["GreatCircleTracing"]
+__all__ = ["SurfaceWaveTomography"]

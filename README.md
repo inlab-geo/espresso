@@ -47,7 +47,7 @@ from espresso import <testproblem>
 ```
 
 Replace ``<testproblem>`` with an actual problem class in Espresso, such as
-`SimpleRegression` and `FmWavefrontTracker`. See 
+`SimpleRegression` and `FmmTomography`. See 
 [here](https://geo-espresso.readthedocs.io/en/latest/user_guide/contrib/index.html) 
 for a full list of problems Espresso currently includes.
 
@@ -55,9 +55,9 @@ Once a problem is imported, its main functions can be called using the same
 structure for each problem. For instance:
 
 ```python
-from espresso import FmWavefrontTracker
+from espresso import FmmTomography
 
-problem = FmWavefrontTracker(example_number=1)
+problem = FmmTomography(example_number=1)
 model = problem.good_model
 data = problem.data
 pred = problem.forward(model)
@@ -67,9 +67,9 @@ fig_model = problem.plot_model(model)
 You can access related metadata programatically:
 
 ```python
-print(FmWavefrontTracker.metadata["problem_title"])
-print(FmWavefrontTracker.metadata["problem_short_description"])
-print(FmWavefrontTracker.metadata["author_names"])
+print(FmmTomography.metadata["problem_title"])
+print(FmmTomography.metadata["problem_short_description"])
+print(FmmTomography.metadata["author_names"])
 ```
 
 Other problem-specific parameters can be accessed through the problem instance. For instance:

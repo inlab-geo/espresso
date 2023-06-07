@@ -1,4 +1,4 @@
-# Great Circle Tracing
+# Surface Wave Tomography
 
 
 <!-- Welcome to your new Espresso example! -->

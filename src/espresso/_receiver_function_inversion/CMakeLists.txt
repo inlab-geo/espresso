@@ -87,7 +87,7 @@ if (UNIX)
 endif()
 
 if(SKBUILD)
-  install(TARGETS ${f2py_module_name} DESTINATION _receiver_function/build)
+  install(TARGETS ${f2py_module_name} DESTINATION _receiver_function_inversion/build)
 else()
   install(TARGETS ${f2py_module_name} DESTINATION .)
 endif()

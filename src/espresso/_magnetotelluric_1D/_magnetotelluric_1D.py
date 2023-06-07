@@ -151,12 +151,12 @@ class Magnetotelluric1D(EspressoProblem):
         ax.set_title(title)
         plt.tight_layout()
         #plt.show()
-        return fig
+        return ax
     
-    def plot_data(self, data, data2 = None, Cm = None):
+    def plot_data(self, data1, data2 = None, Cm = None):
         nf = len(self._freqs)
-        log10_rho = data[:nf]
-        phase = data[nf:]
+        log10_rho = data1[:nf]
+        phase = data1[nf:]
         fig, axs = plt.subplots(2,1,sharex = True,figsize = (4,4), num = 2)
         if Cm is None:
             axs[0].plot(np.log10(1/self._freqs), log10_rho,'k.')
@@ -184,10 +184,10 @@ class Magnetotelluric1D(EspressoProblem):
         # axs[0].legend()
         plt.tight_layout()
         #plt.show()
-        return fig
+        return axs
 
-    def misfit(self, data, data2, Cm_inv = None):
-        res = data - data2
+    def misfit(self, data1, data2, Cm_inv = None):
+        res = data1 - data2
         if Cm_inv is None:
             return float(res.T @ res)
         else:

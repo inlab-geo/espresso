@@ -278,7 +278,7 @@ class EspressoProblem(metaclass=ABCMeta):
         """
         raise NotImplementedError
     
-    def plot_data(self, data, data2 = None):
+    def plot_data(self, data1, data2 = None):
         """Returns a figure containing a basic visualisation of a dataset and 
         (optionally) comparing it to a second dataset
 
@@ -357,7 +357,7 @@ class EspressoProblem(metaclass=ABCMeta):
         Examples
         --------
         >>> import espresso
-        >>> r = espresso.ReceiverFunction()
+        >>> r = espresso.ReceiverFunctionInversion()
         >>> r.list_capabilities()
         ['model_size', 'data_size', 'good_model', 'starting_model', 'data', 'description', 'covariance_matrix', 'plot_model', 'plot_data', 'log_likelihood', 'log_prior', 'rf', 'capability_report']
         """
