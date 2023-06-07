@@ -1,6 +1,6 @@
 # Change Log
 
-## v0.3.7 (not yet released)
+## v0.3.7 (07/06/2023)
 
 ### New examples
 
