@@ -144,7 +144,7 @@ class SurfaceWaveTomography(EspressoProblem):
                            **kwargs)       
         cb.set_label('Phase velocity [m/s]')      
         plt.tight_layout()
-        return fig
+        return ax
 
     def plot_data(self, data, data2=None):
         raise NotImplementedError  # optional

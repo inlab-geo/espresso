@@ -107,7 +107,7 @@ class XrayTomography(EspressoProblem):
         if paths:
             for p in self._paths:
                 ax.plot([p[0],p[2]],[p[1],p[3]],'y',linewidth=0.05)
-        return fig
+        return ax
     
     def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional

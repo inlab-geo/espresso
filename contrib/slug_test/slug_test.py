@@ -114,20 +114,24 @@ class SlugTest(EspressoProblem):
         raise NotImplementedError               # optional
 
     def plot_model(self, model):
-        plt.errorbar(self._xp, self.forward(model), yerr=self._sigma, fmt='.', 
+        fig, ax = plt.subplots()
+        ax.errorbar(self._xp, self.forward(model), yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
-        plt.xscale("log")
-        plt.grid(True, which="both")
-        plt.xlabel('Time elapsed')
-        plt.ylabel('Displacement')
+        ax.set_xscale("log")
+        ax.grid(True, which="both")
+        ax.set_xlabel('Time elapsed')
+        ax.set_ylabel('Displacement')
+        return ax
     
     def plot_data(self, data):
-        plt.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
+        fig, ax = plt.subplots()
+        ax.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
-        plt.xscale("log")
-        plt.grid(True, which="both")
-        plt.xlabel('Time elapsed')
-        plt.ylabel('Displacement')
+        ax.set_xscale("log")
+        ax.grid(True, which="both")
+        ax.set_xlabel('Time elapsed')
+        ax.set_ylabel('Displacement')
+        return ax
 
     def misfit(self, data1, data2):              # optional
         raise NotImplementedError

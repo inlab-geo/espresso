@@ -15,6 +15,11 @@
     - `GravityDensity` -> `GravityInversion`
     - `GreatCircleTracing` -> `SurfaceWaveTomography`
 
+### Espresso core
+
+- Template: Minor naming changes in templates
+- Template: Return `matplotlib.axes.Axes` instead of `matplotlib.figures.Figure` in plotting methods
+
 ## v0.3.6 (19/05/2023)
 
 ### Changed examples

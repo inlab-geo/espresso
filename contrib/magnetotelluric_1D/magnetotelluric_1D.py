@@ -151,7 +151,7 @@ class Magnetotelluric1D(EspressoProblem):
         ax.set_title(title)
         plt.tight_layout()
         #plt.show()
-        return fig
+        return ax
     
     def plot_data(self, data1, data2 = None, Cm = None):
         nf = len(self._freqs)
@@ -184,7 +184,7 @@ class Magnetotelluric1D(EspressoProblem):
         # axs[0].legend()
         plt.tight_layout()
         #plt.show()
-        return fig
+        return axs
 
     def misfit(self, data1, data2, Cm_inv = None):
         res = data1 - data2

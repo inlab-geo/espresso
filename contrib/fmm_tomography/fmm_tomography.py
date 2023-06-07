@@ -195,9 +195,10 @@ class FmmTomography(EspressoProblem):
                     alpha=alpha,
                     **kwargs
                 )
-            return (fig, paths) if return_paths else fig
+            ax = fig.get_axes()[0]
+            return (ax, paths) if return_paths else ax
         else:
-            return wt.displayModel(
+            fig = wt.displayModel(
                 velocity, 
                 paths=None, 
                 extent=self.extent, 
@@ -205,6 +206,7 @@ class FmmTomography(EspressoProblem):
                 alpha=alpha,
                 **kwargs
             ) 
+            return fig.get_axes()[0]
     
     def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional

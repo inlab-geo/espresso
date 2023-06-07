@@ -155,7 +155,7 @@ class ReceiverFunctionInversion(EspressoProblem):
             px2[1::2,1] = model_setup2[:,0]
             px2[2::2,1] = model_setup2[:-1,0]
             ax.plot(px2[:,0], px2[:,1], 'r-', label=label2)
-        return fig
+        return ax
     
     def plot_data(self, data1, data2=None, label=None, label2=None):
         fig, ax = plt.subplots(1, 1)
@@ -165,7 +165,7 @@ class ReceiverFunctionInversion(EspressoProblem):
         ax.set_xlabel('Time/s')
         ax.set_ylabel('Amplitude')
         ax.grid(True)
-        return fig
+        return ax
 
     def misfit(self, data1, data2):
         return -self.log_likelihood(data1, data2)
