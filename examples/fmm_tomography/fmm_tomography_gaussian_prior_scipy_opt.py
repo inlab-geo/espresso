@@ -72,9 +72,9 @@ inv_options.set_params(method=method, options={"xtol": 1e-12})
 # define CoFI Inversion and run
 inv = Inversion(fmm_problem, inv_options)
 inv_result = inv.run()
-fig1 = fmm.plot_model(inv_result.model)
-fig1.savefig(f"figs/fmm_gaussian_prior_scipy_{method}")
+ax1 = fmm.plot_model(inv_result.model)
+ax1.get_figure().savefig(f"figs/fmm_gaussian_prior_scipy_{method}")
 
 # Plot the true model
-fig3 = fmm.plot_model(fmm.good_model)
-fig3.savefig("figs/fmm_true_model")
+ax2 = fmm.plot_model(fmm.good_model)
+ax2.get_figure().savefig("figs/fmm_true_model")

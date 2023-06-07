@@ -85,9 +85,9 @@ inv_options_newton.set_tool("cofi.simple_newton")
 inv_options_newton.set_params(num_iterations=4, step_length=1)
 inv_newton = Inversion(fmm_problem, inv_options_newton)
 inv_result_newton = inv_newton.run()
-fig2 = fmm.plot_model(inv_result_newton.model)
-fig2.savefig(f"figs/fmm_{int(damping_factor)}_{int(flattening_factor)}_{int(smoothing_factor)}_simple_newton")
+ax = fmm.plot_model(inv_result_newton.model)
+ax.get_figure().savefig(f"figs/fmm_{int(damping_factor)}_{int(flattening_factor)}_{int(smoothing_factor)}_simple_newton")
 
 # Plot the true model
-fig3 = fmm.plot_model(fmm.good_model)
-fig3.savefig("figs/fmm_true_model")
+ax2 = fmm.plot_model(fmm.good_model)
+ax2.get_figure().savefig("figs/fmm_true_model")
