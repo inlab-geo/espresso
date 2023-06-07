@@ -11,7 +11,7 @@ import cartopy.crs as ccrs
 
 
 
-class GreatCircleTracing(EspressoProblem):
+class SurfaceWaveTomography(EspressoProblem):
     """Forward simulation class"""
 
     metadata = {
@@ -144,7 +144,7 @@ class GreatCircleTracing(EspressoProblem):
                            **kwargs)       
         cb.set_label('Phase velocity [m/s]')      
         plt.tight_layout()
-        return fig
+        return ax
 
     def plot_data(self, data, data2=None):
         raise NotImplementedError  # optional

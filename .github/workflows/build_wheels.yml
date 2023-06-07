@@ -20,7 +20,10 @@ jobs:
         # Giving up windows, see the following two links:
         # https://groups.google.com/g/comp.lang.fortran/c/Jna-QAHCOpk/m/VZq7gVq3AgAJ
         # https://github.com/awvwgk/setup-fortran/issues/6
-        os: [ubuntu-latest, macos-latest]
+        # Giving up MacOS (temporarily), due to mismatch in some cython dependencies
+        # https://github.com/inlab-geo/espresso/actions/runs/5183776893/jobs/9342041891#step:9:158
+        # os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
       - name: Checkout

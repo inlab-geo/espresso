@@ -110,10 +110,10 @@ class SimpleRegression(EspressoProblem):
     def plot_model(self, model):
         raise NotImplementedError               # optional
     
-    def plot_data(self, data, data2=None):
+    def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional
 
-    def misfit(self, data, data2):              # optional
+    def misfit(self, data1, data2):              # optional
         raise NotImplementedError
 
     def log_likelihood(self,data,data2):        # optional

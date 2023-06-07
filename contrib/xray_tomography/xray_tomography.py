@@ -8,12 +8,12 @@ import tqdm
 
 
 
-class XrayTracer(EspressoProblem):
+class XrayTomography(EspressoProblem):
     """Forward simulation class
     """
 
     metadata = {
-        "problem_title": "X-ray Tracer",
+        "problem_title": "X-ray Tomography",
         "problem_short_description": "",
 
         "author_names": ["Andrew Valentine"],
@@ -107,12 +107,12 @@ class XrayTracer(EspressoProblem):
         if paths:
             for p in self._paths:
                 ax.plot([p[0],p[2]],[p[1],p[3]],'y',linewidth=0.05)
-        return fig
+        return ax
     
-    def plot_data(self, data, data2=None):
+    def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional
 
-    def misfit(self, data, data2):              # optional
+    def misfit(self, data1, data2):              # optional
         raise NotImplementedError
 
     def log_likelihood(self,data,data2):        # optional

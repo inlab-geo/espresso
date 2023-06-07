@@ -1,4 +1,4 @@
-# Gravity Density
+# Gravity Inversion
 
 This Inversion Test Problem explores the gravitational acceleration of a three-dimensional (example 1) 
 and pseude-2D (example 2) density model onto specified receiver locations. In this example, 

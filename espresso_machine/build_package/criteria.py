@@ -14,7 +14,7 @@ Check comments for these functions for what criteria are implemented.
 
 import os
 import numpy as np
-from matplotlib.figure import Figure
+from matplotlib.axes import Axes
 
 import run_examples
 import _utils
@@ -238,10 +238,11 @@ def _check_is_str(all_results: run_examples.ResultsFromExample, obj, obj_str):
     assert isinstance(obj, str), f"ensure {obj_str} is a string"
 
 
-def _check_is_figure(all_results: run_examples.ResultsFromExample, obj, obj_str):
-    assert isinstance(
-        obj, Figure
-    ), f"ensure {obj_str} returns an instance of matplotlib.figure.Figure"
+def _check_is_axes(all_results: run_examples.ResultsFromExample, obj, obj_str):
+    assert isinstance(obj, Axes) or \
+        (isinstance(obj, list) or isinstance(obj, np.ndarray) \
+            and isinstance(obj[0], Axes)), \
+                f"ensure {obj_str} returns an instance of matplotlib.axes.Axes"
 
 
 def _check_1d_array_like(all_results: run_examples.ResultsFromExample, obj, obj_str):
@@ -344,8 +345,8 @@ attributes_to_check = [
         False,
         [_check_2d_array_like, _check_jac_shape],
     ),
-    ("fig_model", "plot_model(prob.good_model)", False, [_check_is_figure]),
-    ("fig_data", "plot_data(prob.data)", False, [_check_is_figure]),
+    ("fig_model", "plot_model(prob.good_model)", False, [_check_is_axes]),
+    ("fig_data", "plot_data(prob.data)", False, [_check_is_axes]),
     ("misfit", "misfit(prob.data, prob.data)", False, [_check_is_number]),
     (
         "log_likelihood",

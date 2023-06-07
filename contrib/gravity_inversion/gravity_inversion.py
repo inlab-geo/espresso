@@ -15,7 +15,7 @@ from espresso.exceptions import InvalidExampleError
 from espresso.utils import loadtxt
 
 
-class GravityDensity(EspressoProblem):
+class GravityInversion(EspressoProblem):
     """Forward simulation class
     """
 
@@ -128,7 +128,7 @@ class GravityDensity(EspressoProblem):
             plt.colorbar(img, label="Density [kg/m$^3$]")
             ax.set_xlim([-30, 30])
             ax.set_ylim([-30, 30])
-            return fig
+            return ax
         elif self.example_number == 2:
             fig = plt.figure()
             ax = fig.add_subplot(1, 1, 1)
@@ -138,7 +138,7 @@ class GravityDensity(EspressoProblem):
             ax.set_xlabel("y [m]")
             ax.set_ylabel("z [m]")
             plt.colorbar(img, label="Density [kg/m^3]")
-            return fig
+            return ax
         else:
             raise NotImplementedError               # optional
     
@@ -166,7 +166,7 @@ class GravityDensity(EspressoProblem):
             ax.set_xlabel("y [m]")
             ax.set_ylabel("x [m]")
             plt.colorbar(img, label="Gravity [mGal]")
-            return fig
+            return ax
         elif self.example_number == 2:
             fig = plt.figure()
             ax = fig.add_subplot(1, 1, 1)
@@ -175,7 +175,7 @@ class GravityDensity(EspressoProblem):
             ax.set_xlabel("Distance [m]")
             ax.set_ylabel("Gravity [mGal]")
             ax.grid()
-            return fig
+            return ax
         else:
             raise NotImplementedError               # optional
 
