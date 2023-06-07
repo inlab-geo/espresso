@@ -8,11 +8,11 @@ Last updated July 2022
 
 from cofi import BaseProblem, InversionOptions, Inversion
 from cofi.utils import QuadraticReg
-from espresso import FmWavefrontTracker
+from espresso import FmmTomography
 
 
-# get espresso problem FmWavefrontTracker information
-fmm = FmWavefrontTracker()
+# get espresso problem FmmTomography information
+fmm = FmmTomography()
 model_size = fmm.model_size  # number of model parameters
 model_shape = fmm.model_shape  # 2D spatial grids
 data_size = fmm.data_size  # number of data points

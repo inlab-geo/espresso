@@ -10,11 +10,11 @@ import numpy as np
 
 from cofi import BaseProblem, InversionOptions, Inversion
 from cofi.utils import GaussianPrior
-from espresso import FmWavefrontTracker
+from espresso import FmmTomography
 
 
-# get espresso problem FmWavefrontTracker information
-fmm = FmWavefrontTracker()
+# get espresso problem FmmTomography information
+fmm = FmmTomography()
 model_size = fmm.model_size
 model_shape = fmm.model_shape
 data_size = fmm.data_size
