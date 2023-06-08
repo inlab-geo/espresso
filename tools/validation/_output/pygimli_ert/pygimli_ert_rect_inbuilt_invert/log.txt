@@ -3,333 +3,164 @@ Found: 51 free-electrodes
 rMin = 0.5, rMax = 100
 NGauLeg + NGauLag for inverse Fouriertransformation: 13 + 4
 Found non-Neumann domain
-0.013 s
-FOP updating mesh dependencies ... 0 s
+0.0143211 s
+FOP updating mesh dependencies ... 2.667e-06 s
 Obtaining geometric factors (analytical)
 Calculating response for model: min = 50 max = 200
-Allocating memory for primary potential...... 0.003
+Allocating memory for primary potential...... 0.00362029
 
 No primary potential for secondary field calculation. Calculating analytically...
-Factorize (Cholmod) matrix ... 0.006
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.004
-Factorize (Cholmod) matrix ... 0.005
-Factorize (Cholmod) matrix ... 0.004
-Forward: time: 0.16s
-Response: min = 98.7322 max = 218.789 mean = 173.9
-Reciprocity rms(modelReciprocity) 0.409386%, max: 1.53119%
+Forward: time: 0.178275s
+Response: min = 98.6119 max = 219.048 mean = 173.871
+Reciprocity rms(modelReciprocity) 0.408989%, max: 1.53118%
 ModellingBase::setMesh() copying new mesh ... Found datafile: 51 electrodes
 Found: 51 free-electrodes
 rMin = 0.5, rMax = 100
 NGauLeg + NGauLag for inverse Fouriertransformation: 13 + 4
 Found non-Neumann domain
-0.008 s
-FOP updating mesh dependencies ... 0 s
-min/max(dweight) = 4.43405/99.9078
-Calculating response for model: min = 198.604 max = 198.604
-Allocating memory for primary potential...... 0.006
+0.00718442 s
+FOP updating mesh dependencies ... 1.784e-06 s
+min/max(dweight) = 4.40945/99.9078
+Calculating response for model: min = 198.599 max = 198.599
+Allocating memory for primary potential...... 0.00576827
 
 No primary potential for secondary field calculation. Calculating analytically...
-Factorize (Cholmod) matrix ... 0.013
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.345s
-Response: min = 192.893 max = 317.544 mean = 202.89
+Forward: time: 0.891476s
+Response: min = 192.889 max = 317.538 mean = 202.886
 Reciprocity rms(modelReciprocity) 3.72112%, max: 23.5482%
-min/max(dweight) = 4.43405/99.9078
+min/max(dweight) = 4.40945/99.9078
 Building constraints matrix
 constraint matrix of size(nBounds x nModel) 654 x 351
 check Jacobian: wrong dimensions: (0x0) should be (1176x351)  force: 1
 jacobian size invalid, forced recalc: 1
 calculating jacobian matrix (forced=1)...Using existing subpotentials for createJacobian.
-S(48/48-std::mt): 0.001:time: 0.178s
+S(48/48-std::mt): 0.00161694:time: 0.282984s
 sens sum: median = 1.06689 min = 1.01512 max = 4.83401
-... 0.179 s
-min data = 66.0987 max data = 250.385 (1176)
-min error = 0.0100092 max error = 0.225527 (1176)
-min response = 195.705 max response = 309.932 (1176)
+... 0.284572 s
+min data = 65.7814 max data = 250.365 (1176)
+min error = 0.0100092 max error = 0.226785 (1176)
+min response = 195.701 max response = 309.925 (1176)
 calc without reference model
-0: rms/rrms(data, response) = 49.743/43.6923%
-0: chi^2(data, response, error, log) = 213.608
-0: Phi = 251203 + 0 * 20 = 251203
-Iter: 0
+0: rms/rrms(data, response) = 49.7678/43.7607%
+0: chi^2(data, response, error, log) = 212.939
+0: Phi = 250416 + 0 * 20 = 250416
 solve CGLSCDWWtrans with lambda = 20
-Calculating response for model: min = 10.5643 max = 349.829
+Calculating response for model: min = 10.6681 max = 344.413
 Using existing primary potentials.
-Factorize (Cholmod) matrix ... 0.011
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.011
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.269s
-Response: min = 79.7653 max = 300.333 mean = 167.992
-Reciprocity rms(modelReciprocity) 3.80124%, max: 23.5059%
-1: LS newModel: min = 10.5643; max = 349.829
-1: LS newResponse: min = 79.5126; max = 290.053
-1: rms/rrms(data, LS newResponse) = 21.2042/13.2428%
-1: chi^2(data, LS newResponse, error, log) = 36.1441
-1: Phi = 42505.5+42.8876*20=43363.2
-Linesearch tau = 0.84
-Calculating response for model: min = 16.8929 max = 319.534
+Forward: time: 0.813168s
+Response: min = 79.9828 max = 300.234 mean = 168.157
+Reciprocity rms(modelReciprocity) 3.79957%, max: 23.5015%
+1: LS newModel: min = 10.6681; max = 344.413
+1: LS newResponse: min = 79.7305; max = 290.134
+1: rms/rrms(data, LS newResponse) = 21.0719/13.1433%
+1: chi^2(data, LS newResponse, error, log) = 35.9295
+1: Phi = 42253.1+42.6801*20=43106.7
+Linesearch tau = 0.85
+Calculating response for model: min = 16.5413 max = 317.113
 Using existing primary potentials.
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.26s
-Response: min = 94.4061 max = 302.509 mean = 172.957
-Reciprocity rms(modelReciprocity) 3.77291%, max: 23.5126%
-1: Model: min = 16.8929; max = 319.534
-1: Response: min = 94.3059; max = 293.146
-1: rms/rrms(data, Response) = 17.415/10.182%
-1: chi^2(data, Response, error, log) = 29.1245
-1: Phi = 34250.4+30.2615*20=34855.7
+Forward: time: 0.927821s
+Response: min = 93.6401 max = 302.288 mean = 172.769
+Reciprocity rms(modelReciprocity) 3.77333%, max: 23.5085%
+1: Model: min = 16.5413; max = 317.113
+1: Response: min = 93.5133; max = 293.064
+1: rms/rrms(data, Response) = 17.5029/10.249%
+1: chi^2(data, Response, error, log) = 29.0488
+1: Phi = 34161.4+30.8364*20=34778.1
 calculating jacobian matrix (forced=1)...Using existing subpotentials for createJacobian.
-S(48/48-std::mt): 0:time: 0.18s
-sens sum: median = 1.08503 min = 0.904152 max = 4.83269
-... 0.181 s
+S(48/48-std::mt): 0.00408051:time: 0.255737s
+sens sum: median = 1.08517 min = 0.900586 max = 4.83269
+... 0.257606 s
 solve CGLSCDWWtrans with lambda = 20
-Calculating response for model: min = 23.0877 max = 299.895
+Calculating response for model: min = 23.2379 max = 299.327
 Using existing primary potentials.
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.032
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.302s
-Response: min = 98.7991 max = 294.44 mean = 178.938
-Reciprocity rms(modelReciprocity) 3.76146%, max: 23.4997%
+Forward: time: 0.814408s
+Response: min = 98.8931 max = 294.7 mean = 178.91
+Reciprocity rms(modelReciprocity) 3.76056%, max: 23.4995%
 Linesearch tau = 1
-2: Model: min = 23.0877; max = 299.895
-2: Response: min = 99.6838; max = 287.26
-2: rms/rrms(data, Response) = 15.3192/10.649%
-2: chi^2(data, Response, error, log) = 23.9093
-2: Phi = 28117.3+34.6033*20=28809.4
+2: Model: min = 23.2379; max = 299.327
+2: Response: min = 99.7784; max = 287.502
+2: rms/rrms(data, Response) = 15.3129/10.6813%
+2: chi^2(data, Response, error, log) = 23.8904
+2: Phi = 28095.1+34.6867*20=28788.9
 calculating jacobian matrix (forced=1)...Using existing subpotentials for createJacobian.
-S(48/48-std::mt): 0.001:time: 0.174s
-sens sum: median = 1.14553 min = 0.973675 max = 4.83482
-... 0.176 s
+S(48/48-std::mt): 0.000650432:time: 0.226429s
+sens sum: median = 1.14596 min = 0.973491 max = 4.83481
+... 0.227964 s
 solve CGLSCDWWtrans with lambda = 20
-Calculating response for model: min = 20.4962 max = 296.41
+Calculating response for model: min = 20.4487 max = 296.426
 Using existing primary potentials.
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.269s
-Response: min = 98.47 max = 292.379 mean = 178.011
-Reciprocity rms(modelReciprocity) 3.74912%, max: 23.4889%
+Forward: time: 0.847697s
+Response: min = 98.5576 max = 292.669 mean = 177.964
+Reciprocity rms(modelReciprocity) 3.74846%, max: 23.4878%
 Linesearch tau = 1
-3: Model: min = 20.4962; max = 296.41
-3: Response: min = 99.13; max = 285.134
-3: rms/rrms(data, Response) = 14.7099/10.0902%
-3: chi^2(data, Response, error, log) = 22.6738
-3: Phi = 26664.4+40.29*20=27470.2
+3: Model: min = 20.4487; max = 296.426
+3: Response: min = 99.0504; max = 285.405
+3: rms/rrms(data, Response) = 14.6953/10.1062%
+3: chi^2(data, Response, error, log) = 22.6707
+3: Phi = 26660.7+40.365*20=27468
 calculating jacobian matrix (forced=1)...Using existing subpotentials for createJacobian.
-S(48/48-std::mt): 0:time: 0.173s
-sens sum: median = 1.1593 min = 0.97475 max = 4.83262
-... 0.175 s
+S(48/48-std::mt): 0.000554788:time: 0.236996s
+sens sum: median = 1.15948 min = 0.974254 max = 4.83259
+... 0.238611 s
 solve CGLSCDWWtrans with lambda = 20
-Calculating response for model: min = 19.1897 max = 294.673
+Calculating response for model: min = 19.1517 max = 294.945
 Using existing primary potentials.
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.018
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.275s
-Response: min = 99.0195 max = 291.438 mean = 177.375
-Reciprocity rms(modelReciprocity) 3.74149%, max: 23.4778%
+Forward: time: 0.803195s
+Response: min = 99.148 max = 291.726 mean = 177.391
+Reciprocity rms(modelReciprocity) 3.74098%, max: 23.4761%
 Linesearch tau = 1
-4: Model: min = 19.1897; max = 294.673
-4: Response: min = 99.1961; max = 284.157
-4: rms/rrms(data, Response) = 14.3802/9.88502%
-4: chi^2(data, Response, error, log) = 22.1202
-4: Phi = 26013.3+43.1286*20=26875.9
+4: Model: min = 19.1517; max = 294.945
+4: Response: min = 99.1489; max = 284.427
+4: rms/rrms(data, Response) = 14.3899/9.92906%
+4: chi^2(data, Response, error, log) = 22.1286
+4: Phi = 26023.2+43.2194*20=26887.6
 calculating jacobian matrix (forced=1)...Using existing subpotentials for createJacobian.
-S(48/48-std::mt): 0.001:time: 0.162s
-sens sum: median = 1.1691 min = 0.976022 max = 4.83222
-... 0.163 s
+S(48/48-std::mt): 0.000567599:time: 0.239674s
+sens sum: median = 1.16933 min = 0.975356 max = 4.83222
+... 0.241173 s
 solve CGLSCDWWtrans with lambda = 20
-Calculating response for model: min = 18.8747 max = 311.36
+Calculating response for model: min = 18.8505 max = 311.895
 Using existing primary potentials.
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.259s
-Response: min = 98.6979 max = 290.987 mean = 176.45
-Reciprocity rms(modelReciprocity) 3.73723%, max: 23.4639%
+Forward: time: 0.856744s
+Response: min = 98.7085 max = 291.288 mean = 176.468
+Reciprocity rms(modelReciprocity) 3.73682%, max: 23.4631%
 Linesearch tau = 1
-5: Model: min = 18.8747; max = 311.36
-5: Response: min = 98.6038; max = 283.685
-5: rms/rrms(data, Response) = 14.08/9.49358%
-5: chi^2(data, Response, error, log) = 21.8136
-5: Phi = 25652.8+44.9045*20=26550.9
-Calculating response for model: min = 18.8747 max = 311.36
+5: Model: min = 18.8505; max = 311.895
+5: Response: min = 98.5167; max = 283.967
+5: rms/rrms(data, Response) = 14.0864/9.53098%
+5: chi^2(data, Response, error, log) = 21.8238
+5: Phi = 25664.8+44.9668*20=26564.2
+Calculating response for model: min = 18.8505 max = 311.895
 Using existing primary potentials.
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.018
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.273s
-Response: min = 98.6979 max = 290.987 mean = 176.45
-Reciprocity rms(modelReciprocity) 3.73723%, max: 23.4639%
-Calculating response for model: min = 18.8747 max = 311.36
+Forward: time: 0.826041s
+Response: min = 98.7085 max = 291.288 mean = 176.468
+Reciprocity rms(modelReciprocity) 3.73682%, max: 23.4631%
+Calculating response for model: min = 18.8505 max = 311.895
 Using existing primary potentials.
-Factorize (Cholmod) matrix ... 0.01
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.008
-Factorize (Cholmod) matrix ... 0.009
-Factorize (Cholmod) matrix ... 0.009
-Forward: time: 0.261s
-Response: min = 98.6979 max = 290.987 mean = 176.45
-Reciprocity rms(modelReciprocity) 3.73723%, max: 23.4639%
+Forward: time: 0.887237s
+Response: min = 98.7085 max = 291.288 mean = 176.468
+Reciprocity rms(modelReciprocity) 3.73682%, max: 23.4631%
 relativeError set to a value > 0.5 .. assuming this is a percentage Error level dividing them by 100
-Data error estimate (min:max)  0.010009229451098493 : 0.22552739004919173
-fop: <pygimli.physics.ert.ertModelling.ERTModelling object at 0x7f11d8f26a20>
-Data transformation: <pgcore._pygimli_.RTransLogLU object at 0x7f11d0c291c0>
-Model transformation: <pgcore._pygimli_.RTransLog object at 0x7f11d0c40180>
-min/max (data): 66.1/250
-min/max (error): 1%/22.55%
+Data error estimate (min:max)  0.01000922975985971 : 0.22678548917843905
+fop: <pygimli.physics.ert.ertModelling.ERTModelling object at 0x7f285a919ea0>
+Data transformation: <pgcore._pygimli_.RTransLogLU object at 0x7f285a970040>
+Model transformation: <pgcore._pygimli_.RTransLog object at 0x7f285a919f40>
+min/max (data): 65.78/250
+min/max (error): 1%/22.68%
 min/max (start model): 199/199
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-inv.iter 2 ... chi² = 23.91 (dPhi = 17.35%) lam: 20.0
+inv.iter 1 ... chi² = 29.05 (dPhi = 86.11%) lam: 20
 --------------------------------------------------------------------------------
-inv.iter 3 ... chi² = 22.67 (dPhi = 4.65%) lam: 20.0
+inv.iter 2 ... chi² = 23.89 (dPhi = 17.22%) lam: 20.0
 --------------------------------------------------------------------------------
-inv.iter 4 ... chi² = 22.12 (dPhi = 2.16%) lam: 20.0
+inv.iter 3 ... chi² = 22.67 (dPhi = 4.59%) lam: 20.0
 --------------------------------------------------------------------------------
-inv.iter 5 ... chi² = 21.81 (dPhi = 1.21%) lam: 20.0
+inv.iter 4 ... chi² = 22.13 (dPhi = 2.11%) lam: 20.0
+--------------------------------------------------------------------------------
+inv.iter 5 ... chi² = 21.82 (dPhi = 1.2%) lam: 20.0
 ################################################################################
-#                 Abort criteria reached: dPhi = 1.21 (< 2.0%)                 #
+#                 Abort criteria reached: dPhi = 1.2 (< 2.0%)                  #
 ################################################################################
-data misfit: 6.212675716611715
-regularization: 1413.5024015952629
+data misfit: 6.219683081740143
+regularization: 1421.0633916702634

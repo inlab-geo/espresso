@@ -30,6 +30,7 @@ parameters as the basis function.
 import numpy as np
 import matplotlib.pyplot as plt
 from cofi import BaseProblem, InversionOptions, Inversion
+from cofi.utils import QuadraticReg
 
 np.random.seed(42)
 
@@ -76,7 +77,7 @@ def main(output_dir="."):
     inv_problem.set_data(y_observed)
     inv_problem.set_forward(forward_func)
     inv_problem.set_data_misfit("least squares")
-    inv_problem.set_regularization(2, 0.02)
+    inv_problem.set_regularization(0.02 * QuadraticReg(model_shape=(4,)))
     inv_problem.set_initial_model(np.ones(4))
     if show_summary:
         inv_problem.summary()
