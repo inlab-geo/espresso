@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.3.8 (19/06/2023)
+
+### Changed examples
+
+- ReceiverFunctionInversion: added a 3-layer example (4th example)
+
 ## v0.3.7 (07/06/2023)
 
 ### New examples

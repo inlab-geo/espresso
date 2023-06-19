@@ -17,7 +17,7 @@ mt_problem.set_initial_model(mt.starting_model)
 
 # define regularization: smoothing
 smoothing_factor = 10
-reg_smoothing = cofi.utils.QuadraticReg(smoothing_factor, model_size = mt.model_size, reg_type = "smoothing")
+reg_smoothing = smoothing_factor * cofi.utils.QuadraticReg("smoothing", (mt.model_size,))
 reg = reg_smoothing
 
 # Define objective function
