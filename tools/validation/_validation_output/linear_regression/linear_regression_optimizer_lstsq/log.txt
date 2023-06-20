@@ -11,7 +11,7 @@ List of functions/properties created based on what you have provided:
 ---------------------------------------------------------------------
 List of functions/properties that can be further set for the problem:
 ( not all of these may be relevant to your inversion workflow )
-['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_misfit', 'regularization', 'regularization_matrix', 'regularization_factor', 'data_covariance', 'data_covariance_inv', 'blobs_dtype', 'bounds', 'constraints']
+['objective', 'log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'gradient', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_misfit', 'regularization', 'regularization_matrix', 'data_covariance', 'data_covariance_inv', 'blobs_dtype', 'bounds', 'constraints']
 =============================
 Summary for inversion options
 =============================
