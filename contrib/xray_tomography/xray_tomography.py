@@ -1,5 +1,5 @@
 # Application : Xray tomography
-# 37 Earth Sciences -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration-> Xray Tracer
+# 37 Earth Sciences -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration -> Xray Tracer
 # description: this is a description, if you can see this, it works!
 from espresso import EspressoProblem
 import numpy as np
