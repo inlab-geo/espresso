@@ -76,9 +76,9 @@ class FmmTomography(EspressoProblem):
 
             # Add Gaussian noise to data
             print(' Range of travel times: ',np.min(ttdat.T[2]),np.max(ttdat.T[2]),'\n Mean travel time:',np.mean(ttdat.T[2]))
-            sigma =  0.00001                   # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals
+            self.noise_sigma =  0.00001                   # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals
             np.random.seed(61254557)              # set random seed
-            ttdat[:,2]+=np.random.normal(0.0, sigma, len(ttdat.T[2]))
+            ttdat[:,2]+=np.random.normal(0.0, self.noise_sigma, len(ttdat.T[2]))
 
             # true model
             extent = [0.,20.,0.,30.]
@@ -130,11 +130,13 @@ class FmmTomography(EspressoProblem):
 
     @property
     def covariance_matrix(self):                # optional
-        raise NotImplementedError
+        sigma_sq = self.noise_sigma ** 2
+        return np.diag([sigma_sq] * self.data_size)
 
     @property
     def inverse_covariance_matrix(self):
-        raise NotImplementedError               # optional
+        sigma_sq_inv = 1 / self.noise_sigma ** 2
+        return np.diag([sigma_sq_inv] * self.data_size)
 
     def forward(self, model, with_jacobian=False, **kwargs): # accepting "slowness" though keyword is "model"
         slowness_reshaped = model.reshape(self._mstart.shape)
