@@ -129,12 +129,51 @@ class FmmTomography(EspressoProblem):
             self.params["noise_sigma"] =  2                   # Noise is 2, ~5% of standard deviation of initial travel time residuals
             ttdat+=np.random.normal(0.0, self.noise_sigma, len(ttdat))
             self._data = ttdat
+        elif example_number == 3:
+            filenamev = path('datasets/example3/gridt_ex2.vtx')     # filename to read in example velocity model 3
+            filenames = path('datasets/example3/sources_ex2.dat')   # filename to read in example sources for model 3
+            filenamer = path('datasets/example3/receivers_ex2.dat') # filename to read in example receivers for model 3
+            # set up velocity model and source/receivers
+            m,extent = read_vtxmodel(filenamev, with_line_breaks=False) # set up velocity model
+            srcs     = read_sources(filenames)  # set up sources
+            recs     = read_sources(filenamer)  # set up receivers
+            self._mtrue = m
+            self._mstart = 5 * np.ones(m.shape)
+            self._strue = 1 / m
+            self._sstart = 1 / self._mstart
+            self.params["extent"] = extent
+            self.params["receivers"] = recs
+            self.params["sources"] = srcs
+            self.params["model_shape"] = m.shape
+            # generate data
+            ttdat = self.forward(m)
+            print(' New data set has:\n',np.shape(recs)[0],
+                ' receivers\n',np.shape(srcs)[0],
+                ' sources\n',np.shape(ttdat)[0],' travel times')
+            print(' Range of travel times: ',np.min(ttdat),np.max(ttdat),'\n Mean travel time:',np.mean(ttdat))
+            # add noise to data
+            self.params["noise_sigma"] =  1                   # Noise is 1, ~5% of standard deviation of initial travel time residuals
+            ttdat+=np.random.normal(0.0, self.noise_sigma, len(ttdat))
+            self._data = ttdat
         else:
             raise InvalidExampleError
 
     @property
     def description(self):
-        raise NotImplementedError               # optional
+        if self.example_number == 1:
+            return "Cross borehole velocity model"
+        elif self.example_number == 2:
+            return (
+                "Simple alternating checkerboard model, commonly used for testing "
+                "inversion schemes as a synthetic true model. It was taken from the "
+                "fmst fast Marching package of N. Rawlinson."
+            )
+        elif self.example_number == 3:
+            return (
+                "Australian Surface wave Shear velocity model, derived from ambient "
+                "noise tomography of Australia. It comes from the Ph.D. thesis of "
+                "E. Saygin."
+            )
 
     @property
     def model_size(self):
@@ -280,7 +319,7 @@ def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model
 
 # build test velocity models
 # read vtx format velocity model and source receivers files
-def read_vtxmodel(filename):
+def read_vtxmodel(filename, with_line_breaks=True):
     with open(filename, 'r') as f:
         lines = f.readlines()
         columns = lines[0].split()
@@ -295,12 +334,16 @@ def read_vtxmodel(filename):
         vc = np.zeros((nx+2,ny+2))
         k = 3
         for i in range(nx+2):
-            k+=1
+            if with_line_breaks:
+                k += 1
             for j in range(ny+2):
                 columns = lines[k].split()
-                vc[i,j],dummy = float(columns[0]),float(columns[1])
+                vc[i,j] = float(columns[0])
                 k+=1
-        v = vc[1:nx+1,1:ny+1]
+        if with_line_breaks:
+            v = vc[1:nx+1,1:ny+1]
+        else:
+            v = vc[1:nx+1,ny+1:1:-1]
         f.close()
     return v,extent
     
