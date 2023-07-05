@@ -61,23 +61,26 @@ class FmmTomography(EspressoProblem):
         for name in self.tmp_files:
             self.tmp_paths.append(current_dir / name)
 
+        # random seed for data noise          
+        np.random.seed(61254557)              # set random seed
+
+        # execute fm2dss working directory
+        self.exe_fm2dss = str(current_dir)
+
         if example_number == 1:
             # read in data set
-            sourcedat=np.loadtxt(path('datasets/ttimes/sources_crossb_nwt_s10.dat'))
-            recdat = np.loadtxt(path('datasets/ttimes/receivers_crossb_nwt_r10.dat'))
-            ttdat = np.loadtxt(path('datasets/ttimes/ttimes_crossb_nwt_s10_r10.dat'))
+            sourcedat=np.loadtxt(path('datasets/example1/sources_crossb_nwt_s10.dat'))
+            recdat = np.loadtxt(path('datasets/example1/receivers_crossb_nwt_r10.dat'))
+            ttdat = np.loadtxt(path('datasets/example1/ttimes_crossb_nwt_s10_r10.dat'))
             recs = recdat.T[1:].T # set up receivers
             srcs = sourcedat.T[1:].T # set up sources
-            nr,ns = np.shape(recs)[0],np.shape(srcs)[0] # number of receivers and sources
             print(' New data set has:\n',np.shape(recs)[0],
                 ' receivers\n',np.shape(sourcedat)[0],
                 ' sources\n',np.shape(ttdat)[0],' travel times')
-            # rays = (ttdat[:,1] + ttdat[:,0]*nr).astype(int) # find rays from travel time file
 
             # Add Gaussian noise to data
+            self.params["noise_sigma"] =  0.00001                   # Noise is 1.0E-5, ~5% of standard deviation of initial travel time residuals
             print(' Range of travel times: ',np.min(ttdat.T[2]),np.max(ttdat.T[2]),'\n Mean travel time:',np.mean(ttdat.T[2]))
-            self.noise_sigma =  0.00001                   # Noise is 1.0E-4 is ~5% of standard deviation of initial travel time residuals
-            np.random.seed(61254557)              # set random seed
             ttdat[:,2]+=np.random.normal(0.0, self.noise_sigma, len(ttdat.T[2]))
 
             # true model
@@ -91,16 +94,41 @@ class FmmTomography(EspressoProblem):
             slowness_starting = 1 / mb
 
             # assign properties
-            self.exe_fm2dss = str(current_dir)
             self._mtrue = mtrue
             self._mstart = mb
             self._strue = slowness_true
             self._sstart = slowness_starting
-            self._data = ttdat
+            self._data = ttdat[:,2]
             self.params["extent"] = extent
             self.params["receivers"] = recs
             self.params["sources"] = srcs
             self.params["model_shape"] = slowness_true.shape
+        elif example_number == 2:
+            filenamev = path('datasets/example2/gridt_ex1.vtx')     # filename to read in example velocity model 2
+            filenames = path('datasets/example2/sources_ex1.dat')   # filename to read in example sources for model 2
+            filenamer = path('datasets/example2/receivers_ex1.dat') # filename to read in example receivers for model 2
+            # set up velocity model and source/receivers
+            m,extent = read_vtxmodel(filenamev) # set up velocity model
+            srcs     = read_sources(filenames)  # set up sources
+            recs     = read_sources(filenamer)  # set up receivers
+            self._mtrue = m
+            self._mstart = 5 * np.ones(m.shape)
+            self._strue = 1 / m
+            self._sstart = 1 / self._mstart
+            self.params["extent"] = extent
+            self.params["receivers"] = recs
+            self.params["sources"] = srcs
+            self.params["model_shape"] = m.shape
+            # generate data
+            ttdat = self.forward(m)
+            print(' New data set has:\n',np.shape(recs)[0],
+                ' receivers\n',np.shape(srcs)[0],
+                ' sources\n',np.shape(ttdat)[0],' travel times')
+            print(' Range of travel times: ',np.min(ttdat),np.max(ttdat),'\n Mean travel time:',np.mean(ttdat))
+            # add noise to data
+            self.params["noise_sigma"] =  2                   # Noise is 2, ~5% of standard deviation of initial travel time residuals
+            ttdat+=np.random.normal(0.0, self.noise_sigma, len(ttdat))
+            self._data = ttdat
         else:
             raise InvalidExampleError
 
@@ -126,7 +154,7 @@ class FmmTomography(EspressoProblem):
     
     @property
     def data(self):
-        return self._data[:,2].flatten()
+        return self._data.flatten()
 
     @property
     def covariance_matrix(self):                # optional
@@ -249,3 +277,52 @@ def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model
     pos[:, :, 1] = Y
     gauss1,gauss2 = rv1.pdf(pos),rv2.pdf(pos)
     return   2000.*np.ones([nx,ny])  + (vc1-vb)*gauss1/np.max(gauss1) + (vc2-vb)*gauss2/np.max(gauss2)
+
+# build test velocity models
+# read vtx format velocity model and source receivers files
+def read_vtxmodel(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        columns = lines[0].split()
+        ny,nx = int(columns[0]),int(columns[1])
+        columns = lines[1].split()
+        extent = 4*[0.]
+        extent[3],extent[0] = float(columns[0]),float(columns[1])
+        columns = lines[2].split()
+        dlat,dlon = float(columns[0]),float(columns[1])
+        extent[1] = extent[0] + nx*dlon
+        extent[2] = extent[3] - ny*dlat
+        vc = np.zeros((nx+2,ny+2))
+        k = 3
+        for i in range(nx+2):
+            k+=1
+            for j in range(ny+2):
+                columns = lines[k].split()
+                vc[i,j],dummy = float(columns[0]),float(columns[1])
+                k+=1
+        v = vc[1:nx+1,1:ny+1]
+        f.close()
+    return v,extent
+    
+def read_sources(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        columns = lines[0].split()
+        ns = int(columns[0])
+        srcs = np.zeros((ns,2))
+        for i in range(ns):
+            columns = lines[i+1].split()
+            srcs[i,1],srcs[i,0] = float(columns[0]),float(columns[1])
+        f.close()
+    return srcs
+def read_receivers(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        columns = lines[0].split()
+        nr = int(columns[0])
+        recs = np.zeros((nr,2))
+        for i in range(nr):
+            columns = lines[i+1].split()
+            recs[i,1],recs[i,0] = float(columns[0]),float(columns[1])
+        f.close()
+    return recs
