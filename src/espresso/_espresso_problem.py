@@ -1,4 +1,8 @@
 from abc import abstractmethod, ABCMeta
+import numbers
+
+import numpy
+import matplotlib
 
 
 def abstract_metadata_key(*names):
@@ -7,7 +11,7 @@ def abstract_metadata_key(*names):
     """
 
     def _func(cls, *names):
-        """ Function that extends the __init_subclass__ method of a class."""
+        """Function that extends the __init_subclass__ method of a class."""
         cls.__abstract_metadata_keys__ = names
         for name in names:
             setattr(cls, name, NotImplemented)
@@ -26,8 +30,10 @@ def abstract_metadata_key(*names):
                 # if getattr(cls, name, NotImplemented) is NotImplemented:
                 if name not in cls.metadata:
                     raise NotImplementedError(
-                        f"{name} is required as a metadata entry but you haven't defined it"
+                        f"{name} is required as a metadata entry but you haven't"
+                        " defined it"
                     )
+
         cls.__init_subclass__ = classmethod(new_init_subclass)
         return cls
 
@@ -82,8 +88,8 @@ class EspressoProblem(metaclass=ABCMeta):
        dict_keys(['problem_title', 'problem_short_description', 'author_names', 'contact_name', 'contact_email', 'citations', 'linked_sites'])
 
     .. rubric:: Required attributes
-    
-    Required methods and properties are guaranteed to be written by problem 
+
+    Required methods and properties are guaranteed to be written by problem
     contributors and available for user to access.
 
     .. autosummary::
@@ -95,7 +101,7 @@ class EspressoProblem(metaclass=ABCMeta):
         EspressoProblem.forward
 
     .. rubric:: Optional attributes
-    
+
     Optional methods and properties have standards but are not always implemented for
     each Espresso problem. Try using them or check the documentation page for each
     problem to figure out whether they are available.
@@ -113,12 +119,12 @@ class EspressoProblem(metaclass=ABCMeta):
 
     """
 
-    def __init__(self, example_number=1):
+    def __init__(self, example_number: int = 1):
         self.example_number = example_number
         self.params = dict()
 
     @property
-    def description(self):
+    def description(self) -> str:
         """Returns a brief description of current example
 
         Returns
@@ -130,7 +136,7 @@ class EspressoProblem(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def model_size(self):
+    def model_size(self) -> int:
         """Returns the number of model parameters
 
         Returns
@@ -139,10 +145,10 @@ class EspressoProblem(metaclass=ABCMeta):
             The number of model parameters (i.e. the dimension of a model vector).
         """
         raise NotImplementedError
-    
+
     @property
     @abstractmethod
-    def data_size(self):
+    def data_size(self) -> int:
         """Returns the number of data points
 
         Returns
@@ -154,37 +160,37 @@ class EspressoProblem(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def good_model(self):
-        """Returns a model vector that the contributor regards as a sensible 
+    def good_model(self) -> np.ndarray:
+        """Returns a model vector that the contributor regards as a sensible
         explanation of the dataset
 
         Returns
         -------
         numpy.ndarray
-            A model vector that the contributor regards as being a 'correct' or 
-            'sensible' explanation of the dataset. (In some problems it may be the 
-            case that there are many 'equally good' models. The contributor should 
+            A model vector that the contributor regards as being a 'correct' or
+            'sensible' explanation of the dataset. (In some problems it may be the
+            case that there are many 'equally good' models. The contributor should
             select just one of these.) It has the same shape as :attr:`model_size`.
         """
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def starting_model(self):
+    def starting_model(self) -> numpy.ndarray:
         """Returns a model vector representing a typical starting point for inversion
 
         Returns
         -------
         numpy.ndarray
-            A model vector, possibly just np.zeros(model_size), representing a typical 
-            starting point or 'null model' for an inversion. It has the same shape as 
+            A model vector, possibly just np.zeros(model_size), representing a typical
+            starting point or 'null model' for an inversion. It has the same shape as
             :attr:`model_size`.
         """
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def data(self):
+    def data(self) -> numpy.ndarray:
         """Returns a data vector in the same format as output by :meth:`forward`
 
         Returns
@@ -196,7 +202,7 @@ class EspressoProblem(metaclass=ABCMeta):
         raise NotImplementedError
 
     @property
-    def covariance_matrix(self):
+    def covariance_matrix(self) -> numpy.ndarray:
         """Returns the covariance matrix for the data
 
         Returns
@@ -208,29 +214,31 @@ class EspressoProblem(metaclass=ABCMeta):
         raise NotImplementedError
 
     @property
-    def inverse_covariance_matrix(self):
+    def inverse_covariance_matrix(self) -> numpy.ndarray:
         """Returns the inverse data covariance matrix for the data
 
         Returns
         -------
         numpy.ndarray
-            The inverse data covariance matrix, in the shape 
+            The inverse data covariance matrix, in the shape
             (:attr:`data_size`, :attr:`data_size`)
         """
         raise NotImplementedError
 
     @abstractmethod
-    def forward(self, model, with_jacobian=False):
+    def forward(
+        self, model: numpy.ndarray, with_jacobian: bool = False
+    ) -> numpy.ndarray:
         """Perform forward simulation with a model to produce synthetic data
 
         If with_jacobian == True, returns (d, G); else, returns d, where:
 
-        - d : numpy.ndarray, shape(:attr:`data_size`,), a simulated data vector 
+        - d : numpy.ndarray, shape(:attr:`data_size`,), a simulated data vector
           corresponding to the given model
         - G : numpy.ndarray, shape(:attr:`data_size`, :attr:`model_size`), the
           Jacobian such that :math:`G[i,j] = \partial d[i]/\partial model[j]`
-        
-        If an example does not permit calculation of the Jacobian then calling with 
+
+        If an example does not permit calculation of the Jacobian then calling with
         with_jacobian=True should result in a NotImplementedError being raised.
 
         Parameters
@@ -247,7 +255,7 @@ class EspressoProblem(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    def jacobian(self, model):
+    def jacobian(self, model: numpy.ndarray) -> numpy.ndarray:
         """Returns the Jacobian matrix
 
         Parameters
@@ -263,7 +271,7 @@ class EspressoProblem(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    def plot_model(self, model):
+    def plot_model(self, model: numpy.ndarray) -> matplotlib.axes.Axes:
         """Returns a figure containing a basic visualisation of the model
 
         Parameters
@@ -273,13 +281,15 @@ class EspressoProblem(metaclass=ABCMeta):
 
         Returns
         -------
-        matplotlib.figure.Figure
-            A figure handle containing a basic visualisation of the model.
+        matplotlib.axes.Axes
+            A matplotlib Axes handle containing a basic visualisation of the model.
         """
         raise NotImplementedError
-    
-    def plot_data(self, data1, data2 = None):
-        """Returns a figure containing a basic visualisation of a dataset and 
+
+    def plot_data(
+        self, data1: numpy.ndarray, data2: numpy.ndarray = None
+    ) -> matplotlib.axes.Axes:
+        """Returns a figure containing a basic visualisation of a dataset and
         (optionally) comparing it to a second dataset
 
         Parameters
@@ -288,16 +298,16 @@ class EspressoProblem(metaclass=ABCMeta):
             A data vector for visualisation
         data2 : numpy.ndarray, optional
             A second data vector, for comparison with the first, by default None
-        
+
         Returns
         -------
-        matplotlib.figure.Figure
-            A figure handle containing a basic visualisation of a dataset and 
+        matplotlib.axes.Axes
+            A matplotlib Axes handle containing a basic visualisation of a dataset and
             (optionally) comparing it to a second dataset.
         """
         raise NotImplementedError
 
-    def misfit(self, data, pred):
+    def misfit(self, data: numpy.ndarray, pred: numpy.ndarray) -> numbers.Number:
         """Returns a measure of the extent to which a predicted data vector agrees with
         observed data
 
@@ -307,17 +317,19 @@ class EspressoProblem(metaclass=ABCMeta):
             An observed data vector to base on
         pred : numpy.ndarray
             A predicted data vector to evaluate
-        
+
         Returns
         -------
         Number
-            A measure of the extent to which a predicted data vector, ``pred``, agrees 
-            with observed data, ``data``. Smaller numbers imply better agreement; 
+            A measure of the extent to which a predicted data vector, ``pred``, agrees
+            with observed data, ``data``. Smaller numbers imply better agreement;
             0 -> perfect match.
         """
         raise NotImplementedError
-    
-    def log_likelihood(self, data, pred):
+
+    def log_likelihood(
+        self, data: numpy.ndarray, pred: numpy.ndarray
+    ) -> numbers.Number:
         """Returns the log likelihood density value
 
         Parameters
@@ -326,16 +338,16 @@ class EspressoProblem(metaclass=ABCMeta):
             An observed data vector to base on
         pred : numpy.ndarray
             A predicted data vector to evaluate
-        
+
         Returns
         -------
         Number
-            The log likelihood that ``data`` is an imperfect observation of a system 
+            The log likelihood that ``data`` is an imperfect observation of a system
             generating data ``pred``.
         """
         raise NotImplementedError
 
-    def log_prior(self, model):
+    def log_prior(self, model: numpy.ndarray) -> numbers.Number:
         """Returns the log prior density value
 
         Parameters
@@ -346,12 +358,12 @@ class EspressoProblem(metaclass=ABCMeta):
         Returns
         -------
         Number
-            The log probability that a system is described by ``model`` prior to 
+            The log probability that a system is described by ``model`` prior to
             seeing any data.
         """
         raise NotImplementedError
 
-    def list_capabilities(self):
+    def list_capabilities(self) -> list:
         """Returns a dictionary describing the capabilities of the current example
 
         Examples
@@ -362,6 +374,7 @@ class EspressoProblem(metaclass=ABCMeta):
         ['model_size', 'data_size', 'good_model', 'starting_model', 'data', 'description', 'covariance_matrix', 'plot_model', 'plot_data', 'log_likelihood', 'log_prior', 'rf', 'capability_report']
         """
         from .capabilities import list_capabilities
+
         return list_capabilities(self.__class__.__name__)[self.__class__.__name__]
 
     def __getattr__(self, key):

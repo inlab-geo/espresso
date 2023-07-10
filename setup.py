@@ -97,7 +97,7 @@ INSTALL_REQUIRES = [
     "tqdm>=4.0",
     "mpmath>=1.2.0",
     "cython",
-    "seislib>=0.6.11"
+    "seislib>=0.6.13"
 ]
 
 
