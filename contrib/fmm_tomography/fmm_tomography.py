@@ -26,7 +26,7 @@ class FmmTomography(EspressoProblem):
         "citations": [
             (
                 "Rawlinson, N., de Kool, M. and Sambridge, M., 2006. Seismic wavefront tracking in 3-D heterogeneous media: applications with multiple data classes, Explor. Geophys., 37, 322-330.",
-                ""
+                None
             ),
             (
                 "Rawlinson, N. and Urvoy, M., 2006. Simultaneous inversion of active and passive source datasets for 3-D seismic structure with application to Tasmania, Geophys. Res. Lett., 33 L24313",
@@ -34,7 +34,11 @@ class FmmTomography(EspressoProblem):
             ),
             (
                 "de Kool, M., Rawlinson, N. and Sambridge, M. 2006. A practical grid based method for tracking multiple refraction and reflection phases in 3D heterogeneous media, Geophys. J. Int., 167, 253-270",
-                ""
+                None
+            ),
+            (
+                "Saygin, E. 2007. Seismic receiver and noise correlation based studies in Australia, PhD thesis, Australian National University.",
+                "10.25911/5d7a2d1296f96"
             )
         ], # Reference to publication(s) that describe this example. In most 
                                 # cases there will only be a single entry in this list.
@@ -170,9 +174,9 @@ class FmmTomography(EspressoProblem):
             )
         elif self.example_number == 3:
             return (
-                "Australian Surface wave Shear velocity model, derived from ambient "
-                "noise tomography of Australia. It comes from the Ph.D. thesis of "
-                "E. Saygin."
+                "Australian Surface wave Shear velocity model of Australia, derived "
+                "from ambient noise tomography.  From the Ph.D. thesis of E. Saygin "
+                "(2007)"
             )
 
     @property
