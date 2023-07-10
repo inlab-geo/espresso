@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
+import cartopy
 
 from espresso.utils import absolute_path as path, silent_remove
 
@@ -369,20 +370,50 @@ def read_fmst_wave(filename):
     tfield = tfield[:,::-1]
     return tfield
 
-def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,
+def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,use_geographic=False, 
                  figsize=(6,6),title=None,line=1.0,cline='k',alpha=1.0,wfront=None,cwfront='k',
                  diced=True,dicex=8,dicey=8,cbarshrink=0.6,**wkwargs):
     fig = plt.figure(figsize=figsize)
-    if cmap is None: cmap = plt.cm.RdBu
-
-    # if diced option plot the actual B-spline interpolated velocity used by fmst program
     
-    plotmodel = model
-    if(diced):
-        plotmodel = dicedgrid(model,extent=extent,dicex=dicex,dicey=dicey) 
-    
-    plt.imshow(plotmodel.T,origin='lower',extent=extent,cmap=cmap)
+    if use_geographic:
+        x0,x1,y0,y1 = extent
+        xc = (x0 + x1) / 2
+        yc = (y0 + y1) / 2
+        nx, ny = model.shape
+        x = np.linspace(x0, x1, nx)
+        y = np.linspace(y0, y1, ny)
+        yy, xx = np.meshgrid(y, x)
+        zz = model
+        cartopy_projection = cartopy.crs.Mercator(
+            central_longitude=xc, 
+            min_latitude=y0, 
+            max_latitude=y1, 
+            globe=None,
+            latitude_true_scale=None, 
+            false_easting=0.0, 
+            false_northing=0.0, 
+            scale_factor=None
+        )
+        ax = fig.add_subplot(1, 1, 1, projection=cartopy_projection)
+        ax.set_extent(extent, crs=cartopy.crs.PlateCarree())
+        if cmap is None:
+            cmap = plt.colormaps["Greys_r"]
+        cm = ax.pcolormesh(xx, yy, zz, cmap=cmap, transform=cartopy.crs.PlateCarree())
+        ax.coastlines(resolution='10m', color='black')
+        ax.gridlines(color='k', draw_labels=True)
+        fig.colorbar(cm, orientation="horizontal")
+    else:
+        if cmap is None: cmap = plt.cm.RdBu
 
+        # if diced option plot the actual B-spline interpolated velocity used by fmst program
+        
+        plotmodel = model
+        if(diced):
+            plotmodel = dicedgrid(model,extent=extent,dicex=dicex,dicey=dicey) 
+        
+        plt.imshow(plotmodel.T,origin='lower',extent=extent,cmap=cmap)
+        
+        if(wfront is None): plt.colorbar(shrink=cbarshrink)
 
     if paths is not None:
         if(isinstance(paths, np.ndarray) and paths.shape[1] == 4): # we have paths from xrt.tracer so adjust
@@ -399,7 +430,6 @@ def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,
         X, Y = np.meshgrid(np.linspace(extent[0],extent[1],nx), np.linspace(extent[2],extent[3],ny))
         plt.contour(X, Y, wfront.T, **wkwargs)  # Negative contours default to dashed.
     
-    if(wfront is None): plt.colorbar(shrink=cbarshrink)
 
     # plt.show()
     return fig

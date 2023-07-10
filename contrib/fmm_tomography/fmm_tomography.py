@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.stats import multivariate_normal
+import matplotlib.pyplot as plt
+import cartopy
 
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
@@ -257,6 +259,7 @@ class FmmTomography(EspressoProblem):
                     extent=self.extent, 
                     cline=cline, 
                     alpha=alpha,
+                    use_geographic=self.example_number>=3, 
                     **kwargs
                 )
             else:
@@ -266,9 +269,11 @@ class FmmTomography(EspressoProblem):
                     extent=self.extent, 
                     cline=cline, 
                     alpha=alpha,
+                    use_geographic=self.example_number>=3, 
                     **kwargs
                 )
             ax = fig.get_axes()[0]
+            self._plot_labelling(ax)
             return (ax, paths) if return_paths else ax
         else:
             fig = wt.displayModel(
@@ -277,9 +282,12 @@ class FmmTomography(EspressoProblem):
                 extent=self.extent, 
                 cline=cline, 
                 alpha=alpha,
+                use_geographic=self.example_number>=3, 
                 **kwargs
             ) 
-            return fig.get_axes()[0]
+            ax = fig.get_axes()[0]
+            self._plot_labelling(ax)
+            return ax
     
     def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional
@@ -297,6 +305,14 @@ class FmmTomography(EspressoProblem):
         for file_path in self.tmp_paths:
             silent_remove(file_path)
     
+    def _plot_labelling(self, ax):
+        if self.example_number < 3:
+            ax.set_xlabel("x (km)")
+            ax.set_ylabel("y (km)")
+        else:
+            ax.set_xlabel("longitude")
+            ax.set_ylabel("latitude")
+        
 
 def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model
     vc1 = 1700.                           # velocity of circle 1
