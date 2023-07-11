@@ -11,10 +11,11 @@ def _absolute_path(relative_path):
     file_path = (Path(caller_filename_full).parent / relative_path).resolve()
     return file_path
 
+
 def absolute_path(relative_path):
     r"""Returns the absolute path of a data file
 
-    Please always use this function or :func:`loadtxt` when trying to load data from 
+    Please always use this function or :func:`loadtxt` when trying to load data from
     a relative path into an Espresso problem class.
 
     Parameters
@@ -32,10 +33,11 @@ def absolute_path(relative_path):
     """
     return _absolute_path(relative_path)
 
+
 def loadtxt(relative_path, *args, **kwargs):
     r"""Wrapper of :func:`numpy.loadtxt` given a relative path
 
-    Please always use this function or :func:`absolute_path` when trying to load data 
+    Please always use this function or :func:`absolute_path` when trying to load data
     from a relative path into an Espresso problem class.
 
     Parameters

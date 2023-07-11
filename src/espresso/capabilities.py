@@ -15,14 +15,15 @@ import typing
 _all_problems = []
 _capability_matrix = dict()
 
+
 def list_problem_names(capabilities: list = None):
     """Returns a list of all Espresso problem names
-    
+
     Parameters
     ----------
     capabilities : list
         a list of strings to filter the problem names, default to None
-    
+
     Examples
     --------
     >>> import espresso
@@ -32,14 +33,15 @@ def list_problem_names(capabilities: list = None):
     _all_names = [p.__name__ for p in _problems]
     return _all_names
 
+
 def list_problems(capabilities: list = None):
     """Returns a list of all Espresso problem classes
-    
+
     Parameters
     ----------
     capabilities : list
         a list of strings to filter the problem classes, default to None
-    
+
     Examples
     --------
     >>> import espresso
@@ -69,14 +71,15 @@ def list_problems(capabilities: list = None):
                 _problems.append(p)
         return _problems
 
+
 def list_capabilities(problem_names: typing.Union[list, str] = None) -> dict:
     """Returns a dictionary of capabilities filtered by problem names
-    
+
     Parameters
     ----------
     problem_names : list
         a list of strings of problem names, default to None
-    
+
     Examples
     --------
     >>> import espresso
@@ -88,8 +91,12 @@ def list_capabilities(problem_names: typing.Union[list, str] = None) -> dict:
     if problem_names is None:
         return all_capabilities
     else:
-        problem_names = [problem_names] if isinstance(problem_names, str) else problem_names
-        filtered_capabilities = {k: v for k,v in all_capabilities.items() if k in problem_names}
+        problem_names = (
+            [problem_names] if isinstance(problem_names, str) else problem_names
+        )
+        filtered_capabilities = {
+            k: v for k, v in all_capabilities.items() if k in problem_names
+        }
         return filtered_capabilities
 
 
