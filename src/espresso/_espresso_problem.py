@@ -2,7 +2,7 @@ from abc import abstractmethod, ABCMeta
 import numbers
 
 import numpy
-import matplotlib
+from matplotlib.axes import Axes
 
 
 def abstract_metadata_key(*names):
@@ -160,7 +160,7 @@ class EspressoProblem(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def good_model(self) -> np.ndarray:
+    def good_model(self) -> numpy.ndarray:
         """Returns a model vector that the contributor regards as a sensible
         explanation of the dataset
 
@@ -271,7 +271,7 @@ class EspressoProblem(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    def plot_model(self, model: numpy.ndarray) -> matplotlib.axes.Axes:
+    def plot_model(self, model: numpy.ndarray) -> Axes:
         """Returns a figure containing a basic visualisation of the model
 
         Parameters
@@ -288,7 +288,7 @@ class EspressoProblem(metaclass=ABCMeta):
 
     def plot_data(
         self, data1: numpy.ndarray, data2: numpy.ndarray = None
-    ) -> matplotlib.axes.Axes:
+    ) -> Axes:
         """Returns a figure containing a basic visualisation of a dataset and
         (optionally) comparing it to a second dataset
 
