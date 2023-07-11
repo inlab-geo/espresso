@@ -103,7 +103,7 @@ class gridModel(object):
             print("Trying to fix now...")
             try:
                 import stat
-                exe_file = Path(wdir + "/build/fm2dss.o")
+                exe_file = Path(wdir + "/../build/fm2dss.o")
                 st = os.stat(exe_file)
                 os.chmod(exe_file, st.st_mode | stat.S_IEXEC)
                 print("Execute permission given to fm2dss.o.")
@@ -491,7 +491,7 @@ def generateSurfacePoints(nPerSide,extent=(0,1,0,1),surface=[True,True,True,True
     return np.array(out)
 
 def run_fm2dss(wdir):
-    command = "./build/fm2dss.o"
+    command = "../build/fm2dss.o"
     return subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
 
 def compile_fm2dss():

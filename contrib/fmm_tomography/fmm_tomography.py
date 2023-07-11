@@ -1,11 +1,12 @@
+import os
+from pathlib import Path
+import tempfile
 import numpy as np
 from scipy.stats import multivariate_normal
-import matplotlib.pyplot as plt
-import cartopy
 
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
-from espresso.utils import absolute_path as path, silent_remove
+from espresso.utils import absolute_path as path
 from . import waveTracker as wt
 
 
@@ -28,7 +29,7 @@ class FmmTomography(EspressoProblem):
         "citations": [
             (
                 "Rawlinson, N., de Kool, M. and Sambridge, M., 2006. Seismic wavefront tracking in 3-D heterogeneous media: applications with multiple data classes, Explor. Geophys., 37, 322-330.",
-                None
+                ""
             ),
             (
                 "Rawlinson, N. and Urvoy, M., 2006. Simultaneous inversion of active and passive source datasets for 3-D seismic structure with application to Tasmania, Geophys. Res. Lett., 33 L24313",
@@ -36,7 +37,7 @@ class FmmTomography(EspressoProblem):
             ),
             (
                 "de Kool, M., Rawlinson, N. and Sambridge, M. 2006. A practical grid based method for tracking multiple refraction and reflection phases in 3D heterogeneous media, Geophys. J. Int., 167, 253-270",
-                None
+                ""
             ),
             (
                 "Saygin, E. 2007. Seismic receiver and noise correlation based studies in Australia, PhD thesis, Australian National University.",
@@ -63,15 +64,9 @@ class FmmTomography(EspressoProblem):
         self.tmp_files = ["fm2dss.in", "frechet.out", "gridc.vtx", "otimes.dat",
                     "raypath.out", "receivers.dat", "rtravel.out", "sources.dat",
                     "globalp.mod", "traveltime.mod"]
-        self.tmp_paths = []
-        for name in self.tmp_files:
-            self.tmp_paths.append(current_dir / name)
 
         # random seed for data noise          
         np.random.seed(61254557)              # set random seed
-
-        # execute fm2dss working directory
-        self.exe_fm2dss = str(current_dir)
 
         if example_number == 1:
             # read in data set
@@ -113,6 +108,7 @@ class FmmTomography(EspressoProblem):
             filenamev = path('datasets/example2/gridt_ex1.vtx')     # filename to read in example velocity model 2
             filenames = path('datasets/example2/sources_ex1.dat')   # filename to read in example sources for model 2
             filenamer = path('datasets/example2/receivers_ex1.dat') # filename to read in example receivers for model 2
+            filenamett = path('datasets/example2/ttimes.dat')
             # set up velocity model and source/receivers
             m,extent = read_vtxmodel(filenamev) # set up velocity model
             srcs     = read_sources(filenames)  # set up sources
@@ -126,7 +122,7 @@ class FmmTomography(EspressoProblem):
             self.params["sources"] = srcs
             self.params["model_shape"] = m.shape
             # generate data
-            ttdat = self.forward(m)
+            ttdat = np.loadtxt(filenamett)
             print(' New data set has:\n',np.shape(recs)[0],
                 ' receivers\n',np.shape(srcs)[0],
                 ' sources\n',np.shape(ttdat)[0],' travel times')
@@ -139,6 +135,7 @@ class FmmTomography(EspressoProblem):
             filenamev = path('datasets/example3/gridt_ex2.vtx')     # filename to read in example velocity model 3
             filenames = path('datasets/example3/sources_ex2.dat')   # filename to read in example sources for model 3
             filenamer = path('datasets/example3/receivers_ex2.dat') # filename to read in example receivers for model 3
+            filenamett = path('datasets/example3/ttimes.dat')
             # set up velocity model and source/receivers
             m,extent = read_vtxmodel(filenamev, with_line_breaks=False) # set up velocity model
             srcs     = read_sources(filenames)  # set up sources
@@ -152,7 +149,7 @@ class FmmTomography(EspressoProblem):
             self.params["sources"] = srcs
             self.params["model_shape"] = m.shape
             # generate data
-            ttdat = self.forward(m)
+            ttdat = np.loadtxt(filenamett) 
             print(' New data set has:\n',np.shape(recs)[0],
                 ' receivers\n',np.shape(srcs)[0],
                 ' sources\n',np.shape(ttdat)[0],' travel times')
@@ -217,19 +214,14 @@ class FmmTomography(EspressoProblem):
         g = wt.gridModel(velocity, extent=self.extent)
         if "wdir" in kwargs: kwargs.pop("wdir")
         if "frechet" in kwargs: kwargs.pop("frechet")
-        fmm = g.wavefront_tracker(
-            self.receivers, 
-            self.sources, 
-            # verbose=True, 
-            # paths=True, 
+        fmm = self.call_wavefront_tracker(
+            velocity, 
             frechet=True, 
-            wdir=self.exe_fm2dss,
-            **kwargs,
+            **kwargs, 
         )
         # paths = fmm.paths
         ttimes = fmm.ttimes
         A = fmm.frechet.toarray()
-        self.clean_tmp_files()
         if with_jacobian:
             return np.array(ttimes).flatten(), A
         else:
@@ -244,12 +236,9 @@ class FmmTomography(EspressoProblem):
         cline = kwargs.pop("cline", "g")
         alpha = kwargs.pop("alpha", 0.5)
         if with_paths or return_paths:
-            g = wt.gridModel(velocity, extent=self.extent)
-            fmm = g.wavefront_tracker(
-                self.receivers, 
-                self.sources, 
-                paths=True, 
-                wdir=self.exe_fm2dss,
+            fmm = self.call_wavefront_tracker(
+                velocity,
+                paths=True,
             )
             paths = fmm.paths
             if with_paths:
@@ -300,10 +289,22 @@ class FmmTomography(EspressoProblem):
     
     def log_prior(self, model):
         raise NotImplementedError               # optional
-
-    def clean_tmp_files(self):
-        for file_path in self.tmp_paths:
-            silent_remove(file_path)
+    
+    def call_wavefront_tracker(self, velocity_reshaped, **kwargs):
+        original_dir = Path.cwd()
+        g = wt.gridModel(velocity_reshaped, extent=self.extent)
+        with tempfile.TemporaryDirectory(dir=path(".")) as tmpdir:
+            tmpdir = path(tmpdir)
+            print(f'Temporary directory created at {tmpdir}')
+            # os.chdir(tmpdir)
+            fmm = g.wavefront_tracker(
+                self.receivers,
+                self.sources, 
+                wdir=str(tmpdir), 
+                **kwargs,
+            )
+        os.chdir(original_dir)
+        return fmm
     
     def _plot_labelling(self, ax):
         if self.example_number < 3:
