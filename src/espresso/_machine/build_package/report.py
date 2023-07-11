@@ -152,6 +152,12 @@ class ProblemReport:
             self._analyse_compliance()
         else:
             self.api_compliance = self.metadata
+            self.required = None
+            self.optional = None
+            self.required_count = None
+            self.optional_count = None
+            self.additional = None
+            self.additional_count = None
 
     def metadata_ok(self) -> bool:
         return self.metadata == "OK"

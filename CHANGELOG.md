@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.3.9 (11/07/2023)
+
+### Changed examples
+
+- New examples (checkerboard and Australian shear wave velocities) and improvements 
+  in `FmmTomography`
+
 ## v0.3.8 (19/06/2023)
 
 ### Changed examples
