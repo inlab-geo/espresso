@@ -3,6 +3,7 @@ from pathlib import Path
 import tempfile
 import numpy as np
 from scipy.stats import multivariate_normal
+from scipy import sparse
 
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
@@ -201,12 +202,12 @@ class FmmTomography(EspressoProblem):
     @property
     def covariance_matrix(self):                # optional
         sigma_sq = self.noise_sigma ** 2
-        return np.diag([sigma_sq] * self.data_size)
+        return sparse.diags([sigma_sq] * self.data_size)
 
     @property
     def inverse_covariance_matrix(self):
         sigma_sq_inv = 1 / self.noise_sigma ** 2
-        return np.diag([sigma_sq_inv] * self.data_size)
+        return sparse.diags([sigma_sq_inv] * self.data_size)
 
     def forward(self, model, with_jacobian=False, **kwargs): # accepting "slowness" though keyword is "model"
         slowness_reshaped = model.reshape(self._mstart.shape)
