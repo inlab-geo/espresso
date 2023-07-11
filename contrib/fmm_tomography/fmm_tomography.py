@@ -295,7 +295,7 @@ class FmmTomography(EspressoProblem):
         g = wt.gridModel(velocity_reshaped, extent=self.extent)
         with tempfile.TemporaryDirectory(dir=path(".")) as tmpdir:
             tmpdir = path(tmpdir)
-            print(f'Temporary directory created at {tmpdir}')
+            # print(f'Temporary directory created at {tmpdir}')
             # os.chdir(tmpdir)
             fmm = g.wavefront_tracker(
                 self.receivers,
