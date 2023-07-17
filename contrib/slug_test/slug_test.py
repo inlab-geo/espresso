@@ -1,6 +1,3 @@
-# Application : Magnetotelluric 1D
-# 37 Earth Sciences -> 3707 Hydrology -> 370703 Groundwater Hydrology -> Slug Test
-# description: this is a description, if you can see this, it works!
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -225,3 +222,8 @@ yp2 = np.array([1.0000000, 0.9625890, 0.9265770, 0.8919120, 0.8585450,
                 0.0323345, 0.0311248, 0.0299604, 0.0288395, 0.0277606,
                 0.0267220, 0.0257223, 0.0247600, 0.0238337, 0.0229421,
                 0.0220838])
+
+
+
+# 37 Earth Sciences -> 3707 Hydrology -> 370703 Groundwater Hydrology -> Slug Test
+# description: this is a description, if you can see this, it works!

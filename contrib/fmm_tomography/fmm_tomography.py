@@ -1,6 +1,3 @@
-# Application : Fmm tomography
-# 37 Earth Sciences -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration -> Fast Marching Method
-# description: this is a description, if you can see this, it works!
 import subprocess
 import numpy as np
 from scipy.stats import multivariate_normal
@@ -249,3 +246,7 @@ def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model
     pos[:, :, 1] = Y
     gauss1,gauss2 = rv1.pdf(pos),rv2.pdf(pos)
     return   2000.*np.ones([nx,ny])  + (vc1-vb)*gauss1/np.max(gauss1) + (vc2-vb)*gauss2/np.max(gauss2)
+
+
+# 37 Earth Sciences -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration -> Fast Marching Method -> Fmm tomography
+# description: this is a description, if you can see this, it works!

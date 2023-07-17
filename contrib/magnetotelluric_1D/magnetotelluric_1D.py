@@ -1,6 +1,3 @@
-# Application : Magnetotelluric 1D
-# 37 Earth Sciences -> 3706 Geophysics -> 370602 Electrical And Electromanetic Methods In Geophysics -> Magnetotelluric -> Magnetotelluric_1D
-# description: this is a description, if you can see this, it works!
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
 
@@ -337,3 +334,7 @@ def load_data(filename, error_floor = 0.05, subsampling = 3):
 
 
 
+
+
+# 37 Earth Sciences -> 3706 Geophysics -> 370602 Electrical And Electromanetic Methods In Geophysics -> Magnetotelluric -> Magnetotelluric_1D
+# description: this is a description, if you can see this, it works!

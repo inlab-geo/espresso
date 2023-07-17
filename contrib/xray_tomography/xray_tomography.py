@@ -1,6 +1,3 @@
-# Application : Xray tomography
-# 37 Earth Sciences -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration -> Xray Tracer
-# description: this is a description, if you can see this, it works!
 from espresso import EspressoProblem
 import numpy as np
 from espresso import EspressoProblem
@@ -306,3 +303,8 @@ def pngToModel(pngfile,nx,ny,bg=1.,sc=1.):
     except:
         model = sc*(bg+np.asarray(png.convert('L').resize((nx,ny)).transpose(Image.ROTATE_270))/255.)        
     return model
+
+
+
+# 37 Earth Sciences -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration -> Xray Tracer -> Xray tomography
+# description: this is a description, if you can see this, it works!

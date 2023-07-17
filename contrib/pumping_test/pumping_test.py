@@ -1,6 +1,3 @@
-# Application : Magnetotelluric 1D
-# 37 Earth Sciences -> 3707 Hydrology -> 370703 Groundwater Hydrology -> Pumping Test
-# description: this is a description, if you can see this, it works!
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -296,3 +293,11 @@ yp4 = np.array([  0.012805,   0.882463,   0.930532,   1.032340,   1.259800,
                 180.846000, 183.214000, 185.583000, 186.208000])
 
 #yp5 = np.array([])
+
+
+
+
+
+
+# 37 Earth Sciences -> 3707 Hydrology -> 370703 Groundwater Hydrology -> Pumping Test
+# description: this is a description, if you can see this, it works!
