@@ -1,0 +1,622 @@
+=====================================================================
+Summary for inversion problem: Polynomial Regression
+=====================================================================
+Model shape: (4,)
+---------------------------------------------------------------------
+List of functions/properties set by you:
+['objective', 'gradient', 'initial_model', 'model_shape']
+---------------------------------------------------------------------
+List of functions/properties created based on what you have provided:
+-- none --
+---------------------------------------------------------------------
+List of functions/properties that can be further set for the problem:
+( not all of these may be relevant to your inversion workflow )
+['log_posterior', 'log_posterior_with_blobs', 'log_likelihood', 'log_prior', 'hessian', 'hessian_times_vector', 'residual', 'jacobian', 'jacobian_times_vector', 'data_misfit', 'regularization', 'regularization_matrix', 'forward', 'data', 'data_covariance', 'data_covariance_inv', 'blobs_dtype', 'bounds', 'constraints']
+=============================
+Summary for inversion options
+=============================
+Solving method: None set
+Use `suggest_solving_methods()` to check available solving methods.
+-----------------------------
+Backend tool: `<class 'cofi.tools._pytorch_optim.PyTorchOptim'>` - PyTorch Optimizers under module `pytorch.optim`
+References: ['https://pytorch.org/docs/stable/optim.html#algorithms']
+Use `suggest_tools()` to check available backend tools.
+-----------------------------
+Solver-specific parameters: 
+algorithm = Adam
+lr = 0.1
+num_iterations = 500
+Use `suggest_solver_params()` to check required/optional solver-specific parameters.
+Iteration #0, objective value: 2817.747736682037
+Iteration #1, objective value: 2181.6679276745836
+Iteration #2, objective value: 1684.8936958165225
+Iteration #3, objective value: 1323.8051257890638
+Iteration #4, objective value: 1090.9579660127129
+Iteration #5, objective value: 970.6378688020204
+Iteration #6, objective value: 937.2566113469694
+Iteration #7, objective value: 957.4682035209977
+Iteration #8, objective value: 996.8409395336126
+Iteration #9, objective value: 1027.6698840789586
+Iteration #10, objective value: 1033.4017510716067
+Iteration #11, objective value: 1008.6155435414478
+Iteration #12, objective value: 956.3249311618789
+Iteration #13, objective value: 884.575869229846
+Iteration #14, objective value: 803.4446293641448
+Iteration #15, objective value: 722.7795068802691
+Iteration #16, objective value: 650.6560530987898
+Iteration #17, objective value: 592.43038087875
+Iteration #18, objective value: 550.3166246170879
+Iteration #19, objective value: 523.4684379781702
+Iteration #20, objective value: 508.547293731334
+Iteration #21, objective value: 500.6931152508235
+Iteration #22, objective value: 494.7049285446829
+Iteration #23, objective value: 486.1599049140151
+Iteration #24, objective value: 472.2120043916588
+Iteration #25, objective value: 451.9216739289689
+Iteration #26, objective value: 426.11767616115503
+Iteration #27, objective value: 396.90993426189686
+Iteration #28, objective value: 367.02408996849107
+Iteration #29, objective value: 339.12363480478786
+Iteration #30, objective value: 315.25111633606343
+Iteration #31, objective value: 296.47656122158907
+Iteration #32, objective value: 282.79581057736016
+Iteration #33, objective value: 273.27350477672024
+Iteration #34, objective value: 266.3767912292147
+Iteration #35, objective value: 260.4056251444986
+Iteration #36, objective value: 253.9073302206293
+Iteration #37, objective value: 245.9757862955295
+Iteration #38, objective value: 236.37585438964226
+Iteration #39, objective value: 225.48643429685174
+Iteration #40, objective value: 214.10259216340302
+Iteration #41, objective value: 203.1658857676417
+Iteration #42, objective value: 193.49878936844084
+Iteration #43, objective value: 185.60717953816103
+Iteration #44, objective value: 179.59024402019443
+Iteration #45, objective value: 175.16654554734927
+Iteration #46, objective value: 171.79512252029127
+Iteration #47, objective value: 168.8482679705318
+Iteration #48, objective value: 165.78353118812487
+Iteration #49, objective value: 162.26860814739337
+Iteration #50, objective value: 158.23139095472627
+Iteration #51, objective value: 153.83182028098298
+Iteration #52, objective value: 149.37439073980178
+Iteration #53, objective value: 145.1940360369108
+Iteration #54, objective value: 141.5509756533549
+Iteration #55, objective value: 138.56275207332374
+Iteration #56, objective value: 136.1874842577401
+Iteration #57, objective value: 134.2559804757905
+Iteration #58, objective value: 132.53656896451523
+Iteration #59, objective value: 130.80901641136322
+Iteration #60, objective value: 128.92431396036028
+Iteration #61, objective value: 126.83446955795621
+Iteration #62, objective value: 124.58768831729984
+Iteration #63, objective value: 122.29547725441621
+Iteration #64, objective value: 120.08583657296664
+Iteration #65, objective value: 118.05893399214942
+Iteration #66, objective value: 116.25855699548335
+Iteration #67, objective value: 114.66586365035512
+Iteration #68, objective value: 113.21406344320188
+Iteration #69, objective value: 111.81624837148365
+Iteration #70, objective value: 110.39550425704999
+Iteration #71, objective value: 108.9072460686622
+Iteration #72, objective value: 107.34768606983724
+Iteration #73, objective value: 105.7477534417525
+Iteration #74, objective value: 104.15666199075359
+Iteration #75, objective value: 102.62212566001129
+Iteration #76, objective value: 101.17430417784887
+Iteration #77, objective value: 99.81826985876499
+Iteration #78, objective value: 98.53621265656338
+Iteration #79, objective value: 97.29712205940507
+Iteration #80, objective value: 96.06946982014345
+Iteration #81, objective value: 94.83205455919008
+Iteration #82, objective value: 93.57953092428444
+Iteration #83, objective value: 92.32152052842389
+Iteration #84, objective value: 91.07661654536264
+Iteration #85, objective value: 89.86419339418558
+Iteration #86, objective value: 88.69726788743375
+Iteration #87, objective value: 87.57878975621082
+Iteration #88, objective value: 86.5021488486814
+Iteration #89, objective value: 85.4550471220373
+Iteration #90, objective value: 84.42479483952619
+Iteration #91, objective value: 83.40286968834714
+Iteration #92, objective value: 82.38718155814695
+Iteration #93, objective value: 81.38157342081924
+Iteration #94, objective value: 80.39318726034098
+Iteration #95, objective value: 79.42902272119618
+Iteration #96, objective value: 78.49311204867205
+Iteration #97, objective value: 77.58528029432692
+Iteration #98, objective value: 76.70170735109805
+Iteration #99, objective value: 75.83678788478821
+Iteration #100, objective value: 74.9853672066281
+Iteration #101, objective value: 74.14443146392392
+Iteration #102, objective value: 73.313687057002
+Iteration #103, objective value: 72.49498551266491
+Iteration #104, objective value: 71.69100816999715
+Iteration #105, objective value: 70.90384985595146
+Iteration #106, objective value: 70.13407876060049
+Iteration #107, objective value: 69.38056867982014
+Iteration #108, objective value: 68.64104448573497
+Iteration #109, objective value: 67.91300531583303
+Iteration #110, objective value: 67.19459156292989
+Iteration #111, objective value: 66.48505399572583
+Iteration #112, objective value: 65.78469982754521
+Iteration #113, objective value: 65.09442413604962
+Iteration #114, objective value: 64.41508751693587
+Iteration #115, objective value: 63.747021987012744
+Iteration #116, objective value: 63.089848394045994
+Iteration #117, objective value: 62.44262936049277
+Iteration #118, objective value: 61.804237748824036
+Iteration #119, objective value: 61.17374971430021
+Iteration #120, objective value: 60.55069209470425
+Iteration #121, objective value: 59.9350632318012
+Iteration #122, objective value: 59.32715577177422
+Iteration #123, objective value: 58.72728981598144
+Iteration #124, objective value: 58.135585480612406
+Iteration #125, objective value: 57.55186583542032
+Iteration #126, objective value: 56.97570995257005
+Iteration #127, objective value: 56.4066074486095
+Iteration #128, objective value: 55.84412970465094
+Iteration #129, objective value: 55.2880396438654
+Iteration #130, objective value: 54.73830183592871
+Iteration #131, objective value: 54.195004987948494
+Iteration #132, objective value: 53.65824570481772
+Iteration #133, objective value: 53.12803155616814
+Iteration #134, objective value: 52.60424328384999
+Iteration #135, objective value: 52.086662907273514
+Iteration #136, objective value: 51.57504374571874
+Iteration #137, objective value: 51.06918345384647
+Iteration #138, objective value: 50.568966285661894
+Iteration #139, objective value: 50.07436043736092
+Iteration #140, objective value: 49.5853792004648
+Iteration #141, objective value: 49.1020297970528
+Iteration #142, objective value: 48.6242754589913
+Iteration #143, objective value: 48.15202593442753
+Iteration #144, objective value: 47.68515589886685
+Iteration #145, objective value: 47.223537863761614
+Iteration #146, objective value: 46.767071660785305
+Iteration #147, objective value: 46.315697194949614
+Iteration #148, objective value: 45.86938726340916
+Iteration #149, objective value: 45.4281271830216
+Iteration #150, objective value: 44.99189308353743
+Iteration #151, objective value: 44.56063936325416
+Iteration #152, objective value: 44.134299668560196
+Iteration #153, objective value: 43.71279855436553
+Iteration #154, objective value: 43.29606633544616
+Iteration #155, objective value: 42.88404936722096
+Iteration #156, objective value: 42.47671151604361
+Iteration #157, objective value: 42.07402756979358
+Iteration #158, objective value: 41.67597313519225
+Iteration #159, objective value: 41.28251651451649
+Iteration #160, objective value: 40.89361615511439
+Iteration #161, objective value: 40.50922391850034
+Iteration #162, objective value: 40.129291506494354
+Iteration #163, objective value: 39.75377627467351
+Iteration #164, objective value: 39.382643610584765
+Iteration #165, objective value: 39.01586524690625
+Iteration #166, objective value: 38.65341501955891
+Iteration #167, objective value: 38.29526460601628
+Iteration #168, objective value: 37.94138135913193
+Iteration #169, objective value: 37.59172893669609
+Iteration #170, objective value: 37.24626989564976
+Iteration #171, objective value: 36.90496856725686
+Iteration #172, objective value: 36.56779267642035
+Iteration #173, objective value: 36.2347130742524
+Iteration #174, objective value: 35.90570202898835
+Iteration #175, objective value: 35.58073118641148
+Iteration #176, objective value: 35.259770292633206
+Iteration #177, objective value: 34.94278719256805
+Iteration #178, objective value: 34.629748869956
+Iteration #179, objective value: 34.32062279519725
+Iteration #180, objective value: 34.0153778143022
+Iteration #181, objective value: 33.71398418531016
+Iteration #182, objective value: 33.41641288451962
+Iteration #183, objective value: 33.12263466897213
+Iteration #184, objective value: 32.832619427482975
+Iteration #185, objective value: 32.54633610912328
+Iteration #186, objective value: 32.26375316276333
+Iteration #187, objective value: 31.984839161567272
+Iteration #188, objective value: 31.709563244533854
+Iteration #189, objective value: 31.437895169100614
+Iteration #190, objective value: 31.169805013548185
+Iteration #191, objective value: 30.905262750095616
+Iteration #192, objective value: 30.644237941559705
+Iteration #193, objective value: 30.386699704242687
+Iteration #194, objective value: 30.13261691094445
+Iteration #195, objective value: 29.881958482206727
+Iteration #196, objective value: 29.634693592360144
+Iteration #197, objective value: 29.390791693851142
+Iteration #198, objective value: 29.150222379947685
+Iteration #199, objective value: 28.912955191517195
+Iteration #200, objective value: 28.67895948625015
+Iteration #201, objective value: 28.448204433790846
+Iteration #202, objective value: 28.22065911956203
+Iteration #203, objective value: 27.99629268276909
+Iteration #204, objective value: 27.775074408075337
+Iteration #205, objective value: 27.556973730407304
+Iteration #206, objective value: 27.341960168136037
+Iteration #207, objective value: 27.130003237514927
+Iteration #208, objective value: 26.92107240265966
+Iteration #209, objective value: 26.715137085889932
+Iteration #210, objective value: 26.512166724811177
+Iteration #211, objective value: 26.312130838410425
+Iteration #212, objective value: 26.1149990659208
+Iteration #213, objective value: 25.920741164083477
+Iteration #214, objective value: 25.729326974737933
+Iteration #215, objective value: 25.540726389595125
+Iteration #216, objective value: 25.354909335967374
+Iteration #217, objective value: 25.17184579098569
+Iteration #218, objective value: 24.991505814043983
+Iteration #219, objective value: 24.813859578418317
+Iteration #220, objective value: 24.63887738677872
+Iteration #221, objective value: 24.466529667306517
+Iteration #222, objective value: 24.296786958960915
+Iteration #223, objective value: 24.12961989922922
+Iteration #224, objective value: 23.964999223845506
+Iteration #225, objective value: 23.802895779212424
+Iteration #226, objective value: 23.643280540591388
+Iteration #227, objective value: 23.48612462687627
+Iteration #228, objective value: 23.33139930633144
+Iteration #229, objective value: 23.17907599395193
+Iteration #230, objective value: 23.02912624589655
+Iteration #231, objective value: 22.881521757161277
+Iteration #232, objective value: 22.736234365569544
+Iteration #233, objective value: 22.593236060762088
+Iteration #234, objective value: 22.45249899402764
+Iteration #235, objective value: 22.313995484966863
+Iteration #236, objective value: 22.177698023521042
+Iteration #237, objective value: 22.04357926888015
+Iteration #238, objective value: 21.911612048335183
+Iteration #239, objective value: 21.78176935856098
+Iteration #240, objective value: 21.654024369829564
+Iteration #241, objective value: 21.528350431710365
+Iteration #242, objective value: 21.40472107809059
+Iteration #243, objective value: 21.28311003008043
+Iteration #244, objective value: 21.16349119685055
+Iteration #245, objective value: 21.045838675646834
+Iteration #246, objective value: 20.93012675244876
+Iteration #247, objective value: 20.81632990401671
+Iteration #248, objective value: 20.704422801017675
+Iteration #249, objective value: 20.594380311241274
+Iteration #250, objective value: 20.4861775019735
+Iteration #251, objective value: 20.379789641223365
+Iteration #252, objective value: 20.27519219820623
+Iteration #253, objective value: 20.172360843822428
+Iteration #254, objective value: 20.071271451682442
+Iteration #255, objective value: 19.97190009973212
+Iteration #256, objective value: 19.874223072087425
+Iteration #257, objective value: 19.778216860569906
+Iteration #258, objective value: 19.683858165658645
+Iteration #259, objective value: 19.591123896941788
+Iteration #260, objective value: 19.49999117340102
+Iteration #261, objective value: 19.410437323857796
+Iteration #262, objective value: 19.322439887698614
+Iteration #263, objective value: 19.235976615747404
+Iteration #264, objective value: 19.151025471033257
+Iteration #265, objective value: 19.067564629266116
+Iteration #266, objective value: 18.985572479006862
+Iteration #267, objective value: 18.90502762167161
+Iteration #268, objective value: 18.825908871547703
+Iteration #269, objective value: 18.74819525591581
+Iteration #270, objective value: 18.671866015244312
+Iteration #271, objective value: 18.596900603339652
+Iteration #272, objective value: 18.523278687344632
+Iteration #273, objective value: 18.450980147555526
+Iteration #274, objective value: 18.37998507711349
+Iteration #275, objective value: 18.310273781660193
+Iteration #276, objective value: 18.241826779018226
+Iteration #277, objective value: 18.174624798893547
+Iteration #278, objective value: 18.10864878254792
+Iteration #279, objective value: 18.043879882384168
+Iteration #280, objective value: 17.980299461421122
+Iteration #281, objective value: 17.917889092680067
+Iteration #282, objective value: 17.856630558527414
+Iteration #283, objective value: 17.796505850008817
+Iteration #284, objective value: 17.73749716617936
+Iteration #285, objective value: 17.679586913407164
+Iteration #286, objective value: 17.62275770462139
+Iteration #287, objective value: 17.566992358490676
+Iteration #288, objective value: 17.512273898540467
+Iteration #289, objective value: 17.458585552231806
+Iteration #290, objective value: 17.405910750020738
+Iteration #291, objective value: 17.35423312440334
+Iteration #292, objective value: 17.303536508936126
+Iteration #293, objective value: 17.253804937218025
+Iteration #294, objective value: 17.205022641826456
+Iteration #295, objective value: 17.15717405321083
+Iteration #296, objective value: 17.11024379855605
+Iteration #297, objective value: 17.064216700625487
+Iteration #298, objective value: 17.01907777658768
+Iteration #299, objective value: 16.974812236821933
+Iteration #300, objective value: 16.931405483696636
+Iteration #301, objective value: 16.88884311031651
+Iteration #302, objective value: 16.847110899241045
+Iteration #303, objective value: 16.806194821180345
+Iteration #304, objective value: 16.76608103367422
+Iteration #305, objective value: 16.726755879756464
+Iteration #306, objective value: 16.688205886602823
+Iteration #307, objective value: 16.65041776415959
+Iteration #308, objective value: 16.613378403751486
+Iteration #309, objective value: 16.577074876670423
+Iteration #310, objective value: 16.54149443274857
+Iteration #311, objective value: 16.506624498919155
+Iteration #312, objective value: 16.47245267776608
+Iteration #313, objective value: 16.438966746062057
+Iteration #314, objective value: 16.40615465329403
+Iteration #315, objective value: 16.37400452017546
+Iteration #316, objective value: 16.342504637146902
+Iteration #317, objective value: 16.311643462866915
+Iteration #318, objective value: 16.28140962269499
+Iteration #319, objective value: 16.251791907167732
+Iteration #320, objective value: 16.222779270468017
+Iteration #321, objective value: 16.19436082888683
+Iteration #322, objective value: 16.166525859278128
+Iteration #323, objective value: 16.13926379750759
+Iteration #324, objective value: 16.112564236896628
+Iteration #325, objective value: 16.086416926662782
+Iteration #326, objective value: 16.060811770357226
+Iteration #327, objective value: 16.03573882429955
+Iteration #328, objective value: 16.011188296009784
+Iteration #329, objective value: 15.987150542638254
+Iteration #330, objective value: 15.96361606939379
+Iteration #331, objective value: 15.940575527971543
+Iteration #332, objective value: 15.918019714980726
+Iteration #333, objective value: 15.895939570373113
+Iteration #334, objective value: 15.874326175872449
+Iteration #335, objective value: 15.85317075340494
+Iteration #336, objective value: 15.8324646635313
+Iteration #337, objective value: 15.812199403881035
+Iteration #338, objective value: 15.792366607589477
+Iteration #339, objective value: 15.7729580417381
+Iteration #340, objective value: 15.753965605798607
+Iteration #341, objective value: 15.735381330080898
+Iteration #342, objective value: 15.71719737418533
+Iteration #343, objective value: 15.699406025459716
+Iteration #344, objective value: 15.681999697461203
+Iteration #345, objective value: 15.664970928423893
+Iteration #346, objective value: 15.648312379732292
+Iteration #347, objective value: 15.632016834400991
+Iteration #348, objective value: 15.616077195560804
+Iteration #349, objective value: 15.600486484951642
+Iteration #350, objective value: 15.585237841422481
+Iteration #351, objective value: 15.570324519438692
+Iteration #352, objective value: 15.555739887597085
+Iteration #353, objective value: 15.541477427148992
+Iteration #354, objective value: 15.52753073053152
+Iteration #355, objective value: 15.51389349990724
+Iteration #356, objective value: 15.500559545712639
+Iteration #357, objective value: 15.487522785215349
+Iteration #358, objective value: 15.474777241080607
+Iteration #359, objective value: 15.46231703994716
+Iteration #360, objective value: 15.450136411012611
+Iteration #361, objective value: 15.438229684628634
+Iteration #362, objective value: 15.42659129090609
+Iteration #363, objective value: 15.415215758330222
+Iteration #364, objective value: 15.404097712386154
+Iteration #365, objective value: 15.393231874194887
+Iteration #366, objective value: 15.382613059159738
+Iteration #367, objective value: 15.372236175623833
+Iteration #368, objective value: 15.362096223538053
+Iteration #369, objective value: 15.352188293140342
+Iteration #370, objective value: 15.342507563645997
+Iteration #371, objective value: 15.333049301949032
+Iteration #372, objective value: 15.32380886133523
+Iteration #373, objective value: 15.314781680206275
+Iteration #374, objective value: 15.305963280815629
+Iteration #375, objective value: 15.297349268016003
+Iteration #376, objective value: 15.288935328018379
+Iteration #377, objective value: 15.280717227162992
+Iteration #378, objective value: 15.272690810701945
+Iteration #379, objective value: 15.264852001593852
+Iteration #380, objective value: 15.257196799310343
+Iteration #381, objective value: 15.24972127865454
+Iteration #382, objective value: 15.242421588591727
+Iteration #383, objective value: 15.235293951091801
+Iteration #384, objective value: 15.228334659984071
+Iteration #385, objective value: 15.221540079824033
+Iteration #386, objective value: 15.214906644772377
+Iteration #387, objective value: 15.208430857486034
+Iteration #388, objective value: 15.202109288021536
+Iteration #389, objective value: 15.195938572750439
+Iteration #390, objective value: 15.18991541328696
+Iteration #391, objective value: 15.184036575427818
+Iteration #392, objective value: 15.178298888104148
+Iteration #393, objective value: 15.172699242345674
+Iteration #394, objective value: 15.167234590256937
+Iteration #395, objective value: 15.161901944005756
+Iteration #396, objective value: 15.156698374823604
+Iteration #397, objective value: 15.15162101201824
+Iteration #398, objective value: 15.146667041998208
+Iteration #399, objective value: 15.141833707309589
+Iteration #400, objective value: 15.137118305684375
+Iteration #401, objective value: 15.132518189101047
+Iteration #402, objective value: 15.128030762856982
+Iteration #403, objective value: 15.123653484652612
+Iteration #404, objective value: 15.119383863687409
+Iteration #405, objective value: 15.115219459767642
+Iteration #406, objective value: 15.111157882425818
+Iteration #407, objective value: 15.107196790051667
+Iteration #408, objective value: 15.10333388903474
+Iteration #409, objective value: 15.099566932918577
+Iteration #410, objective value: 15.095893721566188
+Iteration #411, objective value: 15.092312100336958
+Iteration #412, objective value: 15.088819959274833
+Iteration #413, objective value: 15.085415232307838
+Iteration #414, objective value: 15.08209589645858
+Iteration #415, objective value: 15.078859971065958
+Iteration #416, objective value: 15.075705517017807
+Iteration #417, objective value: 15.072630635994585
+Iteration #418, objective value: 15.069633469723682
+Iteration #419, objective value: 15.066712199244732
+Iteration #420, objective value: 15.063865044185473
+Iteration #421, objective value: 15.06109026204824
+Iteration #422, objective value: 15.058386147506951
+Iteration #423, objective value: 15.055751031714577
+Iteration #424, objective value: 15.053183281620807
+Iteration #425, objective value: 15.050681299300171
+Iteration #426, objective value: 15.04824352129013
+Iteration #427, objective value: 15.045868417939317
+Iteration #428, objective value: 15.043554492765756
+Iteration #429, objective value: 15.04130028182497
+Iteration #430, objective value: 15.039104353087763
+Iteration #431, objective value: 15.03696530582792
+Iteration #432, objective value: 15.034881770019275
+Iteration #433, objective value: 15.032852405742396
+Iteration #434, objective value: 15.0308759026007
+Iteration #435, objective value: 15.028950979145785
+Iteration #436, objective value: 15.027076382312066
+Iteration #437, objective value: 15.025250886860448
+Iteration #438, objective value: 15.023473294831149
+Iteration #439, objective value: 15.021742435005232
+Iteration #440, objective value: 15.020057162375162
+Iteration #441, objective value: 15.018416357623948
+Iteration #442, objective value: 15.01681892661308
+Iteration #443, objective value: 15.015263799878705
+Iteration #444, objective value: 15.013749932136573
+Iteration #445, objective value: 15.012276301795021
+Iteration #446, objective value: 15.010841910476381
+Iteration #447, objective value: 15.009445782546436
+Iteration #448, objective value: 15.008086964651948
+Iteration #449, objective value: 15.006764525266014
+Iteration #450, objective value: 15.005477554241422
+Iteration #451, objective value: 15.00422516237167
+Iteration #452, objective value: 15.003006480959563
+Iteration #453, objective value: 15.001820661393483
+Iteration #454, objective value: 15.00066687473095
+Iteration #455, objective value: 14.999544311289744
+Iteration #456, objective value: 14.998452180246044
+Iteration #457, objective value: 14.99738970923988
+Iteration #458, objective value: 14.996356143987638
+Iteration #459, objective value: 14.995350747901442
+Iteration #460, objective value: 14.994372801715487
+Iteration #461, objective value: 14.993421603119144
+Iteration #462, objective value: 14.992496466396675
+Iteration #463, objective value: 14.991596722073684
+Iteration #464, objective value: 14.990721716569892
+Iteration #465, objective value: 14.989870811858472
+Iteration #466, objective value: 14.989043385131541
+Iteration #467, objective value: 14.988238828472069
+Iteration #468, objective value: 14.987456548531728
+Iteration #469, objective value: 14.98669596621492
+Iteration #470, objective value: 14.985956516368667
+Iteration #471, objective value: 14.985237647478451
+Iteration #472, objective value: 14.984538821369789
+Iteration #473, objective value: 14.98385951291543
+Iteration #474, objective value: 14.983199209748372
+Iteration #475, objective value: 14.982557411980064
+Iteration #476, objective value: 14.981933631924393
+Iteration #477, objective value: 14.981327393826781
+Iteration #478, objective value: 14.98073823359862
+Iteration #479, objective value: 14.980165698556966
+Iteration #480, objective value: 14.979609347169195
+Iteration #481, objective value: 14.979068748802778
+Iteration #482, objective value: 14.97854348348
+Iteration #483, objective value: 14.978033141637496
+Iteration #484, objective value: 14.977537323890541
+Iteration #485, objective value: 14.977055640802174
+Iteration #486, objective value: 14.976587712656833
+Iteration #487, objective value: 14.976133169238544
+Iteration #488, objective value: 14.975691649613658
+Iteration #489, objective value: 14.975262801917948
+Iteration #490, objective value: 14.974846283148045
+Iteration #491, objective value: 14.974441758957084
+Iteration #492, objective value: 14.974048903454614
+Iteration #493, objective value: 14.973667399010525
+Iteration #494, objective value: 14.973296936063125
+Iteration #495, objective value: 14.9729372129311
+Iteration #496, objective value: 14.972587935629386
+Iteration #497, objective value: 14.972248817688973
+Iteration #498, objective value: 14.97191957998032
+Iteration #499, objective value: 14.97159995054059
+============================
+Summary for inversion result
+============================
+SUCCESS
+----------------------------
+model: [-5.68109937 -5.08831274  1.80436754  0.96706441]
+objective_value: 14.97159995054059
+losses: tensor([2817.7477, 2181.6679, 1684.8937, 1323.8051, 1090.9580,  970.6379,
+         937.2566,  957.4682,  996.8409, 1027.6699, 1033.4018, 1008.6155,
+         956.3249,  884.5759,  803.4446,  722.7795,  650.6561,  592.4304,
+         550.3166,  523.4684,  508.5473,  500.6931,  494.7049,  486.1599,
+         472.2120,  451.9217,  426.1177,  396.9099,  367.0241,  339.1236,
+         315.2511,  296.4766,  282.7958,  273.2735,  266.3768,  260.4056,
+         253.9073,  245.9758,  236.3759,  225.4864,  214.1026,  203.1659,
+         193.4988,  185.6072,  179.5902,  175.1665,  171.7951,  168.8483,
+         165.7835,  162.2686,  158.2314,  153.8318,  149.3744,  145.1940,
+         141.5510,  138.5628,  136.1875,  134.2560,  132.5366,  130.8090,
+         128.9243,  126.8345,  124.5877,  122.2955,  120.0858,  118.0589,
+         116.2586,  114.6659,  113.2141,  111.8162,  110.3955,  108.9072,
+         107.3477,  105.7478,  104.1567,  102.6221,  101.1743,   99.8183,
+          98.5362,   97.2971,   96.0695,   94.8321,   93.5795,   92.3215,
+          91.0766,   89.8642,   88.6973,   87.5788,   86.5021,   85.4550,
+          84.4248,   83.4029,   82.3872,   81.3816,   80.3932,   79.4290,
+          78.4931,   77.5853,   76.7017,   75.8368,   74.9854,   74.1444,
+          73.3137,   72.4950,   71.6910,   70.9038,   70.1341,   69.3806,
+          68.6410,   67.9130,   67.1946,   66.4851,   65.7847,   65.0944,
+          64.4151,   63.7470,   63.0898,   62.4426,   61.8042,   61.1737,
+          60.5507,   59.9351,   59.3272,   58.7273,   58.1356,   57.5519,
+          56.9757,   56.4066,   55.8441,   55.2880,   54.7383,   54.1950,
+          53.6582,   53.1280,   52.6042,   52.0867,   51.5750,   51.0692,
+          50.5690,   50.0744,   49.5854,   49.1020,   48.6243,   48.1520,
+          47.6852,   47.2235,   46.7671,   46.3157,   45.8694,   45.4281,
+          44.9919,   44.5606,   44.1343,   43.7128,   43.2961,   42.8840,
+          42.4767,   42.0740,   41.6760,   41.2825,   40.8936,   40.5092,
+          40.1293,   39.7538,   39.3826,   39.0159,   38.6534,   38.2953,
+          37.9414,   37.5917,   37.2463,   36.9050,   36.5678,   36.2347,
+          35.9057,   35.5807,   35.2598,   34.9428,   34.6297,   34.3206,
+          34.0154,   33.7140,   33.4164,   33.1226,   32.8326,   32.5463,
+          32.2638,   31.9848,   31.7096,   31.4379,   31.1698,   30.9053,
+          30.6442,   30.3867,   30.1326,   29.8820,   29.6347,   29.3908,
+          29.1502,   28.9130,   28.6790,   28.4482,   28.2207,   27.9963,
+          27.7751,   27.5570,   27.3420,   27.1300,   26.9211,   26.7151,
+          26.5122,   26.3121,   26.1150,   25.9207,   25.7293,   25.5407,
+          25.3549,   25.1718,   24.9915,   24.8139,   24.6389,   24.4665,
+          24.2968,   24.1296,   23.9650,   23.8029,   23.6433,   23.4861,
+          23.3314,   23.1791,   23.0291,   22.8815,   22.7362,   22.5932,
+          22.4525,   22.3140,   22.1777,   22.0436,   21.9116,   21.7818,
+          21.6540,   21.5284,   21.4047,   21.2831,   21.1635,   21.0458,
+          20.9301,   20.8163,   20.7044,   20.5944,   20.4862,   20.3798,
+          20.2752,   20.1724,   20.0713,   19.9719,   19.8742,   19.7782,
+          19.6839,   19.5911,   19.5000,   19.4104,   19.3224,   19.2360,
+          19.1510,   19.0676,   18.9856,   18.9050,   18.8259,   18.7482,
+          18.6719,   18.5969,   18.5233,   18.4510,   18.3800,   18.3103,
+          18.2418,   18.1746,   18.1086,   18.0439,   17.9803,   17.9179,
+          17.8566,   17.7965,   17.7375,   17.6796,   17.6228,   17.5670,
+          17.5123,   17.4586,   17.4059,   17.3542,   17.3035,   17.2538,
+          17.2050,   17.1572,   17.1102,   17.0642,   17.0191,   16.9748,
+          16.9314,   16.8888,   16.8471,   16.8062,   16.7661,   16.7268,
+          16.6882,   16.6504,   16.6134,   16.5771,   16.5415,   16.5066,
+          16.4725,   16.4390,   16.4062,   16.3740,   16.3425,   16.3116,
+          16.2814,   16.2518,   16.2228,   16.1944,   16.1665,   16.1393,
+          16.1126,   16.0864,   16.0608,   16.0357,   16.0112,   15.9872,
+          15.9636,   15.9406,   15.9180,   15.8959,   15.8743,   15.8532,
+          15.8325,   15.8122,   15.7924,   15.7730,   15.7540,   15.7354,
+          15.7172,   15.6994,   15.6820,   15.6650,   15.6483,   15.6320,
+          15.6161,   15.6005,   15.5852,   15.5703,   15.5557,   15.5415,
+          15.5275,   15.5139,   15.5006,   15.4875,   15.4748,   15.4623,
+          15.4501,   15.4382,   15.4266,   15.4152,   15.4041,   15.3932,
+          15.3826,   15.3722,   15.3621,   15.3522,   15.3425,   15.3330,
+          15.3238,   15.3148,   15.3060,   15.2973,   15.2889,   15.2807,
+          15.2727,   15.2649,   15.2572,   15.2497,   15.2424,   15.2353,
+          15.2283,   15.2215,   15.2149,   15.2084,   15.2021,   15.1959,
+          15.1899,   15.1840,   15.1783,   15.1727,   15.1672,   15.1619,
+          15.1567,   15.1516,   15.1467,   15.1418,   15.1371,   15.1325,
+          15.1280,   15.1237,   15.1194,   15.1152,   15.1112,   15.1072,
+          15.1033,   15.0996,   15.0959,   15.0923,   15.0888,   15.0854,
+          15.0821,   15.0789,   15.0757,   15.0726,   15.0696,   15.0667,
+          15.0639,   15.0611,   15.0584,   15.0558,   15.0532,   15.0507,
+          15.0482,   15.0459,   15.0436,   15.0413,   15.0391,   15.0370,
+          15.0349,   15.0329,   15.0309,   15.0290,   15.0271,   15.0253,
+          15.0235,   15.0217,   15.0201,   15.0184,   15.0168,   15.0153,
+          15.0137,   15.0123,   15.0108,   15.0094,   15.0081,   15.0068,
+          15.0055,   15.0042,   15.0030,   15.0018,   15.0007,   14.9995,
+          14.9985,   14.9974,   14.9964,   14.9954,   14.9944,   14.9934,
+          14.9925,   14.9916,   14.9907,   14.9899,   14.9890,   14.9882,
+          14.9875,   14.9867,   14.9860,   14.9852,   14.9845,   14.9839,
+          14.9832,   14.9826,   14.9819,   14.9813,   14.9807,   14.9802,
+          14.9796,   14.9791,   14.9785,   14.9780,   14.9775,   14.9771,
+          14.9766,   14.9761,   14.9757,   14.9753,   14.9748,   14.9744,
+          14.9740,   14.9737,   14.9733,   14.9729,   14.9726,   14.9722,
+          14.9719,   14.9716], dtype=torch.float64, grad_fn=<StackBackward0>)
+n_obj_evaluations: 500
+n_grad_evaluations: 500

@@ -1,0 +1,145 @@
+ModellingBase::setMesh() copying new mesh ... Found datafile: 51 electrodes
+Found: 51 free-electrodes
+rMin = 0.5, rMax = 100
+NGauLeg + NGauLag for inverse Fouriertransformation: 13 + 4
+Found non-Neumann domain
+0.0135877 s
+FOP updating mesh dependencies ... 1.738e-06 s
+Obtaining geometric factors (analytical)
+Calculating response for model: min = 50 max = 200
+Allocating memory for primary potential...... 0.00320915
+
+No primary potential for secondary field calculation. Calculating analytically...
+Forward: time: 0.177876s
+Response: min = 98.6119 max = 219.048 mean = 173.871
+Reciprocity rms(modelReciprocity) 0.408989%, max: 1.53118%
+Constructing Delaunay triangulation by divide-and-conquer method.
+Delaunay milliseconds:  0
+Recovering segments in Delaunay triangulation.
+Segment milliseconds:  0
+Removing unwanted triangles.
+Spreading regional attributes and area constraints.
+Hole milliseconds:  0
+Adding Steiner points to enforce quality.
+Quality milliseconds:  0
+
+Writing vertices.
+Writing triangles.
+Writing segments.
+Writing edges.
+
+Output milliseconds:  0
+Total running milliseconds:  0
+
+Statistics:
+
+  Input vertices: 109
+  Input segments: 110
+  Input holes: 0
+
+  Mesh vertices: 584
+  Mesh triangles: 1031
+  Mesh edges: 1614
+  Mesh exterior boundary edges: 135
+  Mesh interior boundary edges: 21
+  Mesh subsegments (constrained edges): 156
+
+ModellingBase::setMesh() copying new mesh ... Found datafile: 51 electrodes
+Found: 51 node-electrodes
+rMin = 0.5, rMax = 100
+NGauLeg + NGauLag for inverse Fouriertransformation: 13 + 4
+Found non-Neumann domain
+0.00715782 s
+FOP updating mesh dependencies ... 2.858e-06 s
+min/max(dweight) = 4.40945/99.9078
+Calculating response for model: min = 198.599 max = 198.599
+Allocating memory for primary potential...... 0.00528786
+
+No primary potential for secondary field calculation. Calculating analytically...
+Forward: time: 0.32807s
+Response: min = 198.01 max = 198.858 mean = 198.533
+Reciprocity rms(modelReciprocity) 0%, max: 0%
+min/max(dweight) = 4.40945/99.9078
+Building constraints matrix
+constraint matrix of size(nBounds x nModel) 1183 x 831
+check Jacobian: wrong dimensions: (0x0) should be (1176x831)  force: 1
+jacobian size invalid, forced recalc: 1
+calculating jacobian matrix (forced=1)...Using existing subpotentials for createJacobian.
+S(48/48-std::mt): 0.00497511:time: 0.277459s
+sens sum: median = 1.06448 min = 0.961365 max = 1.49643
+... 0.28087 s
+min data = 65.7814 max data = 250.365 (1176)
+min error = 0.0100092 max error = 0.226785 (1176)
+min response = 198.01 max response = 198.858 (1176)
+calc without reference model
+0: rms/rrms(data, response) = 47.2235/42.9201%
+0: chi^2(data, response, error, log) = 171.509
+0: Phi = 201695 + 0 * 20 = 201695
+solve CGLSCDWWtrans with lambda = 20
+Calculating response for model: min = 16.6599 max = 254.576
+Using existing primary potentials.
+Forward: time: 0.264501s
+Response: min = 83.766 max = 230.945 mean = 170.443
+Reciprocity rms(modelReciprocity) 0.46846%, max: 0.821784%
+1: LS newModel: min = 16.6599; max = 254.576
+1: LS newResponse: min = 84.1175; max = 230.791
+1: rms/rrms(data, LS newResponse) = 12.3914/9.0482%
+1: chi^2(data, LS newResponse, error, log) = 7.86121
+1: Phi = 9244.79+14.9593*20=9543.97
+Linesearch tau = 0.84
+Calculating response for model: min = 24.7674 max = 244.66
+Using existing primary potentials.
+Forward: time: 0.256505s
+Response: min = 98.2124 max = 225.747 mean = 174.442
+Reciprocity rms(modelReciprocity) 0.366735%, max: 0.632003%
+1: Model: min = 24.7674; max = 244.66
+1: Response: min = 98.5583; max = 225.614
+1: rms/rrms(data, Response) = 9.64835/7.52083%
+1: chi^2(data, Response, error, log) = 1.70443
+1: Phi = 2004.41+10.5553*20=2215.52
+calculating jacobian matrix (forced=1)...Using existing subpotentials for createJacobian.
+S(48/48-std::mt): 0.000839732:time: 0.285286s
+sens sum: median = 1.09254 min = 0.949731 max = 1.88649
+... 0.288672 s
+solve CGLSCDWWtrans with lambda = 20
+Calculating response for model: min = 31.6455 max = 225.333
+Using existing primary potentials.
+Forward: time: 0.259617s
+Response: min = 98.3079 max = 224.513 mean = 173.513
+Reciprocity rms(modelReciprocity) 0.370013%, max: 0.684187%
+Linesearch tau = 1
+2: Model: min = 31.6455; max = 225.333
+2: Response: min = 98.8913; max = 224.401
+2: rms/rrms(data, Response) = 9.41692/6.96965%
+2: chi^2(data, Response, error, log) = 0.875814
+2: Phi = 1029.96+8.9829*20=1209.62
+Calculating response for model: min = 31.6455 max = 225.333
+Using existing primary potentials.
+Forward: time: 0.271427s
+Response: min = 98.3079 max = 224.513 mean = 173.513
+Reciprocity rms(modelReciprocity) 0.370013%, max: 0.684187%
+Calculating response for model: min = 31.6455 max = 225.333
+Using existing primary potentials.
+Forward: time: 0.269792s
+Response: min = 98.3079 max = 224.513 mean = 173.513
+Reciprocity rms(modelReciprocity) 0.370013%, max: 0.684187%
+relativeError set to a value > 0.5 .. assuming this is a percentage Error level dividing them by 100
+Data error estimate (min:max)  0.01000922975985971 : 0.22678548917843905
+fop: <pygimli.physics.ert.ertModelling.ERTModelling object at 0x7fd7bcecad10>
+Data transformation: <pgcore._pygimli_.RTransLogLU object at 0x7fd7bceca5e0>
+Model transformation: <pgcore._pygimli_.RTransLog object at 0x7fd7bcecab80>
+min/max (data): 65.78/250
+min/max (error): 1%/22.68%
+min/max (start model): 199/199
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+inv.iter 1 ... chi² = 1.7 (dPhi = 98.9%) lam: 20
+--------------------------------------------------------------------------------
+inv.iter 2 ... chi² = 0.88 (dPhi = 45.4%) lam: 20.0
+
+
+################################################################################
+#                  Abort criterion reached: chi² <= 1 (0.88)                   #
+################################################################################
+data misfit: 0.8704059214287384
+regularization: 46.22669546217031

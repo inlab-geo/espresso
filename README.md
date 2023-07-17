@@ -1,104 +1,76 @@
-# Espresso
+# <img src="https://raw.githubusercontent.com/inlab-geo/cofi/main/docs/source/_static/latte_art_cropped.png" width="5%" style="vertical-align:bottom"/> CoFI Examples
 
-[![PyPI version](https://img.shields.io/pypi/v/geo-espresso?logo=pypi&style=flat-square&color=bde0fe&labelColor=f8f9fa)](https://pypi.org/project/geo-espresso/)
-[![Documentation Status](https://img.shields.io/readthedocs/geo-espresso?logo=readthedocs&style=flat-square&color=fed9b7&labelColor=f8f9fa&logoColor=eaac8b)](https://geo-espresso.readthedocs.io/en/latest/?badge=latest)
-[![Slack](https://img.shields.io/badge/Slack-InLab_community-4A154B?logo=slack&style=flat-square&color=cdb4db&labelColor=f8f9fa&logoColor=9c89b8)](https://join.slack.com/t/inlab-community/shared_invite/zt-1ejny069z-v5ZyvP2tDjBR42OAu~TkHg)
-
-## Introduction
-
-**E**arth **S**cience **PR**oblems for the **E**valuation of **S**trategies, 
-**S**olvers and **O**ptimizers (Espresso) is a collection of datasets, and 
-associated simulation codes, spanning a wide range of geoscience problems. 
-Together they form a suite of real-world test problems that can be used to 
-support the development, evaluation and benchmarking of a wide range of tools
-and algorithms for inference, inversion and optimisation. All problems are 
-designed to share a common interface, so that changing from one test problem
-to another requires changing one line of code. 
-
-The Espresso project is a community effort - if you think it sounds useful,
-please consider contributing an example or two from your own research. The project
-is currently being coordinated by InLab, with support from the CoFI development
-team.
-
-For more information, please visit our documentation (coming soon).
+[![Open In Colab](https://img.shields.io/badge/open%20in-Colab-b5e2fa?logo=googlecolab&style=flat-square&color=ffd670&labelColor=f8f9fa)](https://colab.research.google.com/github/inlab-geo/cofi-examples/blob/main/index.ipynb)
+[![badge](https://img.shields.io/badge/launch-Binder-E66581.svg?logo=data:image/png;base64,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&style=flat-square&labelColor=f8f9fa&color=ffafcc)](https://mybinder.org/v2/gh/inlab-geo/cofi-examples/main?filepath=index.ipynb)
+[![CoFI docs](https://img.shields.io/badge/CoFI%20docs-Example%20Gallery-bbd0ff?style=flat-square&labelColor=f8f9fa&logo=readthedocs&logoColor=bbd0ff)](https://cofi.readthedocs.io/en/latest/examples/generated/index.html)
 
 
-## Installation
+> Related repositories by [InLab](https://inlab.edu.au/community/):
+> - [CoFI](https://github.com/inlab-geo/cofi)
+> - [Espresso](https://github.com/inlab-geo/espresso)
+
+CoFI (Common Framework for Inference) is an open-source 
+initiative for interfacing between generic inference algorithms and specific geoscience problems.
+Read [CoFI's documentation](https://cofi.readthedocs.io/en/latest/) for more details.
+
+This repository contains examples for running inversion algorithms using CoFI with increasing complexity in problems.
+
+## Run the examples
+
+- To run the examples interactively without any local setup, click on the "Colab" 
+  (recommended) or "binder" badges above
+- To view the examples and sample output (without interaction, no local setup), click 
+  on the "Example Gallery"
+- To install `cofi` and run the examples locally, follow the instructions below
+
+
+### Run the examples with `cofi` locally
+
+#### Step 1. Get `cofi`
+
+(Strongly recommended) Create a virtual environment to avoid conflicts with your other projects:
 
 ```console
-$ pip install geo-espresso
+$ conda env create -f envs/environment.yml
+$ conda activate cofi_env
 ```
 
-Check Espresso documentation - 
-[installation page](https://geo-espresso.readthedocs.io/en/latest/user_guide/installation.html) 
-for details on dependencies and setting up with virtual environments.
+> For MacOS M1 users, unfortunately `tetgen` (which is a dependency of `pygimli`) doesn't support
+> ARM machines yet. Please use `conda env create -f envs/environment_arm.yml` instead, and use
+> another X86 machine to run the notebooks that make use of `pygimli`.
 
-## Basic usage
+Otherwise (skip this if you've followed above), ensure you have `scipy` and `jupyter-lab` in your environment and then install `cofi` with:
 
-Once installed, each test problem can be imported using the following command:
-
-```python
-from espresso import <testproblem>
+```console
+$ pip install cofi
 ```
 
-Replace ``<testproblem>`` with one of the following currently available problems:
+#### Step 2. Get the examples
 
-- `SimpleRegression`
-- `XrayTomography`
-- `FmmTomography`
-- `PumpingTest`
-- `SlugTest`
-- `GravityDensity`
+Clone this repository:
 
-Once a problem is imported, its main functions can be called using the same 
-structure for each problem. For instance:
-
-```python
-from espresso import GravityDensity
-
-problem = GravityDensity(example_number=1)
-model = problem.good_model
-data = problem.data
-pred = problem.forward(model)
-fig_model = problem.plot_model(model)
-fig_data = problem.plot_data(data, pred)
+```console
+$ git clone https://github.com/inlab-geo/cofi-examples.git
 ```
 
-You can access related metadata programatically:
+#### Step 3. Run the examples
 
-```python
-print(GravityDensity.problem_title)
-print(GravityDensity.problem_short_description)
-print(GravityDensity.author_names)
+Open up Jupyter-lab:
+
+```console
+$ cd cofi-examples
+$ jupyter-lab
 ```
 
-Other problem-specific parameters can be accessed through the problem instance. For instance:
+Run through examples and have fun :tada:! We recommend opening up the `index.ipynb` at root folder to decide where to start.
 
-```python
-print(problem.m)
-print(problem.rec_coords)
-```
+## Contribution
 
-Which additional values are set is highly problem-specific and we suggest to 
-consult the 
-[Espresso Documentation on the problems](https://geo-espresso.readthedocs.io/en/latest/user_guide/contrib/index.html).
+Thanks for contributing! Please refer to our [Contributor's Guide](CONTRIBUTING.md) for
+details.
 
-
-## Contributing
-
-Interested in contributing? Please check out our [contributor's guide](https://geo-espresso.readthedocs.io/en/latest/contributor_guide/index.html).
-
-
-## Licence
-
-Espresso is a community driven project to create a large suite of forward
-simulations to enable researchers to get example data without the need to 
-understand each individual problem in detail.
-
-Licensing is done individually by each contributor. If a contributor wants to freely share their code example we recommend the MIT licence or a 
-2-clause BSD licence. To determine the licence of an existing Espresso
-problem, please consult the documentation section of that problem.
-
-All the other core functions of Espresso written by InLab Espresso developer
-team are distributed under a 2-clause BSD licence. A copy of this licence is
-provided with distributions of the software.
+## Troubleshooting for interactive lab
+If you've followed the [instructions on running locally](#run-the-examples-with-cofi-locally)
+above, and are still having trouble ***displaying the ipython widgets***, then hopefully 
+[this StackOverflow thread](https://stackoverflow.com/questions/36351109/ipython-notebook-ipywidgets-does-not-show) 
+will help you. 
