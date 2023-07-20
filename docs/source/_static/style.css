@@ -1,9 +1,10 @@
-/* ALL: links color */
-:root {
-    --pst-color-link: 141, 66, 76
-}
+/* https://github.com/pydata/pydata-sphinx-theme/blob/master/src/pydata_sphinx_theme/theme/pydata_sphinx_theme/layout.html */
+/* https://github.com/executablebooks/sphinx-book-theme/blob/master/src/sphinx_book_theme/theme/sphinx_book_theme/layout.html */
 
-/* ALL: text font size */
+/* ALL: color, text font size */
+html[data-theme="light"] {
+    --pst-color-primary: #E29578;
+}
 p {
     font-size: 1rem;
 }
@@ -30,8 +31,6 @@ div.contents {
 div.contents>ul>li>p>a {
     font-size: 100%;
 }
-
-
 /* End APV modifications */
 
 
@@ -40,31 +39,20 @@ div.navbar-brand-box a.navbar-brand img {
     max-height: 10vh !important;
 }
 span.project-version {
-    color: #649A69;
+    color: var(--pst-color-primary);
     font-size: 0.8em;
     font-weight: 600;
     margin-left: 3px;
 }
-
-/* TOP RIGHT: three little logos */
-/* .topbar .topbar-main button.topbarbtn {
-    font-size: 1.2em;
-}
-[aria-label] {
-    position: relative;
-}
-div.dropdown-buttons-trigger div.dropdown-buttons button.topbarbtn {
-    font-size: .85em !important;
-} */
 
 /* LEFT: side bar font size */
 .bd-sidenav a.reference.internal {
     font-size: 0.8rem;
 }
 
-/* HOME: inference tree */
+/* Mermaid */
 div.mermaid:not([data-processed]) {
-    opacity: 0;
+    display: none;
 }
 div.mermaid {
     transition: transform .2s;
@@ -75,23 +63,8 @@ div.mermaid:hover {
 
 
 /* HOME: panel button */
-.btn-outline-primary:hover {
-    color: #8D424C;
-    background-color: #FFD883;
-    border-color: #FFD883;
-}
-.btn-outline-primary {
-    /* color: rgb(51, 125, 222); */
-    /* color: #99582a; */
-    border-color: #FFD883;
-}
-.card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-.card:hover {
-    border: 1px solid #8D424C;
+.card-border:hover {
+    border: 1.5px solid var(--pst-color-primary) !important;
 }
 
 /* API: class/method name */
@@ -109,12 +82,6 @@ table.autosummary p {
 }
 table.autosummary span {
     font-size: 1rem;
-}
-
-/* Sphinx gallery */
-div.sphx-glr-download {
-    height: 0px;
-    visibility: hidden;
 }
 
 /* TOC .. contents:: */

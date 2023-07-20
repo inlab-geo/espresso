@@ -1,12 +1,128 @@
 # Change Log
 
+## v0.3.9 (11/07/2023)
+
+### Changed examples
+
+- New examples (checkerboard and Australian shear wave velocities) and improvements 
+  in `FmmTomography`
+
+## v0.3.8 (19/06/2023)
+
+### Changed examples
+
+- ReceiverFunctionInversion: added a 3-layer example (4th example)
+
+## v0.3.7 (07/06/2023)
+
+### New examples
+
+- `SurfaceWaveTomography` examples
+
+### Changed examples
+
+- Naming changes
+    - `FmWavefrontTracker` -> `FmmTomography`
+    - `XrayTracer` -> `XrayTomography`
+    - `ReceiverFunction` -> `ReceiverFunctionInversion`
+    - `GravityDensity` -> `GravityInversion`
+    - `GreatCircleTracing` -> `SurfaceWaveTomography`
+
+### Espresso core
+
+- Template: Minor naming changes in templates
+- Template: Return `matplotlib.axes.Axes` instead of `matplotlib.figures.Figure` in plotting methods
+
+## v0.3.6 (19/05/2023)
+
+### Changed examples
+
+- Improve `ReceiverFunction.starting_model` and `ReceiverFunction.plot_model`
+
+## v0.3.5 (10/05/2023)
+
+- Fix `ReceiverFunction.log_prior` by adding more constraints
+
+## v0.3.4 (02/05/2023)
+
+### Changed examples
+
+- Improve performance of `ReceiverFunction.log_likelihood` by pre computing covariance matrix
+
+## v0.3.3 (01/05/2023)
+
+### Changed examples
+
+- Fix `log_likelihood` in `ReceiverFunction`
+
+## v0.3.2 (01/05/2023)
+
+### Espresso core
+
+- `EspressoProblem.list_capabilities`
+
+### Changed examples
+
+- Fix `covariance_matrix` and `inverse_covariance_matrix` in `ReceiverFunction`
+
+
+## v0.3.1 (27/04/2023)
+
+### Espresso core
+
+- Fix `list_capabilities` and enhance related documentation 
+
+## v0.3.0 (24/04/2023)
+
+First release.
+
+## v0.3.0.dev0 (24/04/2023)
+
+### Changed examples
+
+- Fix installation of receiver function on Windows
+- Fix documentation rendering of 1D MT problem
+
+
+## v0.2.2.dev1 (18/04/2023)
+
+### Changed examples
+
+- Fix installation of receiver function under SKBUILD
+
+## v0.2.2.dev0 (13/04/2023)
+
+### New examples
+
+- [#106](https://github.com/inlab-geo/espresso/pull/106) Receiver function
+
+### Changed examples
+
+- Naming changes
+    - `FmmTomography` -> `FmWavefrontTracker`
+    - `XrayTomography` -> `XrayTracer`
+
+### Infrastructure
+
+- Build and validation scripts to run only on specified contributions
+- CI to test only changed contributions on pull request
+- Write changed contributions to file
+- Routinely check and update active problems list
+- Timeout value defaults to 60 seconds for each method
+
+## v0.2.1.dev1 (27/03/2023)
+
+### Infrastructure
+
+- [#118](https://github.com/inlab-geo/espresso/pull/118) Capability matrix on build
+- [#121](https://github.com/inlab-geo/espresso/pull/121) Compile on build (instead of on import)
+- Code refactor in `espresso_machine`
+
 ## v0.2.1.dev0 (06/03/2023)
 
 ### New examples
 
 - [#100](https://github.com/inlab-geo/espresso/pull/100) 1D magnetotelluric example
-
-### Infrastructure
 
 ## v0.2.0.dev0 (03/03/2023)
 

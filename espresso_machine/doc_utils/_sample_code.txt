@@ -1,0 +1,32 @@
+Code block below is generated automatically based on our tests and inspection of the
+example objects. We'd like to also refer you to the {doc}`../../../api/index` for more
+about the Espresso API.
+
+```{code-block} python
+:linenos:
+:emphasize-lines: 3,6,14
+
+import espresso
+
+# Create a <class_name> object
+<problem_var_name> = espresso.<class_name>(example_number=1)
+
+# Guaranteed API
+model_size     = <problem_var_name>.model_size
+data_size      = <problem_var_name>.data_size
+null_model     = <problem_var_name>.starting_model
+good_model     = <problem_var_name>.good_model
+given_data     = <problem_var_name>.data
+synthetic_data = <problem_var_name>.forward(good_model)
+
+# Optional API
+example_desc       = <problem_var_name>.description
+cov_matrix         = <problem_var_name>.covariance_matrix
+inv_cov_matrix     = <problem_var_name>.inverse_covariance_matrix
+jacobian           = <problem_var_name>.jacobian(good_model)
+model_fig          = <problem_var_name>.plot_model(good_model)
+data_fig           = <problem_var_name>.plot_data(given_data)
+misfit_val         = <problem_var_name>.misfit(given_data, synthetic_data)
+log_likelihood_val = <problem_var_name>.log_likelihood(given_data, synthetic_data)
+log_prior_val      = <problem_var_name>.log_prior(good_model)
+```

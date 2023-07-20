@@ -1,221 +1,178 @@
-===============================
-Creating a new Espresso problem
-===============================
+==================
+Create new example
+==================
 
 👋 Everyone is welcomed to contribute with their own forward code. We aim to reduce the
-barrier of contributing so don't worry if you are not familiar with those technical
-stuff like git operations - we are here to help.
+barrier of contributing so don't worry if you are not familiar with some technical
+stuff - we are here to help.
 
-There are generally three steps involved in submiting your code:
-
-- **Download** - :ref:`get a copy of Espresso <get_own_copy>`
-- **Edit** - :ref:`add in your own Espresso problem <add_contrib>`
-- **Upload** - :ref:`submit your changes to our main repository <submit_changes>`
-
-It's important to note that after you've uploaded your contribution, you can still edit 
-it with the same "pull request" workflow.
-
-In the following paragraphs, we list out detailed steps on how to contribute a new 
-example. Again, feel free to `contact us <../user_guide/faq.html>`_ when in doubt.
-
-In case you prefer an alternative guide, we've also prepared a demo video below. If 
-your browser fails to load the video, head to 
-`this link <https://dl.dropbox.com/s/j1xdl0q7zj039cl/%28with%20clicks%29%20how-to-contribute-an-example-in-espresso.mp4?dl=0>`_ 
-to watch it.
-
-.. raw:: html
-
-    <iframe width="560" height="315" src="https://www.dropbox.com/s/j1xdl0q7zj039cl/%28with%20clicks%29%20how-to-contribute-an-example-in-espresso.mp4?dl=0&raw=1" frameborder="0" allowfullscreen></iframe>
-
-.. _get_own_copy:
-
-Get your own copy of Espresso
------------------------------
-
-#. Open your browser and go to the Espresso `repository`_.
-#. Ensure you have a GitHub account and it's signed in. If not, click the "Sign Up"
-   button on the top right and fill in the necessary information to sign up an account.
-#. Now click the "Fork" button on the top right.
-
-   .. figure:: ../_static/contrib_fork.png
-    :align: center
-
-#. Leave everything by default and click the green "Create fork" button.
-
-   .. figure:: ../_static/contrib_fork2.png
-    :align: center
-
-#. Now you will be redirected to your own "fork" of the Espresso repository.
-
-   This fork is your own version of Espresso, and you can make changes however you 
-   want. We will later demonstrate that after you make your own changes, you are
-   able to "contribute" back to the main repository.
-
-   .. figure:: ../_static/contrib_fork3.png
-    :align: center
-
-#. We will clone your fork into your local machine. Click the green "Code" button first, 
-   and then copy the content under the "HTTPS" tab.
-
-   .. figure:: ../_static/contrib_fork4.png
-    :align: center
-
-#. Clone your fork to somewhere in your computer.
-
-   - For **MacOS** and **Linux** users, open your "Terminal" app, change your working 
-     directory into somehwere you'd like to place the Espresso code, then run the 
-     :code:`git clone` command as following.
-   - For **Windows** users, please install `git <https://git-scm.com/downloads>`_ first, 
-     and open "Git Bash" to run the following commands. In the steps afterwards, it's
-     always "Git Bash" when we refer to a "terminal" if you are on Windows.
-
-   .. code-block:: console
-
-    cd <path-to-espresso>
-    git clone <url-you-copied-in-step-6>
-    cd espresso
-    git remote add upstream https://github.com/inlab-geo/espresso
-    git fetch upstream
-
-   .. admonition:: Instructions for first-time GitHub users
-      :class: dropdown, attention
-
-      If this is the first time you clone a GitHub repository, it's very likely that you 
-      will need a personal access token as your password. 
-      
-      **Option 1** - Check out this page:
-      `creating a personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_
-      for how to create a personal access token, and use it as your password when you are
-      asked to enter it in the terminal.
-
-      **Option 2** - Alternatively, set up SSH key and upload your public key to your 
-      GitHub account. Follow instructions in this page:
-      `Generating a new SSH key and adding it to the ssh-agent <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`_
-      for how to set up SSH keys with GitHub.
-
-#. Open :code:`<path-to-espresso>/espresso` folder with your favourite code editor. 
-   You will see a copy of Espresso in front of you, cheers ☕️! 
-
-
-.. _add_contrib:
 
 Add your own Espresso problem
 -----------------------------
 
-#. Let's now ensure that you have a correct environment set up. Python >= 3.6 is required,
-   and see this 
-   `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_ 
-   file for a list of required packages.
-
-   .. toggle::
-        
-        - Choose a Python environment manager first. 
-          `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
-          `conda <https://docs.conda.io/en/latest/>`_ is recommended as it can set 
-          up system-wide dependencies as well, but feel free to use the one you are most 
-          familiar with.
-
-        - Python >= 3.6 is required.
-
-        - If you use `mamba <https://mamba.readthedocs.io/en/latest/>`_ /
-          `conda <https://docs.conda.io/en/latest/>`_, run 
-          :code:`conda create -f envs/environment_contrib.yml` under the project root folder.
-          Otherwise, make sure you have the list of packages in 
-          `environment_contrib.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_contrib.yml>`_
-          in the virtual environment with your preferred tool.
-
-#. Install Espresso core library - this enables you to access the base class for an Espresso problem
-   :code:`EspressoProblem` and some utility functions to help the development.
-
-   Run the following in your terminal, with :code:`<path-to-espresso>/` as your working directory.
+#. A new contribution to Espresso has to conform to a consistent
+   file structure. The simplest way to ensure that a new contribution includes
+   all files is to start the creation of a new problem from the template. Run the 
+   following command from the the path to Espresso:
 
    .. code-block:: bash
 
-      pip install .
+        python espresso_machine/new_contribution/create_new_contrib.py <problem-name>
 
-#. Create a folder for your new contribution under :code:`contrib/<problem-name>`,
-   by running the following in your terminal:
-
-   .. code-block:: bash
-
-        python <path-to-espresso>/espresso_machine/new_contribution/create_new_contrib.py <problem-name>
-
-   Replacing :code:`path-to-espresso` with your path to the espresso folder you've just cloned,
-   and :code:`problem-name` with your Espresso problem name, with lower case words connected
-   by underscores (e.g. :code:`gravity_density`, :code:`polynomial_regression`).
+   Replacing :code:`problem-name` with your Espresso problem name in snake case 
+   (e.g. :code:`gravity_density`, :code:`polynomial_regression`). Remember to choose a 
+   sensible, unique name for your contribution that makes it easy to understand what 
+   the example is about.
 
 #. Navigate to folder :code:`<path-to-espresso>/contrib/<problem-name>`, and you'll see template 
-   files.
+   files needed for a new contribution. Each Espresso example is organised around a
+   central class object that contains, at minimum, a set of functions with names
+   that are shared by all examples.
 
    .. figure:: ../_static/contrib_edit1.png
     :align: center
 
-#. Read instructions in the :code:`README.md` file, and you will know what to do next 🧑🏽‍💻👩🏻‍💻👨‍💻
+#. Now the folder is all yours, get started with the following checklist.
 
-   #. You should already have all the "pre-requisites" installed if you've gone through 
-      the steps above.
+   .. dropdown:: Checklist and tips
+      :icon: tasklist
+      :open:
 
-   #. See a list of "Checklists". These are pretty much all the things you've
-      got to do to complete this contribution.
+      - ``contrib/<problem-name>/README.md``
 
-   #. When you'd like to perform a quick local test by running your own code, run
-      :code:`python espresso_machine/build_package/validate.py -c <problem-name>`
+        - Document anything you'd like to add for this problem, such as the what the 
+          problem is about and some brief intro of the theory behind.
+        - This will be automatically rendered into :doc:`../user_guide/contrib/index`.
 
-   #. When you think you've finished the coding, run
-      :code:`python espresso_machine/build_package/build.py --validate`
+      - ``contrib/<problem-name>/LICENCE``
+      
+        - We use a 2-clause BSD licence as the default one. Feel free to replace it
+          with a licence that suits you best.
 
+      - ``contrib/<problem-name>/<problem-name>.py``
 
-.. _submit_changes:
+        - The development will be centered around the autogenerated class 
+          ``ProblemName``. It is a subclass of 
+          :doc:`EspressoProblem <../user_guide/api/generated/espresso.EspressoProblem>`
+          so you might find the API reference helpful.
+        - All standard attributes have been declared in the template but are left for 
+          you to implement. You'll see that some are required (with ``TODO``) and 
+          others are optional.
+        - If you would like to load data from files, please use our 
+          :doc:`utility functions <../user_guide/api/generated/espresso.utils>`
+          to get the absolute path before calling your loading function.
+        - Apart from the standard attributes, there are many more functions and values 
+          that a new contribution can contain, for examples:
 
-Submit your changes
--------------------
-
-#. It's helpful to "commit" your changes when you have any progress. Feel free to make 
-   commits as often as necesary.
+          - inversion_suggestion: a string containing inversion suggestions
+          - reg_param_suggestion: a sensible value for regularization parameter
+          - dx: spatial resolution in x-direction
+          - dt: temporal resolution
+          - nt: number of time steps
+          - The possibilities are endless! Whatever information you find helpful is
+            probably also helpful for the users. Simply attach them to the problem 
+            class as additional attributes.
+         
+        - We aim to follow `Python PEP8 style conventions <https://peps.python.org/pep-0008/>`_
+          to make source code readable. Though not strictly enforced, we recommend
+          `Black formatter <https://github.com/psf/black#installation-and-usage>`_ and
+          `PyLint <https://github.com/pylint-dev/pylint#install>`_ to maintain a good 
+          coding style.
+         
+      - ``setup.py``, in particular the ``INSTALL_REQUIRES`` variable, if needed.
    
-   - Use :code:`git add <file-name-1> <file-name-2>` to choose which files you'd like to 
-     include in the following "commit".
-   - Use :code:`git commit -m "progress in xxx"` to commit your changes.
-   - Use :code:`git push origin <branch-name>` to push your changes onto your GitHub fork,
-     where :code:`<branch-name>` is :code:`main` by default.
+#. Test running your code. 
 
-   .. seealso::
+   .. dropdown:: Troubleshooting: issue with relative import
+      :icon: tools
 
-    Check `this cheatsheet <https://education.github.com/git-cheat-sheet-education.pdf>`_
-    for a good reference of using Git.
+      Note that you might see an error if you have any relative import in the main Python 
+      file:
 
-#. After you've commited code changes and pushed your commits up to your fork, open your 
-   fork on GitHub :code:`https://github.com/<your-gh-account>/espresso` in a browser.
+      .. code-block:: python
 
-#. Find the word "Contribute" on top of the page, click it and choose the green "Open 
-   pull request" button. Follow the prompts and fill in necessary message you'd like us
-   to know.
+         # file: <problem-name>.py
 
-   .. figure:: ../_static/contrib_pr1.png
-    :align: center
+         from .lib import *
 
-#. Once your pull request is submitted, some automatic checks will be triggered. Rest 
-   assured - we will review your contribution, comment if necessary, and proceed to merge
-   your contribution into our main repository when everything's ready.
+      In this case, use ``contrib`` as your working directory and import your contribution
+      in the following example way:
 
-#. After your contribution is merged to the main branch, you can request another change
-   with the same workflow anytime you want. Just keep your own fork, edit, commit and 
-   push to your own fork, and raise a pull request from there.
+      .. code-block:: pycon
 
-#. Thanks again, for your contribution to open source 🌟 
+         $ pwd                                        # check you are in the right folder
+         <path-to-espresso>/contrib
+         $ python
+         >>> from example_name import ExampleName     # ...and import this way
+      
+      Or the following example if you are running a file:
+
+      .. code-block:: python
+
+         # file: contrib/tmp.py                       # create tmp file in the right folder
+         from example_name import ExampleName         # ...and import this way
+
+#. Validate your code with Espresso by running:
+
+   .. code-block:: console
+
+      $ python espresso_machine/build_package/build.py --pre --post -c <example_name>
+
+   which includes the following steps:
+
+   - Validate all required and standard attributes that you've implemented
+   - Build your contribution into a temporary source code folder ``_esp_build``
+   - Install your local development Espresso version
+   - Validate all required and standard attributes from the installed package
+   - Check that packages needed to run your code are listed by Espresso
+
+   Read on the :ref:`appendix sections <appendix>` in this page for how an Espresso 
+   example is validated and how Espresso is built, and continue with the 
+   :doc:`../developer_guide/index` further details the whole infrastructure (i.e. the 
+   ``espresso_machine``).
 
 
-.. _appendix_build_steps:
+Jupyter Notebook
+----------------
 
-Appendix I: installation steps
-------------------------------
+Additionally, we encourage you to add a Jupyter Notebook with an identical name
+into the folder Jupyter Notebooks that contains the following:
 
-To install your development version locally, run the following in your terminal:
+1. An extensive description of the new Espresso Problem, containing
+   information about (but not limited to):
+
+   - the forward calculation (ie. the underlying physics) and how it was implemented.
+   - which inversion method is used (and regularisation) and how it was implemented.
+   - the physical unit of relevant variables, but at least of ``model`` and ``data``.
+   - all changeable parameters, possibly in a list.
+
+
+2. An example of the new problem being used, with a reasonable output.
+
+
+.. _appendix:
+
+Appendix I: build steps
+-----------------------
+
+Usage:
+
+.. code-block:: console
+
+   $ python build.py [--pre] [--post] [--no-install] [-c <example_name>] [--file <file_name>]
+
+For instance, to install your development version locally, run the following in your 
+terminal:
 
 .. code-block:: console
 
    $ python espresso_machine/build_package/build.py
 
+Run the following for detailed usage information:
+
+.. code-block:: console
+
+   $ python espresso_machine/build_package.build.py --help
 
 The following table describes what happens when we package Espresso:
 
@@ -236,7 +193,7 @@ The following table describes what happens when we package Espresso:
      - Move ``src/`` content to ``_esp_build/src/espresso``
      - ``shutil.copytree``
    * - 4
-     - Move ``contrib/`` content to ``_esp_build/src/espresso/`` + ``_esp_build/src/espresso/__init__.py`` + ``_esp_build/src/espresso/list_problems.py``
+     - Move ``contrib/`` content to ``_esp_build/src/espresso/`` + ``_esp_build/src/espresso/__init__.py`` + ``_esp_build/src/espresso/capabilities.py``
      - ``shutil.copytree``, a series of file opening and string manipulation
    * - 5
      - Write dynamic version and extra versioningit configs into ``_esp_build/pyproject.toml``
@@ -246,36 +203,28 @@ The following table describes what happens when we package Espresso:
      - ``pip install _esp_build``
 
 
-.. _appendix_validation_steps:
-
 Appendix II: validation steps
 -----------------------------
 
-To test whether your new contribution aligns with the Espresso standard, run 
-the following in your terminal:
+Usage:
+
+.. code-block:: console
+
+   $ python validate.py [-h] [--all] [--pre] [--post] [--contrib CONTRIBS] [--file <file_name>]
+
+For instance, to test whether your new contribution aligns with the Espresso standard, 
+run the following in your terminal:
 
 .. code-block:: console
 
    $ python espresso_machine/build_package/validate.py -c <contrib-name>
 
-You can run the validation script before (``--pre`` flag on) and/or after (``--post`` 
-flag on) you install your development version of Espresso. A better workflow is to run 
-both:
+Or the following for a complete check on all examples (including yours and existing 
+ones for regression test), both before and after Espresso installed:
 
 .. code-block:: console
 
-   $ python espresso_machine/build_package/validate.py --pre -c <contrib-name>
-   $ python espresso_machine/build_package/build.py
-   $ python espresso_machine/build_package/validate.py --post -c <contrib-name>
-
-
-Or the following for a complete check on all examples (including yours), both before
-and after Espresso installed:
-
-.. code-block:: console
-
-   $ python espresso_machine/build_package/build.py
-
+   $ python espresso_machine/build_package/validate.py
 
 Anyway, run the following for a detailed usage of this script:
 

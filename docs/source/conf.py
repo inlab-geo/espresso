@@ -43,7 +43,8 @@ def setup(app):
 # -- Project information -----------------------------------------------------
 project = 'Espresso'
 copyright = f"{datetime.date.today().year}, InLab, {project} development team"
-version = "dev" if "dev" in esp.__version__ else f"v{esp.__version__}"
+_version_short = esp.__version__.split("+")[0]
+version = "dev" if "dev" in esp.__version__ else _version_short
 
 
 # -- General configuration ---------------------------------------------------
@@ -55,7 +56,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.doctest",
     "sphinx.ext.mathjax",
-    "sphinx_panels",
+    "sphinx_design",
     "sphinx_togglebutton",
     "sphinx_copybutton",
     "sphinx.ext.napoleon",
@@ -74,7 +75,7 @@ templates_path = ['_templates']
 exclude_patterns = [
     ".DS_Store",
     "user_guide/contrib/_index.rst",
-    "contributor_guide/contribute.rst",     # TODO migrate to new_contrib.rst
+    "user_guide/contrib/generated/*/examples/*",
 ]
 
 source_suffix = ".rst"
@@ -91,13 +92,6 @@ intersphinx_mapping = {
     "matplotlib": ("https://matplotlib.org/stable", None),
 }
 
-# Disable including boostrap CSS for sphinx_panels since it's already included
-# with sphinx-book-theme
-panels_add_bootstrap_css = False
-panels_css_variables = {
-    "tabs-color-label-inactive": "hsla(231, 99%, 66%, 0.5)",
-}
-
 # settings for the sphinx-copybutton extension
 copybutton_prompt_text = ">>> "
 
@@ -105,14 +99,13 @@ copybutton_prompt_text = ">>> "
 # -- Options for HTML output -------------------------------------------------
 html_title = f'{project} <span class="project-version">{version}</span>'
 html_short_title = project
-# html_logo = "_static/???"
 html_favicon = "_static/inlab_logo_60px.png"
 
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "repository_url": "https://github.com/inlab-geo/espresso",
     "repository_branch": "main",
-    "path_to_docs": "docs",
+    "path_to_docs": "docs/source/",
     "launch_buttons": {
         "notebook_interface": "classic",
         "inlab_url": "http://www.inlab.edu.au/",
@@ -121,7 +114,24 @@ html_theme_options = {
     "home_page_in_toc": True,
     "use_repository_button": True,
     "use_edit_page_button": True,
+    "use_source_button": True,
     "use_issues_button": True,
+    "use_download_button": True,
+    "use_sidenotes": True,
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/inlab-geo/geo-espresso",
+            "icon": "https://img.shields.io/badge/GitHub-espresso-171515?logo=github&labelColor=f8f9fa&style=flat-square&logoColor=171515",
+            "type": "url",
+        },
+        {
+            "name": "Version",
+            "url": "https://pypi.org/project/geo-espresso/",
+            "icon": "https://img.shields.io/pypi/v/geo-espresso?logo=pypi&style=flat-square&color=83C5BE&labelColor=f8f9fa&label=latest",
+            "type": "url",
+        },
+    ],
 }
 
 html_static_path = ["_static"]
@@ -129,9 +139,9 @@ html_css_files = ["style.css"]
 html_context = {
     "display_github": True, # Integrate GitHub
     "github_user": "inlab-geo", # Username
-    "github_repo": "cofi", # Repo name
+    "github_repo": "espresso", # Repo name
     "github_version": "main", # Version
-    "conf_py_path": "", # Path in the checkout to the docs root
+    "conf_py_path": "/source/", # Path in the checkout to the docs root
 }
 
 

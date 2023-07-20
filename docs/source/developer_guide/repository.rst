@@ -1,8 +1,8 @@
-==============================
-The Espresso Github repository
-==============================
+================
+Folder structure
+================
 
-. figure:: ../_static/espresso_arch.svg
+.. figure:: ../_static/espresso_arch.svg
     :align: center
 
 - Folder **contrib/** contains subfolders for each Espresso problem. Each Espresso
@@ -18,8 +18,10 @@ The Espresso Github repository
 
   - If you'd like to bump the version, change file :code:`src/espresso/version.py`.
 
+
 - Folder **espresso_machine/** has all the utility scripts to be used by contributors and 
   developers.
+
 
 - Folder **_esp_build/** will contain temporary Python package source files after you
   build :code:`espresso`.
@@ -27,6 +29,3 @@ The Espresso Github repository
   - These are built files, so you never have to change the contents under this folder. 
     If you feel something's wrong in this folder, look for the source from the three 
     folders above.
-
-- Folder **docs/** has all the documentation sources.
-

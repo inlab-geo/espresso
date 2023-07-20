@@ -2,26 +2,24 @@
 
     <div class="api-module">
 
-Utility Functions
------------------
-
-.. raw:: html
-
     <hr>
 
 .. automodule:: {{ fullname }}
 
-.. {% block classes %}
-.. {% if classes %}
-.. .. rubric:: Classes
-
-.. .. autosummary::
-..   :toctree: ./
-.. {% for item in classes %}
-..   {{ fullname }}.{{ item }}
-.. {% endfor %}
-.. {% endif %}
-.. {% endblock %}
+{% block classes %}
+{% if classes %}
+.. rubric:: Classes
+{% for item in classes %}
+.. autoclass:: {{ fullname }}.{{ item }}
+    :members:
+    :inherited-members:
+    :show-inheritance:
+    :undoc-members:
+    :exclude-members: __init__, __weakref__
+    :special-members: __eq__, __ne__, __lt__, __le__, __gt__, __ge__, __hash__
+{% endfor %}
+{% endif %}
+{% endblock %}
 
 
 {% block functions %}
@@ -35,17 +33,14 @@ Utility Functions
 {% endblock %}
 
 
-.. {% block exceptions %}
-.. {% if exceptions %}
-.. .. rubric:: Exceptions
-
-.. .. autosummary::
-..   :toctree: ./
-.. {% for item in exceptions %}
-..   {{ fullname }}.{{ item }}
-.. {% endfor %}
-.. {% endif %}
-.. {% endblock %}
+{% block exceptions %}
+{% if exceptions %}
+.. rubric:: Exceptions
+{% for item in exceptions %}
+.. autoexception:: {{ fullname }}.{{ item }}
+{% endfor %}
+{% endif %}
+{% endblock %}
 
 .. raw:: html
 

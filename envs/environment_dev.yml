@@ -3,25 +3,30 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - python=3.10
   - numpy>=1.20
   - scipy>=1.0.0
+  - scikit-build==0.17.2
   - black
   - sphinx
   - jupyterlab
   - matplotlib
   - cython
+  - gfortran
   - pybind11
   - pytest
   - pip
   - pip:
     - pyyaml
-    - sphinx-book-theme==0.3.3
-    - sphinx-panels==0.6.0
-    - sphinx-togglebutton==0.3.2
-    - sphinx-gallery==0.11.1
-    - pypandoc==1.10
-    - myst-nb==0.17.1
-    - sphinxcontrib-mermaid==0.7.1
-    - sphinx-copybutton==0.5.1
-    - versioningit==2.1.0
-    - stdlib_list==0.8.0
+    - sphinx-book-theme>=1.0.1
+    - sphinx-design>=0.3.0
+    - sphinx-togglebutton>=0.3.2
+    - sphinx-gallery>=0.11.1
+    - pypandoc>=1.10
+    - myst-nb>=0.17.1
+    - sphinxcontrib-mermaid>=0.8.1
+    - sphinx-copybutton>=0.5.1
+    - versioningit>=2.1.0
+    - stdlib_list>=0.8.0
+    - pytest-json-report>=1.5.0
+    - tqdm

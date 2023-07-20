@@ -1,8 +1,8 @@
 .. highlight:: python
 
-========
-Examples
-========
+==============
+Usage Examples
+==============
 
 This page provides some annotated examples showing how Espresso can be used.
 
@@ -23,7 +23,7 @@ Gradient descent
 
     model = tp.starting_model 
     for k in range(niterations):
-        predictions, G = tp.forward(model, with_jac = True)
+        predictions, G = tp.forward(model, with_jacobian = True)
         residuals = tp.data - predictions
         model -= epsilon * G.T.dot(residuals)
     print(model)
@@ -69,7 +69,7 @@ We compute simulated data and the Jacobian for our current model estimate, and c
     :linenos:
     :lineno-start: 10
 
-        predictions, G = tp.forward(model, with_jac = True)
+        predictions, G = tp.forward(model, with_jacobian = True)
         residuals = tp.data - predictions
 
 Finally, we update the model accordingly, and iterate until (hopefully!) a good model is found. 
