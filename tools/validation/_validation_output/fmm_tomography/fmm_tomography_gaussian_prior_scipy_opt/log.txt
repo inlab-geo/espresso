@@ -1,6 +1,0 @@
- New data set has:
- 10  receivers
- 10  sources
- 100  travel times
- Range of travel times:  0.008911182496368759 0.0153757024856463 
- Mean travel time: 0.01085811731230709
