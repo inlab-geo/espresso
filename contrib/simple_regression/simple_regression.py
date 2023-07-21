@@ -1,6 +1,3 @@
-# Application : Magnetotelluric 1D
-# 49 -> 4905 -> 490501 -> curve fitting
-# description: this is a description, if you can see this, it works!
 import numpy as np
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
@@ -113,10 +110,10 @@ class SimpleRegression(EspressoProblem):
     def plot_model(self, model):
         raise NotImplementedError               # optional
     
-    def plot_data(self, data, data2=None):
+    def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional
 
-    def misfit(self, data, data2):              # optional
+    def misfit(self, data1, data2):              # optional
         raise NotImplementedError
 
     def log_likelihood(self,data,data2):        # optional
@@ -282,3 +279,7 @@ def curveFittingJac(xpts,nModelParameters, basis='polynomial',domainLength=1.):
     else:
         raise ValueError("Unsupported basis")
     return G
+
+
+# 49 MATHEMATICAL SCIENCES -> 4905 Statistics -> 490501 Applied statistics -> Curve fitting -> SimpleRegression
+# description: This example includes various small 1D regression (curve-fitting) problems. Several different forms of basis function are supported: polynomial, Fourier and discrete.

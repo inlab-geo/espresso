@@ -10,8 +10,8 @@ on:
       - 'docs/**'
       - 'setup.py'
       - 'pyproject.toml'
-      - 'CHANGELOG.md'
       - '!src/espresso/version.py'
+      - '!CHANGELOG.md'
 
 jobs:
   ######################## GENERATE PACKAGE SOURCE #####################
@@ -30,19 +30,21 @@ jobs:
           git fetch --tags origin
           git describe
 
-      - name: Install Python 3.9
-        uses: actions/setup-python@v2
+      - name: Install Python 3.10
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y libgeos++-dev
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
       
       - name: Build with pre and post validation
         run: |
-          python espresso_machine/build_package/build.py --validate
+          python espresso_machine/build_package/build.py --no-install -f contrib/active_problems.txt
       
       - name: Deploy to esp_build branch
         uses: s0/git-publish-subdir-action@develop

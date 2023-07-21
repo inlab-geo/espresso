@@ -114,26 +114,30 @@ class SlugTest(EspressoProblem):
         raise NotImplementedError               # optional
 
     def plot_model(self, model):
-        plt.errorbar(self._xp, self.forward(model), yerr=self._sigma, fmt='.', 
+        fig, ax = plt.subplots()
+        ax.errorbar(self._xp, self.forward(model), yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
-        plt.xscale("log")
-        plt.grid(True, which="both")
-        plt.xlabel('Time elapsed')
-        plt.ylabel('Displacement')
+        ax.set_xscale("log")
+        ax.grid(True, which="both")
+        ax.set_xlabel('Time elapsed')
+        ax.set_ylabel('Displacement')
+        return ax
     
     def plot_data(self, data):
-        plt.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
+        fig, ax = plt.subplots()
+        ax.errorbar(self._xp, data, yerr=self._sigma, fmt='.', 
                      color="lightcoral", ecolor='lightgrey', ms=10)
-        plt.xscale("log")
-        plt.grid(True, which="both")
-        plt.xlabel('Time elapsed')
-        plt.ylabel('Displacement')
+        ax.set_xscale("log")
+        ax.grid(True, which="both")
+        ax.set_xlabel('Time elapsed')
+        ax.set_ylabel('Displacement')
+        return ax
 
-    def misfit(self, data, data2):              # optional
+    def misfit(self, data1, data2):              # optional
         raise NotImplementedError
 
-    def log_likelihood(self, data, data2): 
-        residual = data - data2
+    def log_likelihood(self, data1, data2): 
+        residual = data1 - data2
         return (-0.5*residual@self.inverse_covariance_matrix@residual.T).item()
     
     def log_prior(self, model):
@@ -224,6 +228,5 @@ yp2 = np.array([1.0000000, 0.9625890, 0.9265770, 0.8919120, 0.8585450,
                 0.0220838])
 
 
-
-# 37 Earth Sciences -> 3707 Hydrology -> 370703 Groundwater Hydrology -> Slug Test
-# description: this is a description, if you can see this, it works!
+# 37 EARTH SCIENCES -> 3707 Hydrology -> 370703 Groundwater hydrology -> Slug test -> SlugTest
+# description: This example involves the matching of an appropriate forward model to time-displacement data obtained from a traditional single well slug test.

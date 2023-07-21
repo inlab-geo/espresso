@@ -19,9 +19,9 @@ class Magnetotelluric1D(EspressoProblem):
         "contact_name": "Hoël Seillé",         
         "contact_email": "hoel.seille@csiro.au",
 
-        "citations": [("","")],
+        "citations": [],
 
-        "linked_sites": [("","")], 
+        "linked_sites": [], 
     }
 
 
@@ -145,18 +145,18 @@ class Magnetotelluric1D(EspressoProblem):
         ax.plot((px[:,0]),px[:,1],'k-',lw=3)
         ax.set_xlim(res_bounds);
         ax.set_ylim(max_depth,0)
-        ax.set_xlabel('Log$_{10}$ resistivity ($\Omega$m)')
+        ax.set_xlabel(r'Log$_{10}$ resistivity ($\Omega$m)')
         ax.set_ylabel('Depth (m)')
         ax.grid(lw=0.2)
         ax.set_title(title)
         plt.tight_layout()
         #plt.show()
-        return fig
+        return ax
     
-    def plot_data(self, data, data2 = None, Cm = None):
+    def plot_data(self, data1, data2 = None, Cm = None):
         nf = len(self._freqs)
-        log10_rho = data[:nf]
-        phase = data[nf:]
+        log10_rho = data1[:nf]
+        phase = data1[nf:]
         fig, axs = plt.subplots(2,1,sharex = True,figsize = (4,4), num = 2)
         if Cm is None:
             axs[0].plot(np.log10(1/self._freqs), log10_rho,'k.')
@@ -175,7 +175,7 @@ class Magnetotelluric1D(EspressoProblem):
             phase2 = data2[nf:]
             axs[0].plot(np.log10(1/self._freqs), log10_rho2, 'k-', lw = 1, zorder = 2, label = 'Resp')
             axs[1].plot(np.log10(1/self._freqs), phase2, 'k-', lw = 1, zorder = 2)
-        axs[0].set_ylabel('Log$_{10}$ $\\rho_{app}$ ($\Omega$m)')
+        axs[0].set_ylabel(r'Log$_{10}$ $\rho_{app}$ ($\Omega$m)')
         axs[1].set_yticks([0,45,90])
         axs[1].set_ylabel('Phase (deg.)')
         axs[1].set_xlabel('Log$_{10}$ Period (s)')
@@ -184,10 +184,10 @@ class Magnetotelluric1D(EspressoProblem):
         # axs[0].legend()
         plt.tight_layout()
         #plt.show()
-        return fig
+        return axs
 
-    def misfit(self, data, data2, Cm_inv = None):
-        res = data - data2
+    def misfit(self, data1, data2, Cm_inv = None):
+        res = data1 - data2
         if Cm_inv is None:
             return float(res.T @ res)
         else:
@@ -333,8 +333,5 @@ def load_data(filename, error_floor = 0.05, subsampling = 3):
     return freqs, dobs, derr
 
 
-
-
-
-# 37 Earth Sciences -> 3706 Geophysics -> 370602 Electrical And Electromanetic Methods In Geophysics -> Magnetotelluric -> Magnetotelluric_1D
-# description: this is a description, if you can see this, it works!
+# 37 EARTH SCIENCES -> 3706 Geophysics -> 370602 Electrical and electromagnetic methods in geophysics -> Magnetotelluric -> Magnetotelluric1D
+# description: Compute the MT response of a 1D resistivty model.

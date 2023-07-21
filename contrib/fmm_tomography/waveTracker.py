@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
+import cartopy
 
 from espresso.utils import absolute_path as path, silent_remove
 
@@ -95,13 +96,16 @@ class gridModel(object):
         # run fmst wavefront tracker code from command line
         # see if the executable is there, otherwise do preparation for the executable
         out = run_fm2dss(wdir)
-        if out.returncode:      # re-compile if there's an error
-            compile_fm2dss()
-            out = run_fm2dss(wdir)
+        # if out.returncode:      # re-compile if there's an error
+        #     compile_fm2dss()
+        #     out = run_fm2dss(wdir)
         if out.returncode:      # add permission if there's a further error
             print("Trying to fix now...")
             try:
-                Path(wdir + "/fm2dss.o").chmod(0o774)
+                import stat
+                exe_file = Path(wdir + "/../build/fm2dss.o")
+                st = os.stat(exe_file)
+                os.chmod(exe_file, st.st_mode | stat.S_IEXEC)
                 print("Execute permission given to fm2dss.o.")
             except:
                 print("Failed to fix. Check error message above.")
@@ -366,20 +370,50 @@ def read_fmst_wave(filename):
     tfield = tfield[:,::-1]
     return tfield
 
-def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,
+def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,use_geographic=False, 
                  figsize=(6,6),title=None,line=1.0,cline='k',alpha=1.0,wfront=None,cwfront='k',
                  diced=True,dicex=8,dicey=8,cbarshrink=0.6,**wkwargs):
     fig = plt.figure(figsize=figsize)
-    if cmap is None: cmap = plt.cm.RdBu
-
-    # if diced option plot the actual B-spline interpolated velocity used by fmst program
     
-    plotmodel = model
-    if(diced):
-        plotmodel = dicedgrid(model,extent=extent,dicex=dicex,dicey=dicey) 
-    
-    plt.imshow(plotmodel.T,origin='lower',extent=extent,cmap=cmap)
+    if use_geographic:
+        x0,x1,y0,y1 = extent
+        xc = (x0 + x1) / 2
+        yc = (y0 + y1) / 2
+        nx, ny = model.shape
+        x = np.linspace(x0, x1, nx)
+        y = np.linspace(y0, y1, ny)
+        yy, xx = np.meshgrid(y, x)
+        zz = model
+        cartopy_projection = cartopy.crs.Mercator(
+            central_longitude=xc, 
+            min_latitude=y0, 
+            max_latitude=y1, 
+            globe=None,
+            latitude_true_scale=None, 
+            false_easting=0.0, 
+            false_northing=0.0, 
+            scale_factor=None
+        )
+        ax = fig.add_subplot(1, 1, 1, projection=cartopy_projection)
+        ax.set_extent(extent, crs=cartopy.crs.PlateCarree())
+        if cmap is None:
+            cmap = plt.colormaps["Greys_r"]
+        cm = ax.pcolormesh(xx, yy, zz, cmap=cmap, transform=cartopy.crs.PlateCarree())
+        ax.coastlines(resolution='10m', color='black')
+        ax.gridlines(color='k', draw_labels=True)
+        fig.colorbar(cm, orientation="horizontal")
+    else:
+        if cmap is None: cmap = plt.cm.RdBu
 
+        # if diced option plot the actual B-spline interpolated velocity used by fmst program
+        
+        plotmodel = model
+        if(diced):
+            plotmodel = dicedgrid(model,extent=extent,dicex=dicex,dicey=dicey) 
+        
+        plt.imshow(plotmodel.T,origin='lower',extent=extent,cmap=cmap)
+        
+        if(wfront is None): plt.colorbar(shrink=cbarshrink)
 
     if paths is not None:
         if(isinstance(paths, np.ndarray) and paths.shape[1] == 4): # we have paths from xrt.tracer so adjust
@@ -396,7 +430,6 @@ def displayModel(model,paths=None,extent=(0,1,0,1),clim=None,cmap=None,
         X, Y = np.meshgrid(np.linspace(extent[0],extent[1],nx), np.linspace(extent[2],extent[3],ny))
         plt.contour(X, Y, wfront.T, **wkwargs)  # Negative contours default to dashed.
     
-    if(wfront is None): plt.colorbar(shrink=cbarshrink)
 
     # plt.show()
     return fig
@@ -458,22 +491,18 @@ def generateSurfacePoints(nPerSide,extent=(0,1,0,1),surface=[True,True,True,True
     return np.array(out)
 
 def run_fm2dss(wdir):
-    command = "./fm2dss.o"
+    command = "../build/fm2dss.o"
     return subprocess.run(command,stdout=subprocess.PIPE, text=True,shell=True,cwd=wdir)
 
 def compile_fm2dss():
     # https://github.com/inlab-geo/espresso/blob/main/espresso_machine/build_package/validate.py#L170
-    build_dir = path(".")
-    res1 = subprocess.call(["cmake", "."], cwd=build_dir)
+    build_dir = path("./build")
+    res1 = subprocess.call(["cmake", ".."], cwd=build_dir)
     if res1:
         raise ChildProcessError(f"`cmake .` failed in {build_dir}")
     res2 = subprocess.call(["make"], cwd=build_dir)
     if res2:
         raise ChildProcessError(f"`make` failed in {build_dir}")
-    clean_cmake_files()
 
-def clean_cmake_files():
-    shutil.rmtree(path("CMakeFiles"))
-    files_to_rm = ["Makefile", "cmake_install.cmake", "CMakeCache.txt"]
-    for file in files_to_rm:
-        silent_remove(path(file))
+def clean_fm2dss():
+    shutil.rmtree(path("build"))

@@ -50,7 +50,7 @@ Details regarding the MT method can be found in Simpson and Bahr (2005) and Chav
 
 As mentioned earlier, the penetration of the EM fields depends on the frequency and the electrical conductivity of the Earth. Lower frequencies will penetrate deeper into the Earth, and conductive material will attenuate faster the EM fields. Therefore, depending on the frequency range available (and the composition of the Earth), the MT method can be used to map the distribution of the electrical conductivity into the Earth from tens of meters to hundreds of kilometres. Programs such as AusLAMP (for example Robertson et al., 2016) aims at imaging the Australia lithosphere and upper mantle using long period MT data, while Audio MT (AMT) and Broad Band MT (BBMT) data are used to image the upper crust (for example Simpson et al., 2021 or Jiang et al., 2022). 
 
-#### References:
+### References
 
 *Chave, A. D., & Jones, A. G. (Eds.). (2012). The magnetotelluric method: Theory and practice. Cambridge University Press.*
 

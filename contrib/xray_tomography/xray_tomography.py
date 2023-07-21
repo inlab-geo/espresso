@@ -8,13 +8,12 @@ import matplotlib.pyplot as plt
 import tqdm
 
 
-
 class XrayTomography(EspressoProblem):
     """Forward simulation class
     """
 
     metadata = {
-        "problem_title": "X-ray tomography",
+        "problem_title": "X-ray Tomography",
         "problem_short_description": "",
 
         "author_names": ["Andrew Valentine"],
@@ -31,19 +30,19 @@ class XrayTomography(EspressoProblem):
         super().__init__(example_number)
         if example_number == 1:
             self._paths, self._attns = load_data('data/example1.dat')
-            self._desc = "A straightforward X-ray tomography setup with good data coverage (InLab logo)"
+            self._desc = "A straightforward X-ray tracer setup with good data coverage (InLab logo)"
             self._ngrid = 50 
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/inlab_logo.png',self._ngrid,self._ngrid,2,0.5)
         elif example_number == 2:
             self._paths, self._attns = load_data('data/example2.dat')
-            self._desc = "A straightforward X-ray tomography setup with good data coverage (CSIRO logo)"
+            self._desc = "A straightforward X-ray tracer setup with good data coverage (CSIRO logo)"
             self._ngrid = 50 
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)
         elif example_number == 3:
             self._paths, self._attns = load_data('data/example3.dat')
-            self._desc = "X-ray tomography with large gaps (CSIRO logo)"
+            self._desc = "X-ray tracer with large gaps (CSIRO logo)"
             self._ngrid = 50
             self._start = np.ones((self._ngrid,self._ngrid))
             self._true = pngToModel('data/csiro_logo.png',self._ngrid,self._ngrid)
@@ -108,12 +107,12 @@ class XrayTomography(EspressoProblem):
         if paths:
             for p in self._paths:
                 ax.plot([p[0],p[2]],[p[1],p[3]],'y',linewidth=0.05)
-        return fig
+        return ax
     
-    def plot_data(self, data, data2=None):
+    def plot_data(self, data1, data2=None):
         raise NotImplementedError               # optional
 
-    def misfit(self, data, data2):              # optional
+    def misfit(self, data1, data2):              # optional
         raise NotImplementedError
 
     def log_likelihood(self,data,data2):        # optional
@@ -305,6 +304,5 @@ def pngToModel(pngfile,nx,ny,bg=1.,sc=1.):
     return model
 
 
-
-# 37 Earth Sciences -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration -> Xray Tracer -> Xray tomography
-# description: this is a description, if you can see this, it works!
+# 37 EARTH SCIENCES -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration -> Xray Tracer -> Xray tomography
+# description: We assume that the x-rays travel at the same speed regardless of the medium through which they are passing, and so their paths are straight lines between source and receiver.
