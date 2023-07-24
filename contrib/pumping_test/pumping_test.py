@@ -297,3 +297,7 @@ yp4 = np.array([  0.012805,   0.882463,   0.930532,   1.032340,   1.259800,
                 180.846000, 183.214000, 185.583000, 186.208000])
 
 #yp5 = np.array([])
+
+
+# 37 EARTH SCIENCES -> 3707 Hydrology -> 370703 Groundwater hydrology -> Pumping Test -> PumpingTest
+# description: This example involves the matching of an appropriate forward model to time-drawdown data obtained from a two-well constant rate discharge test.

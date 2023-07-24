@@ -339,6 +339,7 @@ def get_gauss_model(extent,nx,ny): # build two gaussian anomaly velocity model
     gauss1,gauss2 = rv1.pdf(pos),rv2.pdf(pos)
     return   2000.*np.ones([nx,ny])  + (vc1-vb)*gauss1/np.max(gauss1) + (vc2-vb)*gauss2/np.max(gauss2)
 
+
 # build test velocity models
 # read vtx format velocity model and source receivers files
 def read_vtxmodel(filename, with_line_breaks=True):
@@ -391,3 +392,7 @@ def read_receivers(filename):
             recs[i,1],recs[i,0] = float(columns[0]),float(columns[1])
         f.close()
     return recs
+
+
+# 37 EARTH SCIENCES -> 3706	Geophysics -> 370609 Seismology and seismic exploration -> Fast Marching Method -> FmmTomography
+# description: The wave front tracker routines solves boundary value ray tracing problems into 2D heterogeneous wavespeed media, defined by continuously varying velocity model calculated by 2D cubic B-splines.
