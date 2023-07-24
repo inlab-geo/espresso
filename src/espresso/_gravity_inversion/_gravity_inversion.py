@@ -619,3 +619,7 @@ class auxclass:
         model[ind] = value
 
         return model
+
+
+# 37 EARTH SCIENCES -> 3706 Geophysics -> 370606 Gravimetrics -> 3D gravity -> GravityInversion
+# description: This example implements a simple gravity forward problem. The model represents density within the earth on a 3D Cartesian grid.

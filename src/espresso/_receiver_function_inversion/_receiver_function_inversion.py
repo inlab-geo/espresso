@@ -210,3 +210,7 @@ class ReceiverFunctionInversion(EspressoProblem):
             if depths_in_0_60 and veloc_in_3_7 and params_increasing:
                 return np.log(1/60).item()
         return float("-inf")
+
+
+# 37 EARTH SCIENCES -> 3706	Geophysics -> 370609 Seismology and seismic exploration -> Receiver function -> ReceiverFunctionInversion
+# description: 'Receiver functions' are a class of seismic data used to study discontinuities (layering) in the Earth's crust.

@@ -1,3 +1,4 @@
+from espresso import EspressoProblem
 import numpy as np
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
@@ -5,7 +6,6 @@ from espresso.utils import loadtxt, absolute_path
 from PIL import Image
 import matplotlib.pyplot as plt
 import tqdm
-
 
 
 class XrayTomography(EspressoProblem):
@@ -302,3 +302,7 @@ def pngToModel(pngfile,nx,ny,bg=1.,sc=1.):
     except:
         model = sc*(bg+np.asarray(png.convert('L').resize((nx,ny)).transpose(Image.ROTATE_270))/255.)        
     return model
+
+
+# 37 EARTH SCIENCES -> 3706 Geophysics -> 370609 Seismology And Seismic Exploration -> Xray Tracer -> Xray tomography
+# description: We assume that the x-rays travel at the same speed regardless of the medium through which they are passing, and so their paths are straight lines between source and receiver.
