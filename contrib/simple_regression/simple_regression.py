@@ -96,9 +96,9 @@ class SimpleRegression(EspressoProblem):
     def inverse_covariance_matrix(self):
         return (1/self._sigma**2) * np.eye(self.data_size)
         
-    def forward(self, model, with_jacobian=False):
+    def forward(self, model, return_jacobian=False):
         d = curveFittingFwd(self._m,self._xp,self._basis)
-        if with_jacobian:
+        if return_jacobian:
             return d, self.jacobian(model)
         else:
             return d

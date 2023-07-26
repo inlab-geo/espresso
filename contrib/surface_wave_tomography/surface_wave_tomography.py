@@ -117,10 +117,10 @@ class SurfaceWaveTomography(EspressoProblem):
     def inverse_covariance_matrix(self):
         raise NotImplementedError  # optional
 
-    def forward(self, model, with_jacobian=False):
+    def forward(self, model, return_jacobian=False):
         jacobian = self.jacobian(model)
         dpred = jacobian @ model
-        if with_jacobian:
+        if return_jacobian:
             return dpred, jacobian
         return dpred 
 

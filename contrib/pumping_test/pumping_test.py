@@ -102,8 +102,8 @@ class PumpingTest(EspressoProblem):
     def inverse_covariance_matrix(self):
         return 1./self._sigma**2.*np.eye(self.data_size)
         
-    def forward(self, model, with_jacobian=False):
-        if with_jacobian:
+    def forward(self, model, return_jacobian=False):
+        if return_jacobian:
             raise NotImplementedError
         if self.example_number == 1:
             from mpmath import pi, sqrt, besselk, invertlaplace

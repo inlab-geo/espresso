@@ -135,8 +135,8 @@ class ReceiverFunctionInversion(EspressoProblem):
             model_setup[:,:2] = model.reshape(model_setup[:,:2].shape)
         return model_setup
 
-    def forward(self, model, with_jacobian=False, *args, **kwargs):
-        if with_jacobian:
+    def forward(self, model, return_jacobian=False, *args, **kwargs):
+        if return_jacobian:
             raise NotImplementedError           # optional
         else:
             model_setup = self._model_setup(model)

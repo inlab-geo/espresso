@@ -77,8 +77,8 @@ class ExampleName(EspressoProblem):
     def inverse_covariance_matrix(self):
         raise NotImplementedError  # optional
 
-    def forward(self, model, with_jacobian=False):
-        if with_jacobian:
+    def forward(self, model, return_jacobian=False):
+        if return_jacobian:
             raise NotImplementedError  # optional
         else:
             raise NotImplementedError  # TODO implement me

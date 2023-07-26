@@ -92,13 +92,13 @@ class GravityInversion(EspressoProblem):
         print("This needs fixing")
         return np.zeros([self.data_size,self.data_size])
 
-    def forward(self, model, with_jacobian=False):
+    def forward(self, model, return_jacobian=False):
         x_nodes = self.x_nodes
         y_nodes = self.y_nodes
         z_nodes = self.z_nodes
         rec_coords = self.rec_coords
         res = _calculate_gravity(
-            model, x_nodes, y_nodes, z_nodes, rec_coords, with_jacobian
+            model, x_nodes, y_nodes, z_nodes, rec_coords, return_jacobian
         )
         return res
     
@@ -333,13 +333,13 @@ def _kernel(ii, jj, kk, dx, dy, dz, dim):
         g = -gxx - gyy
     return g
 
-def _calculate_gravity(model, x_nodes, y_nodes, z_nodes, rec_coords, with_jacobian=False):
+def _calculate_gravity(model, x_nodes, y_nodes, z_nodes, rec_coords, return_jacobian=False):
     # Tolerance implementation follows Nagy et al., 2000
         tol = 1e-4
         # gx_rec=np.zeros(len(rec_coords))
         # gy_rec=np.zeros(len(rec_coords))
         gz_rec = np.zeros(len(rec_coords))
-        if with_jacobian:
+        if return_jacobian:
             # Jx_rec=np.zeros([len(rec_coords),len(x_nodes)])
             # Jy_rec=np.zeros([len(rec_coords),len(x_nodes)])
             Jz_rec = np.zeros([len(rec_coords), len(x_nodes)])
@@ -368,12 +368,12 @@ def _calculate_gravity(model, x_nodes, y_nodes, z_nodes, rec_coords, with_jacobi
             # gx_rec[recno] = 1e5*G*sum(model*Jx)
             # gy_rec[recno] = 1e5*G*sum(model*Jy)
             gz_rec[recno] = 1e5 * G * sum(model * Jz)
-            if with_jacobian:
+            if return_jacobian:
                 # Jx_rec[recno,:] = Jx
                 # Jy_rec[recno,:] = Jy
                 Jz_rec[recno, :] = Jz
 
-        if with_jacobian:
+        if return_jacobian:
             return gz_rec, Jz_rec
         else:
             return gz_rec

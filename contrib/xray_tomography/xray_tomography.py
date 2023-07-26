@@ -81,11 +81,11 @@ class XrayTomography(EspressoProblem):
     def inverse_covariance_matrix(self):
         raise NotImplementedError               # optional
         
-    def forward(self, model, with_jacobian=False):
+    def forward(self, model, return_jacobian=False):
         n = model.size
         ngrid = int(n**0.5)
         attns,A = tracer(model.reshape((ngrid,ngrid)),self._paths)
-        if with_jacobian:
+        if return_jacobian:
             return attns, A
         else:
             return attns
