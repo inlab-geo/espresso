@@ -117,8 +117,8 @@ class Magnetotelluric1D(EspressoProblem):
         self._derr = derr
         self._freqs = freqs
 
-    def forward(self, model, with_jacobian = False):
-        if with_jacobian:
+    def forward(self, model, return_jacobian = False):
+        if return_jacobian:
             dpred, G = forward_1D_MT(model, self._dptrue, self._freqs, return_G=True)
             return dpred, G
         else:

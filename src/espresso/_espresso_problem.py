@@ -227,11 +227,11 @@ class EspressoProblem(metaclass=ABCMeta):
 
     @abstractmethod
     def forward(
-        self, model: numpy.ndarray, with_jacobian: bool = False
+        self, model: numpy.ndarray, return_jacobian: bool = False
     ) -> numpy.ndarray:
         """Perform forward simulation with a model to produce synthetic data
 
-        If with_jacobian == True, returns (d, G); else, returns d, where:
+        If return_jacobian == True, returns (d, G); else, returns d, where:
 
         - d : numpy.ndarray, shape(:attr:`data_size`,), a simulated data vector
           corresponding to the given model
@@ -239,19 +239,19 @@ class EspressoProblem(metaclass=ABCMeta):
           Jacobian such that :math:`G[i,j] = \partial d[i]/\partial model[j]`
 
         If an example does not permit calculation of the Jacobian then calling with
-        with_jacobian=True should result in a NotImplementedError being raised.
+        return_jacobian=True should result in a NotImplementedError being raised.
 
         Parameters
         ----------
         model : numpy.ndarray
             a model vector, in the same shape of :attr:`model_size`
-        with_jacobian: bool
+        return_jacobian: bool
             a switch governing the output required
 
         Returns
         -------
         (numpy.ndarray, numpy.ndarray) | numpy.ndarray
-            (d, G) or d, depending on the value of with_jacobian. Details above.
+            (d, G) or d, depending on the value of return_jacobian. Details above.
         """
         raise NotImplementedError
 
