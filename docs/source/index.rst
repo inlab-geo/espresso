@@ -64,7 +64,7 @@ Here's a simple illustration:
     # ... the ability to compute simulated data for an arbitrary
     # model vector, and the corresponding jacobian (i.e. derivatives 
     # of data wrt model parameters)
-    predictions, G = tp.forward(model, with_jacobian = True)
+    predictions, G = tp.forward(model, return_jacobian = True)
     # ... a data vector, which matches the output from `tp.forward()`
     residuals = tp.data - predictions 
     # ... and much more!
