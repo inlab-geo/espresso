@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.3.10 (27/07/2023)
+
+### Espresso core
+
+- Change the function API `forward(model, return_jacobian)` instead of `forward(model, with_jacobian)`
+
 ## v0.3.9 (11/07/2023)
 
 ### Changed examples
