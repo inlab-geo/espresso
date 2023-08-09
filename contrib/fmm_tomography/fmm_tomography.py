@@ -210,6 +210,7 @@ class FmmTomography(EspressoProblem):
         return sparse.diags([sigma_sq_inv] * self.data_size)
 
     def forward(self, model, return_jacobian=False, **kwargs): # accepting "slowness" though keyword is "model"
+        assert np.all(model>0)
         slowness_reshaped = model.reshape(self._mstart.shape)
         velocity = 1 / slowness_reshaped
         g = wt.gridModel(velocity, extent=self.extent)

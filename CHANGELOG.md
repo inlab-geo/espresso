@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.3.11 (09/08/2023)
+
+### Changed examples
+
+- FmmTomography: check all velocities above zero
+- ReceiverFunctionInversion: store dataset in advance
+
 ## v0.3.10 (27/07/2023)
 
 ### Espresso core
