@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
+from espresso.utils import absolute_path as path
 
 
 LIB_DIR = pathlib.Path(__file__).resolve().parent / "lib"
@@ -45,8 +46,10 @@ class ReceiverFunctionInversion(EspressoProblem):
         from . import rf
         self.rf = rf
 
-        # example initialisation
+        # self._t, self._data = self.rf.rfcalc(self._ref_model_setup, sn=0.3)
         if example_number < 4:
+            _dataset = np.loadtxt(path(f"data/dataset1.txt"))
+            self._Cdinv = self.rf.InvDataCov(2.2764,0.027,len(_dataset))
             self._ref_model_setup = np.array([[1,4.0,1.7],          # used in example_number=1,2,3
                                             [3.5,4.3,1.7],
                                             [8.0,4.2,2.0],
@@ -54,18 +57,19 @@ class ReceiverFunctionInversion(EspressoProblem):
                                             [45,6.2,1.7]])
             # good_model = np.array([1, 4, 3.5, 4.3, 8, 4.2, 20, 6, 45, 6.2])
             # null_model = np.array([1, 4.3, 4, 4.3, 7.5, 4.5, 21, 5, 40, 6.5])
-        else:
+        elif example_number == 4:
+            _dataset = np.loadtxt(path(f"data/dataset4.txt"))
+            self._Cdinv = self.rf.InvDataCov(2.3562,0.027,len(_dataset))
             self._ref_model_setup = np.array([[8.0,4.2,1.7],          # used in example_number=4
                                             [20, 6,1.7],
                                             [45,6.2,1.7]])
             # good_model = np.array([8., 4.2, 20, 6, 45, 6.2])
             # null_model = np.array([9, 4, 20, 5, 50, 6])
+        else:
+            raise InvalidExampleError
 
-        self._t, self._data = self.rf.rfcalc(self._ref_model_setup, sn=0.2)
-
-        # compute covariance matrix
-        self._Cdinv = self.rf.InvDataCov(2.5,0.01,len(self._data))
-        # self._Cdinv /= 100        # (potentially we can) temper the likelihood by rescaling the data covariance
+        self._t = _dataset[:,0]
+        self._data = _dataset[:,1]
         self._Cd = np.linalg.inv(self._Cdinv)
 
         # example-specific model setup
@@ -86,12 +90,10 @@ class ReceiverFunctionInversion(EspressoProblem):
             self._null_model = np.array([1, 4.3, 4, 4.3, 7.5, 4.5, 21, 5, 40, 6.5])
             self._nmodel = len(self._null_model)
         elif example_number == 4:
-            self._description = "Inverting dpeths and velocities of 3 layers"
+            self._description = "Inverting depths and velocities of 3 layers"
             self._good_model = self._ref_model_setup[:,:2].flatten()
-            self._null_model = np.array([9, 4, 20, 5, 50, 6])
+            self._null_model = np.array([9., 4., 20., 5., 50., 6.])
             self._nmodel = len(self._null_model)
-        else:
-            raise InvalidExampleError
 
     @property
     def description(self):
