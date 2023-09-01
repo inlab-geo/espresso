@@ -228,5 +228,5 @@ yp2 = np.array([1.0000000, 0.9625890, 0.9265770, 0.8919120, 0.8585450,
                 0.0220838])
 
 
-# 37 EARTH SCIENCES -> 3707 Hydrology -> 370703 Groundwater hydrology -> Slug test -> SlugTest
+# Espresso -> EARTH SCIENCES -> Hydrology -> Groundwater hydrology -> Slug test -> SlugTest
 # description: This example involves the matching of an appropriate forward model to time-displacement data obtained from a traditional single well slug test.
