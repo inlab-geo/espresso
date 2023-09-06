@@ -281,5 +281,5 @@ def curveFittingJac(xpts,nModelParameters, basis='polynomial',domainLength=1.):
     return G
 
 
-# 49 MATHEMATICAL SCIENCES -> 4905 Statistics -> 490501 Applied statistics -> Curve fitting -> SimpleRegression
+# Espresso -> MATHEMATICAL SCIENCES -> Statistics -> Applied statistics -> Curve fitting -> SimpleRegression
 # description: This example includes various small 1D regression (curve-fitting) problems. Several different forms of basis function are supported: polynomial, Fourier and discrete.

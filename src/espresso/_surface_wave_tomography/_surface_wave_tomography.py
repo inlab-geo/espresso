@@ -157,5 +157,5 @@ class SurfaceWaveTomography(EspressoProblem):
         raise NotImplementedError  # optional
 
 
-# 37 EARTH SCIENCES -> 3706	Geophysics -> 370609 Seismology and seismic exploration -> Ambient noise -> SurfaceWaveTomography
+# Espresso -> EARTH SCIENCES -> Geophysics -> Seismology and seismic exploration -> Surface wave / ambient noise -> SurfaceWaveTomography
 # description: Mapping lateral variations in surface-wave velocity at continental (USA -- example 1) and global (example 2) scale. Here, the problem is linearized, meaning that we assume that surface waves travel along the great-circle path connecting two points on the Earth surface.

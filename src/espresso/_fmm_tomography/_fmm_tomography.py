@@ -395,5 +395,5 @@ def read_receivers(filename):
     return recs
 
 
-# 37 EARTH SCIENCES -> 3706	Geophysics -> 370609 Seismology and seismic exploration -> Fast Marching Method -> FmmTomography
+# Espresso -> EARTH SCIENCES -> Geophysics -> Seismology and seismic exploration -> Fast Marching Method -> FmmTomography
 # description: The wave front tracker routines solves boundary value ray tracing problems into 2D heterogeneous wavespeed media, defined by continuously varying velocity model calculated by 2D cubic B-splines.

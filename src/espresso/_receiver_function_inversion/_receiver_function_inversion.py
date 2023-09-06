@@ -214,5 +214,5 @@ class ReceiverFunctionInversion(EspressoProblem):
         return float("-inf")
 
 
-# 37 EARTH SCIENCES -> 3706	Geophysics -> 370609 Seismology and seismic exploration -> Receiver function -> ReceiverFunctionInversion
+# Espresso -> EARTH SCIENCES -> Geophysics -> Seismology and seismic exploration -> Receiver function -> ReceiverFunctionInversion
 # description: 'Receiver functions' are a class of seismic data used to study discontinuities (layering) in the Earth's crust.

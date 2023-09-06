@@ -333,5 +333,5 @@ def load_data(filename, error_floor = 0.05, subsampling = 3):
     return freqs, dobs, derr
 
 
-# 37 EARTH SCIENCES -> 3706 Geophysics -> 370602 Electrical and electromagnetic methods in geophysics -> Magnetotelluric -> Magnetotelluric1D
+# Espresso -> EARTH SCIENCES -> Geophysics -> Electromagnetic -> Magnetotelluric -> Magnetotelluric1D
 # description: Compute the MT response of a 1D resistivty model.
