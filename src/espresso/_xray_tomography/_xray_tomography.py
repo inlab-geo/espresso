@@ -304,5 +304,5 @@ def pngToModel(pngfile,nx,ny,bg=1.,sc=1.):
     return model
 
 
-# Espresso -> EARTH SCIENCES -> Geophysics -> Seismology And Seismic Exploration -> Travel times -> XrayTomography
+# Espresso -> EARTH SCIENCES -> Geophysics -> Seismology and seismic exploration -> Travel times -> XrayTomography
 # description: We assume that the x-rays travel at the same speed regardless of the medium through which they are passing, and so their paths are straight lines between source and receiver.

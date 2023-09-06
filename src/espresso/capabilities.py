@@ -257,8 +257,8 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
-        "list_capabilities": 1,
         "parameterization": 1,
+        "list_capabilities": 1,
         "example_dict": 1
     },
     "SlugTest": {
@@ -313,8 +313,8 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 0,
         "log_prior": 0,
+        "list_capabilities": 1,
         "call_wavefront_tracker": 1,
-        "tmp_files": 1,
-        "list_capabilities": 1
+        "tmp_files": 1
     }
 }
