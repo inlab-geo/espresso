@@ -70,8 +70,8 @@ class ExampleName(EspressoProblem):
         raise NotImplementedError  # TODO implement me
 
     @property
-    def covariance_matrix(self):  # optional
-        raise NotImplementedError
+    def covariance_matrix(self):
+        raise NotImplementedError  # optional
 
     @property
     def inverse_covariance_matrix(self):
