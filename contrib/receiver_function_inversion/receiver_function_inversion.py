@@ -14,7 +14,7 @@ class ReceiverFunctionInversion(EspressoProblem):
     """
 
     metadata = {
-        "problem_title": "Receiver function",                # To be used in docs
+        "problem_title": "Receiver function (Fortran)",                # To be used in docs
         "problem_short_description": (
             "'Receiver functions' are a class of seismic data used to study "
             "discontinuities (layering) in the Earth's crust"
@@ -25,13 +25,11 @@ class ReceiverFunctionInversion(EspressoProblem):
         "contact_name": "Malcolm Sambridge",         # Contact for contributor/maintainer of espresso example
         "contact_email": "Malcolm.Sambridge@anu.edu.au",
 
-        "citations": [("Langston, C. A., Structure under Mount Rainer, Washington, inferred from teleseismic body waves, J. Geophys. Res., vol 84, 4749-4762, 1979.", 
-                       "Shibutani, T., Kennett, B. and Sambridge, M., Genetic algorithm inversion for receiver functions with application to crust and uppermost mantle structure beneath Eastern Australia, Geophys. Res. Lett., 23 , No. 4, 1829-1832, 1996")], # Reference to publication(s) that describe this example. In most 
-                                # cases there will only be a single entry in this list.
-                                # List of (citation, doi) pairs e.g. 
-                                # citations = [("Newton, I (1687). Philosophiae naturalis principia mathematica.", "")]
-                                # If there are no citations, use empty list `[]`
-
+        "citations": [
+            ("Langston, C. A., Structure under Mount Rainer, Washington, inferred from teleseismic body waves, J. Geophys. Res., vol 84, 4749-4762, 1979.", ""), 
+            ("Shibutani, T., Kennett, B. and Sambridge, M., Genetic algorithm inversion for receiver functions with application to crust and uppermost mantle structure beneath Eastern Australia, Geophys. Res. Lett., 23 , No. 4, 1829-1832, 1996", "")
+        ],
+        
         "linked_sites": [],  # List of (title, address) pairs for any websites that 
                                     # should be linked in the documentation, e.g.
                                     # linked_sites = [("Parent project on Github","https://github.com/user/repo"),
