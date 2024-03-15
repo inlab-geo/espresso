@@ -314,7 +314,7 @@ def pprint_compliance_report(report: dict[str, ProblemReport]):
         _required_title = cformat(bcolors.UNDERLINE, "Required attributes") + ": "
         _required_count = r.required_count
         _required_title += (
-            f"{_required_count['implemented']}/{_required_count['implemented']} "
+            f"{_required_count['implemented']}/{_required_count['total']} "
             f"implemented, {_required_count['error']} errors, "
             f"{_required_count['not_implemented']} not implemented yet"
         )
