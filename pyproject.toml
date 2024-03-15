@@ -25,6 +25,7 @@ requires = [
     "ninja",
     "versioningit",
     "numpy>=1.18",
+    "cython>=0.29",
 ]
 build-backend = "setuptools.build_meta"
 
