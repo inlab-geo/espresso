@@ -6,7 +6,7 @@ ext = Extension(
     "rf", 
     sources=[
         "rf.pyx", 
-        "src/Complex.c", 
+        "src/my_complex.c", 
         "src/matrix.c", 
         "src/knt_mini.c", 
         "src/fft.c", 

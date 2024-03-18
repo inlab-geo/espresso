@@ -1,3 +1,5 @@
+# mkdir build; cd build; cmake -DPYTHON_EXECUTABLE=$(which python) ..; make
+
 cmake_minimum_required(VERSION 3.9)
 
 project(rf_c)
@@ -30,7 +32,7 @@ find_package(PythonExtensions REQUIRED)
 find_package(Cython REQUIRED)
 
 set(rf_src_files
-    rf_lib/src/Complex.c
+    rf_lib/src/my_complex.c
     rf_lib/src/fft.c
     rf_lib/src/knt_mini.c
     rf_lib/src/matrix.c

@@ -89,7 +89,7 @@ PACKAGE_DIR = {"": "src"}
 PACKAGES = setuptools.find_namespace_packages(where='src')
 CMAKE_INSTALL_DIR = f"src/espresso"
 CMAKE_ARGS = ['-DSKBUILD=ON']
-PYTHON_REQUIRES = ">=3.7"
+PYTHON_REQUIRES = ">=3.8"
 INSTALL_REQUIRES = [
     "numpy>=1.18",
     "scipy>=1.0.0",

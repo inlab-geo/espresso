@@ -11,7 +11,8 @@ dependencies:
   - sphinx
   - jupyterlab
   - matplotlib
-  - cython
+  - cython>=3.0.9
+  - cmake>=3.28
   - gfortran
   - pybind11
   - pytest

@@ -1,7 +1,7 @@
 /*********************************************************
-*			Complex.h
+*			my_complex.h
 *  header file for complex data type, source codes are in
-*  Complex.c and fft.c
+*  my_complex.c and fft.c
 *********************************************************/
 
 #ifndef __MY_COMPLEX__
