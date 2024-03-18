@@ -24,7 +24,7 @@ requires = [
     "cmake>=3.18",
     "ninja",
     "versioningit",
-    "numpy>=1.26",
+    "numpy>=1.21",
     "cython>=3.0.9",
 ]
 build-backend = "setuptools.build_meta"
