@@ -28,5 +28,8 @@ In order to release a new version,
    `src/espresso/version.py <https://github.com/inlab-geo/espresso/blob/main/src/espresso/version.py>`_
 2. Update `CHANGELOG.md <https://github.com/inlab-geo/espresso/blob/main/CHANGELOG.md>`_
 
+When there are changes to example name or new examples, remember to add the new problem into
+`active_list.txt <https://github.com/inlab-geo/espresso/blob/main/contrib/active_problems.txt>`.
+
 You can then follow up with the automatic run from the 
 `actions page <https://github.com/inlab-geo/espresso/actions/workflows/publish_pypi.yml>`_.
