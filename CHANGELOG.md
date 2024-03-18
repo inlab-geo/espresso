@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.3.13 (19/03/2024)
+
+- Fix active_problems.txt and include all examples properly
+
 ## v0.3.12 (18/03/2024)
 
 ### New examples
