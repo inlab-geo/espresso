@@ -41,7 +41,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
-#include "Complex.h"
+#include "my_complex.h"
 
 /*---------------------------------------------------------------
 *   fft()

@@ -6,7 +6,7 @@ author	Lupei Zhu
 #ifndef __KNT__
   #define __KNT__
 
-#include "Complex.h"
+#include "my_complex.h"
 
 #define MAXL 500
 
