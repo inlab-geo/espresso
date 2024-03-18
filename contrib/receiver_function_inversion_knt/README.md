@@ -1,4 +1,4 @@
-# Receiver Function Inversion Knt
+# Receiver Function Inversion (Kennett)
 
 This inference problem set uses the forward code by Brian Kennet and adapted
 by Lupei Zhu and Sheng Wang.

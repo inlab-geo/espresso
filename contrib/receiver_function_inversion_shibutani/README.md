@@ -1,4 +1,4 @@
-# Receiver Function Inversion
+# Receiver Function Inversion (Shibutani)
 
 <!-- Please write anything you'd like to explain about the forward problem here -->
 

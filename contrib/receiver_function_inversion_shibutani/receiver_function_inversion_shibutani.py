@@ -9,7 +9,7 @@ from espresso.utils import absolute_path as path
 
 LIB_DIR = pathlib.Path(__file__).resolve().parent / "lib"
 
-class ReceiverFunctionInversion(EspressoProblem):
+class ReceiverFunctionInversionShibutani(EspressoProblem):
     """Forward simulation class
     """
 
@@ -47,22 +47,22 @@ class ReceiverFunctionInversion(EspressoProblem):
         # self._t, self._data = self.rf.rfcalc(self._ref_model_setup, sn=0.3)
         if example_number < 4:
             _dataset = np.loadtxt(path(f"data/dataset1.txt"))
-            self._Cdinv = self.rf.InvDataCov(2.2764,0.027,len(_dataset))
-            self._ref_model_setup = np.array([[1,4.0,1.7],          # used in example_number=1,2,3
-                                            [3.5,4.3,1.7],
-                                            [8.0,4.2,2.0],
-                                            [20, 6,1.7],
-                                            [45,6.2,1.7]])
-            # good_model = np.array([1, 4, 3.5, 4.3, 8, 4.2, 20, 6, 45, 6.2])
-            # null_model = np.array([1, 4.3, 4, 4.3, 7.5, 4.5, 21, 5, 40, 6.5])
+            self._Cdinv = self.rf.InvDataCov(41, 0.0158,len(_dataset))
+            self._ref_model_setup = np.array([[1, 2.5, 1.7],          # used in example_number=1,2,3
+                                            [3.5, 3.0, 1.7],
+                                            [8.0, 3.5, 2.0],
+                                            [20, 3.9, 1.7],
+                                            [45, 4.4,1.7]])
+            # good_model = np.array([1, 2.5, 3.5, 3, 8, 3.5, 20, 3.9, 45, 4.4])
+            # null_model = np.array([1, 2.7, 4, 3.2, 7.5, 3.6, 21, 4, 40, 4.3])
         elif example_number == 4:
             _dataset = np.loadtxt(path(f"data/dataset4.txt"))
-            self._Cdinv = self.rf.InvDataCov(2.3562,0.027,len(_dataset))
-            self._ref_model_setup = np.array([[8.0,4.2,1.7],          # used in example_number=4
-                                            [20, 6,1.7],
-                                            [45,6.2,1.7]])
-            # good_model = np.array([8., 4.2, 20, 6, 45, 6.2])
-            # null_model = np.array([9, 4, 20, 5, 50, 6])
+            self._Cdinv = self.rf.InvDataCov(76, 0.0169,len(_dataset))
+            self._ref_model_setup = np.array([[8.0, 3.0, 1.7],          # used in example_number=4
+                                            [20, 3.9, 1.7],
+                                            [45, 4.4, 1.7]])
+            # good_model = np.array([8, 3, 20, 3.9, 45, 4.4])
+            # null_model = np.array([9, 3.2, 20, 4, 50, 4.3])
         else:
             raise InvalidExampleError
 
@@ -73,24 +73,24 @@ class ReceiverFunctionInversion(EspressoProblem):
         # example-specific model setup
         if example_number == 1:
             self._description = "Inverting depths of the 2nd and 3rd interfaces"
-            self._good_model = np.array([8., 20.])
+            self._good_model = np.array([8, 20])
             self._null_model = np.array([7.5, 21])
             self._interfaces = [2, 3]      # 1st and 2nd interfaces for inversion
             self._nmodel = len(self._interfaces)
         elif example_number == 2:
             self._description = "Inverting velocities of 5 layers"
-            self._good_model = np.array([4., 4.3, 4.2, 6., 6.2])
-            self._null_model = np.array([4.3, 4.3, 4.5, 5, 6.5])
+            self._good_model = np.array([2.5, 3, 3.5, 3.9, 4.4])
+            self._null_model = np.array([2.7, 3.2, 3.6, 4, 4.3])
             self._nmodel = self._ref_model_setup.shape[0]
         elif example_number == 3:
             self._description = "Inverting depths and velocities of 5 layers"
             self._good_model = self._ref_model_setup[:,:2].flatten()
-            self._null_model = np.array([1, 4.3, 4, 4.3, 7.5, 4.5, 21, 5, 40, 6.5])
+            self._null_model = np.array([1, 2.7, 4, 3.2, 7.5, 3.6, 21, 4, 40, 4.3])
             self._nmodel = len(self._null_model)
         elif example_number == 4:
             self._description = "Inverting depths and velocities of 3 layers"
             self._good_model = self._ref_model_setup[:,:2].flatten()
-            self._null_model = np.array([9., 4., 20., 5., 50., 6.])
+            self._null_model = np.array([9, 3.2, 20, 4, 50, 4.3])
             self._nmodel = len(self._null_model)
 
     @property
@@ -195,22 +195,22 @@ class ReceiverFunctionInversion(EspressoProblem):
             if depths_increasing and depths_in_range: 
                 return np.log(1/(40-3.5)).item()
         elif self.example_number == 2:
-            veloc_in_3_7 = all([m_p < 7. and m_p > 3. for m_p in model])
-            if veloc_in_3_7: return np.log(1/2).item()
+            veloc_in_range = all([m_p < 4.5 and m_p > 2 for m_p in model])
+            if veloc_in_range: return np.log(1/2).item()
         elif self.example_number == 3:
             depths_in_0_60 = all([m_p < 60 and m_p > 0 for m_p in model[[0,2,4,6,8]]])
-            veloc_in_3_7 = all([m_p < 7. and m_p > 3. for m_p in model[[1,3,5,7,9]]])
+            veloc_in_range = all([m_p < 4.5 and m_p > 2 for m_p in model[[1,3,5,7,9]]])
             params_increasing = all([model[i] < model[i+2] for i in range(0,len(model)-2,2)])
-            if depths_in_0_60 and veloc_in_3_7 and params_increasing:
+            if depths_in_0_60 and veloc_in_range and params_increasing:
                 return np.log(1/60).item()
         elif self.example_number == 4:
             depths_in_0_60 = all([m_p < 60 and m_p > 0 for m_p in model[[0,2,4]]])
-            veloc_in_3_7 = all([m_p < 7. and m_p > 3. for m_p in model[[1,3,5]]])
+            veloc_in_range = all([m_p < 4.5 and m_p > 2 for m_p in model[[1,3,5]]])
             params_increasing = all([model[i] < model[i+2] for i in range(0,len(model)-2,2)])
-            if depths_in_0_60 and veloc_in_3_7 and params_increasing:
+            if depths_in_0_60 and veloc_in_range and params_increasing:
                 return np.log(1/60).item()
         return float("-inf")
 
 
-# Espresso -> EARTH SCIENCES -> Geophysics -> Seismology and seismic exploration -> Receiver function -> ReceiverFunctionInversion
+# Espresso -> EARTH SCIENCES -> Geophysics -> Seismology and seismic exploration -> Receiver function -> ReceiverFunctionInversionShibutani
 # description: 'Receiver functions' are a class of seismic data used to study discontinuities (layering) in the Earth's crust.

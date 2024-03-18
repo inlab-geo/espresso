@@ -41,7 +41,7 @@ known_dependencies = {
     "obspy", 
     "cartopy", 
 }
-to_exclude = {"espresso", "run_examples"}
+to_exclude = {"espresso", "run_examples", "rf"}
 
 
 def _strip_pkg(modules):

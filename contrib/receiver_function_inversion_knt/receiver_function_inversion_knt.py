@@ -311,3 +311,7 @@ def plot_data(
     ax.set_ylabel(ylabel)
     ax.set_title(title)
     return ax
+
+
+# Espresso -> EARTH SCIENCES -> Geophysics -> Seismology and seismic exploration -> Receiver function -> ReceiverFunctionInversionKnt
+# description:  Receiver function inference problem based on a forward code by Brian Kennet and adapted by Lupei Zhu and Sheng Wang
