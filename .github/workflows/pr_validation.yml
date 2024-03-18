@@ -33,16 +33,21 @@ jobs:
 
       - name: Get changed folders in the contrib folder
         id: changed-contribs
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v43
         with:
           files: contrib/*/  # Alternatively using: `docs/**` or `docs`
 
       - name: List all changed contributions
+        if: steps.changed-contribs.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-contribs.outputs.all_changed_files }}
         run: |
-          for folder in ${{ steps.changed-contribs.outputs.all_changed_files }}; do
+          for folder in ${ALL_CHANGED_FILES}; do
             contrib_name=$(echo $folder | cut -d'/' -f2)
-            echo $contrib_name >> changed_contribs.txt
-          done    
+            if [[ $contrib_name != "active_problems.txt" ]]; then
+              echo $contrib_name >> changed_contribs.txt
+            fi
+          done
 
       - name: Build with pre and post validation
         run: |
