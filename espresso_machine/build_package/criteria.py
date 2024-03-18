@@ -240,8 +240,8 @@ def _check_is_str(all_results: run_examples.ResultsFromExample, obj, obj_str):
 
 def _check_is_axes(all_results: run_examples.ResultsFromExample, obj, obj_str):
     assert isinstance(obj, Axes) or \
-        (isinstance(obj, list) or isinstance(obj, np.ndarray) \
-            and isinstance(obj[0], Axes)), \
+        (isinstance(obj, list) or isinstance(obj, np.ndarray)) and \
+            (isinstance(obj[0], Axes) or isinstance(obj[0,0], Axes)), \
                 f"ensure {obj_str} returns an instance of matplotlib.axes.Axes"
 
 
