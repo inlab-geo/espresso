@@ -3,7 +3,8 @@ fmm_tomography
 gravity_inversion
 magnetotelluric_1D
 pumping_test
-receiver_function_inversion
+receiver_function_inversion_knt
+receiver_function_inversion_shibutani
 simple_regression
 slug_test
 surface_wave_tomography
