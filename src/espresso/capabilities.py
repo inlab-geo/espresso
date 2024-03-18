@@ -114,60 +114,36 @@ def list_capabilities(problem_names: typing.Union[list, str] = None) -> dict:
 #     ...
 # }
 
-from ._magnetotelluric_1D import Magnetotelluric1D
 from ._gravity_inversion import GravityInversion
 from ._pumping_test import PumpingTest
-from ._xray_tomography import XrayTomography
-from ._receiver_function_inversion import ReceiverFunctionInversion
 from ._surface_wave_tomography import SurfaceWaveTomography
-from ._slug_test import SlugTest
-from ._simple_regression import SimpleRegression
 from ._fmm_tomography import FmmTomography
+from ._slug_test import SlugTest
+from ._magnetotelluric_1D import Magnetotelluric1D
+from ._xray_tomography import XrayTomography
+from ._simple_regression import SimpleRegression
 
 _all_problems = [
-    Magnetotelluric1D,
     GravityInversion,
     PumpingTest,
-    XrayTomography,
-    ReceiverFunctionInversion,
     SurfaceWaveTomography,
-    SlugTest,
-    SimpleRegression,
     FmmTomography,
+    SlugTest,
+    Magnetotelluric1D,
+    XrayTomography,
+    SimpleRegression,
 ]
-del Magnetotelluric1D
 del GravityInversion
 del PumpingTest
-del XrayTomography
-del ReceiverFunctionInversion
 del SurfaceWaveTomography
-del SlugTest
-del SimpleRegression
 del FmmTomography
+del SlugTest
+del Magnetotelluric1D
+del XrayTomography
+del SimpleRegression
 
 
 _capability_matrix = {
-    "Magnetotelluric1D": {
-        "model_size": 1,
-        "data_size": 1,
-        "good_model": 1,
-        "starting_model": 1,
-        "data": 1,
-        "forward": 1,
-        "description": 1,
-        "covariance_matrix": 1,
-        "inverse_covariance_matrix": 1,
-        "jacobian": 1,
-        "plot_model": 1,
-        "plot_data": 1,
-        "misfit": 1,
-        "log_likelihood": 0,
-        "log_prior": 0,
-        "set_start_model": 1,
-        "set_start_mesh": 1,
-        "set_obs_data": 1,
-        "list_capabilities": 1
-    },
     "GravityInversion": {
         "model_size": 1,
         "data_size": 1,
@@ -204,43 +180,6 @@ _capability_matrix = {
         "log_prior": 0,
         "list_capabilities": 1
     },
-    "XrayTomography": {
-        "model_size": 1,
-        "data_size": 1,
-        "good_model": 1,
-        "starting_model": 1,
-        "data": 1,
-        "forward": 0,
-        "description": 1,
-        "covariance_matrix": 0,
-        "inverse_covariance_matrix": 0,
-        "jacobian": 0,
-        "plot_model": 1,
-        "plot_data": 0,
-        "misfit": 0,
-        "log_likelihood": 0,
-        "log_prior": 0,
-        "list_capabilities": 1
-    },
-    "ReceiverFunctionInversion": {
-        "model_size": 1,
-        "data_size": 1,
-        "good_model": 1,
-        "starting_model": 1,
-        "data": 1,
-        "forward": 0,
-        "description": 1,
-        "covariance_matrix": 1,
-        "inverse_covariance_matrix": 1,
-        "jacobian": 0,
-        "plot_model": 1,
-        "plot_data": 1,
-        "misfit": 1,
-        "log_likelihood": 1,
-        "log_prior": 1,
-        "rf": 1,
-        "list_capabilities": 1
-    },
     "SurfaceWaveTomography": {
         "model_size": 1,
         "data_size": 1,
@@ -257,9 +196,29 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
-        "parameterization": 1,
         "list_capabilities": 1,
+        "parameterization": 1,
         "example_dict": 1
+    },
+    "FmmTomography": {
+        "model_size": 1,
+        "data_size": 1,
+        "good_model": 1,
+        "starting_model": 1,
+        "data": 1,
+        "forward": 1,
+        "description": 1,
+        "covariance_matrix": 1,
+        "inverse_covariance_matrix": 1,
+        "jacobian": 1,
+        "plot_model": 1,
+        "plot_data": 0,
+        "misfit": 0,
+        "log_likelihood": 0,
+        "log_prior": 0,
+        "call_wavefront_tracker": 1,
+        "tmp_files": 1,
+        "list_capabilities": 1
     },
     "SlugTest": {
         "model_size": 1,
@@ -276,6 +235,45 @@ _capability_matrix = {
         "plot_data": 1,
         "misfit": 0,
         "log_likelihood": 1,
+        "log_prior": 0,
+        "list_capabilities": 1
+    },
+    "Magnetotelluric1D": {
+        "model_size": 1,
+        "data_size": 1,
+        "good_model": 1,
+        "starting_model": 1,
+        "data": 1,
+        "forward": 1,
+        "description": 1,
+        "covariance_matrix": 1,
+        "inverse_covariance_matrix": 1,
+        "jacobian": 1,
+        "plot_model": 1,
+        "plot_data": 1,
+        "misfit": 1,
+        "log_likelihood": 0,
+        "log_prior": 0,
+        "list_capabilities": 1,
+        "set_obs_data": 1,
+        "set_start_model": 1,
+        "set_start_mesh": 1
+    },
+    "XrayTomography": {
+        "model_size": 1,
+        "data_size": 1,
+        "good_model": 1,
+        "starting_model": 1,
+        "data": 1,
+        "forward": 0,
+        "description": 1,
+        "covariance_matrix": 0,
+        "inverse_covariance_matrix": 0,
+        "jacobian": 0,
+        "plot_model": 1,
+        "plot_data": 0,
+        "misfit": 0,
+        "log_likelihood": 0,
         "log_prior": 0,
         "list_capabilities": 1
     },
@@ -296,25 +294,5 @@ _capability_matrix = {
         "log_likelihood": 0,
         "log_prior": 0,
         "list_capabilities": 1
-    },
-    "FmmTomography": {
-        "model_size": 1,
-        "data_size": 1,
-        "good_model": 1,
-        "starting_model": 1,
-        "data": 1,
-        "forward": 1,
-        "description": 1,
-        "covariance_matrix": 1,
-        "inverse_covariance_matrix": 1,
-        "jacobian": 1,
-        "plot_model": 1,
-        "plot_data": 0,
-        "misfit": 0,
-        "log_likelihood": 0,
-        "log_prior": 0,
-        "list_capabilities": 1,
-        "call_wavefront_tracker": 1,
-        "tmp_files": 1
     }
 }

@@ -1,5 +1,16 @@
 # Change Log
 
+## v0.3.12 (18/03/2024)
+
+### New examples
+
+- ReceiverFunctionInversionKnt along with 3 examples, from a 2-layer model to a field data example
+
+### Changed examples
+
+- ReceiverFunctionInversion renamed to ReceiverFunctionInversionShibutani;
+    - Shear wave velocity values in all examples are changed into a more realistic range
+
 ## v0.3.11 (09/08/2023)
 
 ### Changed examples
