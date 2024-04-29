@@ -115,17 +115,17 @@ Implementation wise,
 Dynamic versioning
 ------------------
 
-TODO: This section needs to be updated now that we are not using versioningit anymore.
+We use 
+`versioningit <https://versioningit.readthedocs.io/en/stable/configuration.html>`_
+to generate dynamic version from the output of 
+``git describe``, and write the dynamic version into file
+``src/espresso/_version.py`` (which is hidden from version control). 
 
-.. We use 
-.. `versioningit <https://versioningit.readthedocs.io/en/stable/configuration.html>`_
-.. to generate dynamic version from the output of 
-.. ``git describe``, and write the dynamic version into file
-.. ``src/espresso/_version.py`` (which is hidden from version control). 
+When we run ``pip install .`` from the root level of this project, the generated 
+version always ends with ``.core``. This behaviour is configured by the 
+``versioningit_config`` variable in ``espresso_machine/versioning/__init__.py``. 
 
-.. When we run ``pip install .`` from the root level of this project, the generated 
-.. version always ends with ``.core``. This behaviour is configured by the 
-.. ``versioningit_config`` variable in ``setup.py``. 
-
-.. When we run ``pip install .`` from ``_esp_build/`` folder, the generated version won't 
-.. end with ``.core`` because the build script removes ``.core`` from that configuration.
+When we run ``pip install .`` from ``_esp_build/`` folder, the generated version won't 
+end with ``.core`` because we use the configurations written in 
+``espresso_machine/versioning/versioning_for_full_package.py``
+instead.

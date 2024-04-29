@@ -1,12 +1,15 @@
 """Build the Python package "espresso"
 
-1. clean "_esp_build/"
-2. "/<meta-data-files>" => "_esp_build/"
-3. generate "_version.py"
-4. "src/" => "_esp_build/src/"
-5. "contrib/" => "_esp_build/src/espresso/" + "__init__.py" + "capabilities.py"
-6. remove `.core` from versioningit_config
-7. "espresso_machine/" => _esp_build/src/_machine"
+1. clean `_esp_build/`
+2. `/<meta-info-files>` => `_esp_build/`
+3. `src/` => `_esp_build/src/`
+4. generate `_version.py` => `_esp_build/src/espresso/_version.py`
+5. `contrib/` => `_esp_build/src/espresso/`;
+   `__init__.py` => `_esp_build/src/__init__.py`; 
+   `capabilities.py` => `_esp_build/src/capabilities.py`
+6. `espresso_machine/` => `_esp_build/src/_machine`
+7. remove `_esp_build/src/_machine/versioning/__init__.py` and
+   rename `_esp_build/src/_machine/versioning/versioning_for_full_package.py` to `__init__.py`
 8. build capability_matrix
 9. `pip install .`      (can be disabled by `--no-install`)
 
@@ -126,6 +129,11 @@ def move_pkg_metadata():
 
 
 # 3
+def move_pkg_source():
+    move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
+
+
+# 4
 def write_version():
     versioningit_config = {
         "format": {
@@ -133,28 +141,12 @@ def write_version():
             "dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
             "distance-dirty": "{base_version}+{distance}.{vcs}{rev}.dirty",
         },
-        "write": {"file": "src/espresso/_version.py"},
+        "write": {"file": "_esp_build/src/espresso/_version.py"},
     }
     versioningit.get_version(root, versioningit_config, True)
 
 
-# 4
-def move_pkg_source():
-    move_folder_content(PKG_SRC, f"{BUILD_DIR}/src")
-
-
 # 5
-# TODO change setuptools_scm config
-# def change_versioningit_config():
-#     with open(f"{BUILD_DIR}/setup.py", "r") as f:
-#         setup_content = f.read()
-#     setup_content = setup_content.replace(".core", "")
-#     setup_content = setup_content.replace('"rmsuffix": ""', '"rmsuffix": "-build"')
-#     with open(f"{BUILD_DIR}/setup.py", "w") as f:
-#         f.write(setup_content)
-
-
-# 6
 def move_contrib_source():
     # see if any contribution is specified through command line args
     specified_problems = _utils.problems_to_run_names_only()
@@ -199,7 +191,6 @@ def move_contrib_source():
             f.write(f"install(DIRECTORY _{contrib} DESTINATION espresso)\n")
             if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
                 f.write(f"add_subdirectory(_{contrib})\n")
-                # compiled_code_list.add(contrib)
     with open(f"{BUILD_DIR}/src/{MODULE_NAME}/__init__.py", "a") as f:
         f.write(init_file_imports)
         f.write(init_file_imp_funcs)
@@ -209,13 +200,29 @@ def move_contrib_source():
         f.write(init_file_imports)
         f.write(init_file_all_cls)
         f.write(init_file_deletes)
-    # with open(f"{ROOT_DIR}/contrib/{PROBLEMS_TO_COMPILE_FILE}", "w") as f:
-    #     f.writelines(compiled_code_list)
 
 
-# 7 move espresso_machine into espresso/_machine
+# 6 move espresso_machine into espresso/_machine
 def move_espresso_machine():
     move_folder_content(MACHINE_SRC, f"{BUILD_DIR}/src/espresso/_machine")
+
+
+# 7 remove versioning/__init__.py and rename versioning_for_full_package.py to __init__.py
+def change_versioningit_config():
+    os.remove(f"{BUILD_DIR}/src/espresso/_machine/versioning/__init__.py")
+    os.rename(
+        f"{BUILD_DIR}/src/espresso/_machine/versioning/versioning_for_full_package.py",
+        f"{BUILD_DIR}/src/espresso/_machine/versioning/__init__.py",
+    )
+    # change scikit-build metadata local plugin path
+    with open(f"{BUILD_DIR}/pyproject.toml", "r") as f:
+        lines = f.readlines()
+    # replace `provider-path = "espresso_machine"` with `provider-path = "src/espresso/_machine`
+    with open(f"{BUILD_DIR}/pyproject.toml", "w") as f:
+        for line in lines:
+            f.write(line.replace(
+                "provider-path = \"espresso_machine\"", "provider-path = \"src/espresso/_machine\""
+            ))
 
 
 # 8 build capability matrix
@@ -244,16 +251,15 @@ def println_with_emoji(content, emoji):
 build_pipeline = [
     (clean_build_folder, "Cleaning build folder..."),
     (move_pkg_metadata, "Moving package metadata..."),
-    (write_version, "Generating version file..."),
     (move_pkg_source, "Moving Espresso core packaging files..."),
-    # (change_versioningit_config, "Removing `.core` from versioningit config..."),
+    (write_version, "Generating version file..."),
     (move_contrib_source, "Moving all contributions..."),
     (move_espresso_machine, "Moving infrastructure code..."),
+    (change_versioningit_config, "Changing versioningit configurations..."),
     (
         build_problem_capability,
         "Building capability matrix... (this will take some time)",
     ),
-    # ( install_pkg, "Building Python package: geo-espresso..." ),
 ]
 
 
