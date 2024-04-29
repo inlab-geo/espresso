@@ -22,10 +22,10 @@ docs/source/user_guide/api/generated
 
 # Python files #
 ################
-# setup.py working directory
+# scikit-build-core working directory
 _skbuild
 _esp_build
-# setup.py dist directory
+# scikit-build-core dist directory
 dist
 # Egg metadata
 *.egg-info

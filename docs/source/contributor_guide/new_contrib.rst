@@ -79,7 +79,7 @@ Add your own Espresso problem
           `PyLint <https://github.com/pylint-dev/pylint#install>`_ to maintain a good 
           coding style.
          
-      - ``setup.py``, in particular the ``INSTALL_REQUIRES`` variable, if needed.
+      - ``pyproject.toml``, in particular the ``INSTALL_REQUIRES`` variable, if needed.
    
 #. Test running your code. 
 

@@ -8,7 +8,6 @@ on:
       - 'contrib/**'
       - 'src/**'
       - 'docs/**'
-      - 'setup.py'
       - 'pyproject.toml'
       - '!src/espresso/version.py'
       - '!CHANGELOG.md'

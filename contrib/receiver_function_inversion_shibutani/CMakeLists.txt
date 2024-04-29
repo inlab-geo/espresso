@@ -1,12 +1,14 @@
-# mkdir build; cd build; cmake -DPYTHON_EXECUTABLE=$(which python) ..; make
+# mkdir build; cd build; cmake -DPython_EXECUTABLE=$(which python) ..; make
 
 find_package(
   Python
   COMPONENTS Interpreter Development.Module NumPy
   REQUIRED)
 
+enable_language(Fortran)
+
 execute_process(
-  COMMAND ${PYTHON_EXECUTABLE} -c
+  COMMAND ${Python_EXECUTABLE} -c
           "import numpy.f2py; print(numpy.f2py.get_include())"
   OUTPUT_VARIABLE F2PY_INCLUDE_DIR
   OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -22,14 +24,15 @@ file(GLOB_RECURSE module_src_subs "${CMAKE_CURRENT_SOURCE_DIR}/RFsubs/*.f*")
 set(module_c "${CMAKE_CURRENT_BINARY_DIR}/${module_name}module.c")
 
 add_custom_command(
-  OUTPUT ${module_c}
-  DEPENDS ${module_src} ${module_src_subs}
+  OUTPUT ${module_c} "${module_name}-f2pywrappers.f"
+  COMMAND ${Python_EXECUTABLE} -m numpy.f2py ${module_src} 
+          -m ${module_name}
+          --lower
+  DEPENDS ${module_src} 
   VERBATIM
-  COMMAND ${PYTHON_EXECUTABLE} -m numpy.f2py 
-          ${module_src} -m ${module_name}
-          --lower)
+)
 
-python_add_library(${module_name} MODULE ${module_c} ${module_src} WITH_SOABI)
+python_add_library(${module_name} MODULE ${module_c} ${module_src_subs} ${module_src} WITH_SOABI)
 target_link_libraries(${module_name} PRIVATE fortranobject)
 
 if(SKBUILD)

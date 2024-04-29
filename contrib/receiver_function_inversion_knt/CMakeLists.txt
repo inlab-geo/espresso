@@ -1,4 +1,4 @@
-# mkdir build; cd build; cmake -DPYTHON_EXECUTABLE=$(which python) ..; make
+# mkdir build; cd build; cmake -DPython_EXECUTABLE=$(which python) ..; make
 
 find_package(
   Python
@@ -6,7 +6,7 @@ find_package(
   REQUIRED)
 
 execute_process(
-  COMMAND ${PYTHON_EXECUTABLE} -c
+  COMMAND ${Python_EXECUTABLE} -c
           "import numpy; print(numpy.get_include())"
   OUTPUT_VARIABLE NUMPY_INCLUDE_DIRS
   OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -21,12 +21,12 @@ add_custom_command(
     OUTPUT ${module_c}
     COMMENT
         "Making ${CMAKE_CURRENT_BINARY_DIR}/rf_lib/rf.c from ${CMAKE_CURRENT_SOURCE_DIR}/rf_lib/rf.pyx"
-    COMMAND ${PYTHON_EXECUTABLE} -m cython ${module_pyx}
+    COMMAND ${Python_EXECUTABLE} -m cython ${module_pyx}
             --output-file ${module_c}
     DEPENDS ${module_pyx} ${module_src} ${module_header} ${NUMPY_INCLUDE_DIRS}
     VERBATIM
 )
-python_add_library(${module_name} MODULE ${module_c} WITH_SOABI)
+python_add_library(${module_name} MODULE ${module_c} ${module_src} WITH_SOABI)
 target_include_directories(${module_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/rf_lib/src ${NUMPY_INCLUDE_DIRS})
 
 if(SKBUILD)

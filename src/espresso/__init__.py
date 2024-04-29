@@ -51,6 +51,9 @@ Espresso exceptions
 
 from ._espresso_problem import EspressoProblem
 
+from . import utils
+from . import exceptions
+
 
 from ._version import __version__
 

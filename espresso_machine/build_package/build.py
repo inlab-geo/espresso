@@ -41,7 +41,6 @@ MACHINE_SRC = str(root / "espresso_machine")
 META_FILES = [
     "README.md",
     "pyproject.toml",
-    "setup.py",
     "LICENCE",
     "CMakeLists.txt",
     ".readthedocs.yml",
@@ -145,13 +144,14 @@ def move_pkg_source():
 
 
 # 5
-def change_versioningit_config():
-    with open(f"{BUILD_DIR}/setup.py", "r") as f:
-        setup_content = f.read()
-    setup_content = setup_content.replace(".core", "")
-    setup_content = setup_content.replace('"rmsuffix": ""', '"rmsuffix": "-build"')
-    with open(f"{BUILD_DIR}/setup.py", "w") as f:
-        f.write(setup_content)
+# TODO change setuptools_scm config
+# def change_versioningit_config():
+#     with open(f"{BUILD_DIR}/setup.py", "r") as f:
+#         setup_content = f.read()
+#     setup_content = setup_content.replace(".core", "")
+#     setup_content = setup_content.replace('"rmsuffix": ""', '"rmsuffix": "-build"')
+#     with open(f"{BUILD_DIR}/setup.py", "w") as f:
+#         f.write(setup_content)
 
 
 # 6
@@ -193,9 +193,10 @@ def move_contrib_source():
     # write all above to files
     # compiled_code_list = set()
     with open(f"{BUILD_DIR}/src/{MODULE_NAME}/CMakeLists.txt", "a") as f:
-        f.write(f"install(DIRECTORY _machine DESTINATION .)\n")
+        f.write(f"install(DIRECTORY _machine DESTINATION espresso)\n")
+        f.write(f"install(FILES capabilities.py DESTINATION espresso)\n")
         for contrib in contribs:
-            f.write(f"install(DIRECTORY _{contrib} DESTINATION .)\n")
+            f.write(f"install(DIRECTORY _{contrib} DESTINATION espresso)\n")
             if Path(f"{CONTRIB_SRC}/{contrib}/CMakeLists.txt").exists():
                 f.write(f"add_subdirectory(_{contrib})\n")
                 # compiled_code_list.add(contrib)
@@ -245,7 +246,7 @@ build_pipeline = [
     (move_pkg_metadata, "Moving package metadata..."),
     (write_version, "Generating version file..."),
     (move_pkg_source, "Moving Espresso core packaging files..."),
-    (change_versioningit_config, "Removing `.core` from versioningit config..."),
+    # (change_versioningit_config, "Removing `.core` from versioningit config..."),
     (move_contrib_source, "Moving all contributions..."),
     (move_espresso_machine, "Moving infrastructure code..."),
     (
