@@ -11,7 +11,7 @@ if(SKBUILD)
     ${CMAKE_CURRENT_BINARY_DIR}/traveltime.mod
     DESTINATION fmm_tomography/build)
 else()
-  # Run "mkdir build; cd build; cmake ..; make"
+  # Run "mkdir build; cd build; cmake -DPython_EXECUTABLE=$(which python) ..; make"
   message(STATUS "The project is NOT built using scikit-build")
   cmake_minimum_required(VERSION 3.11.0)
   project(FMMTracer Fortran)
