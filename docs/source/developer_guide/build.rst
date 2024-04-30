@@ -21,12 +21,8 @@ Build system
 We use `scikit-build <https://scikit-build.readthedocs.io/>`_ as Espresso's packaging
 tool. This choice is due to the necessity of including compiled code in Espresso.
 
-Like other modern Python packages, we use a ``pyproject.toml`` file to specify some
-package metadata. Additionally, we keep the traditional ``setup.py`` file for most of
-other meta information. It would be cleaner to have only one ``pyproject.toml`` file
-to host everything, but 
-`scikit-build doesn't support this approach yet <https://scikit-build.readthedocs.io/en/latest/usage.html#setuptools-options>`__.
-
+Like other modern Python packages, we use a ``pyproject.toml`` file to specify package
+metadata.
 
 Build script
 ------------
@@ -36,7 +32,7 @@ A built Espresso package is a combination of four components:
 - The Espresso core (``src/espresso/``)
 - All / selected contributed problems (``contrib/``)
 - The Espresso Machine itself (``espresso_machine/``)
-- Package metadata files (``setup.py``, ``CMakeLists.txt`` and ``pyproject.toml``)
+- Package metadata files (``pyproject.toml`` and ``CMakeLists.txt``)
 
 Build and validation steps are listed in the 
 :ref:`Appendix section of the contributor guide <appendix>`. The build script basically
@@ -44,7 +40,7 @@ copies the files from the above 4 sources into ``_esp_build``, and runs
 ``pip install .`` from ``_esp_build/`` folder. It does perform slight changes to the 
 files:
 
-#. Versioning template configured in ``setup.py`` is modified. Look at the 
+#. Versioning template configured in ``pyproject.toml`` is modified. Look at the 
    :ref:`versioning` section below for details.
 #. A prefix of ``_`` is added to all contribution folder names and Python file names
    to ensure cleaner tab completion results (e.g. from a iPython console)
@@ -127,7 +123,9 @@ to generate dynamic version from the output of
 
 When we run ``pip install .`` from the root level of this project, the generated 
 version always ends with ``.core``. This behaviour is configured by the 
-``versioningit_config`` variable in ``setup.py``. 
+``versioningit_config`` variable in ``espresso_machine/versioning/__init__.py``. 
 
 When we run ``pip install .`` from ``_esp_build/`` folder, the generated version won't 
-end with ``.core`` because the build script removes ``.core`` from that configuration.
+end with ``.core`` because we use the configurations written in 
+``espresso_machine/versioning/versioning_for_full_package.py``
+instead.

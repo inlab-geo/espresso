@@ -79,7 +79,7 @@ Add your own Espresso problem
           `PyLint <https://github.com/pylint-dev/pylint#install>`_ to maintain a good 
           coding style.
          
-      - ``setup.py``, in particular the ``INSTALL_REQUIRES`` variable, if needed.
+      - ``pyproject.toml``, in particular the ``INSTALL_REQUIRES`` variable, if needed.
    
 #. Test running your code. 
 
@@ -187,18 +187,27 @@ The following table describes what happens when we package Espresso:
      - Clean ``_esp_build/``
      - ``shutil.rmtree``
    * - 2
-     - Move meta data files to ``_esp_build/``
+     - Move meta info files to ``_esp_build/``
      - ``shutil.copy``
    * - 3
      - Move ``src/`` content to ``_esp_build/src/espresso``
      - ``shutil.copytree``
    * - 4
+     - Generate version file and write it to ``_esp_build/``
+     - ``versioningit``
+   * - 5
      - Move ``contrib/`` content to ``_esp_build/src/espresso/`` + ``_esp_build/src/espresso/__init__.py`` + ``_esp_build/src/espresso/capabilities.py``
      - ``shutil.copytree``, a series of file opening and string manipulation
-   * - 5
-     - Write dynamic version and extra versioningit configs into ``_esp_build/pyproject.toml``
-     - ``versioningit``
    * - 6
+     - Move ``espresso_machine`` content to ``_esp_build/src/_machine/``
+     - ``shutil.copytree``
+   * - 7
+     - Change versioningit configs file ``_esp_build/pyproject.toml``
+     - ``os.remove`` and ``os.rename``
+   * - 8
+     - Build capability matrix
+     - ``espresso_machine/build_package/report.py``
+   * - 9
      - Install package from ``_esp_build/``
      - ``pip install _esp_build``
 
