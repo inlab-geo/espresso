@@ -28,6 +28,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgeos++-dev
+          pip install --upgrade pip
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
 
