@@ -32,13 +32,6 @@ Welcome to Espresso!
     developer_guide/index.rst
 
 
-.. .. toctree::
-..     :hidden:
-    
-..     GitHub repository <https://github.com/inlab-geo/espresso/>
-..     Issue tracker <https://github.com/inlab-geo/espresso/issues/>
-
-
 You've just come up with a new optimisation algorithm, inversion strategy, or machine learning-based inference framework. Now you want to see how it performs on a real-world problem... 
 
 Espresso (**E**\ arth **s**\ cience **pr**\ oblems for the **e**\ valuation of **s**\ trategies, **s**\ olvers and **o**\ ptimizers) aims to make this as easy as possible. It provides access to a range of exemplars via a standardized Python interface, including domain-expert--curated datasets and corresponding simulation codes. Swapping from one test problem to the next is just one line of code.
@@ -143,4 +136,4 @@ If this looks interesting, you can:
         Accept this invitation to join the conversation on Slack
 
 
-Espresso is an open-source community effort, currently supported and coordinated by `InLab <http://www.inlab.edu.au/>`_.
+Espresso is an open-source community effort, currently supported and coordinated by `InLab <https://inlab.au>`_.
