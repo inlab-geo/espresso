@@ -1,0 +1,75 @@
+# Espresso Pull Request Template
+
+## Description
+
+Please provide a clear and concise description of the changes you've made.
+
+If you are adding a new `EspressoProblem`, read the 
+[Contributor's Guide](https://geo-espresso.readthedocs.io/en/latest/contributor_guide/index.html) 
+as a reference. Otherwise refer to the 
+[Developer's Guide](https://geo-espresso.readthedocs.io/en/latest/developer_guide/develop.html).
+
+## Type of Change
+
+Please indicate the type of change this pull request represents:
+
+- [ ] New Espresso problem or example
+- [ ] Espresso core
+- [ ] Espresso machine
+- [ ] Documentation
+- [ ] Others (please specify here)
+
+## Checklist for new `EspressoProblem` (remove me if not applicable)
+
+### Requirements
+
+Please list any requirements or dependencies for running the problem here.
+
+### Additional information
+
+Provide any additional information on how to run the problem or context about it here.
+
+### Jupyter Notebook
+
+If applicable, provide a brief description of the Jupyter notebook included with this problem.
+
+### Testing
+
+To validate your problem:
+
+```console
+$ python espresso_machine/build_package/build.py --pre --post -c <example_name>
+```
+
+Please confirm that you have tested your problem:
+
+- [ ] I have checked that all tests pass locally with my changes
+- [ ] I have ensured that my code follows the style guidelines of this project
+
+### Licence
+
+Confirm the licence under which this problem is distributed.
+
+## Checklist for Espresso core (remove me if not applicable)
+
+- [ ] My changes are backward compatible
+- [ ] The new contribution generation script is compatible with the new changes
+- [ ] The build script is compatible with the new changes
+- [ ] The validation script is compatible with the new changes
+- [ ] The documentation is up to date with the new changes
+- [ ] I have formatted the Python files with `black`
+
+## Checklist for Espresso machine (remove me if not applicable)
+
+- [ ] My changes are backward compatible
+- [ ] The documentation is up to date with the new changes
+- [ ] I have formatted the Python files with `black`
+
+## Checklist for Espresso documentation (remove me if not applicable)
+
+- [ ] I have built the documentation by running `make html` in the `docs/` folder
+- [ ] I have served the website locally by running `python -m http.server 8000 -d build/html` and checked the changes at `localhost:8000`
+
+## Additional Information
+
+Please provide any additional information or context about the pull request here.
