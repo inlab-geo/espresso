@@ -36,12 +36,17 @@ class SurfaceWaveTomography(EspressoProblem):
         "citations": [
             ('Surface-wave tomography using SeisLib: a Python package for '
              'multiscale seismic imaging, GJI, vol 84, 1011-1030, 2022. '
-             'F. Magrini, L. Sebastian, E. K{\"a}stle, L. Boschi',
+             'F. Magrini, S. Lauro, E. K{\"a}stle, L. Boschi. ',
             'https://doi.org/10.1093/gji/ggac236'
             ),
             ('A global model of Love and Rayleigh surface wave dispersion and '
              'anisotropy, GJI, vol 187, 1668-1686, 2011. G. Ekstr{\"o}m',
              'https://doi.org/10.1111/j.1365-246X.2011.05225.x'
+            ),
+            ('A New Shear-Velocity Model of Continental Australia Based on '
+             'Multi-Scale Surface-Wave Tomography, JGR: Solid Earth, vol 128, '
+             '2023. F. Magrini, E. K{\"a}stle, S. Pilia, N. Rawlinson, L. De ',
+            'Siena. https://doi.org/10.1029/2023JB026688'
             )
         ],
         # List of (title, address) pairs for any websites that
@@ -67,6 +72,12 @@ class SurfaceWaveTomography(EspressoProblem):
             self._description = (
                 'Global measurements of Rayleigh-wave phase velocity at 50 s '
                 'period as calculated by Ekström et al. (2011)'
+                )
+            
+        elif example_number == 3:
+            self._description = (
+                'Rayleigh-wave phase velocity across Australia at 5 s period as '
+                'calculated by Magrini et al. (2023)'
                 )
         else:
             raise InvalidExampleError
@@ -132,12 +143,15 @@ class SurfaceWaveTomography(EspressoProblem):
         fig = plt.figure()
         ax = plt.subplot(111, projection=proj)
         ax.coastlines()
+        cmap = kwargs.pop('cmap', scm.roma)
+        vmin = kwargs.pop('vmin', vmean - vmean*0.1)
+        vmax = kwargs.pop('vmax', vmean + vmean*0.1)
         img, cb = plot_map(self.parameterization.mesh,
                            velocity,
                            ax=ax,
-                           cmap=scm.roma,
-                           vmin=vmean - vmean*0.1,
-                           vmax=vmean + vmean*0.1,
+                           cmap=cmap,
+                           vmin=vmin,
+                           vmax=vmax,
                            show=False,
                            **kwargs)       
         cb.set_label('Phase velocity [m/s]')      
