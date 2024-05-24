@@ -2,8 +2,7 @@ pytest
 pyyaml
 numpy
 matplotlib
-# scipy<1.13.0; python_version<"3.10"
-scipy<1.13.0    # TODO remove this after seislib releases new version
+scipy
 tqdm
 cython
 scikit-build-core
