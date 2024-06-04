@@ -1,96 +1,93 @@
-# Command to create a new example folder:
-# In ROOT, execute:
-# python espresso_machine/new_contribution/create_new_contrib.py <example-name>
-# Replacing <example_name> with the new example name.
+"""Generate a new contribution package
 
-from glob import glob
+Usage: python create_new_contrib.py <example_name>
+"""
+
 import sys
-import os
-from shutil import copyfile
-from pathlib import Path
+import glob
+import pathlib
+import copier
 
 
-def getListOfFiles(dirName):
-    # create a list of file and sub directories
-    # names in the given directory
-    listOfFile = os.listdir(dirName)
-    allFiles = list()
-    # Iterate over all the entries
-    for entry in listOfFile:
-        # Create full path
-        fullPath = os.path.join(dirName, entry)
-        # If entry is a directory then get the list of files in this directory
-        if os.path.isdir(fullPath):
-            allFiles = allFiles + getListOfFiles(fullPath)
-        else:
-            allFiles.append(fullPath)
-
-    return allFiles
-
-
-current_dir = Path(__file__).resolve().parent
+SRC_COOKIE = "gh:scientific-python/cookie"
+current_dir = pathlib.Path(__file__).resolve().parent
 root_dir = current_dir.parent.parent
 CONTRIB_FOLDER = str(root_dir / "contrib")
-TEMPLATE_FOLDER = str(root_dir / "espresso_machine/new_contribution/_template")
 
 
-def main():
-    print(
-        "🥰 Thanks for contributing! \nWe are generating new contribution component from"
-        " template...\n"
-    )
-
-    # validate example name
+def validate_contrib_name():
     if len(sys.argv) != 2:
         raise RuntimeError(
-            "No example name detected.\n\nUsage: python create_new_contrib.py"
-            " EXAMPLE_NAME\n\n"
+            "No example name detected.\n\n\tUsage:\tpython create_new_contrib.py"
+            " <example_name>\n\te.g.\tpython create_new_contrib.py my_example"
         )
-    example_name = sys.argv[-1]
-    existing_examples = glob(CONTRIB_FOLDER + "/*/")
+    contrib_name = sys.argv[-1]
+    existing_examples = glob.glob(CONTRIB_FOLDER + "/*/")
     existing_examples = [e.split("/")[-2] for e in existing_examples]
-    if example_name in existing_examples:
+    if contrib_name in existing_examples:
         raise ValueError(
             "The example name provided already exists, please choose another name"
         )
-    elif example_name in ["utils", "_machine"]:
-        raise ValueError(
-            "This sub-folder name is occupied in Espresso core library, "
-            "please choose another name"
-        )
-    
-    
-    # convert example name to other formats
-    example_name_capitalised = example_name.title().replace("_", " ").replace("-", " ")
-    example_name_no_space = example_name_capitalised.replace(" ", "")
-    # make new folders and subfolders
-    new_subfolder = CONTRIB_FOLDER + "/" + example_name
-    os.makedirs(new_subfolder)
-    os.makedirs(new_subfolder + "/data")
+    return contrib_name
 
-    # generate file names
-    template_files = getListOfFiles(TEMPLATE_FOLDER)
-    new_files = [f.replace(TEMPLATE_FOLDER, new_subfolder) for f in template_files]
-    new_files = [f.replace("example_name", example_name) for f in new_files]
+def get_contrib_name_variants(contrib_name):
+    return {
+        "contrib_name": contrib_name, 
+        "contrib-name": contrib_name.replace("_", "-"),
+        "Contrib Name": contrib_name.title().replace("_", " "),
+        "ContribName": contrib_name.title().replace("_", "")
+    }
 
-    # generate example subfolder from template
-    print("🗂  Copying files...")
-    for template_file, new_file in zip(template_files, new_files):
-        print("file: " + template_file + " -> " + new_file)
-        files_to_adapt = ["README", "__init__.py", "example_name.py"]
-        if any([fname in template_file for fname in files_to_adapt]):
-            with open(template_file, "r") as template_f:
-                content = template_f.read()
-            content = content.replace("example_name", example_name)
-            content = content.replace("Example Name Title", example_name_capitalised)
-            content = content.replace("ExampleName", example_name_no_space)
-            with open(new_file, "w") as new_f:
-                new_f.write(content)
-        else:
-            copyfile(template_file, new_file)
+def generate_new_contrib_folder(contrib_names):
+    with copier.Worker(
+        src_path=SRC_COOKIE,
+        dst_path=f"{CONTRIB_FOLDER}/{contrib_names["contrib_name"]}",
+        unsafe=True,
+        data={
+            "project_name": contrib_names["contrib-name"], 
+            "org": "inlab-geo",
+            "url": "https://github.com/inlab-geo",
+            "project_short_description": f"{contrib_names["Contrib Name"]} plugin for Espresso",
+            "vcs": False
+        },
+        exclude=[
+            ".github",
+            "docs",
+            "tests",
+            ".git_archival.txt",
+            ".gitattributes",
+            "pre-commit-config.yaml",
+            ".readthedocs.yaml",
+            "noxfile.py",
+            "README.md",
+            f"src/{contrib_names['contrib_name']}/py.typed"
+        ]
+    ) as worker:
+        worker.run_copy()
+
+def generate_new_contrib_readme(contrib_names):
+    pass
+
+def generate_new_contrib_src_pyfile(contrib_names):
+    pass
+
+def update_new_contrib_pyproject(contrib_names):
+    pass
+
+
+def main():
+    contrib_name = validate_contrib_name()
+    contrib_names = get_contrib_name_variants(contrib_name)
+    
     print(
-        "\n🎉 OK. Please navigate to " + new_subfolder + " to write your own example. "
+        "🥰 Thanks for contributing! \nAnswer a few quick questions and we will be "
+        "generating new contribution folder from the template...\n"
     )
+    
+    generate_new_contrib_folder(contrib_names)
+    generate_new_contrib_readme(contrib_names)
+    generate_new_contrib_src_pyfile(contrib_names)
+    update_new_contrib_pyproject(contrib_names)
 
 
 if __name__ == "__main__":
