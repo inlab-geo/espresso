@@ -90,16 +90,16 @@ consult the
 Interested in contributing? Please check out our [contributor's guide](https://geo-espresso.readthedocs.io/en/latest/contributor_guide/index.html).
 
 
-## Licence
+## License
 
 Espresso is a community driven project to create a large suite of forward
 simulations to enable researchers to get example data without the need to 
 understand each individual problem in detail.
 
-Licensing is done individually by each contributor. If a contributor wants to freely share their code example we recommend the MIT licence or a 
-2-clause BSD licence. To determine the licence of an existing Espresso
+Licensing is done individually by each contributor. If a contributor wants to freely share their code example we recommend the MIT license or a 
+2-clause BSD license. To determine the license of an existing Espresso
 problem, please consult the documentation section of that problem.
 
 All the other core functions of Espresso written by InLab Espresso developer
-team are distributed under a 2-clause BSD licence. A copy of this licence is
+team are distributed under a 2-clause BSD license. A copy of this license is
 provided with distributions of the software.
