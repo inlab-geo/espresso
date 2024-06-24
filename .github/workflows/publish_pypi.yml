@@ -128,7 +128,9 @@ jobs:
         # Giving up windows, see the following two links:
         # https://groups.google.com/g/comp.lang.fortran/c/Jna-QAHCOpk/m/VZq7gVq3AgAJ
         # https://github.com/awvwgk/setup-fortran/issues/6
-        os: [ubuntu-latest, macos-latest]
+        # Giving up macos, see the error below:
+        # https://github.com/inlab-geo/espresso/actions/runs/9638796711/job/26580066676
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
         with:
