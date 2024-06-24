@@ -166,9 +166,9 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
+        "set_start_model": 1,
         "set_start_mesh": 1,
         "set_obs_data": 1,
-        "set_start_model": 1,
         "list_capabilities": 1
     },
     "PumpingTest": {
@@ -205,9 +205,9 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 0,
         "log_prior": 0,
-        "call_wavefront_tracker": 1,
         "tmp_files": 1,
-        "list_capabilities": 1
+        "list_capabilities": 1,
+        "call_wavefront_tracker": 1
     },
     "SlugTest": {
         "model_size": 1,
@@ -243,8 +243,8 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 0,
         "log_prior": 0,
-        "rf": 1,
-        "list_capabilities": 1
+        "list_capabilities": 1,
+        "rf": 1
     },
     "XrayTomography": {
         "model_size": 1,
@@ -280,8 +280,8 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 1,
         "log_prior": 1,
-        "rf": 1,
-        "list_capabilities": 1
+        "list_capabilities": 1,
+        "rf": 1
     },
     "GravityInversion": {
         "model_size": 1,
