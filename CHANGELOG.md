@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.3.14 (24/06/2024)
+
+### Changed examples
+
+- Add the third example in `SurfaceWaveTomography`
+
 ## v0.3.13 (19/03/2024)
 
 - Fix active_problems.txt and include all examples properly
