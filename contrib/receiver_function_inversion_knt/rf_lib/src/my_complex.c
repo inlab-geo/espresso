@@ -1,45 +1,45 @@
 #include <math.h>
 #include "my_complex.h"
 
-complex cplus(complex a, complex b) {
+my_complex cplus(my_complex a, my_complex b) {
   a.x += b.x;
   a.y += b.y;
   return(a);
 }
 
-complex cmltp(complex a, complex b) {
-  complex c;
+my_complex cmltp(my_complex a, my_complex b) {
+  my_complex c;
   c.x = a.x*b.x - a.y*b.y;
   c.y = a.x*b.y + a.y*b.x;
   return(c);
 }
 
-complex cngtv(complex a) {
+my_complex cngtv(my_complex a) {
   a.x = -a.x;
   a.y = -a.y;
   return(a);
 }
 
-complex cinvs(complex a) {
-  complex dmltp(float, complex);
-  complex conjg(complex a);
+my_complex cinvs(my_complex a) {
+  my_complex dmltp(float, my_complex);
+  my_complex conjg(my_complex a);
   return(dmltp(1./(a.x*a.x+a.y*a.y), conjg(a)));
 }
 
-complex conjg(complex a) {
+my_complex conjg(my_complex a) {
   a.y = -a.y;
   return(a);
 }
 
-complex dmltp(float a, complex b) {
+my_complex dmltp(float a, my_complex b) {
   b.x *= a;
   b.y *= a;
   return(b);
 }
 
-complex Csqrt(complex a) {
+my_complex Csqrt(my_complex a) {
   double mo, ar;
-  double ccabs(complex);
+  double ccabs(my_complex);
   mo = sqrt(ccabs(a));
   ar = 0.5*atan2(a.y, a.x);
   a.x = mo*cos(ar);
@@ -47,19 +47,19 @@ complex Csqrt(complex a) {
   return(a);
 }
 
-complex cmplx(float x, float y) {
-  complex a;
+my_complex cmplx(float x, float y) {
+  my_complex a;
   a.x = x;
   a.y = y;
   return(a);
 }
 
-complex cphase(complex w) {
+my_complex cphase(my_complex w) {
   double mo;
   mo = exp(w.x);
   return cmplx(mo*cos(w.y), mo*sin(w.y));
 }
 
-double ccabs(complex a) {
+double ccabs(my_complex a) {
   return(sqrt(a.x*a.x+a.y*a.y));
 }

@@ -16,11 +16,11 @@ author	Lupei Zhu
 *    | sp ss |
 *******************************************/
 typedef struct {
-   complex pp;
-   complex ps;
-   complex sp;
-   complex ss;
-   complex sh;
+   my_complex pp;
+   my_complex ps;
+   my_complex sp;
+   my_complex ss;
+   my_complex sh;
 } matrix;
 
 /*******************************************
@@ -41,8 +41,8 @@ typedef struct {
 typedef struct {
    float   beta, kapa, thik;	/* Vs, Vp/Vs ratio, thickness */
    float   dbet;	/* perturbed Vs for computing differentials */
-   complex qa, qb;	/* vertical P and S slowness */
-   complex dqa, dqb;	/* when the layer is perturbed */
+   my_complex qa, qb;	/* vertical P and S slowness */
+   my_complex dqa, dqb;	/* when the layer is perturbed */
    matrix  SRd, STu;	/* Rd and Tu between upper interf and the half space */
    matrix  URu, UTu;	/* Ru and Tu between lower interf and the free surf+ */
    Dmatrix D;		/* eigenvector matrix (p51, M->r,N->t) */
@@ -60,7 +60,7 @@ extern matrix trns(matrix a);
 extern matrix imlt(matrix a);
 
 /* declaration of KNT functions */
-extern matrix EEE(complex qa, complex qb, float wh);
+extern matrix EEE(my_complex qa, my_complex qb, float wh);
 extern void    ifmat(float p, int nlyrs, Layer *);
 extern void   delifm(float p, int nlyrs, Layer *);
 extern matrix rcvrfn(float w, int nlyrs, Layer *);
@@ -71,7 +71,7 @@ extern Layer  *mdSetup(int, const float *, const float *, const float *,
 extern float  *partial(int, int, int, const float *, const float *, const float *,
 			float, float, float, float, float, float);
 extern void    respknt(int ps, int, int, const float *, const float *, const float *,
-			float, float, complex *, complex *);
+			float, float, my_complex *, my_complex *);
 extern int    mdin(const char *, float *, float *, float *);
 extern int partial_modified(int, int, int, const float*, const float*, const float*, 
          float, float, float, float, float, float, float*);

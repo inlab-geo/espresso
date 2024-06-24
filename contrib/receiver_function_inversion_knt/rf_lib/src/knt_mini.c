@@ -72,10 +72,10 @@ Layer	*mdSetup(int		m,	/* number of input layers */
 
 /* calculate eigenvector matrix D and qa, qb from layer parameter beta, kapa */
 /* see page 46 (3.7) and 50 (3.36) and 51 (3.37 and 3.38)                    */
-Dmatrix DDD(float p, float beta, float kapa, complex *qa, complex *qb) {
+Dmatrix DDD(float p, float beta, float kapa, my_complex *qa, my_complex *qb) {
   Dmatrix D;
   float   rho;
-  complex bet, pa, pb, t1, t2, tt;
+  my_complex bet, pa, pb, t1, t2, tt;
   rho = 0.77 + 0.32*kapa*beta;
   bet = cmplx(beta, 0.5*beta/225.);
   tt = cmltp(bet, bet);
@@ -123,8 +123,8 @@ Dmatrix QQQ(Dmatrix D1, Dmatrix D2) {
 
 
 /* calculate E matrix through the layer of thickness h at freq. w */
-matrix EEE(complex qa, complex qb, float wh) {
-  complex iwh;
+matrix EEE(my_complex qa, my_complex qb, float wh) {
+  my_complex iwh;
   matrix  Ed;
   iwh = cmplx(0., -wh);
   Ed.pp = cphase(cmltp(iwh, qa));
@@ -271,7 +271,7 @@ float *partial( int		ps,	/* 0=P; 1=S receiver function */
   int     	i, j, k, n, nft2, nlyrs;
   unsigned char	vORh;
   float   	w, delw, agg, delta[2];
-  complex 	temp, *a;
+  my_complex 	temp, *a;
   Layer		*lyr;
   matrix  	dis;
 
@@ -287,7 +287,7 @@ float *partial( int		ps,	/* 0=P; 1=S receiver function */
      n = nlyrs;
   }
 
-  if ( (a = (complex *) malloc(nft2*n*sizeof(complex)))  == NULL ) {
+  if ( (a = (my_complex *) malloc(nft2*n*sizeof(my_complex)))  == NULL ) {
      fprintf(stderr, "failed to allocat memeory for receiver fn\n");
      return NULL;
   }
@@ -341,10 +341,10 @@ int partial_modified( int		ps,	/* 0=P; 1=S receiver function */
   int     	i, j, k, n, nft2, nlyrs;
   unsigned char	vORh;
   float   	w, delw, agg, delta[2];
-  complex 	temp, *a;
+  my_complex 	temp, *a;
   Layer		*lyr;
   matrix  	dis;
-  complex *dpred = (complex *)arr;
+  my_complex *dpred = (my_complex *)arr;
 
   nft2 = nft/2;
   delw = 3.1415926/(dt*nft2);
@@ -371,8 +371,8 @@ int partial_modified( int		ps,	/* 0=P; 1=S receiver function */
      n = nlyrs;
   }
 
-  // a = (complex *) array;
-  // if ( (a = (complex *) malloc(nft2*n*sizeof(complex)))  == NULL ) {
+  // a = (my_complex *) array;
+  // if ( (a = (my_complex *) malloc(nft2*n*sizeof(my_complex)))  == NULL ) {
   //    fprintf(stderr, "failed to allocat memeory for receiver fn\n");
   //    return NULL;
   // }
@@ -417,8 +417,8 @@ void	respknt(int		ps,	/* 0=incident P; 1=incident S */
 		const float	kapa[],	/* Vp/Vs */
 		float		p,	/* ray parameter */
 		float 		dt,	/* sampling interval */
-		complex		z[],	/* vertical response */
-		complex		r[]	/* radial response */
+		my_complex		z[],	/* vertical response */
+		my_complex		r[]	/* radial response */
 	)
 {
   int     	i, nft2, nlyrs;

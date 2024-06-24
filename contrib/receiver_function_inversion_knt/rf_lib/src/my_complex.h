@@ -1,6 +1,6 @@
 /*********************************************************
 *			my_complex.h
-*  header file for complex data type, source codes are in
+*  header file for my_complex data type, source codes are in
 *  my_complex.c and fft.c
 *********************************************************/
 
@@ -9,7 +9,7 @@
 
 
 /* data type */
-typedef struct { float x; float y;} complex;
+typedef struct { float x; float y;} my_complex;
 
 /* constants */
 #define PI	3.1415926
@@ -18,23 +18,23 @@ typedef struct { float x; float y;} complex;
 #define Zero cmplx(0., 0.)
 
 /* basic operations */
-complex cplus(complex a, complex b);
-complex cmltp(complex a, complex b);
-complex cngtv(complex a);
-complex cinvs(complex a);
-complex conjg(complex a);
-complex dmltp(float a, complex b);
-complex Csqrt(complex a);
-complex cmplx(float x, float y);
-complex cphase(complex w);
-double  ccabs(complex a);
+my_complex cplus(my_complex a, my_complex b);
+my_complex cmltp(my_complex a, my_complex b);
+my_complex cngtv(my_complex a);
+my_complex cinvs(my_complex a);
+my_complex conjg(my_complex a);
+my_complex dmltp(float a, my_complex b);
+my_complex Csqrt(my_complex a);
+my_complex cmplx(float x, float y);
+my_complex cphase(my_complex w);
+double  ccabs(my_complex a);
 
 /* fft */
-void    fft(complex *a, int n, float dt);	/* dt>0: forw.; dt<0: inv */
-void    fftr(complex *x, int n, float dt);
+void    fft(my_complex *a, int n, float dt);	/* dt>0: forw.; dt<0: inv */
+void    fftr(my_complex *x, int n, float dt);
 
 /* convolution and correlation */
-void	cor(complex *a, complex *b, float dt, int nft);
+void	cor(my_complex *a, my_complex *b, float dt, int nft);
 void	conv(float *, int, float *, int);
 float	*crscrl(int,float *,float *,int);
 float	maxCor(float *, float *, int, int, int *, float *);
@@ -53,7 +53,7 @@ void revers(float *a, int n);
 float *coswndw(int, float);
 
 /* high-pass filtering */
-void	filter(complex *, int, float, float, float, int);
+void	filter(my_complex *, int, float, float, float, int);
 
 /* find max. values in an array, return the shift */
 int findMax(float *a, int n, float *amp);
@@ -65,11 +65,11 @@ int findMaxAbs(float *a, int n, float *amp);
 void rtrend(float *, int);
 
 /* some operation on spectrum */
-void fltGauss(complex *u, int n, float gauss);
-void shiftSpec(complex *u, int n, float shift);
-void specAdd(complex *a, complex *b, int n);
-void specMul(complex *a, complex *b, int n);
-void specScale(complex *a, float c, int n);
-float specPwr(complex *u, int n);
+void fltGauss(my_complex *u, int n, float gauss);
+void shiftSpec(my_complex *u, int n, float shift);
+void specAdd(my_complex *a, my_complex *b, int n);
+void specMul(my_complex *a, my_complex *b, int n);
+void specScale(my_complex *a, float c, int n);
+float specPwr(my_complex *u, int n);
 
 #endif
