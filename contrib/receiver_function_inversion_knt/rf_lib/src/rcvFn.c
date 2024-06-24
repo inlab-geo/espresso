@@ -80,7 +80,7 @@ int main (int argc, char **argv) {
 		fprintf(stderr, "failed to allocate memeory\n");
 		continue;
 	   }
-	   respknt(ps, nft, nlyrs, thik, beta, kapa, p, dt, (complex *) z, (complex *) a);
+	   respknt(ps, nft, nlyrs, thik, beta, kapa, p, dt, (my_complex *) z, (my_complex *) a);
 	   sprintf(temp, "%s.%05.3f.z", argv[j], p);
 	   free(a); free(z);
 	}

@@ -32,7 +32,7 @@ matrix ngtv(matrix a) {
 }
 
 matrix invs(matrix a) {
-  complex det;
+  my_complex det;
   matrix  c;
   det = cplus(cmltp(a.pp, a.ss), cngtv(cmltp(a.ps, a.sp)));
   det = cinvs(det);
@@ -45,7 +45,7 @@ matrix invs(matrix a) {
 }
 
 matrix trns(matrix a) {
-  complex t;
+  my_complex t;
   t = a.sp;
   a.sp = a.ps;
   a.ps = t;

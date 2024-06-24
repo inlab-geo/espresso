@@ -3,7 +3,7 @@
 -	subroutines doing fast fourier transform, correlation, etc
 -
 - Includes:
--	fft()		- FFT for complex sequence.
+-	fft()		- FFT for my_complex sequence.
 -	fftr()		- FFT for real sequence.
 -	cor()		- cross-correlation of two seqs. using their spectra.
 -	crscrl()	- cross-correlation of two seq., returns a portion.
@@ -45,20 +45,20 @@
 
 /*---------------------------------------------------------------
 *   fft()
-*   discrete fourier transform of complex sequence x[i], i=0,1,...,n-1.
+*   discrete fourier transform of my_complex sequence x[i], i=0,1,...,n-1.
 *
 *	fft{x}[i] = dt*SUM x[k]*exp(-j*i*k*pi/n) over k=0 to n-1
 *   or
 *       inv_fft{x}[i] = (1/(n*dt)) SUM x[k]*exp(j*i*k*pi/n) over k=0 to n-1
 *   This should agree with analog Fourier transform in amplitude
 *   Input arguments:
-*   x (complex *)	- array for FFT (IN/OUT)
+*   x (my_complex *)	- array for FFT (IN/OUT)
 *   n (int)	- dimension of x[], n=2^N, N>0.
 *   dt (float)	- time sampling interval, forward (>0) or inverse (<0) FFT;
 *--------------------------------------------------------------*/
-void	fft(complex *a, int n, float dt) {
+void	fft(my_complex *a, int n, float dt) {
   int i, j, k, step, m;
-  complex u, w, t;
+  my_complex u, w, t;
   double pi;
   pi = -PI;
   if (dt<0.) pi = PI;
@@ -91,17 +91,17 @@ void	fft(complex *a, int n, float dt) {
 *   fftr()
 *   fast fourier transform of real sequence
 *   Input arguments:
-*   x (complex *)	- array for FFT (IN/OUT). For the forward
-*	transf., x is the real sequence stored as complex array;
+*   x (my_complex *)	- array for FFT (IN/OUT). For the forward
+*	transf., x is the real sequence stored as my_complex array;
 *	for the inverse transf., x is the half of spectrum f and
 *	f(n) is in Im(x[0]).
 *   n (int)		- dimension of x[], n=2^N, N>0.
 *   dt (float)		- forward (>0) or inverse (<0) FFT;
 *--------------------------------------------------------------*/
-void	fftr(complex *x, int n, float dt) {
+void	fftr(my_complex *x, int n, float dt) {
   int	i, j, n2;
   float	delw, w;
-  complex t, g, h, isg;
+  my_complex t, g, h, isg;
   n2 = n/2;
   delw = PI/n;
   isg = IMAGE;
@@ -127,7 +127,7 @@ void	fftr(complex *x, int n, float dt) {
   }
 }
 void	fftr_(float *x, int *n, float *dt) {
-  fftr((complex *) x, *n, *dt);
+  fftr((my_complex *) x, *n, *dt);
 }
 
 
@@ -136,8 +136,8 @@ cross-correlation, IFFT{data[w]*conjugate(src[w])} = int(data(tau)*src(t-tau),ta
 The output is shifted by pi in phase so that the zero-lag is at the middle (nft/2).
 */
 void	cor(
-	    complex	*src,		/* In: source function */
-	    complex     *data,		/* In: data */
+	    my_complex	*src,		/* In: source function */
+	    my_complex     *data,		/* In: data */
 	                                /* Out: cross-correlation */
 	    float	dt,		/* In: dt */
 	    int 	nft		/* In: number of pts */
@@ -196,10 +196,10 @@ float	*crscrl(int npt,float *rec,float *syn,int m) {
   memcpy((char *)ss1, (char *) rec, npt*sizeof(float));
   memcpy((char *)ss2, (char *) syn, npt*sizeof(float));
   for(i=npt;i<nft;i++) {ss1[i]=0.;ss2[i]=0.;}
-  fftr((complex *) ss1,nft2,1.);
-  fftr((complex *) ss2,nft2,1.);
+  fftr((my_complex *) ss1,nft2,1.);
+  fftr((my_complex *) ss2,nft2,1.);
 
-  cor((complex *) ss2, (complex *) ss1, 1., nft2);
+  cor((my_complex *) ss2, (my_complex *) ss1, 1., nft2);
 
   nft2 -= m/2;
   i = (m+1)*sizeof(float);
@@ -379,7 +379,7 @@ float	*coswndw(int n, float w) {
 
 
 /* windowing spectrum d[i], sgn=1 -> high-pass; sgn=-1 -> low-pass */
-void	filter(complex *d, int n, float f1, float f2, float dt, int sgn) {
+void	filter(my_complex *d, int n, float f1, float f2, float dt, int sgn) {
      int i, if1, if2;
      float a;
      dt = 0.5/dt/n;
@@ -453,7 +453,7 @@ void	rtrend(float *y, int n) {
 /* multiply exp(-w^2/(4*gauss^2)) to spectrum u, which is equivalent to
    convolve f(t)=(gauss/sqrt(pi))*exp(-(gauss*t)^2) to u(t).
    f(t) has unit area. The input gauss is actually gauss*dt */
-void fltGauss(complex *u, int n, float gauss) {
+void fltGauss(my_complex *u, int n, float gauss) {
     int j;
     float w, delw, agg;
     delw=PI/n;
@@ -468,7 +468,7 @@ void fltGauss(complex *u, int n, float gauss) {
 
 /* compute f(t)=u(t-shift*dt), which is equ. to multiply
 exp(-j*w*shift) to its spectrum u*/
-void shiftSpec(complex *u, int n, float shift) {
+void shiftSpec(my_complex *u, int n, float shift) {
     int j;
     float w, delw;
     delw=PI/n;
@@ -480,7 +480,7 @@ void shiftSpec(complex *u, int n, float shift) {
 
 
 /* compute spectrum power which equals auto_correlation*dt */
-float specPwr(complex *u, int n) {
+float specPwr(my_complex *u, int n) {
   int j;
   float a, temp;
   for(a=0.,j=0;j<n;j++) {
@@ -492,14 +492,14 @@ float specPwr(complex *u, int n) {
 
 
 /* add spectra a=a+b */
-void specAdd(complex *a, complex *b, int n) {
+void specAdd(my_complex *a, my_complex *b, int n) {
   int j;
   for(j=0;j<n;j++) a[j] = cplus(a[j], b[j]);
 }
 
 
 /* specMul a=a*b */
-void specMul(complex *a, complex *b, int n) {
+void specMul(my_complex *a, my_complex *b, int n) {
   int	j;
   a[0]=cmplx(a[0].x*b[0].x, a[0].y*b[0].y);
   for (j=1; j<n; j++) a[j]=cmltp(a[j], b[j]);
@@ -507,7 +507,7 @@ void specMul(complex *a, complex *b, int n) {
 
 
 /* multiply spectrum a by a constant c */
-void specScale(complex *a, float c, int n) {
+void specScale(my_complex *a, float c, int n) {
   int j;
   for(j=0;j<n;j++) a[j] = dmltp(c, a[j]);
 }
