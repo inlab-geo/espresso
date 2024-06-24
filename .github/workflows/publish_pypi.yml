@@ -146,8 +146,9 @@ jobs:
           python-version: 3.9
 
       - name: Setup GNU Fortran
-        uses: modflowpy/install-gfortran-action@v1
-
+        uses: fortran-lang/setup-fortran@v1
+        id: setup-fortran
+      
       - name: Set up environment
         run: |
           python -m pip install scikit-build versioningit cibuildwheel
