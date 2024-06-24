@@ -27,9 +27,9 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Link gcc for seislib
+      - name: Install gcc through brew (for seislib)
         if: matrix.os == 'macos-13'
-        run: sudo brew install gcc
+        run: brew install gcc
 
       - name: Install dependencies
         run: |
