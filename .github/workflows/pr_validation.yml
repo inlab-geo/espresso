@@ -22,6 +22,13 @@ jobs:
           git fetch --tags origin
           git describe
 
+      - name: Set up Fortran
+        uses: fortran-lang/setup-fortran@v1
+        id: setup-fortran
+        with:
+          compiler: gcc
+          version: 13
+
       - name: Install Python 3.10
         uses: actions/setup-python@v4
         with:
