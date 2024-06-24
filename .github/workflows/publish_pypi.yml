@@ -151,7 +151,7 @@ jobs:
       
       - name: Set up environment
         run: |
-          python -m pip install scikit-build versioningit cibuildwheel
+          python -m pip install scikit-build-core versioningit cibuildwheel
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
