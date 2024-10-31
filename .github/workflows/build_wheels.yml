@@ -8,7 +8,6 @@ on:
       - 'src/espresso/**'
       - 'contrib/**'
       - 'pyproject.toml'
-      - '.github/workflows/**'
 
 jobs:
   build_wheels_non_windows:
