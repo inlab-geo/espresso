@@ -51,7 +51,7 @@ dependencies = [
     "tqdm>=4.0",
     "mpmath>=1.2.0",
     "cython",
-    "seislib@git+https://github.com/auggiemarignier/seislib.git@macos-pip-install"
+    "seislib>=0.6.26"
 ]
 dynamic = ["version"]
 
