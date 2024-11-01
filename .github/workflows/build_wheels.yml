@@ -20,7 +20,6 @@ jobs:
         # https://groups.google.com/g/comp.lang.fortran/c/Jna-QAHCOpk/m/VZq7gVq3AgAJ
         # https://github.com/awvwgk/setup-fortran/issues/6
         os: [ubuntu-latest, macos-latest]
-        # os: [ubuntu-latest]
 
     steps:
       - name: Checkout
