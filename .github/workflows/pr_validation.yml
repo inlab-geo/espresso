@@ -27,6 +27,10 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Setup GNU Fortran
+        uses: fortran-lang/setup-fortran@v1
+        id: setup-fortran
+
       - name: Install dependencies (MacOS)
         if: matrix.os == 'macOS-latest'
         run: |
