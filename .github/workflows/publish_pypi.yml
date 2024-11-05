@@ -106,9 +106,8 @@ jobs:
           python-version: 3.9
 
       - name: Set up environment
-      # should this not install scikit-build-core instead of scikit-build?
         run: |
-          python -m pip install scikit-build versioningit build
+          python -m pip install scikit-build-core versioningit build
 
       - name: Build and check sdist
         run: |
