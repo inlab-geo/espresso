@@ -68,16 +68,16 @@ __all__ = [
 # __all__ += list_problem_names()
 # __all__ += ["list_problem_names", "list_problems", "list_capabilities"]
 
-from ._magnetotelluric_1D import Magnetotelluric1D
-from ._pumping_test import PumpingTest
 from ._fmm_tomography import FmmTomography
-from ._slug_test import SlugTest
-from ._receiver_function_inversion_knt import ReceiverFunctionInversionKnt
-from ._xray_tomography import XrayTomography
-from ._receiver_function_inversion_shibutani import ReceiverFunctionInversionShibutani
-from ._gravity_inversion import GravityInversion
 from ._simple_regression import SimpleRegression
+from ._receiver_function_inversion_shibutani import ReceiverFunctionInversionShibutani
+from ._xray_tomography import XrayTomography
+from ._pumping_test import PumpingTest
+from ._slug_test import SlugTest
+from ._gravity_inversion import GravityInversion
+from ._receiver_function_inversion_knt import ReceiverFunctionInversionKnt
 from ._surface_wave_tomography import SurfaceWaveTomography
+from ._magnetotelluric_1D import Magnetotelluric1D
 
 from .capabilities import list_problem_names, list_problems, list_capabilities
 
