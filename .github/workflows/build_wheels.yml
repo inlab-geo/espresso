@@ -68,4 +68,5 @@ jobs:
           CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
           CIBW_ARCHS_MACOS: arm64
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
+          CIBW_TEST_COMMAND: "python -c 'from espresso import *'"
 
