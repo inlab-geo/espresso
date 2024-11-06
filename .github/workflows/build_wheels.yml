@@ -56,39 +56,16 @@ jobs:
           python -m pip install -r envs/requirements_test.txt
           python -m pip install scikit-build versioningit build
           python -m pip install .
-          cat src/espresso/_version.py
 
       - name: Generate package source with contributions
         run: |
           python espresso_machine/build_package/build.py -f contrib/active_problems.txt
-          cat _esp_build/src/espresso/_version.py
 
-      - name: Deploy to dummy branch
-        uses: s0/git-publish-subdir-action@develop
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+        working-directory: _esp_build
         env:
-          REPO: self
-          BRANCH: dummy
-          FOLDER: _esp_build
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
+          CIBW_ARCHS_MACOS: arm64
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
 
-    #   - name: Build wheels
-    #     run: python -m cibuildwheel --output-dir wheelhouse
-    #     working-directory: _esp_build
-    #     env:
-    #       CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
-    #       CIBW_ARCHS_MACOS: arm64
-    #       CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
-
-    #   - name: Upload artifact
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       path: wheelhouse/*.whl
-
-    #   - name: Build and check sdist
-    #     run: |
-    #       python -m build --sdist
-  
-    #   - name: Upload artifact
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       path: dist/*.tar.gz
