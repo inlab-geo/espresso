@@ -56,7 +56,7 @@ jobs:
           python -m pip install -r envs/requirements_test.txt
           python -m pip install scikit-build versioningit build
           python -m pip install .
-          cat src/espresso/grep _version.py
+          cat src/espresso/_version.py
 
       - name: Generate package source with contributions
         run: |
