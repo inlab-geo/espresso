@@ -56,11 +56,12 @@ jobs:
           python -m pip install -r envs/requirements_test.txt
           python -m pip install scikit-build versioningit build
           python -m pip install .
-          ls -l src/espresso | grep _version.py
+          cat src/espresso/grep _version.py
 
-    #   - name: Generate package source with contributions
-    #     run: |
-    #       python espresso_machine/build_package/build.py -f contrib/active_problems.txt
+      - name: Generate package source with contributions
+        run: |
+          python espresso_machine/build_package/build.py -f contrib/active_problems.txt
+          cat _esp_build/src_espresso/_version.py
 
     #   - name: Build wheels
     #     run: python -m cibuildwheel --output-dir wheelhouse
