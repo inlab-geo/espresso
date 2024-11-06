@@ -69,4 +69,5 @@ jobs:
           CIBW_ARCHS_MACOS: arm64
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
           CIBW_TEST_COMMAND: "python -c 'from espresso import *'"
+          CIBW_BEFORE_TEST_LINUX: "sudo apt-get update && sudo apt-get install -y libgeos++-dev"
 
