@@ -188,9 +188,9 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
           verbose: true
 
-    #   - name: Publish package to PyPI
-    #     uses: pypa/gh-action-pypi-publish@v1.4.1
-    #     with:
-    #       user: __token__
-    #       password: ${{ secrets.PYPI_TOKEN }}
-    #       verbose: true
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.4.1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
+          verbose: true
