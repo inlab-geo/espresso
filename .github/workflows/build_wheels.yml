@@ -66,9 +66,10 @@ jobs:
         run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
         env:
+          CFLAGS: "-I/usr/include"  # to include geos on linux so cartopy can build in venv
+          LDFLAGS: "-L/usr/lib"
           CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
           CIBW_ARCHS_MACOS: arm64
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
           CIBW_TEST_COMMAND: "python -c 'from espresso import *'"
-          CIBW_BEFORE_TEST_LINUX: "export CFLAGS=\"-I/usr/include\" && export LDFLAGS=\"-L/usr/lib\""
 
