@@ -71,6 +71,6 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
           CIBW_TEST_COMMAND_MACOS: "python -c 'from espresso import *'"
           # couldn't get cartopy to install in the testing virtual environment on linux
-          CIBW_BEFORE_TEST_LINUX: "find / -name geos_c.h 2>/dev/null"
+          CIBW_BEFORE_TEST_LINUX: "CPPFLAGS='-I/host/usr/include' pip install cartopy"
           CIBW_TEST_COMMAND_LINUX: "python -c 'from espresso import *'"
 
