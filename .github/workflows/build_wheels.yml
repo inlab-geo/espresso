@@ -20,7 +20,7 @@ jobs:
         # https://groups.google.com/g/comp.lang.fortran/c/Jna-QAHCOpk/m/VZq7gVq3AgAJ
         # https://github.com/awvwgk/setup-fortran/issues/6
         # os: [ubuntu-latest, macos-latest]
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - name: Checkout
@@ -66,14 +66,9 @@ jobs:
         run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
         env:
-          CPPFLAGS: "-I/host/usr/include -L/host/usr/lib"
           CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
           CIBW_ARCHS_MACOS: arm64
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
           CIBW_TEST_COMMAND_MACOS: "python -c 'from espresso import *'"
           # couldn't get cartopy to install in the testing virtual environment on linux
-          CIBW_BEFORE_TEST_LINUX: >
-            /host/usr/bin/sudo apt-get update &&
-            /host/usr/bin/sudo apt-get install -y libgeos++-dev
-          CIBW_TEST_COMMAND_LINUX: "python -c 'from espresso import *'"
 
