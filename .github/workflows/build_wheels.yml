@@ -50,6 +50,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgeos++-dev
+          ls -l /usr/include/geos_c.h
 
       - name: Prepare Python environment
         run: |
@@ -69,5 +70,5 @@ jobs:
           CIBW_ARCHS_MACOS: arm64
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
           CIBW_TEST_COMMAND: "python -c 'from espresso import *'"
-          CIBW_BEFORE_TEST_LINUX: "apt-get update && apt-get install -y libgeos++-dev"
+          CIBW_BEFORE_TEST_LINUX: "export CFLAGS=\"-I/usr/include\" && export LDFLAGS=\"-L/usr/lib\""
 
