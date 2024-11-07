@@ -19,7 +19,8 @@ jobs:
         # Giving up windows, see the following two links:
         # https://groups.google.com/g/comp.lang.fortran/c/Jna-QAHCOpk/m/VZq7gVq3AgAJ
         # https://github.com/awvwgk/setup-fortran/issues/6
-        os: [ubuntu-latest, macos-latest]
+        # os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
       - name: Checkout
@@ -70,4 +71,6 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
           CIBW_TEST_COMMAND_MACOS: "python -c 'from espresso import *'"
           # couldn't get cartopy to install in the testing virtual environment on linux
+          CIBW_BEFORE_TEST_LINUX: "find / -name geos_c.h 2>/dev/null"
+          CIBW_TEST_COMMAND_LINUX: "python -c 'from espresso import *'"
 
