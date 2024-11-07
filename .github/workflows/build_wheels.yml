@@ -63,7 +63,11 @@ jobs:
           python espresso_machine/build_package/build.py -f contrib/active_problems.txt
 
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
+        run: |
+          echo "CFLAGS=${CFLAGS}"
+          echo "LDFLAGS=${LDFLAGS}"
+          ls -l /usr/include/geos_c.h
+          python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
         env:
           CFLAGS: "-I/usr/include"  # to include geos on linux so cartopy can build in venv
