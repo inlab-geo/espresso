@@ -50,7 +50,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgeos++-dev
-          ls -l /usr/include/geos_c.h
 
       - name: Prepare Python environment
         run: |
@@ -63,19 +62,12 @@ jobs:
           python espresso_machine/build_package/build.py -f contrib/active_problems.txt
 
       - name: Build wheels
-        run: |
-          echo "CPPFLAGS=${CPPFLAGS}"
-          echo "LDFLAGS=${LDFLAGS}"
-          python -m cibuildwheel --output-dir wheelhouse
+        run: python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
         env:
-          CPPFLAGS: "-I/usr/include"  # to include geos on linux so cartopy can build in venv
-          LDFLAGS: "-L/usr/lib"
           CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
           CIBW_ARCHS_MACOS: arm64
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
-          CIBW_TEST_COMMAND: "python -c 'from espresso import *'"
-          CIBW_BEFORE_TEST_LINUX: >
-            ls -l /usr/include/geos_c.h
-            CPPFLAGS=-I/usr/include LDFLAGS=-L/usr/lib pip install cartopy
+          CIBW_TEST_COMMAND_MACOS: "python -c 'from espresso import *'"
+          # couldn't get cartopy to install in the testing virtual environment on linux
 
