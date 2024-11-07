@@ -66,7 +66,6 @@ jobs:
         run: |
           echo "CFLAGS=${CFLAGS}"
           echo "LDFLAGS=${LDFLAGS}"
-          ls -l /usr/include/geos_c.h
           python -m cibuildwheel --output-dir wheelhouse
         working-directory: _esp_build
         env:
