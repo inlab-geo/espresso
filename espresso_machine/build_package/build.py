@@ -123,9 +123,20 @@ def clean_build_folder():
 
 # 2
 def move_pkg_metadata():
+    def _fix_gitignore():
+        # find and remove line with src/espresso/_version.py
+        fname = f"{BUILD_DIR}/.gitignore"
+        with open(fname, "r") as file:
+            lines = file.readlines()
+        with open(fname, "w") as file:
+            for line in lines:
+                if "src/espresso/_version.py" not in line:
+                    file.write(line)
+
     move_folder_content(DOCS_SRC, f"{BUILD_DIR}/docs")
     for f in META_FILES:
         copy(f"{ROOT_DIR}/{f}", f"{BUILD_DIR}/{f}")
+    _fix_gitignore()
 
 
 # 3

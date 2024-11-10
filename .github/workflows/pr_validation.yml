@@ -7,7 +7,10 @@ on:
 jobs:
   gen_pkg_source:
     name: Generate package source
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+        matrix:
+            os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,13 +27,27 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Setup GNU Fortran
+        uses: fortran-lang/setup-fortran@v1
+        id: setup-fortran
+
+      - name: Install dependencies (MacOS)
+        if: matrix.os == 'macOS-latest'
+        run: |
+          brew install geos
+  
+      - name: Install dependencies (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgeos++-dev
+
+      - name: Prepare Python environment
+        run: |
           pip install --upgrade pip
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
+          ls -l src/espresso | grep _version.py
 
       - name: Get changed folders in the contrib folder
         id: changed-contribs
