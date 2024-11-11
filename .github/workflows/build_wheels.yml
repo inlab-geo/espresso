@@ -63,7 +63,9 @@ jobs:
           python espresso_machine/build_package/build.py -f contrib/active_problems.txt
 
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
+        run: |
+          python -m cibuildwheel --output-dir wheelhouse
+          ls -l wheelhouse
         working-directory: _esp_build
         env:
           CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
