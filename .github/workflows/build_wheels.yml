@@ -78,4 +78,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{matrix.os}}-wheels
-          path: wheelhouse/
+          path: _esp_build/wheelhouse/
