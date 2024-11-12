@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout build branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: esp_build
 
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: esp_build
           fetch-depth: 0
@@ -117,6 +117,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: dist/*.tar.gz
+          name: sourcedist
 
   ######################## WHEELS DISTRIBUTION #########################
   build_wheels:
@@ -130,7 +131,7 @@ jobs:
         # https://github.com/awvwgk/setup-fortran/issues/6
         os: [ubuntu-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: esp_build
           fetch-depth: 0
@@ -174,7 +175,9 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: wheelhouse/*.whl
+          path: ./wheelhouse/
+          name: ${{matrix.os}}-wheels
+          if-no-files-found: error
 
 
   ######################## UPLOAD TO PYPI #########################
