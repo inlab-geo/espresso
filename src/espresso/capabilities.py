@@ -204,8 +204,8 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 1,
         "log_prior": 1,
-        "rf": 1,
-        "list_capabilities": 1
+        "list_capabilities": 1,
+        "rf": 1
     },
     "XrayTomography": {
         "model_size": 1,
@@ -295,8 +295,8 @@ _capability_matrix = {
         "misfit": 0,
         "log_likelihood": 0,
         "log_prior": 0,
-        "rf": 1,
-        "list_capabilities": 1
+        "list_capabilities": 1,
+        "rf": 1
     },
     "SurfaceWaveTomography": {
         "model_size": 1,
@@ -314,8 +314,8 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
-        "example_dict": 1,
         "list_capabilities": 1,
+        "example_dict": 1,
         "parameterization": 1
     },
     "Magnetotelluric1D": {
@@ -334,9 +334,9 @@ _capability_matrix = {
         "misfit": 1,
         "log_likelihood": 0,
         "log_prior": 0,
+        "list_capabilities": 1,
         "set_start_model": 1,
         "set_obs_data": 1,
-        "list_capabilities": 1,
         "set_start_mesh": 1
     }
 }
