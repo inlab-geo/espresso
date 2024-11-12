@@ -178,6 +178,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: ./wheelhouse/
+          name: ${{matrix.os}}-wheels
           if-no-files-found: error
 
 
