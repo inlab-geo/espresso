@@ -121,7 +121,7 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "GitHub",
-            "url": "https://github.com/inlab-geo/geo-espresso",
+            "url": "https://github.com/inlab-geo/espresso",
             "icon": "https://img.shields.io/badge/GitHub-espresso-171515?logo=github&labelColor=f8f9fa&style=flat-square&logoColor=171515",
             "type": "url",
         },
