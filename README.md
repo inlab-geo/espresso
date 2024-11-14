@@ -53,7 +53,7 @@ pip install .
 python espresso_machine/build_package/build.py all
 ```
 
-This also assumes that you have the python packages `pytest`, `versiongit` and `tqdm` installed in addition to the packages listed in `pyporject.toml`. If not the installation script will report them as missing and you need to install them using `pip`. It also assumes that you have `cmake` and the gnu compilers installed i.e. `gcc` and `gfortran`
+This also assumes that you have the python packages `pytest`, `versioningit` and `tqdm` installed in addition to the packages listed in `pyporject.toml`. If not the installation script will report them as missing and you need to install them using `pip`. It also assumes that you have `cmake` and the gnu compilers installed i.e. `gcc` and `gfortran`
 
 ## Basic usage
 
