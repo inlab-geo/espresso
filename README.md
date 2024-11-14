@@ -41,7 +41,7 @@ for details on dependencies and setting up with virtual environments.
 
 ## Building espresso from source
 
-This is a temporary workaround that should result in a usable espresso. Please note that `pip install .
+This is a temporary workaround that should result in a usable espresso. Please note that `pip install` 
 and `python espresso_machine/build_package/build.py` do indeed need to be run twice...
 
 ```console
