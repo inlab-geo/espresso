@@ -3,7 +3,8 @@ from espresso.exceptions import InvalidExampleError
 from espresso.utils import absolute_path
 from seislib.plotting import plot_map
 from seislib.utils import load_pickle
-import seislib.colormaps as scm
+#import seislib.colormaps as scm
+import cmcrameri as scm
 import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
