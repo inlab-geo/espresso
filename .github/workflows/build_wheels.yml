@@ -67,9 +67,10 @@ jobs:
           ls
           cd _esp_build
           python -m pip wheel .
+          unzip -l geo_espresso*.whl
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{matrix.os}}-wheels
-          path: geo_espresso*.whl
+          path: _esp_build/geo_espresso*.whl
