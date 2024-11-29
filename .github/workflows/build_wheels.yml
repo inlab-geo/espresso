@@ -66,10 +66,14 @@ jobs:
         run: |
           ls
           cd _esp_build
-          tree -I doc
+          find . | grep fm2dss.o
+          find . | grep rf.cpython
+          find . | grep rfc.cpython
           python -m pip wheel --no-deps .
           unzip -l geo_espresso*.whl
-          tree -I doc
+          find . | grep fm2dss.o
+          find . | grep rf.cpython
+          find . | grep rfc.cpython
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
