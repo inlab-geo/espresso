@@ -6,7 +6,7 @@ scipy
 tqdm
 cython
 scikit-build-core
-cibuildwheel==2.10.0
+cibuildwheel<3
 versioningit==2.1.0
 stdlib_list==0.8.0
 pytest-json-report==1.5.0
