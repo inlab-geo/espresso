@@ -66,8 +66,10 @@ jobs:
         run: |
           ls
           cd _esp_build
-          python -m pip wheel .
+          tree -I doc
+          python -m pip wheel --no-deps .
           unzip -l geo_espresso*.whl
+          tree -I doc
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
