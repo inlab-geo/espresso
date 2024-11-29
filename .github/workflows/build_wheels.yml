@@ -67,6 +67,7 @@ jobs:
         working-directory: _esp_build
         env:
           CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
+          CIBW_BUILD_FRONTEND: "pip; args: --no-clean"
           CIBW_ARCHS_MACOS: arm64
           CIBW_TEST_COMMAND_MACOS: "python -c 'from espresso import *'"
           # couldn't get cartopy to install in the testing virtual environment on linux
