@@ -264,13 +264,13 @@ build_pipeline = [
     (move_pkg_metadata, "Moving package metadata..."),
     (move_pkg_source, "Moving Espresso core packaging files..."),
     (write_version, "Generating version file..."),
-    (move_contrib_source, "Moving all contributions..."),
     (move_espresso_machine, "Moving infrastructure code..."),
     (change_versioningit_config, "Changing versioningit configurations..."),
     (
         build_problem_capability,
         "Building capability matrix... (this will take some time)",
     ),
+    (move_contrib_source, "Moving all contributions..."),
 ]
 
 
