@@ -52,10 +52,10 @@ jobs:
             pip install -r envs/requirements_test.txt &&
             pip install . &&
             python espresso_machine/build_package/build.py -f contrib/active_problems.txt &&
-            mv _esp_build /tmp
-            cd ..
-            rm -rf ${project}
-            mv /tmp/_esp_build {project}
+            mv _esp_build /tmp &&
+            cd .. &&
+            rm -rf ${project} &&
+            mv /tmp/_esp_build {project} &&
             ls {project}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_BEFORE_ALL_LINUX: > 
