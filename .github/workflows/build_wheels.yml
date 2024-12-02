@@ -53,7 +53,7 @@ jobs:
           sudo apt-get install -y libgeos++-dev
 
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
+        uses: pypa/cibuildwheel@v2.22
         env:
           CIBW_SKIP: pp* cp36* cp37* cp312* *-win32 *-manylinux_i686 *-musllinux_*
           CIBW_BEFORE_BUILD: >
