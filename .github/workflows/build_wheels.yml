@@ -53,10 +53,14 @@ jobs:
             pip install . &&
             python espresso_machine/build_package/build.py -f contrib/active_problems.txt &&
             mv _esp_build /tmp &&
+            pwd &&
+            ls &&
             cd .. &&
-            rm -rf {project} &&
-            mv -v /tmp/_esp_build {project} &&
-            find {project}
+            pwd &&
+            ls &&
+            rm -rf espresso &&
+            mv -v /tmp/_esp_build espresso &&
+            find espresso
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_BEFORE_ALL_LINUX: > 
             yum install -y epel-release &&
