@@ -54,8 +54,7 @@ jobs:
             cd _esp_build
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_BEFORE_ALL_LINUX: > 
-            apt-get update &&
-            apt-get install -y libgeos++-dev
+            yum install -y geos geos-devel || apk add --upgrade geos || apt-get install -y libgeos++-dev
 
           CIBW_BEFORE_ALL_MACOS: brew install geos
           CIBW_ARCHS_MACOS: arm64
