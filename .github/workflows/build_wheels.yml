@@ -52,15 +52,17 @@ jobs:
             pip install -r envs/requirements_test.txt &&
             pip install . &&
             python espresso_machine/build_package/build.py -f contrib/active_problems.txt &&
-            mv _esp_build /tmp &&
+            main_dir=$(pwd) &&
+            echo "Current directory is: $main_dir" &&
+            mv -v _esp_build /tmp &&
             pwd &&
             ls &&
-            cd .. &&
+            cd ${main_dir}/.. &&
             pwd &&
             ls &&
-            rm -rf espresso &&
-            mv -v /tmp/_esp_build espresso &&
-            find espresso
+            rm -rf ${main_dir} &&
+            mv -v /tmp/_esp_build ${main_dir} &&
+            find ${main_dir}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_BEFORE_ALL_LINUX: > 
             yum install -y epel-release &&
