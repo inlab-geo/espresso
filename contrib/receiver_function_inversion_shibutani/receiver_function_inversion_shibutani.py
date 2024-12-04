@@ -1,13 +1,12 @@
 import pathlib
 import numpy as np
 import matplotlib.pyplot as plt
+import pyrf96 as rf
 
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
 from espresso.utils import absolute_path as path
 
-
-LIB_DIR = pathlib.Path(__file__).resolve().parent / "lib"
 
 class ReceiverFunctionInversionShibutani(EspressoProblem):
     """Forward simulation class
@@ -41,13 +40,10 @@ class ReceiverFunctionInversionShibutani(EspressoProblem):
     def __init__(self, example_number=1):
         super().__init__(example_number)
 
-        from . import rf
-        self.rf = rf
-
-        # self._t, self._data = self.rf.rfcalc(self._ref_model_setup, sn=0.3)
+        # self._t, self._data = rf.rfcalc(self._ref_model_setup, sn=0.3)
         if example_number < 4:
             _dataset = np.loadtxt(path(f"data/dataset1.txt"))
-            self._Cdinv = self.rf.InvDataCov(41, 0.0158,len(_dataset))
+            self._Cdinv = rf.InvDataCov(41, 0.0158,len(_dataset))
             self._ref_model_setup = np.array([[1, 2.5, 1.7],          # used in example_number=1,2,3
                                             [3.5, 3.0, 1.7],
                                             [8.0, 3.5, 2.0],
@@ -57,7 +53,7 @@ class ReceiverFunctionInversionShibutani(EspressoProblem):
             # null_model = np.array([1, 2.7, 4, 3.2, 7.5, 3.6, 21, 4, 40, 4.3])
         elif example_number == 4:
             _dataset = np.loadtxt(path(f"data/dataset4.txt"))
-            self._Cdinv = self.rf.InvDataCov(76, 0.0169,len(_dataset))
+            self._Cdinv = rf.InvDataCov(76, 0.0169,len(_dataset))
             self._ref_model_setup = np.array([[8.0, 3.0, 1.7],          # used in example_number=4
                                             [20, 3.9, 1.7],
                                             [45, 4.4, 1.7]])
@@ -140,7 +136,7 @@ class ReceiverFunctionInversionShibutani(EspressoProblem):
             raise NotImplementedError           # optional
         else:
             model_setup = self._model_setup(model)
-            _, dpred = self.rf.rfcalc(model_setup, *args, **kwargs)
+            _, dpred = rf.rfcalc(model_setup, *args, **kwargs)
             return dpred
 
     def jacobian(self, model):
