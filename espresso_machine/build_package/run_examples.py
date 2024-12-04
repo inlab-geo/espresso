@@ -197,9 +197,8 @@ def run_cmake_if_needed(prob_path, pre_build):
     if pre_build and "CMakeLists.txt" in os.listdir(prob_path):
         build_dir = pathlib.Path(prob_path) / "build"
         build_dir.mkdir(exist_ok=True)
-        python_root = pathlib.Path(sys.executable).parent.parent
         res1 = subprocess.call([
-            "cmake", f"-DCMAKE_PREFIX_PATH={python_root}", ".."
+            "cmake", f"-DPython_EXECUTABLE={sys.executable}", ".."
         ], cwd=build_dir)
         if res1:
             raise ChildProcessError(f"`cmake -DPython_EXECUTABLE=$(which python) ..` failed in {prob_path}/build")
