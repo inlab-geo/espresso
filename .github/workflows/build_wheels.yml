@@ -62,6 +62,8 @@ jobs:
           CIBW_BEFORE_BUILD: >
             echo "Checking python executable" &&
             python -c "import sys; print(sys.executable)" &&
+            echo "Removing previous contribution builds" &&
+            rm -rf contrib/fmm_tomography/build receiver_function_inversion_knt/build receiver_function_shibutani/build &&
             pip install -r envs/requirements_test.txt &&
             pip install . &&
             python espresso_machine/build_package/build.py -f contrib/active_problems.txt
