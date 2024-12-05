@@ -40,6 +40,7 @@ known_dependencies = {
     "shapely", 
     "obspy", 
     "cartopy", 
+    "pyrf96"
 }
 to_exclude = {"espresso", "run_examples", "rf"}
 
