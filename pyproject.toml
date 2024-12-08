@@ -51,7 +51,8 @@ dependencies = [
     "tqdm>=4.0",
     "mpmath>=1.2.0",
     "cython",
-    "seislib>=0.6.26"
+    "seislib>=0.6.26",
+    "pyrf96 @ git+https://github.com/inlab-geo/pyrf96@v0.0.2"
 ]
 dynamic = ["version"]
 
