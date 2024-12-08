@@ -12,7 +12,7 @@ on:
 jobs:
   build_wheels_non_windows:
     if: github.repository_owner == 'inlab-geo'
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.os }} for ${{ matrix.cibw_python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -22,6 +22,7 @@ jobs:
         # https://github.com/awvwgk/setup-fortran/issues/6
         # os: [ubuntu-latest, macos-latest]
         os: [ubuntu-latest, macos-latest]
+        cibw_python-version: [cp39*, cp310*, cp311*, cp312*, cp313*]
 
     steps:
       - name: Checkout
@@ -58,12 +59,8 @@ jobs:
           package-dir: _esp_build
           output-dir: wheelhouse
         env:
-          CIBW_SKIP: pp* cp36* cp37* cp38* cp39* *-win32 *-manylinux_i686 *-musllinux_*
+          CIBW_BUILD: ${{ matrix.cibw_python-version }}
           CIBW_BEFORE_BUILD: >
-            echo "Checking python executable" &&
-            python -c "import sys; print(sys.executable)" &&
-            echo "Removing previous contribution builds" &&
-            rm -rfv contrib/fmm_tomography/build receiver_function_inversion_knt/build &&
             pip install -r envs/requirements_test.txt &&
             pip install . &&
             python espresso_machine/build_package/build.py -f contrib/active_problems.txt
@@ -80,5 +77,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{matrix.os}}-wheels
+          name: ${{matrix.os}}-${{ matrix.cibw_python-version }}-wheels
           path: _esp_build/geo_espresso*.whl
