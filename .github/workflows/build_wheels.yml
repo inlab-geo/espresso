@@ -60,6 +60,7 @@ jobs:
           output-dir: wheelhouse
         env:
           CIBW_BUILD: '${{ matrix.cibw_python-version }}*'
+          CIBW_SKIP: '*-manylinux_i686 *-musllinux_*'
           CIBW_BEFORE_BUILD: >
             pip install -r envs/requirements_test.txt &&
             pip install . &&
