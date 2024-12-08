@@ -22,7 +22,7 @@ jobs:
         # https://github.com/awvwgk/setup-fortran/issues/6
         # os: [ubuntu-latest, macos-latest]
         os: [ubuntu-latest, macos-latest]
-        cibw_python-version: [cp39*, cp310*, cp311*, cp312*, cp313*]
+        cibw_python-version: [cp39, cp310, cp311, cp312, cp313]
 
     steps:
       - name: Checkout
@@ -59,7 +59,7 @@ jobs:
           package-dir: _esp_build
           output-dir: wheelhouse
         env:
-          CIBW_BUILD: ${{ matrix.cibw_python-version }}
+          CIBW_BUILD: '${{ matrix.cibw_python-version }}*'
           CIBW_BEFORE_BUILD: >
             pip install -r envs/requirements_test.txt &&
             pip install . &&
