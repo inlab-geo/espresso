@@ -20,7 +20,7 @@ class SurfaceWaveTomography(EspressoProblem):
             "scale. Here, the problem is linearized, meaning that we assume that "
             "surface waves travel along the great-circle path connecting two "
             "points on the Earth surface."
-        ), # 1-3 sentences
+        ),  # 1-3 sentences
         # List of names e.g. author_names = ["Sally Smith", "Mark Brown"]
         "author_names": [
             "Fabrizio Magrini",
@@ -34,65 +34,68 @@ class SurfaceWaveTomography(EspressoProblem):
         # citations = [("Newton, I (1687). Philosophiae naturalis principia mathematica.", "")]
         # If there are no citations, use empty list `[]`
         "citations": [
-            ('Surface-wave tomography using SeisLib: a Python package for '
-             'multiscale seismic imaging, GJI, vol 84, 1011-1030, 2022. '
-             'F. Magrini, S. Lauro, E. K{\"a}stle, L. Boschi. ',
-            'https://doi.org/10.1093/gji/ggac236'
+            (
+                "Surface-wave tomography using SeisLib: a Python package for "
+                "multiscale seismic imaging, GJI, vol 84, 1011-1030, 2022. "
+                'F. Magrini, S. Lauro, E. K{"a}stle, L. Boschi. ',
+                "https://doi.org/10.1093/gji/ggac236",
             ),
-            ('A global model of Love and Rayleigh surface wave dispersion and '
-             'anisotropy, GJI, vol 187, 1668-1686, 2011. G. Ekstr{\"o}m',
-             'https://doi.org/10.1111/j.1365-246X.2011.05225.x'
+            (
+                "A global model of Love and Rayleigh surface wave dispersion and "
+                'anisotropy, GJI, vol 187, 1668-1686, 2011. G. Ekstr{"o}m',
+                "https://doi.org/10.1111/j.1365-246X.2011.05225.x",
             ),
-            ('A New Shear-Velocity Model of Continental Australia Based on '
-             'Multi-Scale Surface-Wave Tomography, JGR: Solid Earth, vol 128, '
-             '2023. F. Magrini, E. K{\"a}stle, S. Pilia, N. Rawlinson, L. De ',
-            'Siena. https://doi.org/10.1029/2023JB026688'
-            )
+            (
+                "A New Shear-Velocity Model of Continental Australia Based on "
+                "Multi-Scale Surface-Wave Tomography, JGR: Solid Earth, vol 128, "
+                '2023. F. Magrini, E. K{"a}stle, S. Pilia, N. Rawlinson, L. De ',
+                "Siena. https://doi.org/10.1029/2023JB026688",
+            ),
         ],
         # List of (title, address) pairs for any websites that
         # should be linked in the documentation, e.g.
         # linked_sites = [("Parent project on Github","https://github.com/user/repo"),
         #                 ("Data source","https://www.data.com") ]
         # If there are no links, use empty list `[]`
-        "linked_sites": [("PyPI Installation", "https://pypi.org/project/seislib/"), 
-                          ("SeisLib docs", "https://seislib.readthedocs.io/en/latest/")],
+        "linked_sites": [
+            ("PyPI Installation", "https://pypi.org/project/seislib/"),
+            ("SeisLib docs", "https://seislib.readthedocs.io/en/latest/"),
+        ],
     }
-    
-        
+
     def __init__(self, example_number=1):
         super().__init__(example_number)
 
         if example_number == 1:
             self._description = (
-                'Rayleigh-wave phase velocity across USA at 10 s period as '
-                'calculated by Magrini et al. (2022)'
-                )
-            
+                "Rayleigh-wave phase velocity across USA at 10 s period as "
+                "calculated by Magrini et al. (2022)"
+            )
+
         elif example_number == 2:
             self._description = (
-                'Global measurements of Rayleigh-wave phase velocity at 50 s '
-                'period as calculated by Ekström et al. (2011)'
-                )
-            
+                "Global measurements of Rayleigh-wave phase velocity at 50 s "
+                "period as calculated by Ekström et al. (2011)"
+            )
+
         elif example_number == 3:
             self._description = (
-                'Rayleigh-wave phase velocity across Australia at 5 s period as '
-                'calculated by Magrini et al. (2023)'
-                )
+                "Rayleigh-wave phase velocity across Australia at 5 s period as "
+                "calculated by Magrini et al. (2023)"
+            )
         else:
             raise InvalidExampleError
-        
+
         self._example_number = example_number
         self.example_dict = load_pickle(
-            absolute_path('./data/example%d.pickle'%example_number)
-            )
-        self._data = self.example_dict['slowness']
-        self._jacobian = self.example_dict['jacobian']
-        self._good_model = self.example_dict['model']
+            absolute_path("./data/example%d.pickle" % example_number)
+        )
+        self._data = self.example_dict["slowness"]
+        self._jacobian = self.example_dict["jacobian"]
+        self._good_model = self.example_dict["model"]
         ref_slowness = np.mean(self._data)
         self._null_model = np.full(self._good_model.size, ref_slowness)
-        self.parameterization = self.example_dict['grid']
-
+        self.parameterization = self.example_dict["grid"]
 
     @property
     def description(self):
@@ -131,7 +134,7 @@ class SurfaceWaveTomography(EspressoProblem):
         dpred = jacobian @ model
         if return_jacobian:
             return dpred, jacobian
-        return dpred 
+        return dpred
 
     def jacobian(self, model):
         return self._jacobian
@@ -139,22 +142,24 @@ class SurfaceWaveTomography(EspressoProblem):
     def plot_model(self, model, **kwargs):
         velocity = 1 / model
         vmean = np.mean(velocity)
-        proj = ccrs.Robinson() if self._example_number==2 else ccrs.Mercator()
+        proj = ccrs.Robinson() if self._example_number == 2 else ccrs.Mercator()
         fig = plt.figure()
         ax = plt.subplot(111, projection=proj)
         ax.coastlines()
-        cmap = kwargs.pop('cmap', cm.roma)
-        vmin = kwargs.pop('vmin', vmean - vmean*0.1)
-        vmax = kwargs.pop('vmax', vmean + vmean*0.1)
-        img, cb = plot_map(self.parameterization.mesh,
-                           velocity,
-                           ax=ax,
-                           cmap=cmap,
-                           vmin=vmin,
-                           vmax=vmax,
-                           show=False,
-                           **kwargs)       
-        cb.set_label('Phase velocity [m/s]')      
+        cmap = kwargs.pop("cmap", cm.roma)
+        vmin = kwargs.pop("vmin", vmean - vmean * 0.1)
+        vmax = kwargs.pop("vmax", vmean + vmean * 0.1)
+        img, cb = plot_map(
+            self.parameterization.mesh,
+            velocity,
+            ax=ax,
+            cmap=cmap,
+            vmin=vmin,
+            vmax=vmax,
+            show=False,
+            **kwargs,
+        )
+        cb.set_label("Phase velocity [m/s]")
         plt.tight_layout()
         return ax
 
