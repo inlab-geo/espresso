@@ -122,6 +122,7 @@ jobs:
   ######################## WHEELS DISTRIBUTION #########################
   build_wheels:
     name: Build wheels on ${{ matrix.os }} for ${{ matrix.cibw_python-version }}
+    needs: tag_pkg_source
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
