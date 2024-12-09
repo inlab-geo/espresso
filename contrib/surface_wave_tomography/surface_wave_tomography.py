@@ -3,8 +3,7 @@ from espresso.exceptions import InvalidExampleError
 from espresso.utils import absolute_path
 from seislib.plotting import plot_map
 from seislib.utils import load_pickle
-#import seislib.colormaps as scm
-import cmcrameri as scm
+from cmcrameri import cm
 import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
@@ -144,7 +143,7 @@ class SurfaceWaveTomography(EspressoProblem):
         fig = plt.figure()
         ax = plt.subplot(111, projection=proj)
         ax.coastlines()
-        cmap = kwargs.pop('cmap', scm.roma)
+        cmap = kwargs.pop('cmap', cm.roma)
         vmin = kwargs.pop('vmin', vmean - vmean*0.1)
         vmax = kwargs.pop('vmax', vmean + vmean*0.1)
         img, cb = plot_map(self.parameterization.mesh,
