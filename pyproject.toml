@@ -52,7 +52,8 @@ dependencies = [
     "mpmath>=1.2.0",
     "cython",
     "seislib>=0.6.26",
-    "pyrf96 @ git+https://github.com/inlab-geo/pyrf96@v0.0.2"
+    "pyrf96 @ git+https://github.com/inlab-geo/pyrf96@v0.0.2",
+    "pyhk @ git+https://github.com/inlab-geo/pyhk@main"
 ]
 dynamic = ["version"]
 
