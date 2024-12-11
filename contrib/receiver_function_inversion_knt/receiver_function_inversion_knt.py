@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import warnings
+import pyhk
 
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
@@ -38,10 +39,6 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
 
     def __init__(self, example_number=1):
         super().__init__(example_number)
-
-        from .build import rf
-
-        self.rf = rf
 
         if example_number == 1:
             self._description = "a three-layer model with a synthetic dataset"
@@ -148,7 +145,7 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
         else:
             thicknesses, vs = split_layercake_model(model)
             if self.example_number < 3:
-                data_rf = self.rf.rf_calc(
+                data_rf = pyhk.rf_calc(
                     ps=0, 
                     thik=thicknesses,
                     beta=vs,
@@ -165,7 +162,7 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
                 for ray, gauss, data_rf in zip(
                     self._all_ray_param_s_km, self._all_gauss, self._all_data_rf
                 ):
-                    data_pred = self.rf.rf_calc(
+                    data_pred = pyhk.rf_calc(
                         ps=0, 
                         thik=thicknesses,
                         beta=vs,
