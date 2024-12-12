@@ -41,6 +41,7 @@ known_dependencies = {
     "obspy",
     "cartopy",
     "pyrf96",
+    "pyhk",
 }
 to_exclude = {"espresso", "run_examples", "rf"}
 
