@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import warnings
+import pyhk
 
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
@@ -39,10 +40,6 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
     def __init__(self, example_number=1):
         super().__init__(example_number)
 
-        from .build import rf
-
-        self.rf = rf
-
         if example_number == 1:
             self._description = "a three-layer model with a synthetic dataset"
             self._thicknesses = [10, 20]
@@ -72,13 +69,17 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
             self._data_times = _dataset[:, 0]
             self._data_rf = _dataset[:, 1]
         elif example_number == 3:
-            self._description = "a field dataset from the computer programs in seismology"
-            self._thicknesses, self._vs = read_mod_file(path(f"data/cps_rf_data/end.txt"))
+            self._description = (
+                "a field dataset from the computer programs in seismology"
+            )
+            self._thicknesses, self._vs = read_mod_file(
+                path(f"data/cps_rf_data/end.txt")
+            )
             self._vp_vs = [1.77] * len(self._vs)
             self._t_shift = 5
             self._t_duration = 70
             self._t_sampling_interval = 0.5
-            self._data_noise = 0.015        # estimated from the data
+            self._data_noise = 0.015  # estimated from the data
             self._all_ray_param_s_km = []
             self._all_gauss = []
             self._data_times = None
@@ -148,12 +149,12 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
         else:
             thicknesses, vs = split_layercake_model(model)
             if self.example_number < 3:
-                data_rf = self.rf.rf_calc(
-                    ps=0, 
+                data_rf = pyhk.rfcalc(
+                    ps=0,
                     thik=thicknesses,
                     beta=vs,
-                    kapa=self._vp_vs, 
-                    p=self._ray_param_s_km, 
+                    kapa=self._vp_vs,
+                    p=self._ray_param_s_km,
                     duration=self._t_duration,
                     dt=self._t_sampling_interval,
                     shft=self._t_shift,
@@ -165,12 +166,12 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
                 for ray, gauss, data_rf in zip(
                     self._all_ray_param_s_km, self._all_gauss, self._all_data_rf
                 ):
-                    data_pred = self.rf.rf_calc(
-                        ps=0, 
+                    data_pred = pyhk.rfcalc(
+                        ps=0,
                         thik=thicknesses,
                         beta=vs,
-                        kapa=self._vp_vs, 
-                        p=ray, 
+                        kapa=self._vp_vs,
+                        p=ray,
                         duration=self._t_duration,
                         dt=self._t_sampling_interval,
                         shft=self._t_shift,
@@ -219,7 +220,7 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
     ):
         if self.example_number < 3:
             return plot_data(
-                self._data_times, 
+                self._data_times,
                 self._data_rf,
                 ax=ax,
                 scatter=scatter,
@@ -230,14 +231,16 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
             )
         else:
             if ax is not None:
-                warnings.warn("ax is not used in this example, a list of axes will be returned")
+                warnings.warn(
+                    "ax is not used in this example, a list of axes will be returned"
+                )
             fig, axes = plt.subplots(13, 3, figsize=(10, 12))
             data = np.reshape(data1, (len(self._data_times), -1))
             for i, ax in enumerate(axes.flat):
                 plot_data(
-                    self._data_times, 
-                    data[:, i], 
-                    ax=ax, 
+                    self._data_times,
+                    data[:, i],
+                    ax=ax,
                     scatter=scatter,
                     title=f"ray (s/km) = {self._all_ray_param_s_km[i]}, gauss = {self._all_gauss[i]}",
                     xlabel=xlabel,
@@ -245,10 +248,10 @@ class ReceiverFunctionInversionKnt(EspressoProblem):
                     **kwargs,
                 )
             for ax in axes[:-1, :].flat:
-                ax.set_xlabel('')
+                ax.set_xlabel("")
                 ax.tick_params(labelbottom=False)
             for ax in axes[:, 1:].flat:
-                ax.set_ylabel('')
+                ax.set_ylabel("")
             fig.tight_layout()
             return axes
 
@@ -285,15 +288,16 @@ def read_mod_file(file_name):
     ref_model = np.array(ref_model)
     return ref_model[:-1, 0], ref_model[:, 1]
 
+
 def plot_data(
-    times: np.ndarray, 
-    data: np.ndarray, 
+    times: np.ndarray,
+    data: np.ndarray,
     ax=None,
     scatter=False,
     title="receiver function data",
     xlabel="Times (s)",
     ylabel="Amplitude",
-    **kwargs, 
+    **kwargs,
 ):
     if ax is None:
         _, ax = plt.subplots()
