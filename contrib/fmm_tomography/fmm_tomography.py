@@ -1,15 +1,14 @@
-import os
-from pathlib import Path
-import tempfile
 import numpy as np
 from scipy.stats import multivariate_normal
 from scipy import sparse
+import matplotlib.pyplot as plt
 
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
 from espresso.utils import absolute_path as path
 
-from pyfm2d import calc_wavefronts, WaveTrackerOptions, display_model, BasisModel
+from pyfm2d import calc_wavefronts, WaveTrackerOptions, BasisModel
+from pyfm2d.wavetracker import create_diced_grid, change_paths_format
 
 
 class FmmTomography(EspressoProblem):
@@ -473,6 +472,80 @@ def read_receivers(filename):
         f.close()
     return recs
 
+
+def display_model(
+    model,
+    paths=None,
+    extent=(0, 1, 0, 1),
+    clim=None,
+    cmap=None,
+    figsize=(6, 6),
+    title=None,
+    line=1.0,
+    cline="k",
+    alpha=1.0,
+    wfront=None,
+    cwfront="k",
+    diced=True,
+    dicex=8,
+    dicey=8,
+    cbarshrink=0.6,
+    cbar=True,
+    filename=None,
+    **wkwargs,
+):
+    """
+    COPIED FROM pyfm2d/wavetracker.py REMOVING THE plt.show() CALL AND RETURNING THE FIGURE
+
+    Function to plot 2D velocity or slowness field
+
+    Inputs:
+        model, ndarray(nx,ny)           : 2D velocity or slowness field on rectangular grid
+        paths, string                   :
+
+    """
+
+    plt.figure(figsize=figsize)
+    if cmap is None:
+        cmap = plt.cm.RdBu
+
+    # if diced option plot the actual B-spline interpolated velocity used by fmst program
+
+    plotmodel = model
+    if diced:
+        plotmodel = create_diced_grid(model, extent=extent, dicex=dicex, dicey=dicey)
+
+    plt.imshow(plotmodel.T, origin="lower", extent=extent, cmap=cmap)
+
+    if paths is not None:
+        if isinstance(paths, np.ndarray) and paths.ndim == 2:
+            if paths.shape[1] == 4:  # we have paths from xrt.tracer so adjust
+                paths = change_paths_format(paths)
+
+        for p in paths:
+            plt.plot(p[:, 0], p[:, 1], cline, lw=line, alpha=alpha)
+
+    if clim is not None:
+        plt.clim(clim)
+
+    if title is not None:
+        plt.title(title)
+
+    if wfront is not None:
+        nx, ny = wfront.shape
+        X, Y = np.meshgrid(
+            np.linspace(extent[0], extent[1], nx),
+            np.linspace(extent[2], extent[3], ny),
+        )
+        plt.contour(X, Y, wfront.T, **wkwargs)  # Negative contours default to dashed.
+
+    if wfront is None and cbar:
+        plt.colorbar(shrink=cbarshrink)
+
+    if filename is not None:
+        plt.savefig(filename)
+
+    return plt.gcf()
 
 # Espresso -> EARTH SCIENCES -> Geophysics -> Seismology and seismic exploration -> Travel times -> FmmTomography
 # description: The wave front tracker routines solves boundary value ray tracing problems into 2D heterogeneous wavespeed media, defined by continuously varying velocity model calculated by 2D cubic B-splines.
