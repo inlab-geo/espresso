@@ -8,7 +8,8 @@ from scipy import sparse
 from espresso import EspressoProblem
 from espresso.exceptions import InvalidExampleError
 from espresso.utils import absolute_path as path
-from . import waveTracker as wt
+
+from pyfm2d import calc_wavefronts, WaveTrackerOptions, display_model, BasisModel
 
 
 class FmmTomography(EspressoProblem):
@@ -281,28 +282,35 @@ class FmmTomography(EspressoProblem):
         assert np.all(model > 0)
         slowness_reshaped = model.reshape(self._mstart.shape)
         velocity = 1 / slowness_reshaped
-        g = wt.gridModel(velocity, extent=self.extent)
-        if "wdir" in kwargs:
-            kwargs.pop("wdir")
-        if "frechet" in kwargs:
-            kwargs.pop("frechet")
+
         fmm = self.call_wavefront_tracker(
             velocity,
-            frechet=True,
             **kwargs,
         )
-        # paths = fmm.paths
-        ttimes = fmm.ttimes
-        A = fmm.frechet.toarray()
         if return_jacobian:
-            return np.array(ttimes).flatten(), A
+            return fmm.ttimes, fmm.frechet.toarray()
         else:
-            return np.array(ttimes).flatten()
+            return fmm.ttimes
 
     def jacobian(
         self, model, **kwargs
     ):  # accepting "slowness" though keyword is "model"
         return self.forward(model, True, **kwargs)[1]
+
+    def call_wavefront_tracker(self, velocity_reshaped, **kwargs):
+        g = BasisModel(velocity_reshaped, extent=self.extent)
+        v = g.get_velocity()
+
+        # after lots of testing, for some reason if paths=False then the frechet calculations beraks
+        options = WaveTrackerOptions(times=True, paths=True, frechet=True, **kwargs)
+
+        return calc_wavefronts(
+            v,
+            self.receivers,
+            self.sources,
+            extent=self.extent,
+            options=options,
+        )
 
     def plot_model(
         self, model, with_paths=False, return_paths=False, **kwargs
@@ -318,7 +326,7 @@ class FmmTomography(EspressoProblem):
             )
             paths = fmm.paths
             if with_paths:
-                fig = wt.displayModel(
+                fig = display_model(
                     velocity,
                     paths=paths,
                     extent=self.extent,
@@ -328,7 +336,7 @@ class FmmTomography(EspressoProblem):
                     **kwargs,
                 )
             else:
-                fig = wt.displayModel(
+                fig = display_model(
                     velocity,
                     paths=None,
                     extent=self.extent,
@@ -341,7 +349,7 @@ class FmmTomography(EspressoProblem):
             self._plot_labelling(ax)
             return (ax, paths) if return_paths else ax
         else:
-            fig = wt.displayModel(
+            fig = display_model(
                 velocity,
                 paths=None,
                 extent=self.extent,
@@ -365,22 +373,6 @@ class FmmTomography(EspressoProblem):
 
     def log_prior(self, model):
         raise NotImplementedError  # optional
-
-    def call_wavefront_tracker(self, velocity_reshaped, **kwargs):
-        original_dir = Path.cwd()
-        g = wt.gridModel(velocity_reshaped, extent=self.extent)
-        with tempfile.TemporaryDirectory(dir=path(".")) as tmpdir:
-            tmpdir = path(tmpdir)
-            # print(f'Temporary directory created at {tmpdir}')
-            # os.chdir(tmpdir)
-            fmm = g.wavefront_tracker(
-                self.receivers,
-                self.sources,
-                wdir=str(tmpdir),
-                **kwargs,
-            )
-        os.chdir(original_dir)
-        return fmm
 
     def _plot_labelling(self, ax):
         if self.example_number < 3:
