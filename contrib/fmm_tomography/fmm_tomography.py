@@ -199,7 +199,12 @@ class FmmTomography(EspressoProblem):
             self._sstart = 1 / self._mstart
             self.params["extent"] = extent
             self.params["receivers"] = recs
-            self.params["sources"] = srcs
+
+            # The esspresso build system runs all the examples with a short timeout
+            # TimeoutError on the python side will cause a memory leak in the fortran side
+            # I can't think of a way to cleanly call pyfm2d.fastmarching.deallocate_result_arrays()
+            # from the python side, so this example will only have one source for now
+            self.params["sources"] = srcs[5]
             self.params["model_shape"] = m.shape
             # generate data
             ttdat = np.loadtxt(filenamett)
