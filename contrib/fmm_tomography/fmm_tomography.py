@@ -283,8 +283,10 @@ class FmmTomography(EspressoProblem):
         slowness_reshaped = model.reshape(self._mstart.shape)
         velocity = 1 / slowness_reshaped
 
+        nthreads = kwargs.pop("nthreads", 12)
         fmm = self.call_wavefront_tracker(
             velocity,
+            nthreads=nthreads,
             **kwargs,
         )
         if return_jacobian:
@@ -297,7 +299,7 @@ class FmmTomography(EspressoProblem):
     ):  # accepting "slowness" though keyword is "model"
         return self.forward(model, True, **kwargs)[1]
 
-    def call_wavefront_tracker(self, velocity_reshaped, **kwargs):
+    def call_wavefront_tracker(self, velocity_reshaped, nthreads, **kwargs):
         g = BasisModel(velocity_reshaped, extent=self.extent)
         v = g.get_velocity()
 
@@ -309,6 +311,7 @@ class FmmTomography(EspressoProblem):
             self.receivers,
             self.sources,
             extent=self.extent,
+            nthreads=nthreads,
             options=options,
         )
 
