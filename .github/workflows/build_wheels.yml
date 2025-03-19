@@ -47,20 +47,9 @@ jobs:
         uses: fortran-lang/setup-fortran@v1
         id: setup-fortran
 
-      - name: Trick cibuildwheel
-        # cibuild wheel requires e.g. a pyproject.toml file in the package dir
-        # which in our case is _esp_build but this doesn't get created until
-        # the CIBW_BEFORE_BUILD step, which happens after option validation.
-        # So here I just copy our pyproject.toml into a fresh _esp_build dir,
-        # which will get overwritten later
-        run: |
-          mkdir -p _esp_build
-          cp pyproject.toml _esp_build
-
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22
         with:
-          package-dir: _esp_build
           output-dir: wheelhouse
         env:
           CIBW_BUILD: '${{ matrix.cibw_python-version }}*'
