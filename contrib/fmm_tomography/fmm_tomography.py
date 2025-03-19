@@ -283,7 +283,7 @@ class FmmTomography(EspressoProblem):
         slowness_reshaped = model.reshape(self._mstart.shape)
         velocity = 1 / slowness_reshaped
 
-        nthreads = kwargs.pop("nthreads", 12)
+        nthreads = kwargs.pop("nthreads", 1)
         fmm = self.call_wavefront_tracker(
             velocity,
             nthreads=nthreads,
