@@ -1,8 +1,5 @@
 """Run all problems and associated examples in espresso
 
-This script assumes you have geo-espresso installed via:
-$ python espresso_machine/build_package/build.py
-
 """
 
 import sys

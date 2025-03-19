@@ -34,10 +34,6 @@ jobs:
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
 
-      - name: Install Espresso
-        run: |
-          python espresso_machine/build_package/build.py
-
       - name: Run tests and write results to contrib/active_problems.txt
         run: |
           python espresso_machine/build_package/test_examples.py

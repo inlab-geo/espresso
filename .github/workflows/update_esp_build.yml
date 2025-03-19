@@ -41,10 +41,6 @@ jobs:
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
       
-      - name: Build with pre and post validation
-        run: |
-          python espresso_machine/build_package/build.py --no-install -f contrib/active_problems.txt
-      
       - name: Deploy to esp_build branch
         uses: s0/git-publish-subdir-action@develop
         env:

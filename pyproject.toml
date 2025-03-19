@@ -1,8 +1,7 @@
 # --------------------------- BEGIN NOTES ---------------------------
 
 ####### TO INSTALL #######
-# pip install .                           # core only, or
-# python espresso_machine/build_package/build.py     # with contributions
+# pip install .
 
 ####### TO TEST #######
 # python espresso_machine/build_package/validate.py --pre
