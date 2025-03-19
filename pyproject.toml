@@ -16,8 +16,8 @@
 
 # --------------------------- END NOTES -----------------------------
 [build-system]
-requires = ["scikit-build-core", "numpy", "cython", "versioningit"]
-build-backend = "scikit_build_core.build"
+requires = ["setuptools", "versioningit"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "geo-espresso"
@@ -56,13 +56,6 @@ dependencies = [
     "pyfm2d>=0.1.2"
 ]
 dynamic = ["version"]
-
-[tool.scikit-build]
-experimental = true
-
-[tool.scikit-build.metadata.version]
-provider = "versioning"
-provider-path = "espresso_machine"
 
 [tool.black]
 line-length = 88
