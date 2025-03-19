@@ -25,7 +25,7 @@ name = "geo-espresso"
 description = "Earth Science PRoblems for the Evaluation of Strategies, Solvers and Optimizers"
 authors = [{name = "InLab, Espresso development team"}]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 keywords = ["inversion", "inference", "python package", "geoscience", "geophysics"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
@@ -54,6 +54,7 @@ dependencies = [
     "seislib>=0.6.26",
     "pyrf96>=0.1.0",
     "pyhk>=0.1.0",
+    "pyfm2d>=0.1.2"
 ]
 dynamic = ["version"]
 
@@ -66,7 +67,7 @@ provider-path = "src/espresso/_machine"
 
 [tool.black]
 line-length = 88
-target_version = ['py38']
+target_version = ['py39']
 experimental_string_processing = true
 exclude = '''
 (
