@@ -47,7 +47,6 @@ jobs:
           pip install --upgrade pip
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
-          ls -l src/espresso | grep _version.py
 
       - name: Get changed folders in the contrib folder
         id: changed-contribs
@@ -73,10 +72,8 @@ jobs:
           then
             echo "Tests will be run on the following contributions:"
             cat changed_contribs.txt
-            pip install -v _esp_build/
             python espresso_machine/build_package/test_examples.py -f changed_contribs.txt
           else
             echo "Tests will be run on the entire package."
-            pip install -v _esp_build/
             python espresso_machine/build_package/test_examples.py
           fi
