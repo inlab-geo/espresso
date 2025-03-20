@@ -12,7 +12,7 @@ on:
 jobs:
   build_wheels_non_windows:
     if: github.repository_owner == 'inlab-geo'
-    name: Build wheels on ${{ matrix.os }} for ${{ matrix.cibw_python-version }}
+    name: Build wheels on ${{ matrix.os }} for ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
