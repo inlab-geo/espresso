@@ -1,10 +1,11 @@
-"""Generate API compliance report 
+"""Generate API compliance report
 
 Usage:
 - To generate raw report, raw_compliance_report(problems_to_check=None, pre_build=True)
 - To generate report, compliance_report(problems_to_check=None, pre_build=True)
 - To print report, print_compliance_report(report)
 """
+
 import dataclasses
 import typing
 
@@ -100,8 +101,9 @@ class ProblemRawReport:
         self.attributes_additional = _additional_attr
 
 
-def raw_compliance_report(problems_to_check=None, pre_build=True, timeout=None) \
-    -> dict[str, ProblemRawReport]:
+def raw_compliance_report(
+    problems_to_check=None, timeout=None
+) -> dict[str, ProblemRawReport]:
     """Run all problems and generate a raw compliance report
 
     A typical raw report looks like:
@@ -122,7 +124,7 @@ def raw_compliance_report(problems_to_check=None, pre_build=True, timeout=None) 
     """
     raw_report = dict()
     problems = _utils.problems_to_run(problems_to_check)
-    results = run_examples.run_problems(problems, pre_build=pre_build, timeout=timeout)
+    results = run_examples.run_problems(problems, timeout=timeout)
     for res in results:
         raw_report[res.problem_class_str] = ProblemRawReport(res)
     return raw_report
@@ -161,7 +163,7 @@ class ProblemReport:
 
     def metadata_ok(self) -> bool:
         return self.metadata == "OK"
-    
+
     def _collect_metadata_report(self, raw_report: ProblemRawReport):
         return "OK" if raw_report.metadata_ok() else raw_report.metadata
 
@@ -198,21 +200,23 @@ class ProblemReport:
         res = self._analyse_report_dict(raw_report.attributes_optional)
         self.optional = res["report"]
         self.optional_count = res["count"]
-    
+
     def _collect_additional_attr_report(self, raw_report: ProblemRawReport):
         self.additional = raw_report.attributes_additional
         self.additional_count = len(raw_report.attributes_additional)
-    
+
     def _analyse_compliance(self):
         _metadata_ok = self.metadata_ok()
-        _required_ok = \
+        _required_ok = (
             self.required_count["implemented"] == self.required_count["total"]
+        )
         _optional_ok = self.optional_count["error"] == 0
         self.api_compliance = _metadata_ok and _required_ok and _optional_ok
 
 
-def compliance_report(problems_to_check=None, pre_build=True, timeout=_utils.DEFAULT_TIMEOUT) \
-    -> dict[str, ProblemReport]:
+def compliance_report(
+    problems_to_check=None, timeout=_utils.DEFAULT_TIMEOUT
+) -> dict[str, ProblemReport]:
     """Generate a readable compliance report based on running raw report
 
     A typical compliance report looks like:
@@ -229,7 +233,7 @@ def compliance_report(problems_to_check=None, pre_build=True, timeout=_utils.DEF
         }
     }
     """
-    raw_report = raw_compliance_report(problems_to_check, pre_build, timeout)
+    raw_report = raw_compliance_report(problems_to_check, timeout)
     report = dict()
     for prob_name, prob_raw_report in raw_report.items():
         report[prob_name] = ProblemReport(prob_raw_report)
@@ -351,9 +355,18 @@ def pprint_compliance_report(report: dict[str, ProblemReport]):
         #### sum up
         _api_compliance = r.api_compliance
         if _api_compliance:
-            print(cformat(bcolors.OKCYAN, f"\n{prob} ({r.problem_name}) is API-compliant. Cheers!"))
+            print(
+                cformat(
+                    bcolors.OKCYAN,
+                    f"\n{prob} ({r.problem_name}) is API-compliant. Cheers!",
+                )
+            )
         else:
-            print(cformat(bcolors.FAIL, f"\n{prob} ({r.problem_name}) is not API-compliant."))
+            print(
+                cformat(
+                    bcolors.FAIL, f"\n{prob} ({r.problem_name}) is not API-compliant."
+                )
+            )
 
 
 def capability_report(problems_to_check=None, timeout=_utils.DEFAULT_TIMEOUT_SHORT):

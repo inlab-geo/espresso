@@ -27,23 +27,6 @@ def setup_parser():
         description="Script to build Espresso, with/without pre/post-build validation"
     )
     parser.add_argument(
-        "-v",
-        "--checks",
-        "--post",
-        "--validate",
-        dest="post",
-        action="store_true",
-        default=False,
-        help="Run tests after building the package",
-    )
-    parser.add_argument(
-        "--pre",
-        dest="pre",
-        action="store_true",
-        default=False,
-        help="Run tests before building the package",
-    )
-    parser.add_argument(
         "--timeout",
         "-t",
         dest="timeout",
@@ -79,11 +62,6 @@ def setup_parser():
 def args():
     args, unknown = setup_parser().parse_known_args()
     return args
-
-
-def pre_build():
-    _args = args()
-    return _args.pre or (not _args.pre and not _args.post)
 
 
 # ------------------------------- running timeout -------------------------------------
@@ -162,6 +140,7 @@ def problems_specified_from_args():
         contribs = args().contribs
     return contribs
 
+
 def problems_to_run(problems_specified=None) -> typing.List[typing.Tuple[str, str]]:
     if problems_specified is None:
         problems_specified = problems_specified_from_args()
@@ -181,6 +160,7 @@ def problems_to_run(problems_specified=None) -> typing.List[typing.Tuple[str, st
                 + ", ".join(problems_not_in_folder)
             )
         return problems
+
 
 def problems_to_run_names_only(problems_specified=None) -> typing.List[str]:
     problems = problems_to_run(problems_specified)

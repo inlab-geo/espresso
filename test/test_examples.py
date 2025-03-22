@@ -15,23 +15,18 @@ import report
 import _utils
 
 
-@pytest.fixture
-def pre_build(request):
-    return not request.config.getoption("--post")
-
-
 # Note: `contrib` fixture is defined in conftest.py
-def test_contrib(contrib, pre_build):
-    _report = report.compliance_report([contrib[0]], pre_build)
+def test_contrib(contrib):
+    _report = report.compliance_report([contrib[0]])
     for _r in _report.values():  # always only one iteration
         report.pprint_compliance_report(_report)
         if isinstance(_r.api_compliance, Exception):
             raise _r.api_compliance
-        assert _r.api_compliance, \
-            "Not API-compliant. Check report above for details."
+        assert _r.api_compliance, "Not API-compliant. Check report above for details."
 
 
 pass_pattern = r"\(([\w\s]+)\) is API-compliant"
+
 
 def write_active_list():
     # read report
