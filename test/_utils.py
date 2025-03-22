@@ -13,7 +13,7 @@ import typing
 
 # ------------------------------- constants -------------------------------------------
 PKG_NAME = "espresso"
-ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
+ROOT = str(pathlib.Path(__file__).resolve().parent.parent)
 CONTRIB_FOLDER = ROOT + "/contrib"
 ACTIVE_LIST = CONTRIB_FOLDER + "/active_problems.txt"
 
