@@ -13,9 +13,12 @@ import typing
 
 # ------------------------------- constants -------------------------------------------
 PKG_NAME = "espresso"
-ROOT = str(pathlib.Path(__file__).resolve().parent.parent)
-CONTRIB_FOLDER = ROOT + "/contrib"
-ACTIVE_LIST = CONTRIB_FOLDER + "/active_problems.txt"
+ROOT = pathlib.Path(__file__).resolve().parent.parent / "src" / PKG_NAME
+CONTRIB_FOLDER = ROOT / "contrib"
+ACTIVE_LIST = CONTRIB_FOLDER  / "active_problems.txt"
+ROOT = str(ROOT)
+CONTRIB_FOLDER = str(CONTRIB_FOLDER)
+ACTIVE_LIST = str(ACTIVE_LIST)
 
 DEFAULT_TIMEOUT = 60
 DEFAULT_TIMEOUT_SHORT = 1

@@ -11,8 +11,8 @@ helpful:
 """
 
 import typing
+from .contrib import _all_problems
 
-_all_problems = []
 _capability_matrix = dict()
 
 
@@ -98,18 +98,3 @@ def list_capabilities(problem_names: typing.Union[list, str] = None) -> dict:
             k: v for k, v in all_capabilities.items() if k in problem_names
         }
         return filtered_capabilities
-
-
-# from .example_name import ExampleName
-
-# _all_problems = [ ExampleName, ]
-
-# _capability_matrix = {
-#     "ExampleName": {
-#         "model_size": 1,
-#         "data_size": 1,
-#         "starting_model": 1,
-#         ...
-#     },
-#     ...
-# }
