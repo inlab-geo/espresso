@@ -11,7 +11,7 @@ import pytest
 import json
 import re
 
-import report
+import espresso.utils.report as report
 import _utils
 
 
