@@ -15,7 +15,7 @@ import typing
 PKG_NAME = "espresso"
 ROOT = pathlib.Path(__file__).resolve().parent.parent / "src" / PKG_NAME
 CONTRIB_FOLDER = ROOT / "contrib"
-ACTIVE_LIST = CONTRIB_FOLDER  / "active_problems.txt"
+ACTIVE_LIST = CONTRIB_FOLDER / "active_problems.txt"
 ROOT = str(ROOT)
 CONTRIB_FOLDER = str(CONTRIB_FOLDER)
 ACTIVE_LIST = str(ACTIVE_LIST)
@@ -148,8 +148,12 @@ def problems_to_run(problems_specified=None) -> typing.List[typing.Tuple[str, st
     if problems_specified is None:
         problems_specified = problems_specified_from_args()
     all_problems = get_folder_content(CONTRIB_FOLDER)
-    all_problems_zipped = list(zip(*all_problems))
-    all_problems_zipped = [c for c in all_problems_zipped if "." not in c[0]]
+    _ignore_patterns = [".", "__pycache__"]
+    all_problems_zipped = [
+        (name, path)
+        for name, path in zip(*all_problems)
+        if not any(p in name for p in _ignore_patterns)
+    ]
     if problems_specified is None:
         return all_problems_zipped
     else:  # filter by specified problems list
