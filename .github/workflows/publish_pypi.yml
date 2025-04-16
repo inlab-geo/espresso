@@ -49,8 +49,11 @@ jobs:
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
-        with:
-          path: dist
+        
+      - name: Rename artifact
+        run: |
+          ls -l
+          mv artifact dist
 
       - name: Publish package to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
