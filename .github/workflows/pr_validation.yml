@@ -49,32 +49,7 @@ jobs:
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
 
-      - name: Get changed folders in the contrib folder
-        id: changed-contribs
-        uses: tj-actions/changed-files@v43
-        with:
-          files: src/espresso/contrib/*/  # Alternatively using: `docs/**` or `docs`
-
-      - name: List all changed contributions
-        if: steps.changed-contribs.outputs.any_changed == 'true'
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-contribs.outputs.all_changed_files }}
+      - name: Run tests
         run: |
-          for folder in ${ALL_CHANGED_FILES}; do
-            contrib_name=$(echo $folder | cut -d'/' -f2)
-            if [[ $contrib_name != "active_problems.txt" ]]; then
-              echo $contrib_name >> changed_contribs.txt
-            fi
-          done
-
-      - name: Build with pre and post validation
-        run: |
-          if [[ -f "changed_contribs.txt" ]]
-          then
-            echo "Tests will be run on the following contributions:"
-            cat changed_contribs.txt
-            python test/test_examples.py -f changed_contribs.txt
-          else
-            echo "Tests will be run on the entire package."
-            python test/test_examples.py
-          fi
+          echo "Tests will be run on the entire package."
+          python test/test_examples.py
