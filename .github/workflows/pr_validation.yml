@@ -11,9 +11,10 @@ jobs:
     strategy:
         matrix:
             os: [ubuntu-latest, macos-latest]
+            python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -22,10 +23,10 @@ jobs:
           git fetch --tags origin
           git describe
 
-      - name: Install Python 3.10
-        uses: actions/setup-python@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+            python-version: ${{ matrix.python-version }}
 
       - name: Setup GNU Fortran
         uses: fortran-lang/setup-fortran@v1
@@ -52,7 +53,7 @@ jobs:
         id: changed-contribs
         uses: tj-actions/changed-files@v43
         with:
-          files: contrib/*/  # Alternatively using: `docs/**` or `docs`
+          files: src/espresso/contrib/*/  # Alternatively using: `docs/**` or `docs`
 
       - name: List all changed contributions
         if: steps.changed-contribs.outputs.any_changed == 'true'
@@ -72,8 +73,8 @@ jobs:
           then
             echo "Tests will be run on the following contributions:"
             cat changed_contribs.txt
-            python espresso_machine/build_package/test_examples.py -f changed_contribs.txt
+            python test/test_examples.py -f changed_contribs.txt
           else
             echo "Tests will be run on the entire package."
-            python espresso_machine/build_package/test_examples.py
+            python test/test_examples.py
           fi
