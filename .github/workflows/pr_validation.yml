@@ -5,8 +5,8 @@ on:
   pull_request:
 
 jobs:
-  gen_pkg_source:
-    name: Generate package source
+  test:
+    name: Test Examples
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
