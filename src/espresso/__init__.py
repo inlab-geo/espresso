@@ -54,16 +54,12 @@ from ._espresso_problem import EspressoProblem
 from . import utils
 from . import exceptions
 
+from .contrib import *
+from .capabilities import list_problem_names, list_problems, list_capabilities
 
 from ._version import __version__
 
 
-__all__ = [
-    "EspressoProblem",
-]
-
-# from .example_name import ExampleName
-
-# from .capabilities import list_problem_names, list_problems
-# __all__ += list_problem_names()
-# __all__ += ["list_problem_names", "list_problems", "list_capabilities"]
+__all__ = ["EspressoProblem"]
+__all__ += list_problem_names()
+__all__ += ["list_problem_names", "list_problems", "list_capabilities"]

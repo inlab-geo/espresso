@@ -1,9 +1,4 @@
-"""Run all problems and associated examples in espresso
-
-This script assumes you have geo-espresso installed via:
-$ python espresso_machine/build_package/build.py
-
-"""
+"""Run all problems and associated examples in espresso"""
 
 import sys
 import os
@@ -65,16 +60,11 @@ class _ProblemModule:
     2. run the examples from a built espresso package (post-build)
     """
 
-    def __init__(self, pre_build, problem_name):
-        self._pre_build = pre_build
+    def __init__(self, problem_name):
         self._problem_name = problem_name
 
     def __enter__(self):
-        if self._pre_build:
-            sys.path.insert(1, _utils.CONTRIB_FOLDER)
-            return __import__(self._problem_name)
-        else:
-            return __import__(_utils.PKG_NAME)
+        return __import__(_utils.PKG_NAME)
 
     def __exit__(self, exc_type, exc_value, traceback):
         _to_del = set()
@@ -143,12 +133,12 @@ def instantiate_example(problem_class, i):
 
 
 def collect_methods_outputs(prob_instance_i, all_outputs, timeout=None):
-    for (output_name, how) in prob_methods:
+    for output_name, how in prob_methods:
         all_outputs[output_name] = _get_result(prob_instance_i, how, True, timeout)
 
 
 def collect_properties(prob_instance_i, all_outputs, timeout=None):
-    for (output_name, prop) in prob_properties:
+    for output_name, prop in prob_properties:
         all_outputs[output_name] = _get_result(prob_instance_i, prop, False, timeout)
 
 
@@ -184,7 +174,7 @@ def run_problem(
         try:
             if problem_class_str == "FmmTomography" and i == 3:
                 # Skip the third example for FmmTomography
-                # For some reason the timeout error is not 
+                # For some reason the timeout error is not
                 # beign raised for this example.
                 # This is a yucky hack to skip it.
                 i += 1
@@ -204,24 +194,23 @@ def run_cmake_if_needed(prob_path, pre_build):
     if pre_build and "CMakeLists.txt" in os.listdir(prob_path):
         build_dir = pathlib.Path(prob_path) / "build"
         build_dir.mkdir(exist_ok=True)
-        res1 = subprocess.call([
-            "cmake", f"-DPython_EXECUTABLE={sys.executable}", ".."
-        ], cwd=build_dir)
+        res1 = subprocess.call(
+            ["cmake", f"-DPython_EXECUTABLE={sys.executable}", ".."], cwd=build_dir
+        )
         if res1:
-            raise ChildProcessError(f"`cmake -DPython_EXECUTABLE=$(which python) ..` failed in {prob_path}/build")
+            raise ChildProcessError(
+                f"`cmake -DPython_EXECUTABLE=$(which python) ..` failed in {prob_path}/build"
+            )
         res2 = subprocess.call(["make"], cwd=build_dir)
         if res2:
             raise ChildProcessError(f"`make` failed in {prob_path}/build")
 
 
-def run_problems(
-    problems, pre_build, timeout=None
-) -> typing.Iterator[ResultsFromProblem]:
-    for (prob_name, prob_path) in problems:
+def run_problems(problems, timeout=None) -> typing.Iterator[ResultsFromProblem]:
+    for prob_name, prob_path in problems:
         prob_class_str = _utils.problem_name_to_class(prob_name)
-        run_cmake_if_needed(prob_path, pre_build)
         try:
-            with _ProblemModule(pre_build, prob_name) as parent_module:
+            with _ProblemModule(prob_name) as parent_module:
                 try:
                     prob_class = getattr(parent_module, prob_class_str)
                 except Exception as e:
@@ -249,7 +238,7 @@ def run_problems(
 
 def main(problems_specified=None, timeout=_utils.DEFAULT_TIMEOUT, verbose=False):
     problems = _utils.problems_to_run(problems_specified)
-    results = run_problems(problems, pre_build=True, timeout=timeout)
+    results = run_problems(problems, timeout=timeout)
     for res in results:
         if verbose:
             print(res.problem_class)

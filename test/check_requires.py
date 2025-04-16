@@ -1,8 +1,5 @@
 """Check if all requirements are listed in pyproject.toml
 
-This script assumes you have geo-espresso installed via:
-$ python espresso_machine/build_package/build.py
-
 Usage: python check_requires.py [-c <example_name] [--file <file_name>]
 """
 

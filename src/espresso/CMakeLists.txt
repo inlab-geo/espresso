@@ -1,5 +1,0 @@
-install(FILES __init__.py DESTINATION espresso)
-install(FILES _version.py DESTINATION espresso)
-install(FILES _espresso_problem.py DESTINATION espresso)
-install(FILES exceptions.py DESTINATION espresso)
-install(DIRECTORY utils DESTINATION espresso)

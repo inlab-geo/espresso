@@ -1,8 +1,6 @@
 """Helper functions to analyse the base class `EspressoProblem`
 
 This script assumes you have geo-espresso installed via:
-    $ python espresso_machine/build_package/build.py
-Or the core package via:
     $ pip install .
 
 The following two functions are exposed to other scripts by this file:

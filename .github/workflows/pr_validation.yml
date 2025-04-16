@@ -5,15 +5,16 @@ on:
   pull_request:
 
 jobs:
-  gen_pkg_source:
-    name: Generate package source
+  test:
+    name: Test Examples
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
             os: [ubuntu-latest, macos-latest]
+            python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -22,10 +23,10 @@ jobs:
           git fetch --tags origin
           git describe
 
-      - name: Install Python 3.10
-        uses: actions/setup-python@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+            python-version: ${{ matrix.python-version }}
 
       - name: Setup GNU Fortran
         uses: fortran-lang/setup-fortran@v1
@@ -47,38 +48,8 @@ jobs:
           pip install --upgrade pip
           python -m pip install -r envs/requirements_test.txt
           python -m pip install .
-          ls -l src/espresso | grep _version.py
 
-      - name: Get changed folders in the contrib folder
-        id: changed-contribs
-        uses: tj-actions/changed-files@v43
-        with:
-          files: contrib/*/  # Alternatively using: `docs/**` or `docs`
-
-      - name: List all changed contributions
-        if: steps.changed-contribs.outputs.any_changed == 'true'
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-contribs.outputs.all_changed_files }}
+      - name: Run tests
         run: |
-          for folder in ${ALL_CHANGED_FILES}; do
-            contrib_name=$(echo $folder | cut -d'/' -f2)
-            if [[ $contrib_name != "active_problems.txt" ]]; then
-              echo $contrib_name >> changed_contribs.txt
-            fi
-          done
-
-      - name: Build with pre and post validation
-        run: |
-          if [[ -f "changed_contribs.txt" ]]
-          then
-            echo "Tests will be run on the following contributions:"
-            cat changed_contribs.txt
-            python espresso_machine/build_package/build.py -f changed_contribs.txt --no-install
-            pip install -v _esp_build/
-            python espresso_machine/build_package/test_examples.py -f changed_contribs.txt
-          else
-            echo "Tests will be run on the entire package."
-            python espresso_machine/build_package/build.py --no-install
-            pip install -v _esp_build/
-            python espresso_machine/build_package/test_examples.py
-          fi
+          echo "Tests will be run on the entire package."
+          python test/test_examples.py

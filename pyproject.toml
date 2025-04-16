@@ -1,8 +1,7 @@
 # --------------------------- BEGIN NOTES ---------------------------
 
 ####### TO INSTALL #######
-# pip install .                           # core only, or
-# python espresso_machine/build_package/build.py     # with contributions
+# pip install .
 
 ####### TO TEST #######
 # python espresso_machine/build_package/validate.py --pre
@@ -17,8 +16,8 @@
 
 # --------------------------- END NOTES -----------------------------
 [build-system]
-requires = ["scikit-build-core", "numpy", "cython", "versioningit"]
-build-backend = "scikit_build_core.build"
+requires = ["setuptools", "versioningit"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "geo-espresso"
@@ -58,12 +57,17 @@ dependencies = [
 ]
 dynamic = ["version"]
 
-[tool.scikit-build]
-experimental = true
+[tool.versioningit.tag2version]
+rmprefix = "v"
+rmsuffix = ""
 
-[tool.scikit-build.metadata.version]
-provider = "versioning"
-provider-path = "espresso_machine"
+[tool.versioningit.format]
+distance = "{base_version}+{distance}.{vcs}{rev}"
+dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
+distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
+
+[tool.versioningit.write]
+file = "src/espresso/_version.py"
 
 [tool.black]
 line-length = 88
