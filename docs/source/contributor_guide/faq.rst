@@ -13,19 +13,9 @@ Contents
 I need to include a compiled executable (from C/C++/Fortran source code), how to do it?
 ---------------------------------------------------------------------------------------
 
-- We suggest you to follow the general contributor guide, and write a ``CMakeLists.txt``
-  file so that our build system ``scikit-build`` can pick up the compilation process.
-- Here's a working example that you could refer to: 
-  `fm_wavefront_tracker <https://github.com/inlab-geo/espresso/tree/main/contrib/fm_wavefront_tracker>`_ 
-
-I need to include a compiled function (written in C/C++/Fortran), how to do it?
--------------------------------------------------------------------------------
-
-- We suggest you to follow the general contributor guide, and write a ``CMakeLists.txt``
-  file so that our build system ``scikit-build`` can pick up the compilation process.
-- Here's a working example that you could refer to: 
-  `receiver_function <https://github.com/inlab-geo/espresso/tree/main/contrib/receiver_function>`_ 
-
+- For ease of maintainability, we recommend you create a separate (pip installable) 
+  Python package for your compiled code, e.g. using ``scikit-build`` and ``cmake``.
+  This package should be installed as a dependency of your Espresso problem.
 
 I have put together an espresso contribution but I also have this new awesome inference method to solve it
 ----------------------------------------------------------------------------------------------------------
