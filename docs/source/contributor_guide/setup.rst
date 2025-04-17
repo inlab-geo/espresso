@@ -45,8 +45,12 @@ Espresso core package
 Install Espresso core library - this enables you to access the base class for an Espresso problem
 :code:`EspressoProblem` and some utility functions to help the development.
 
+Since you will be modifying the `espresso` package to create your contribution, you should
+install it in 'editable' mode. This means that any changes you make to the code will be
+immediately available to you without needing to re-install the package.
+
 Run the following in your terminal, with :code:`<path-to-espresso>/` as your working directory.
 
 .. code-block:: console
 
-   $ pip install .
+   $ pip install -e .
