@@ -36,7 +36,7 @@ jobs:
 
       - name: Run tests and write results to contrib/active_problems.txt
         run: |
-          python espresso_machine/build_package/test_examples.py
+          python test/test_examples.py
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
