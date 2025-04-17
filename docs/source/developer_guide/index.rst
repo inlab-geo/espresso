@@ -6,7 +6,6 @@ Developer Guide
     :hidden:
 
     repository.rst
-    build.rst
     develop.rst
     deploy.rst
     ci.rst
@@ -17,7 +16,6 @@ This guide explains how Espresso works 'behind the scenes', particularly the sys
 for validation, build, documentation and deployment - the Espresso Machine:
 
 - :doc:`repository`
-- :doc:`build`
 - :doc:`develop`
 - :doc:`deploy`
 - :doc:`ci`

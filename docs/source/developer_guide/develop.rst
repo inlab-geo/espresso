@@ -14,7 +14,7 @@ Getting ready
 How to get started with developing Espresso
 -------------------------------------------
 
-Before you work on any parts of Epsresso, make sure you have the project forked and 
+Before you work on any parts of Espresso, make sure you have the project forked and 
 cloned, and a development environment prepared.
 
 If not, follow these pages before you continue with the development:
@@ -30,7 +30,7 @@ How to modify EspressoProblem base class
 
 1. Modify the class in file :code:`src/espresso/espresso_problem.py`
 2. Make sure your changes are backward compatible, otherwise take the responsibility of
-   modifying existing contributions under folder :code:`contrib/`
+   modifying existing contributions under folder :code:`src/espresso/contrib/`
 3. Make new contribution generation script compatible with new changes. Check by running 
    file :code:`espresso_machine/new_contribution/create_new_contrib.py`. 
 
@@ -41,12 +41,9 @@ How to modify EspressoProblem base class
      - :code:`espresso_machine/new_contribution/_template/example_name.py`
      - :code:`espresso_machine/new_contribution/_template/README.md`
 
-4. Ensure build and validation scripts are compatible with new changes. Check by running:
+4. Test the new contribution generation script by running:
 
-   - :code:`espresso_machine/build_package/validate.py --pre`
-   - :code:`espresso_machine/build_package/build.py`
-   - :code:`espresso_machine/build_package/validate.py --post`
-   - :code:`espresso_machine/build_package/build.py --pre --post`
+   - :code:`python test/test_examples.py`
    
    Examine reported error (if any) to locate whether to change scripts themselves, or to
    edit the template files under :code:`espresso_machine/new_contribution/_template`.
@@ -74,22 +71,6 @@ How to add a new utility function
 2. Write docstring for the function.
 3. Import and add the name to :code:`__all__` variable from :code:`src/espresso/utils/__init__.py`.
 4. Add the name into docstring at top of :code:`src/espresso/utils/__init__.py`.
-
-
-Espresso machine
-****************
-
-How to modify build/validation scripts
---------------------------------------
-
-1. Navigate to :code:`espresso_machine/build_package/` folder, all the scripts are there. Make changes as you need.
-2. Ensure the other scripts still work. For example, you might want to change usage of :code:`validate.py`
-   inside :code:`build.py --validate` after the argument parser is modified. Check by running them on
-   your own.
-3. Ensure documentations are up to date. The following places need checking:
-
-   - :code:`espresso_machine/README.md`
-   - :code:`docs/source/contributor_guide/new_contrib.rst`
 
 
 Documentation
