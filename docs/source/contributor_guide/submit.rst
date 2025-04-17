@@ -15,7 +15,7 @@ Commit & push
 
    .. code-block:: console
 
-        $ git add contrib/<new-problem> # Adds the new folder, but no other changes
+        $ git add src/espresso/contrib/<new-problem> # Adds the new folder, but no other changes
         $ git commit -m "feat: My commit message"
 
    Please note that we aim to use

@@ -30,7 +30,7 @@ def getListOfFiles(dirName):
 
 current_dir = Path(__file__).resolve().parent
 root_dir = current_dir.parent.parent
-CONTRIB_FOLDER = str(root_dir / "contrib")
+CONTRIB_FOLDER = str(root_dir / "src" / "espresso" / "contrib")
 TEMPLATE_FOLDER = str(root_dir / "espresso_machine/new_contribution/_template")
 
 

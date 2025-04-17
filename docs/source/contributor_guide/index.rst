@@ -9,7 +9,6 @@ Contributor Guide
     setup.rst
     new_contrib.rst 
     submit.rst
-    video.rst
     faq.rst
 
 Espresso is a community project, and we welcome contributions! Ways you can get involved include:
@@ -26,8 +25,7 @@ This guide provides step-by-step instructions on how to contribute an Espresso e
 - Step 3 - :doc:`Add your example <new_contrib>`
 - Step 4 - :doc:`Submit your changes <submit>`
 
-Additionally, we made a :doc:`how-to-contribute video <video>` and collected some 
-:doc:`contributor FAQs <faq>`.
+Additionally, we have collected some :doc:`contributor FAQs <faq>`.
 
 There is also a :doc:`../developer_guide/index` that explains some 'behind the scenes' 
 aspects of our build system.

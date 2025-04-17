@@ -2,7 +2,7 @@ numpy>=1.20
 scipy>=1.0.0
 scikit-build==0.17.2
 black>=22.0.0
-sphinx>=4.5.0
+sphinx>=5.0
 matplotlib
 cython
 pybind11
