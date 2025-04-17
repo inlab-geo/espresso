@@ -7,9 +7,7 @@ Let's now ensure that you have a correct environment set up.
 Development requirements
 ------------------------
 
-Python >= 3.7 is required, and see this 
-`environment_dev.yml <https://github.com/inlab-geo/espresso/blob/main/envs/environment_dev.yml>`_ 
-file for a list of required packages.
+Python >= 3.9 is required.
 
 We strongly recommend using a virtual environment.
 
@@ -17,7 +15,7 @@ We strongly recommend using a virtual environment.
 
    .. tab-item:: venv
 
-      Ensure you have `python>=3.7`.
+      Ensure you have `python>=3.9`.
 
       .. code-block:: console
 
