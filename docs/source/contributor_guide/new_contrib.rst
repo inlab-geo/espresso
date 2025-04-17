@@ -118,11 +118,6 @@ Add your own Espresso problem
 
       $ python test/test_examples -c <example_name>
 
-   Read on the :ref:`appendix sections <appendix>` in this page for how an Espresso 
-   example is validated and how Espresso is built, and continue with the 
-   :doc:`../developer_guide/index` further details the whole infrastructure (i.e. the 
-   ``espresso_machine``).
-
 
 Jupyter Notebook
 ----------------
