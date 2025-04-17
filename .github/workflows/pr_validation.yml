@@ -3,6 +3,11 @@ name: Validate Pull Request
 on:
   workflow_dispatch:
   pull_request:
+    branches: main
+    paths:
+      - "src"
+      - "test"
+      - "espresso_machine"
 
 jobs:
   test:
