@@ -1,5 +1,31 @@
 # Change Log
 
+## v0.4.0 (17/05/2025)
+
+- Integrate `pyfm2d`
+- Significant changes to the build system after the package has become pure Python
+
+## v0.3.19 (12/12/2024)
+
+- Integrate `pyhk`
+
+## v0.3.18 (09/12/2024)
+
+- fix pypi deployment CI
+
+## v0.3.17 (09/12/2024)
+
+- fix pypi deployment CI
+
+## v0.3.16 (09/12/2024)
+
+- More fiddling to build wheels
+- Integrate `pyrf96`
+
+## v0.3.15 (10/11/2024)
+
+- Lots of fiddling to build wheels
+
 ## v0.3.14 (24/06/2024)
 
 ### Changed examples
