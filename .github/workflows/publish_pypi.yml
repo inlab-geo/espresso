@@ -8,9 +8,39 @@ on:
       - "src/espresso/version.py"
 
 jobs:
+  tag_pkg_source:
+    if: github.repository_owner == 'inlab-geo'
+    name: Tag current commit and send package source to _esp_build branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Extract Release Version
+        id: release_version
+        working-directory: src/espresso
+        run: |
+          set -e
+          python -c "import version as v; print(v.__version__)"
+          echo ::set-output name=version::$(python -c "import version as v; print(v.__version__)")
+
+      - name: Create release tag
+        uses: rickstaa/action-create-tag@v1.3.0
+        with:
+          tag: "v${{ steps.release_version.outputs.version }}"
+          force_push_tag: true
+
   ######################## BUILD DISTRIBUTION #########################
   build:
     name: Build
+    needs: [tag_pkg_source]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
