@@ -81,7 +81,7 @@ class FmmTomography(EspressoProblem):
             # read in data set
             sourcedat = np.loadtxt(path("datasets/example1/sources_crossb_nwt_s10.dat"))
             recdat = np.loadtxt(path("datasets/example1/receivers_crossb_nwt_r10.dat"))
-            ttdat = np.loadtxt(path("datasets/example1/ttimes_crossb_nwt_s10_r10.dat"))
+            ttdat = np.loadtxt(path("datasets/example1/ttimes_crossb_nwt_s10_r10_pyfm2d.dat"))
             recs = recdat.T[1:].T  # set up receivers
             srcs = sourcedat.T[1:].T  # set up sources
             print(
