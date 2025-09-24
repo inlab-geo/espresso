@@ -81,7 +81,7 @@ class FmmTomography(EspressoProblem):
             # read in data set
             sourcedat = np.loadtxt(path("datasets/example1/sources_crossb_nwt_s10.dat"))
             recdat = np.loadtxt(path("datasets/example1/receivers_crossb_nwt_r10.dat"))
-            ttdat = np.loadtxt(path("datasets/example1/ttimes_crossb_nwt_s10_r10.dat"))
+            ttdat = np.loadtxt(path("datasets/example1/ttimes_crossb_nwt_s10_r10_pyfm2d.dat"))
             recs = recdat.T[1:].T  # set up receivers
             srcs = sourcedat.T[1:].T  # set up sources
             print(
@@ -284,6 +284,8 @@ class FmmTomography(EspressoProblem):
         velocity = 1 / slowness_reshaped
 
         nthreads = kwargs.pop("nthreads", 1)
+        kwargs["paths"]=True
+        kwargs["frechet"]=True
         fmm = self.call_wavefront_tracker(
             velocity,
             nthreads=nthreads,
@@ -304,7 +306,9 @@ class FmmTomography(EspressoProblem):
         v = g.get_velocity()
 
         # after lots of testing, for some reason if paths=False then the frechet calculations beraks
-        options = WaveTrackerOptions(times=True, paths=True, frechet=True, **kwargs)
+        kwargs['paths']=True
+        kwargs["frechet"]=True
+        options = WaveTrackerOptions(times=True, **kwargs)
 
         return calc_wavefronts(
             v,
@@ -322,10 +326,12 @@ class FmmTomography(EspressoProblem):
         velocity = 1 / slowness_reshaped
         cline = kwargs.pop("cline", "g")
         alpha = kwargs.pop("alpha", 0.5)
+        nthreads = kwargs.pop("nthreads", 1)
         if with_paths or return_paths:
             fmm = self.call_wavefront_tracker(
                 velocity,
                 paths=True,
+                nthreads=nthreads
             )
             paths = fmm.paths
             if with_paths:
