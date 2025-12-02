@@ -7,7 +7,7 @@ Let's now ensure that you have a correct environment set up.
 Development requirements
 ------------------------
 
-Python >= 3.9 is required.
+Python >= 3.10 is required.
 
 We strongly recommend using a virtual environment.
 
@@ -15,7 +15,7 @@ We strongly recommend using a virtual environment.
 
    .. tab-item:: venv
 
-      Ensure you have `python>=3.9`.
+      Ensure you have `python>=3.10`.
 
       .. code-block:: console
 
